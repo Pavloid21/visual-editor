@@ -9,8 +9,8 @@ import gallery2 from "./gallery2";
 import article1 from "./article1";
 import article2 from "./article2";
 
-import hstack from "./hstack";
 import vstack from "./vstack";
+import hstack from "./hstack";
 import input from "./input";
 import label from "./label";
 import button from "./button";

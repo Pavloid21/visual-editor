@@ -2,13 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import "./common.css";
 
-const Image = styled.div`
-  width: ${(props) => (props.size.width ? props.size.width + "px" : "100%")};
-  height: ${(props) => (props.size.height ? props.size.height + "px" : "auto")};
-  background-image: url(${(props) => props.imageUrl});
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+const Image = styled.img`
+  width: ${(props) => (+props.size.width ? props.size.width + "px" : "100%")};
+  height: ${(props) =>
+    +props.size.height ? props.size.height + "px" : "auto"};
   ${(props) => {
     if (props.shape.type === "ALLCORNERSROUND") {
       return `border-radius: ${props.shape.radius}px;`;

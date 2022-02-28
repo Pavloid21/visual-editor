@@ -22,8 +22,14 @@ const Card = styled.div`
   padding-right: ${(props) => props.padding.right}px;
   padding-bottom: ${(props) => props.padding.bottom}px;
   padding-left: ${(props) => props.padding.left}px;
-  height: ${(props) => props.size.height ? props.size.height+ "px" : "auto"};
+  height: ${(props) => (props.size.height ? props.size.height + "px" : "auto")};
   box-shadow: ${(props) => elevation[props.elevation] || "none"};
+  border-radius: ${(props) => `
+    ${props.corners.topLeftRadius}px 
+    ${props.corners.topRightRadius}px 
+    ${props.corners.bottomRightRadius}px
+    ${props.corners.bottomLeftRadius}px 
+  `}
 `;
 
 const SortableContainer = sortableContainer(
@@ -57,7 +63,7 @@ const Component = ({ data, uuid, listItems, ...props }) => {
       }
       return {
         uuid,
-        target: target.targetId
+        target: target.targetId,
       };
     },
     collect: (monitor) => ({
@@ -117,6 +123,12 @@ const block = {
     size: {
       height: 0,
     },
+    corners: {
+      topLeftRadius: 20,
+      topRightRadius: 20,
+      bottomLeftRadius: 0,
+      bottomRightRadius: 0,
+    },
   },
   listItems: [],
   config: {
@@ -124,6 +136,12 @@ const block = {
     alignment: { type: "string", name: "Alignment" },
     backgroundColor: { type: "color", name: "Background color" },
     spacing: { type: "number", name: "Spacing" },
+    corners: {
+      topLeftRadius: { type: "number", name: "Top left radius" },
+      topRightRadius: { type: "number", name: "Top right radius" },
+      bottomLeftRadius: { type: "number", name: "Bottom left radius" },
+      bottomRightRadius: { type: "number", name: "Bottom right radius" },
+    },
     padding: {
       top: {
         type: "number",

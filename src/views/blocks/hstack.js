@@ -3,9 +3,9 @@ import { useDrop } from "react-dnd";
 import { ItemTypes } from "../../constants/actionTypes";
 import renderHandlebars from "../../utils/renderHandlebars";
 import styled from "styled-components";
-import { observer } from "../../utils/observer";
 import { sortableContainer } from "react-sortable-hoc";
 import { arrayMoveImmutable } from "array-move";
+import { observer } from "../../utils/observer";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import actionTypes from "../../constants/actionTypes";
@@ -14,9 +14,12 @@ import "./common.css";
 const HStack = styled.div`
   background-color: ${(props) => props.backgroundColor};
   display: flex;
-  align-items: ${(props) =>
-    props.alignment === "SPACEBETWEEN" ? "space-between" : props.alignment};
-  flex-direction: column;
+  justify-content: ${(props) =>
+    props.distribution === "SPACEBETWEEN"
+      ? "space-between"
+      : props.distribution};
+  text-align: ${(props) => props.alignment};
+  flex-direction: row;
   padding-top: ${(props) => props.padding.top}px;
   padding-bottom: ${(props) => props.padding.bottom}px;
   padding-left: ${(props) => props.padding.left}px;
@@ -30,8 +33,8 @@ const SortableContainer = sortableContainer(
       <HStack
         {...data}
         {...props}
-        ref={drop}
         border={border}
+        ref={drop}
         className="draggable"
       >
         {listItems && renderHandlebars(listItems, "document2").components}
@@ -85,11 +88,12 @@ const Component = ({ data, uuid, listItems, ...props }) => {
 
   return (
     <SortableContainer
+      axis="x"
       drop={drop}
       border={border}
       onSortEnd={onSortEnd}
       listItems={listItems}
-      {...data}
+      data={data}
       {...props}
       distance={1}
     />
@@ -104,6 +108,7 @@ const block = {
   defaultData: {
     alignment: "CENTER",
     backgroundColor: "#C6C6C6",
+    distribution: "SPACEBETWEEN",
     spacing: 16,
     padding: {
       top: "100",
@@ -116,7 +121,11 @@ const block = {
   config: {
     alignment: { type: "string", name: "Alignment" },
     backgroundColor: { type: "color", name: "Background color" },
-    spacing: { type: "number", name: "Spacing" },
+    distribution: { type: "string", name: "Distribution" },
+    spacing: {
+      type: "number",
+      name: "Spacing",
+    },
     padding: {
       top: {
         type: "number",
