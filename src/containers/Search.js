@@ -39,7 +39,8 @@ class Search extends Component {
                 name={block.name}
                 blockId={blockId}
                 image={block.previewImageUrl}
-                onPushBlock={this.props.onPushBlock} />
+                onPushBlock={this.props.onPushBlock}
+                onPushBlockInside={this.props.onPushBlockInside} />
             } else {
               return null;
             }

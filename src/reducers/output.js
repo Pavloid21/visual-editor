@@ -1,21 +1,16 @@
 import actionTypes from "../constants/actionTypes";
 
 const initialState = {
-  activeTab: 0,
-  previewMode: 3
+  screen: "screen name",
+  listItems: [],
 };
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case actionTypes.CHANGE_ACTIVE_TAB:
+    case actionTypes.EDIT_SCREEN_NAME:
       return {
         ...state,
-        activeTab: action.index,
-      };
-    case actionTypes.CHANGE_PREVIEW_MODE:
-      return {
-        ...state,
-        previewMode: action.mode,
+        screen: action.screen
       };
     default:
       return state;

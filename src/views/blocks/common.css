@@ -1,0 +1,7 @@
+.draggable:hover {
+  border: 4px dashed black;
+}
+
+body > .draggable {
+  border: 4px dashed black;
+}
