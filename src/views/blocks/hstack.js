@@ -25,6 +25,7 @@ const HStack = styled.div`
   padding-left: ${(props) => props.padding.left}px;
   padding-right: ${(props) => props.padding.right}px;
   border: ${(props) => props.border};
+  gap: ${(props) => props.spacing}px;
 `;
 
 const SortableContainer = sortableContainer(

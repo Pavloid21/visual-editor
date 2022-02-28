@@ -24,6 +24,7 @@ const Card = styled.div`
   padding-left: ${(props) => props.padding.left}px;
   height: ${(props) => (props.size.height ? props.size.height + "px" : "auto")};
   box-shadow: ${(props) => elevation[props.elevation] || "none"};
+  gap: ${(props) => props.spacing}px;
   border-radius: ${(props) => `
     ${props.corners.topLeftRadius}px 
     ${props.corners.topRightRadius}px 

@@ -3,6 +3,9 @@ import styled from "styled-components";
 import "./common.css";
 
 const Image = styled.img`
+  display: flex;
+  align-items: align-items: ${(props) =>
+    props.alignment === "SPACEBETWEEN" ? "space-between" : props.alignment};
   width: ${(props) => (+props.size.width ? props.size.width + "px" : "100%")};
   height: ${(props) =>
     +props.size.height ? props.size.height + "px" : "auto"};
