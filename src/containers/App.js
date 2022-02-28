@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import renderHandlebars from "../utils/renderHandlebars";
 import NarrowSidebar from "../components/NarrowSidebar";
 import WideSidebar from "../components/WideSidebar";
+import TreeViewSidebar from "../components/TreeViewSidebar";
 
 import Preview from "./Preview";
 import BlocksGallery from "./BlocksGallery";
@@ -158,6 +159,7 @@ const App = () => {
                   onChangePreviewMode={handleChangePreviewMode}
                   previewMode={previewMode}
                 />
+                <TreeViewSidebar/>
               </Route>
             </Switch>
           </div>
