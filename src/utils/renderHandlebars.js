@@ -23,7 +23,6 @@ function render(layoutBlocks, documentId) {
   const components = [];
   const innerHTML = layoutBlocks.reduce((acc, layoutBlock) => {
     let blockHTML;
-    console.log("layoutBlock.blockId", layoutBlock);
     if (blocks[layoutBlock.blockId].Component) {
       const Component = blocks[layoutBlock.blockId].Component;
       components.push(

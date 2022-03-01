@@ -16,6 +16,7 @@ const Card = styled.div`
   border: ${(props) => props.border};
   background-color: ${(props) => props.backgroundColor};
   display: flex;
+  overflow: auto;
   align-items: ${(props) => props.alignment};
   flex-direction: column;
   padding-top: ${(props) => props.padding?.top}px;
