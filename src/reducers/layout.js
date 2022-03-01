@@ -168,6 +168,7 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         blocks: [action.layout],
+        bottomBar: action.bottomBar,
       };
     default:
       return state;

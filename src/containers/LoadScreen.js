@@ -1,19 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import styled from "styled-components";
 import v4 from "uuid/dist/v4";
 import actionTypes from "../constants/actionTypes";
 
+const ScreenItem = styled.div`
+  padding: 4px 0px;
+  &:hover {
+    cursor: pointer;
+    color: blue;
+  }
+`;
+
 const LoadScreen = (props) => {
+  const [availableScreenes, setScreenes] = useState([]);
   const dispatch = useDispatch();
-  // useEffect(() => {
-  //   fetch(
-  //     "http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/configurations/"
-  //   )
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log("data", data);
-  //     });
-  // }, []);
+  useEffect(() => {
+    fetch(
+      "http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/configurations/"
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setScreenes(data);
+      });
+  }, []);
 
   const buildLayout = (object) => {
     const tree = object.listItems;
@@ -37,13 +47,21 @@ const LoadScreen = (props) => {
     dispatch({
       type: actionTypes.SET_LAYOUT,
       layout: newBlock.listItems[0],
-    })
+      bottomBar: {
+        data: {
+          ...object.bottomBar.settingsUI,
+          navigationItems: object.bottomBar.navigationItems,
+        },
+        blockId: "bottombar",
+        uuid: v4(),
+      },
+    });
   };
 
   const changeHandler = (event) => {
     try {
       const json = JSON.parse(event.target.value);
-      console.log("json", json);
+      // console.log("json", json);
       buildLayout(json);
     } catch (e) {
       console.log(e);
@@ -60,12 +78,35 @@ const LoadScreen = (props) => {
       </div>
       <hr />
       <div>
-        <label>Screen JSON</label>
+        {/* <label>Screen JSON</label>
         <textarea
           className="form-control"
           rows={20}
           onChange={changeHandler}
-        ></textarea>
+        ></textarea> */}
+        <h3>Avaliable screenes</h3>
+        {availableScreenes.map((screen) => {
+          return (
+            <ScreenItem
+              onClick={() => {
+                fetch(
+                  `http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/configurations/${screen}`
+                )
+                  .then((response) => response.json())
+                  .then((data) => {
+                    console.log("data", data);
+                    try {
+                      buildLayout(data);
+                    } catch (e) {
+                      console.log("e", e);
+                    }
+                  });
+              }}
+            >
+              {screen}
+            </ScreenItem>
+          );
+        })}
       </div>
     </div>
   );

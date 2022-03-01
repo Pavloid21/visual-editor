@@ -21,7 +21,7 @@ const SortableItem = sortableElement(({ layoutBlock, Component, ...props }) => {
 
 function render(layoutBlocks, documentId, bottomBar) {
   const components = [];
-  const innerHTML = layoutBlocks.reduce((acc, layoutBlock) => {
+  const innerHTML = layoutBlocks[0] ? layoutBlocks.reduce((acc, layoutBlock) => {
     let blockHTML;
     if (blocks[layoutBlock.blockId].Component) {
       const Component = blocks[layoutBlock.blockId].Component;
@@ -43,7 +43,7 @@ function render(layoutBlocks, documentId, bottomBar) {
     });
 
     return `${acc}${sectionHTML}`;
-  }, ``);
+  }, ``) : null;
 
   if (bottomBar) {
     const Component = blocks[bottomBar.blockId].Component;

@@ -18,9 +18,11 @@ const Output = (props) => {
   };
 
   const prepareJSON = () => {
-    initial.listItems = blocks.map((block) => {
-      return buildJSONitem(block);
-    });
+    initial.listItems = initial.listItems[0]
+      ? blocks.map((block) => {
+          return buildJSONitem(block);
+        })
+      : [];
     if (bottomBar) {
       initial.bottomBar = buildJSONitem(bottomBar);
     }

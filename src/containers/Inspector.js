@@ -125,10 +125,10 @@ class Inspector extends Component {
     const findInTree = (tree, uuid) => {
       let result = null;
       for (let item of tree) {
-        if (item.uuid === uuid) {
+        if (item && item.uuid === uuid) {
           result = item;
         }
-        if (!result && item.listItems) {
+        if (!result && item && item.listItems) {
           result = findInTree(item.listItems, uuid);
         }
       }

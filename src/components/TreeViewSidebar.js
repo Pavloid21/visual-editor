@@ -17,15 +17,18 @@ export default function TreeViewSidebar() {
   ];
 
   const buildJSONitem = (block) => {
-    const data = {
-      key: [block.uuid],
-      label: block.blockId.toUpperCase(),
-      nodes: [],
-    };
-    if (block.listItems) {
-      data.nodes = block.listItems.map((item) => buildJSONitem(item));
+    if (block) {
+      const data = {
+        key: [block.uuid],
+        label: block.blockId.toUpperCase(),
+        nodes: [],
+      };
+      if (block.listItems) {
+        data.nodes = block.listItems.map((item) => buildJSONitem(item));
+      }
+      return data;
     }
-    return data;
+    return null;
   };
 
   const prepareJSON = () => {
@@ -46,7 +49,7 @@ export default function TreeViewSidebar() {
     } else {
       observer.broadcast({ blockId: uuid, event: "click" });
     }
-  }
+  };
 
   return (
     <div className="mh-100 d-flex flex-column inspector-wrapper">
