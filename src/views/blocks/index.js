@@ -11,7 +11,8 @@ import article2 from "./article2";
 
 import vstack from "./vstack";
 import hstack from "./hstack";
-import input from "./input";
+import basictextfield from "./input";
+import passwordtextfield from "./passwordtextfield";
 import label from "./label";
 import button from "./button";
 import card from "./card";
@@ -29,7 +30,8 @@ const blocks = {
   hstack,
   card,
   vstack,
-  input,
+  basictextfield,
+  passwordtextfield,
   label,
   button,
   image,

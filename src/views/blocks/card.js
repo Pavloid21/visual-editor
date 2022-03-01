@@ -18,11 +18,11 @@ const Card = styled.div`
   display: flex;
   align-items: ${(props) => props.alignment};
   flex-direction: column;
-  padding-top: ${(props) => props.padding.top}px;
-  padding-right: ${(props) => props.padding.right}px;
-  padding-bottom: ${(props) => props.padding.bottom}px;
-  padding-left: ${(props) => props.padding.left}px;
-  height: ${(props) => (props.size.height ? props.size.height + "px" : "auto")};
+  padding-top: ${(props) => props.padding?.top}px;
+  padding-right: ${(props) => props.padding?.right}px;
+  padding-bottom: ${(props) => props.padding?.bottom}px;
+  padding-left: ${(props) => props.padding?.left}px;
+  height: ${(props) => (props.size?.height ? props.size?.height + "px" : "auto")};
   box-shadow: ${(props) => elevation[props.elevation] || "none"};
   gap: ${(props) => props.spacing}px;
   border-radius: ${(props) => `

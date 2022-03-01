@@ -6,6 +6,7 @@ import renderHandlebars from "../utils/renderHandlebars";
 import NarrowSidebar from "../components/NarrowSidebar";
 import WideSidebar from "../components/WideSidebar";
 import TreeViewSidebar from "../components/TreeViewSidebar";
+import LoadScreen from "./LoadScreen";
 
 import Preview from "./Preview";
 import BlocksGallery from "./BlocksGallery";
@@ -26,7 +27,6 @@ const App = () => {
   const config = useSelector((state) => state.config);
   const dispatch = useDispatch();
   useEffect(() => {
-
     const handleMessage = (event) => {
       if (event.data.event) {
         if (event.data.blockId && event.data.event === "click") {
@@ -132,6 +132,7 @@ const App = () => {
                     onPushBlock={handlePushBlock}
                     onPushBlockInside={handlePushBlockInside}
                   />
+                  <LoadScreen display={activeTab === 2} />
                   <Screen
                     category="screen"
                     display={activeTab === 5}
@@ -159,7 +160,7 @@ const App = () => {
                   onChangePreviewMode={handleChangePreviewMode}
                   previewMode={previewMode}
                 />
-                <TreeViewSidebar/>
+                <TreeViewSidebar />
               </Route>
             </Switch>
           </div>

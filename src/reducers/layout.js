@@ -131,6 +131,11 @@ export default function reducer(state = initialState, action) {
         ...state,
         documentId: action.documentId,
       };
+    case actionTypes.SET_LAYOUT:
+      return {
+        ...state,
+        blocks: [action.layout],
+      };
     default:
       return state;
   }

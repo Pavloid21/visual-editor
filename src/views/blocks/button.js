@@ -6,6 +6,8 @@ const Button = styled.div`
   color: ${(props) => props.textColor};
   background-color: ${(props) => props.backgroundColor};
   text-align: ${(props) => props.textAlignment};
+  align-items: center;
+  display: flex;
   ${(props) => {
     if (props.shape.type === "ALLCORNERSROUND") {
       return `border-radius: ${props.shape.radius}px;`;

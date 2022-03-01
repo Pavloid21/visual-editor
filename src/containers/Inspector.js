@@ -42,7 +42,7 @@ class Inspector extends Component {
               type="text"
               className="form-control"
               placeholder={config[el].name}
-              value={endpoint[el]}
+              value={endpoint ? endpoint[el] : null}
               onChange={(e) =>
                 this.handleChangeBlockData(
                   blockUuid,
@@ -63,7 +63,7 @@ class Inspector extends Component {
               type="color"
               className="form-control"
               placeholder={config[el].name}
-              value={endpoint[el]}
+              value={endpoint ? endpoint[el] : null}
               onChange={(e) =>
                 this.handleChangeBlockData(blockUuid, el, e.target.value)
               }
@@ -79,7 +79,7 @@ class Inspector extends Component {
               type="number"
               className="form-control"
               placeholder={config[el].name}
-              value={endpoint[el]}
+              value={endpoint ? endpoint[el] : null}
               onChange={(e) =>
                 this.handleChangeBlockData(
                   blockUuid,
@@ -107,7 +107,7 @@ class Inspector extends Component {
             </label>
           </div>
         );
-      } else {
+      } else if (endpoint) {
         return (
           <div>
             <p className="lead">{el}</p>

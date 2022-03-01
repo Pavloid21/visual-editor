@@ -5,27 +5,25 @@ import blocks from "../views/blocks";
 import { sortableElement } from "react-sortable-hoc";
 import { observer } from "./observer";
 
-const SortableItem = sortableElement(
-  ({ layoutBlock, Component, ...props }) => {
-    return (
-      <Component
-        {...{ ...layoutBlock, uuid: layoutBlock.uuid }}
-        {...props}
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          observer.broadcast({ blockId: layoutBlock.uuid, event: "click" });
-        }}
-      />
-    );
-  }
-);
+const SortableItem = sortableElement(({ layoutBlock, Component, ...props }) => {
+  return (
+    <Component
+      {...{ ...layoutBlock, uuid: layoutBlock.uuid }}
+      {...props}
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        observer.broadcast({ blockId: layoutBlock.uuid, event: "click" });
+      }}
+    />
+  );
+});
 
 function render(layoutBlocks, documentId) {
   const components = [];
   const innerHTML = layoutBlocks.reduce((acc, layoutBlock) => {
     let blockHTML;
-
+    console.log("layoutBlock.blockId", layoutBlock);
     if (blocks[layoutBlock.blockId].Component) {
       const Component = blocks[layoutBlock.blockId].Component;
       components.push(

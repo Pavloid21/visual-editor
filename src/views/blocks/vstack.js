@@ -12,15 +12,15 @@ import actionTypes from "../../constants/actionTypes";
 import "./common.css";
 
 const VStack = styled.div`
-  background-color: ${(props) => props.backgroundColor};
+  background-color: ${(props) => props.backgroundColor?.indexOf("#") >= 0 ? props.backgroundColor : "#FFFFFF"};
   display: flex;
   align-items: ${(props) =>
     props.alignment === "SPACEBETWEEN" ? "space-between" : props.alignment};
   flex-direction: column;
-  padding-top: ${(props) => props.padding.top}px;
-  padding-bottom: ${(props) => props.padding.bottom}px;
-  padding-left: ${(props) => props.padding.left}px;
-  padding-right: ${(props) => props.padding.right}px;
+  padding-top: ${(props) => props.padding?.top}px;
+  padding-bottom: ${(props) => props.padding?.bottom}px;
+  padding-left: ${(props) => props.padding?.left}px;
+  padding-right: ${(props) => props.padding?.right}px;
   border: ${(props) => props.border};
   gap: ${(props) => props.spacing}px;
 `;
