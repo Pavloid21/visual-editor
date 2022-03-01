@@ -48,7 +48,10 @@ export default function reducer(state = initialState, action) {
       return { ...state, bottomBar };
     case actionTypes.ADD_BOTTOMBAR_ITEM:
       const extendedItems = [...state.bottomBar.data.navigationItems];
-      extendedItems.push(blocks.bottombar.defaultData.navigationItems[0]);
+      extendedItems.push({
+        ...blocks.bottombar.defaultData.navigationItems[0],
+        uuid: uuidv4(),
+      });
       const bar = { ...state.bottomBar };
       bar.data.navigationItems = extendedItems;
       return { ...state, bottomBar: { ...bar } };
@@ -149,7 +152,7 @@ export default function reducer(state = initialState, action) {
       const mustBeRemoved = removeFromList(newArr, action.blockUuid);
       const stateReference = { ...state };
       if (action.blockUuid === state.bottomBar?.uuid) {
-        delete stateReference.bottomBar
+        delete stateReference.bottomBar;
       }
       return {
         ...stateReference,
