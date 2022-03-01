@@ -37,6 +37,27 @@ const removeFromList = (tree, uuid) => {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
+    case actionTypes.PUSH_BOTTOMBAR:
+      const bottomBar = {
+        uuid: uuidv4(),
+        blockId: action.blockId,
+        data: {
+          ...getData(blocks[action.blockId].defaultData),
+        },
+      };
+      return { ...state, bottomBar };
+    case actionTypes.ADD_BOTTOMBAR_ITEM:
+      const extendedItems = [...state.bottomBar.data.navigationItems];
+      extendedItems.push(blocks.bottombar.defaultData.navigationItems[0]);
+      const bar = { ...state.bottomBar };
+      bar.data.navigationItems = extendedItems;
+      return { ...state, bottomBar: { ...bar } };
+    case actionTypes.REMOVE_BOTTOMBAR_ITEM:
+      const newBarItems = [...state.bottomBar.data.navigationItems];
+      newBarItems.splice(action.index, 1);
+      const newBottomBar = { ...state.bottomBar };
+      newBottomBar.data.navigationItems = newBarItems;
+      return { ...state, bottomBar: { ...newBottomBar } };
     case actionTypes.PUSH_BLOCK:
       const listItems = blocks[action.blockId].listItems;
       const newBlock = {
@@ -108,8 +129,13 @@ export default function reducer(state = initialState, action) {
       };
     case actionTypes.CHANGE_BLOCK_DATA:
       const newBlocks = [...state.blocks];
-      const element = findInTree(newBlocks, action.blockUuid);
-      if (action.parentKey) {
+      const element = findInTree(newBlocks, action.blockUuid) || {
+        ...state.bottomBar,
+      };
+      if (action.parentKey && Array.isArray(action.parentKey)) {
+        element.data[action.parentKey[1]][action.parentKey[0]][action.key] =
+          action.value;
+      } else if (action.parentKey) {
         element.data[action.parentKey][action.key] = action.value;
       } else {
         element.data[action.key] = action.value;
@@ -121,8 +147,12 @@ export default function reducer(state = initialState, action) {
     case actionTypes.DELETE_BLOCK:
       const newArr = [...state.blocks];
       const mustBeRemoved = removeFromList(newArr, action.blockUuid);
+      const stateReference = { ...state };
+      if (action.blockUuid === state.bottomBar?.uuid) {
+        delete stateReference.bottomBar
+      }
       return {
-        ...state,
+        ...stateReference,
         blocks: [...mustBeRemoved],
         selectedBlockUuid: "",
       };

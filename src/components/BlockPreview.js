@@ -2,17 +2,25 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useDrag } from "react-dnd";
 import { ItemTypes } from "../constants/actionTypes";
+import { useDispatch } from "react-redux";
+import actionTypes from "../constants/actionTypes";
 
 const BlockPreview = (props) => {
+  const dispatch = useDispatch();
   const [{ isDragging }, drag] = useDrag(() => ({
     type: ItemTypes.BOX,
     item: { id: props.blockId },
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult();
       if (item && dropResult) {
-        if (!dropResult.uuid) {
+        if (!dropResult.uuid && item.id !== "bottombar") {
           props.onPushBlock(props.blockId);
-        } 
+        } else {
+          dispatch({
+            type: actionTypes.PUSH_BOTTOMBAR,
+            blockId: item.id,
+          });
+        }
       }
     },
     collect: (monitor) => ({

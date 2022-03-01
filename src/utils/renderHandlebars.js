@@ -19,7 +19,7 @@ const SortableItem = sortableElement(({ layoutBlock, Component, ...props }) => {
   );
 });
 
-function render(layoutBlocks, documentId) {
+function render(layoutBlocks, documentId, bottomBar) {
   const components = [];
   const innerHTML = layoutBlocks.reduce((acc, layoutBlock) => {
     let blockHTML;
@@ -44,6 +44,22 @@ function render(layoutBlocks, documentId) {
 
     return `${acc}${sectionHTML}`;
   }, ``);
+
+  if (bottomBar) {
+    const Component = blocks[bottomBar.blockId].Component;
+    components.push(
+      <Component
+        {...{ ...bottomBar, uuid: bottomBar.uuid }}
+        id={bottomBar.uuid}
+        key={bottomBar.uuid}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          observer.broadcast({ blockId: bottomBar.uuid, event: "click" });
+        }}
+      />
+    );
+  }
 
   return {
     components,

@@ -17,6 +17,7 @@ import label from "./label";
 import button from "./button";
 import card from "./card";
 import image from "./image";
+import bottombar from "./bottombar";
 
 const blocks = {
   header1,
@@ -35,6 +36,7 @@ const blocks = {
   label,
   button,
   image,
+  bottombar,
 };
 
 export default blocks;

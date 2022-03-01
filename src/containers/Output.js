@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 
 const Output = (props) => {
   const blocks = useSelector((state) => state.layout.blocks);
+  const bottomBar = useSelector((state) => state.layout.bottomBar);
   const initial = useSelector((state) => state.output);
 
   const buildJSONitem = (block) => {
@@ -20,6 +21,9 @@ const Output = (props) => {
     initial.listItems = blocks.map((block) => {
       return buildJSONitem(block);
     });
+    if (bottomBar) {
+      initial.bottomBar = buildJSONitem(bottomBar);
+    }
   };
 
   prepareJSON();

@@ -1,6 +1,9 @@
 function prepareModel(defaultData, endpoint) {
   Object.keys(defaultData).forEach((key) => {
-    if (typeof defaultData[key] !== "object") {
+    if (
+      typeof defaultData[key] !== "object" ||
+      Array.isArray(defaultData[key])
+    ) {
       endpoint[key] = defaultData[key];
     } else {
       endpoint[key] = {};

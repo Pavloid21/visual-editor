@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { DebounceInput } from "react-debounce-input";
 import actionTypes from "../constants/actionTypes";
 import blocks from "../views/blocks";
+import styled from "styled-components";
 
 class Inspector extends Component {
   constructor(props) {
@@ -107,7 +108,7 @@ class Inspector extends Component {
             </label>
           </div>
         );
-      } else if (endpoint) {
+      } else if (endpoint && !Array.isArray(endpoint[el])) {
         return (
           <div>
             <p className="lead">{el}</p>
@@ -135,7 +136,9 @@ class Inspector extends Component {
     };
 
     const blockUuid = this.props.layout.selectedBlockUuid;
-    const block = findInTree(this.props.layout.blocks, blockUuid);
+    const block =
+      findInTree(this.props.layout.blocks, blockUuid) ||
+      this.props.layout.bottomBar;
 
     if (!block)
       return (
@@ -157,10 +160,62 @@ class Inspector extends Component {
         </div>
         <hr />
         {this.parseConfig(config, blockUuid, block.data)}
+        {block.data.navigationItems && (
+          <div>
+            <h2>Navigation items</h2>
+            <hr />
+            {block.data.navigationItems.map((element, index) => {
+              return (
+                <div key={`navItem_${index}`}>
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <p className="lead">Button {index + 1}</p>
+                    <RemoveButton
+                      className="material-icons"
+                      onClick={(e) => {
+                        this.props.dispatch({
+                          type: actionTypes.REMOVE_BOTTOMBAR_ITEM,
+                          index,
+                        });
+                      }}
+                    >
+                      remove_circle_outline
+                    </RemoveButton>
+                  </div>
+                  {this.parseConfig(
+                    config.navigationItems[0],
+                    blockUuid,
+                    block.data.navigationItems[index],
+                    [index, "navigationItems"]
+                  )}
+                  <hr />
+                </div>
+              );
+            })}
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                this.props.dispatch({
+                  type: actionTypes.ADD_BOTTOMBAR_ITEM,
+                });
+              }}
+            >
+              Add item
+            </button>
+          </div>
+        )}
       </div>
     );
   }
 }
+
+const RemoveButton = styled.span`
+  color: red;
+  &:hover {
+    cursor: pointer;
+  }
+`;
 
 Inspector.propTypes = {
   layout: PropTypes.object,

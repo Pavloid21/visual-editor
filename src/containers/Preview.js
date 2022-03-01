@@ -9,7 +9,15 @@ import { observer } from "../utils/observer";
 const SortableContainer = sortableContainer(
   ({ children, drop, backgroundColor }) => {
     return (
-      <div ref={drop} style={{ height: "100%", backgroundColor, overflow: "hidden" }}>
+      <div
+        ref={drop}
+        style={{
+          height: "100%",
+          backgroundColor,
+          overflow: "hidden",
+          position: "relative",
+        }}
+      >
         {children}
       </div>
     );
