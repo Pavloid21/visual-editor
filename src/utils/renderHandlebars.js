@@ -19,12 +19,12 @@ const SortableItem = sortableElement(({ layoutBlock, Component, ...props }) => {
   );
 });
 
-function render(layoutBlocks, documentId, bottomBar) {
+function render(layoutBlocks, documentId, bottomBar, appBar) {
   const components = [];
   const innerHTML = layoutBlocks[0] ? layoutBlocks.reduce((acc, layoutBlock) => {
     let blockHTML;
-    if (blocks[layoutBlock.blockId].Component) {
-      const Component = blocks[layoutBlock.blockId].Component;
+    if (blocks[layoutBlock.blockId.toLowerCase()].Component) {
+      const Component = blocks[layoutBlock.blockId.toLowerCase()].Component;
       components.push(
         <SortableItem
           id={layoutBlock.uuid}
@@ -46,7 +46,7 @@ function render(layoutBlocks, documentId, bottomBar) {
   }, ``) : null;
 
   if (bottomBar) {
-    const Component = blocks[bottomBar.blockId].Component;
+    const Component = blocks[bottomBar.blockId.toLowerCase()].Component;
     components.push(
       <Component
         {...{ ...bottomBar, uuid: bottomBar.uuid }}
@@ -56,6 +56,22 @@ function render(layoutBlocks, documentId, bottomBar) {
           e.preventDefault();
           e.stopPropagation();
           observer.broadcast({ blockId: bottomBar.uuid, event: "click" });
+        }}
+      />
+    );
+  }
+
+  if (appBar) {
+    const Component = blocks[appBar.blockId.toLowerCase()].Component;
+    components.unshift(
+      <Component
+        {...{ ...appBar, uuid: appBar.uuid }}
+        id={appBar.uuid}
+        key={appBar.uuid}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          observer.broadcast({ blockId: appBar.uuid, event: "click" });
         }}
       />
     );

@@ -25,6 +25,7 @@ import { findInTree } from "../reducers/layout";
 const App = () => {
   const layout = useSelector((state) => state.layout);
   const bottomBar = useSelector((state) => state.layout.bottomBar);
+  const appBar = useSelector((state) => state.layout.appBar);
   const config = useSelector((state) => state.config);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -111,7 +112,8 @@ const App = () => {
   const { components, schema } = renderHandlebars(
     layout.blocks,
     layout.documentId,
-    bottomBar
+    bottomBar,
+    appBar
   );
   const innerHTML = schema;
   const { activeTab, previewMode } = config;

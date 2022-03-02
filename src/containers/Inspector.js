@@ -138,7 +138,9 @@ class Inspector extends Component {
     const blockUuid = this.props.layout.selectedBlockUuid;
     const block =
       findInTree(this.props.layout.blocks, blockUuid) ||
-      this.props.layout.bottomBar;
+      this.props.layout.bottomBar?.uuid === blockUuid
+        ? this.props.layout.bottomBar
+        : this.props.layout.appBar;
 
     if (!block)
       return (
@@ -198,6 +200,51 @@ class Inspector extends Component {
               onClick={() => {
                 this.props.dispatch({
                   type: actionTypes.ADD_BOTTOMBAR_ITEM,
+                });
+              }}
+            >
+              Add item
+            </button>
+          </div>
+        )}
+        {block.data.appBarItems && (
+          <div>
+            <h2>App bar items</h2>
+            <hr />
+            {block.data.appBarItems.map((element, index) => {
+              return (
+                <div key={`navItem_${index}`}>
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <p className="lead">Button {index + 1}</p>
+                    <RemoveButton
+                      className="material-icons"
+                      onClick={(e) => {
+                        this.props.dispatch({
+                          type: actionTypes.REMOVE_TOPAPPBAR_ITEM,
+                          index,
+                        });
+                      }}
+                    >
+                      remove_circle_outline
+                    </RemoveButton>
+                  </div>
+                  {this.parseConfig(
+                    config.appBarItems[0],
+                    blockUuid,
+                    block.data.appBarItems[index],
+                    [index, "appBarItems"]
+                  )}
+                  <hr />
+                </div>
+              );
+            })}
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                this.props.dispatch({
+                  type: actionTypes.ADD_TOPAPPBAR_ITEM,
                 });
               }}
             >

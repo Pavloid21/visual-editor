@@ -3,50 +3,35 @@ import { useDrop } from "react-dnd";
 import { ItemTypes } from "../../constants/actionTypes";
 import renderHandlebars from "../../utils/renderHandlebars";
 import styled from "styled-components";
+import { observer } from "../../utils/observer";
 import { sortableContainer } from "react-sortable-hoc";
 import { arrayMoveImmutable } from "array-move";
-import { observer } from "../../utils/observer";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import actionTypes from "../../constants/actionTypes";
 import "./common.css";
 
-const HStack = styled.div`
-  background-color: ${(props) => props.backgroundColor};
+const Box = styled.div`
+  border: ${(props) => `${props.borderWidth}px solid ${props.borderColor}`};
+  width: ${(props) => (props.size.width ? props.size.width + "px;" : "100%;")}
+  height: ${(props) => props.size.height}px;
   display: flex;
-  justify-content: ${(props) =>
-    props.distribution === "SPACEBETWEEN"
-      ? "space-between"
-      : props.distribution};
-  text-align: ${(props) => props.alignment};
-  flex-direction: row;
   align-items: center;
-  padding-top: ${(props) => props.padding.top}px;
-  padding-bottom: ${(props) => props.padding.bottom}px;
-  padding-left: ${(props) => props.padding.left}px;
-  padding-right: ${(props) => props.padding.right}px;
-  border: ${(props) => props.border};
-  gap: ${(props) => props.spacing}px;
-  position: relative;
-  ${(props) => {
-    if (!props.alignment || props.alignment === "FILL") {
-      return "width: 100%;";
-    }
-  }}
+  overflow: hidden;
 `;
 
 const SortableContainer = sortableContainer(
   ({ drop, border, listItems, data, ...props }) => {
     return (
-      <HStack
+      <Box
         {...data}
         {...props}
-        border={border}
         ref={drop}
+        border={border}
         className="draggable"
       >
         {listItems && renderHandlebars(listItems, "document2").components}
-      </HStack>
+      </Box>
     );
   }
 );
@@ -96,12 +81,11 @@ const Component = ({ data, uuid, listItems, ...props }) => {
 
   return (
     <SortableContainer
-      axis="x"
       drop={drop}
       border={border}
       onSortEnd={onSortEnd}
       listItems={listItems}
-      data={data}
+      {...data}
       {...props}
       distance={1}
     />
@@ -110,46 +94,29 @@ const Component = ({ data, uuid, listItems, ...props }) => {
 
 const block = {
   Component,
-  name: "HSTACK",
+  name: "BOX",
   previewImageUrl: "https://cdn-icons-png.flaticon.com/128/1239/1239779.png",
   category: "Layouts",
   defaultData: {
-    alignment: "CENTER",
-    backgroundColor: "#C6C6C6",
-    distribution: "SPACEBETWEEN",
-    spacing: 16,
-    padding: {
-      top: "100",
-      bottom: "100",
-      left: "10",
-      right: "10",
+    borderColor: "#EFEFEF",
+    borderWidth: 1,
+    size: {
+      height: 56,
+      width: 100,
     },
   },
   listItems: [],
   config: {
-    alignment: { type: "string", name: "Alignment" },
-    backgroundColor: { type: "color", name: "Background color" },
-    distribution: { type: "string", name: "Distribution" },
-    spacing: {
-      type: "number",
-      name: "Spacing",
-    },
-    padding: {
-      top: {
+    borderColor: { type: "color", name: "Border color" },
+    borderWidth: { type: "number", name: "Border width" },
+    size: {
+      height: {
         type: "number",
-        name: "Top",
+        name: "Height",
       },
-      bottom: {
+      width: {
         type: "number",
-        name: "Bottom",
-      },
-      left: {
-        type: "number",
-        name: "Left",
-      },
-      right: {
-        type: "number",
-        name: "Right",
+        name: "Width",
       },
     },
   },

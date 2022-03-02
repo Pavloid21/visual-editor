@@ -27,10 +27,10 @@ const Card = styled.div`
   box-shadow: ${(props) => elevation[props.elevation] || "none"};
   gap: ${(props) => props.spacing}px;
   border-radius: ${(props) => `
-    ${props.corners.topLeftRadius}px 
-    ${props.corners.topRightRadius}px 
-    ${props.corners.bottomRightRadius}px
-    ${props.corners.bottomLeftRadius}px 
+    ${props.corners?.topLeftRadius}px 
+    ${props.corners?.topRightRadius}px 
+    ${props.corners?.bottomRightRadius}px
+    ${props.corners?.bottomLeftRadius}px 
   `}
 `;
 

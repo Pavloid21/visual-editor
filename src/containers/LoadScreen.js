@@ -43,19 +43,32 @@ const LoadScreen = (props) => {
         return reference;
       });
     };
-    newBlock.listItems = traverse(tree);
-    dispatch({
+    newBlock.listItems = tree?.length ? traverse(tree) : [];
+    const action = {
       type: actionTypes.SET_LAYOUT,
       layout: newBlock.listItems[0],
-      bottomBar: {
+    };
+    if (object.bottomBar) {
+      action.bottomBar = {
+        blockId: "bottombar",
+        uuid: v4(),
         data: {
           ...object.bottomBar.settingsUI,
           navigationItems: object.bottomBar.navigationItems,
         },
-        blockId: "bottombar",
+      };
+    }
+    if (object.appBar) {
+      action.appBar = {
+        blockId: "topappbar",
         uuid: v4(),
-      },
-    });
+        data: {
+          ...object.appBar.settingsUI,
+          appBarItems: object.appBar.appBarItems,
+        },
+      };
+    }
+    dispatch(action);
   };
 
   const changeHandler = (event) => {
@@ -94,7 +107,6 @@ const LoadScreen = (props) => {
                 )
                   .then((response) => response.json())
                   .then((data) => {
-                    console.log("data", data);
                     try {
                       buildLayout(data);
                     } catch (e) {

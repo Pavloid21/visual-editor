@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 const Output = (props) => {
   const blocks = useSelector((state) => state.layout.blocks);
   const bottomBar = useSelector((state) => state.layout.bottomBar);
+  const appBar = useSelector((state) => state.layout.appBar);
   const initial = useSelector((state) => state.output);
 
   const buildJSONitem = (block) => {
+    if (block.data.checked) {
+      delete block.data.checked;
+    }
     const data = {
       type: block.blockId.toUpperCase(),
       settingsUI: block.data,
@@ -18,17 +22,26 @@ const Output = (props) => {
   };
 
   const prepareJSON = () => {
-    initial.listItems = initial.listItems[0]
+    initial.listItems = blocks[0]
       ? blocks.map((block) => {
           return buildJSONitem(block);
         })
       : [];
     if (bottomBar) {
       initial.bottomBar = buildJSONitem(bottomBar);
+    } else {
+      delete initial.bottomBar;
+    }
+    if (appBar) {
+      initial.appBar = buildJSONitem(appBar);
+    } else {
+      delete initial.appBar;
     }
   };
 
-  prepareJSON();
+  useEffect(() => {
+    prepareJSON();
+  }, [blocks, bottomBar, appBar, initial]);
 
   if (!props.display) return null;
 

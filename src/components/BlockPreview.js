@@ -13,11 +13,18 @@ const BlockPreview = (props) => {
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult();
       if (item && dropResult) {
-        if (!dropResult.uuid && item.id !== "bottombar") {
+        if (
+          !dropResult.uuid &&
+          item.id !== "bottombar" &&
+          item.id !== "topappbar"
+        ) {
           props.onPushBlock(props.blockId);
         } else {
           dispatch({
-            type: actionTypes.PUSH_BOTTOMBAR,
+            type:
+              item.id === "bottombar"
+                ? actionTypes.PUSH_BOTTOMBAR
+                : actionTypes.PUSH_TOPAPPBAR,
             blockId: item.id,
           });
         }

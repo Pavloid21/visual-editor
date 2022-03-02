@@ -37,6 +37,15 @@ const removeFromList = (tree, uuid) => {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
+    case actionTypes.PUSH_TOPAPPBAR:
+      const appBar = {
+        uuid: uuidv4(),
+        blockId: action.blockId,
+        data: {
+          ...getData(blocks[action.blockId].defaultData),
+        },
+      };
+      return { ...state, appBar };
     case actionTypes.PUSH_BOTTOMBAR:
       const bottomBar = {
         uuid: uuidv4(),
@@ -132,9 +141,13 @@ export default function reducer(state = initialState, action) {
       };
     case actionTypes.CHANGE_BLOCK_DATA:
       const newBlocks = [...state.blocks];
-      const element = findInTree(newBlocks, action.blockUuid) || {
-        ...state.bottomBar,
-      };
+      const element =
+        findInTree(newBlocks, action.blockUuid) ||
+        action.blockUuid === state.bottomBar.uuid
+          ? {
+              ...state.bottomBar,
+            }
+          : { ...state.appBar };
       if (action.parentKey && Array.isArray(action.parentKey)) {
         element.data[action.parentKey[1]][action.parentKey[0]][action.key] =
           action.value;
@@ -169,6 +182,7 @@ export default function reducer(state = initialState, action) {
         ...state,
         blocks: [action.layout],
         bottomBar: action.bottomBar,
+        appBar: action.appBar,
       };
     default:
       return state;

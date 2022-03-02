@@ -12,7 +12,7 @@ import actionTypes from "../../constants/actionTypes";
 import "./common.css";
 
 const VStack = styled.div`
-  background-color: ${(props) => props.backgroundColor?.indexOf("#") >= 0 ? props.backgroundColor : "#FFFFFF"};
+  background-color: ${(props) => props.backgroundColor?.indexOf("#") >= 0 ? props.backgroundColor : "transparent"};
   display: flex;
   align-items: ${(props) =>
     props.alignment === "SPACEBETWEEN" ? "space-between" : props.alignment};

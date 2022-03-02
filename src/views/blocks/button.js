@@ -9,7 +9,7 @@ const Button = styled.div`
   align-items: center;
   display: flex;
   ${(props) => {
-    if (props.shape.type === "ALLCORNERSROUND") {
+    if (props.shape?.type === "ALLCORNERSROUND") {
       return `border-radius: ${props.shape.radius}px;`;
     }
   }}
