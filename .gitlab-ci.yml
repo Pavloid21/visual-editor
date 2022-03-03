@@ -1,0 +1,19 @@
+include:
+  - project: 'neo-projects/gitlab-templates'
+    ref: master
+    file: 'web-ui-template.yaml'
+
+stages:
+  - build
+  - docker
+  - deploy
+
+variables:
+  APP_NAME: msa-mobile-web-ui
+  PROJECT_NAME: mobile
+
+deploy:
+  stage: deploy
+  image: $DOCKER_REGISTRY_PROXY/alpine/helm
+  script:
+    - helm upgrade --install mobile-web helm --namespace=resource-manager --set image.tag=sha$CI_COMMIT_SHORT_SHA
