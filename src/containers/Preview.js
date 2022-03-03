@@ -5,6 +5,7 @@ import { sortableContainer } from "react-sortable-hoc";
 import { ItemTypes } from "../constants/actionTypes";
 import { arrayMoveImmutable } from "array-move";
 import { observer } from "../utils/observer";
+import IphoneX from "../assets/mockups/IphoneX";
 
 const SortableContainer = sortableContainer(
   ({ children, drop, backgroundColor }) => {
@@ -74,7 +75,17 @@ const Preview = (props) => {
 
   return (
     <div className="page-content-wrapper overflow-hidden d-flex justify-content-center">
-      <div
+      <IphoneX>
+        <SortableContainer
+          drop={drop}
+          backgroundColor={backgroundColor}
+          onSortEnd={onSortEnd}
+          distance={1}
+        >
+          {props.components}
+        </SortableContainer>
+      </IphoneX>
+      {/* <div
         className={`preview-window shadow-lg preview-mode-${props.previewMode}`}
       >
         <div className="preview-toolbar d-flex align-items-center justify-content-between">
@@ -132,7 +143,7 @@ const Preview = (props) => {
         >
           {props.components}
         </SortableContainer>
-      </div>
+      </div> */}
     </div>
   );
 };
