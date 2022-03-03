@@ -1,14 +1,16 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-  filter: drop-shadow(1px 0px 0px #BBC0C5) drop-shadow(-1px 0px 0px #BBC0C5)
-    drop-shadow(0px 1px 0px #BBC0C5) drop-shadow(0px -1px 0px #BBC0C5)
-    drop-shadow(1px 1px 0px #BBC0C5) drop-shadow(-1px -1px 0px #BBC0C5)
-    drop-shadow(-1px 1px 0px #BBC0C5) drop-shadow(1px -1px 0px #BBC0C5);
+  filter: drop-shadow(1px 0px 0px #bbc0c5) drop-shadow(-1px 0px 0px #bbc0c5)
+    drop-shadow(0px 1px 0px #bbc0c5) drop-shadow(0px -1px 0px #bbc0c5)
+    drop-shadow(1px 1px 0px #bbc0c5) drop-shadow(-1px -1px 0px #bbc0c5)
+    drop-shadow(-1px 1px 0px #bbc0c5) drop-shadow(1px -1px 0px #bbc0c5);
 `;
 
 const IphoneX = (props) => {
+  const appBar = useSelector((state) => state.layout.appBar);
   return (
     <>
       <Wrapper>
@@ -20,7 +22,9 @@ const IphoneX = (props) => {
             borderRadius: "37px",
             overflow: "hidden",
             padding: "56px 30px 0px 30px",
-            backgroundColor: "rgb(255, 255, 255)",
+            backgroundColor: appBar
+              ? appBar.data.backgroundColor
+              : "rgb(255, 255, 255)",
             clipPath: "url(#maskRect1)",
           }}
         >
