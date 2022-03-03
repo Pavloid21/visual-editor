@@ -182,6 +182,9 @@ export default function reducer(state = initialState, action) {
       if (action.blockUuid === state.bottomBar?.uuid) {
         delete stateReference.bottomBar;
       }
+      if (action.blockUuid === state.appBar?.uuid) {
+        delete stateReference.appBar;
+      }
       return {
         ...stateReference,
         blocks: [...mustBeRemoved],
