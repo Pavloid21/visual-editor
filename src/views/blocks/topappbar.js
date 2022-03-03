@@ -1,12 +1,13 @@
 import React from "react";
 import styled from "styled-components";
+import invertColor from "../../utils/invertColor";
 
 const TopAppBar = styled.div`
   padding-top: ${(props) => props.padding?.top}px;
   padding-bottom: ${(props) => props.padding?.bottom}px;
   padding-left: ${(props) => props.padding?.left}px;
   padding-right: ${(props) => props.padding?.right}px;
-  color: ${(props) => props.textColor};
+  color: ${(props) => props.textColor || invertColor(props.backgroundColor, true)};
   background-color: ${(props) => props.backgroundColor};
   z-index: 2;
   width: 100%;
