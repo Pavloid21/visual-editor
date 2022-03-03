@@ -138,9 +138,9 @@ class Inspector extends Component {
     const blockUuid = this.props.layout.selectedBlockUuid;
     const block =
       findInTree(this.props.layout.blocks, blockUuid) ||
-      this.props.layout.bottomBar?.uuid === blockUuid
+      (this.props.layout.bottomBar?.uuid === blockUuid
         ? this.props.layout.bottomBar
-        : this.props.layout.appBar;
+        : this.props.layout.appBar);
 
     if (!block)
       return (

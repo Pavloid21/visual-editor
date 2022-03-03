@@ -91,12 +91,6 @@ const LoadScreen = (props) => {
       </div>
       <hr />
       <div>
-        {/* <label>Screen JSON</label>
-        <textarea
-          className="form-control"
-          rows={20}
-          onChange={changeHandler}
-        ></textarea> */}
         <h3>Avaliable screenes</h3>
         {availableScreenes.map((screen) => {
           return (
@@ -120,6 +114,12 @@ const LoadScreen = (props) => {
           );
         })}
       </div>
+      <label>Screen JSON</label>
+      <textarea
+        className="form-control"
+        rows={20}
+        onChange={changeHandler}
+      ></textarea>
     </div>
   );
 };
