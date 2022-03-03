@@ -1,23 +1,32 @@
 import React from "react";
+import styled from "styled-components";
+
+const Wrapper = styled.div`
+  filter: drop-shadow(1px 0px 0px #BBC0C5) drop-shadow(-1px 0px 0px #BBC0C5)
+    drop-shadow(0px 1px 0px #BBC0C5) drop-shadow(0px -1px 0px #BBC0C5)
+    drop-shadow(1px 1px 0px #BBC0C5) drop-shadow(-1px -1px 0px #BBC0C5)
+    drop-shadow(-1px 1px 0px #BBC0C5) drop-shadow(1px -1px 0px #BBC0C5);
+`;
 
 const IphoneX = (props) => {
   return (
     <>
-      <div
-        style={{
-          position: "absolute",
-          width: "436px",
-          top: "32px",
-          height: "836px",
-          borderRadius: "37px",
-          overflow: "hidden",
-          padding: "56px 30px 0px 30px",
-          backgroundColor: "rgb(255, 255, 255)",
-          clipPath: "url(#maskRect1)",
-        }}
-      >
-        {props.children}
-      </div>
+      <Wrapper>
+        <div
+          style={{
+            position: "absolute",
+            width: "436px",
+            height: "836px",
+            borderRadius: "37px",
+            overflow: "hidden",
+            padding: "56px 30px 0px 30px",
+            backgroundColor: "rgb(255, 255, 255)",
+            clipPath: "url(#maskRect1)",
+          }}
+        >
+          {props.children}
+        </div>
+      </Wrapper>
       <svg
         width="437"
         height="860"
