@@ -64,12 +64,27 @@ export default function reducer(state = initialState, action) {
       const bar = { ...state.bottomBar };
       bar.data.navigationItems = extendedItems;
       return { ...state, bottomBar: { ...bar } };
+    case actionTypes.ADD_TOPAPPBAR_ITEM:
+      const nextItems = [...state.appBar.data.appBarItems];
+      nextItems.push({
+        ...blocks.topappbar.defaultData.appBarItems[0],
+        uuid: uuidv4(),
+      });
+      const abar = { ...state.appBar };
+      abar.data.appBarItems = nextItems;
+      return { ...state, appBar: { ...abar } };
     case actionTypes.REMOVE_BOTTOMBAR_ITEM:
       const newBarItems = [...state.bottomBar.data.navigationItems];
       newBarItems.splice(action.index, 1);
       const newBottomBar = { ...state.bottomBar };
       newBottomBar.data.navigationItems = newBarItems;
       return { ...state, bottomBar: { ...newBottomBar } };
+    case actionTypes.REMOVE_TOPAPPBAR_ITEM:
+      const newAppBarItems = [...state.appBar.data.appBarItems];
+      newAppBarItems.splice(action.index, 1);
+      const newAppBar = { ...state.appBar };
+      newAppBar.data.appBarItems = newAppBarItems;
+      return { ...state, appBar: { ...newAppBar } };
     case actionTypes.PUSH_BLOCK:
       const listItems = blocks[action.blockId].listItems;
       const newBlock = {
