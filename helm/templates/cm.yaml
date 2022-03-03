@@ -49,7 +49,7 @@ data:
             }
     
             location /api/v1 {
-                proxy_pass http://mobile-backend:80;
+                proxy_pass http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru:80;
             }
         }
     }
