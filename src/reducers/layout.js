@@ -158,11 +158,11 @@ export default function reducer(state = initialState, action) {
       const newBlocks = [...state.blocks];
       const element =
         findInTree(newBlocks, action.blockUuid) ||
-        action.blockUuid === state.bottomBar.uuid
+        (action.blockUuid === state.bottomBar.uuid
           ? {
               ...state.bottomBar,
             }
-          : { ...state.appBar };
+          : { ...state.appBar });
       if (action.parentKey && Array.isArray(action.parentKey)) {
         element.data[action.parentKey[1]][action.parentKey[0]][action.key] =
           action.value;
