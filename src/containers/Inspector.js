@@ -257,7 +257,7 @@ class Inspector extends Component {
   }
 }
 
-const RemoveButton = styled.span`
+export const RemoveButton = styled.span`
   color: red;
   &:hover {
     cursor: pointer;

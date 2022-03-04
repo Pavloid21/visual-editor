@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDrop } from "react-dnd";
 import { useSelector } from "react-redux";
 import { sortableContainer } from "react-sortable-hoc";
@@ -6,6 +6,21 @@ import { ItemTypes } from "../constants/actionTypes";
 import { arrayMoveImmutable } from "array-move";
 import { observer } from "../utils/observer";
 import IphoneX from "../assets/mockups/IphoneX";
+import styled from "styled-components";
+import Code from "./Code";
+
+const SourceCode = styled.div`
+  position: absolute;
+  width: 100%;
+  left: 16px;
+  & button {
+    padding: 10px;
+    background-color: white;
+    border: none;
+    border-radius: 2px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  }
+`;
 
 const SortableContainer = sortableContainer(
   ({ children, drop, backgroundColor }) => {
@@ -37,6 +52,7 @@ const Preview = (props) => {
     }),
   }));
 
+  const [isShowCode, showCode] = useState(false);
   const layout = useSelector((state) => state.layout);
 
   useEffect(() => {
@@ -74,7 +90,20 @@ const Preview = (props) => {
   }
 
   return (
-    <div className="page-content-wrapper overflow-hidden d-flex justify-content-center">
+    <div
+      className="page-content-wrapper overflow-hidden d-flex justify-content-center"
+      style={{ position: "relative" }}
+    >
+      <SourceCode>
+        <button
+          className="btn"
+          onClick={() => {
+            showCode(!isShowCode);
+          }}
+        >
+          <img src="https://icons.getbootstrap.com/assets/icons/code-slash.svg" />
+        </button>
+      </SourceCode>
       <IphoneX>
         <SortableContainer
           drop={drop}
@@ -85,65 +114,7 @@ const Preview = (props) => {
           {props.components}
         </SortableContainer>
       </IphoneX>
-      {/* <div
-        className={`preview-window shadow-lg preview-mode-${props.previewMode}`}
-      >
-        <div className="preview-toolbar d-flex align-items-center justify-content-between">
-          <div className="d-flex align-items-center">
-            <span className="material-icons preview-toolbar-dot">
-              stop_circle
-            </span>
-            <span className="material-icons preview-toolbar-dot">
-              stop_circle
-            </span>
-            <span className="material-icons preview-toolbar-dot">
-              stop_circle
-            </span>
-          </div>
-          <div className="d-flex">
-            <button
-              onClick={() => props.onChangePreviewMode(0)}
-              className={`btn btn-sm btn-preview-toolbar d-flex align-items-center ${
-                props.previewMode === 0 ? "active" : ""
-              }`}
-            >
-              <span className="material-icons">devices</span>
-            </button>
-            <button
-              onClick={() => props.onChangePreviewMode(1)}
-              className={`btn btn-sm btn-preview-toolbar d-flex align-items-center ${
-                props.previewMode === 1 ? "active" : ""
-              }`}
-            >
-              <span className="material-icons">tv</span>
-            </button>
-            <button
-              onClick={() => props.onChangePreviewMode(2)}
-              className={`btn btn-sm btn-preview-toolbar d-flex align-items-center ${
-                props.previewMode === 2 ? "active" : ""
-              }`}
-            >
-              <span className="material-icons">tablet</span>
-            </button>
-            <button
-              onClick={() => props.onChangePreviewMode(3)}
-              className={`btn btn-sm btn-preview-toolbar d-flex align-items-center ${
-                props.previewMode === 3 ? "active" : ""
-              }`}
-            >
-              <span className="material-icons">smartphone</span>
-            </button>
-          </div>
-        </div>
-        <SortableContainer
-          drop={drop}
-          backgroundColor={backgroundColor}
-          onSortEnd={onSortEnd}
-          distance={1}
-        >
-          {props.components}
-        </SortableContainer>
-      </div> */}
+      <Code show={isShowCode} />
     </div>
   );
 };

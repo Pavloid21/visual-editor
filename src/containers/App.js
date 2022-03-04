@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import renderHandlebars from "../utils/renderHandlebars";
 import NarrowSidebar from "../components/NarrowSidebar";
@@ -21,6 +21,7 @@ import Output from "./Output";
 import { DndWrapper } from "./DnDWrapper";
 import { observer } from "../utils/observer";
 import { findInTree } from "../reducers/layout";
+import ApiSettings from "./ApiSettings";
 
 const App = () => {
   const layout = useSelector((state) => state.layout);
@@ -123,50 +124,56 @@ const App = () => {
       <DndWrapper id="APP">
         <Router>
           <div className="wrapper d-flex">
-            <Switch>
-              <Route path="/">
-                <NarrowSidebar
-                  onChangeActiveTab={handleChangeActiveTab}
-                  activeTab={activeTab}
-                />
-                <WideSidebar>
-                  <Inspector display={activeTab === 0} />
-                  <Search
-                    display={activeTab === 1}
-                    onPushBlock={handlePushBlock}
-                    onPushBlockInside={handlePushBlockInside}
-                  />
-                  <LoadScreen display={activeTab === 2} />
-                  <Screen
-                    category="screen"
-                    display={activeTab === 5}
-                    onPushBlock={handlePushBlock}
-                    onPushBlockInside={handlePushBlockInside}
-                  />
-                  <BlocksGallery
-                    category="Layouts"
-                    display={activeTab === 7}
-                    onPushBlock={handlePushBlock}
-                    onPushBlockInside={handlePushBlockInside}
-                  />
-                  <BlocksGallery
-                    category="Controls"
-                    display={activeTab === 8}
-                    onPushBlock={handlePushBlock}
-                    onPushBlockInside={handlePushBlockInside}
-                  />
-                  <Output display={activeTab === 9} html={innerHTML} />
-                  <Settings display={activeTab === 10} />
-                </WideSidebar>
-                <Preview
-                  html={innerHTML}
-                  components={components}
-                  onChangePreviewMode={handleChangePreviewMode}
-                  previewMode={previewMode}
-                />
-                <TreeViewSidebar />
-              </Route>
-            </Switch>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <>
+                    <NarrowSidebar
+                      onChangeActiveTab={handleChangeActiveTab}
+                      activeTab={activeTab}
+                    />
+                    <WideSidebar>
+                      <Inspector display={activeTab === 0} />
+                      <Search
+                        display={activeTab === 1}
+                        onPushBlock={handlePushBlock}
+                        onPushBlockInside={handlePushBlockInside}
+                      />
+                      <LoadScreen display={activeTab === 2} />
+                      <ApiSettings display={activeTab === 3} />
+                      <Screen
+                        category="screen"
+                        display={activeTab === 5}
+                        onPushBlock={handlePushBlock}
+                        onPushBlockInside={handlePushBlockInside}
+                      />
+                      <BlocksGallery
+                        category="Layouts"
+                        display={activeTab === 7}
+                        onPushBlock={handlePushBlock}
+                        onPushBlockInside={handlePushBlockInside}
+                      />
+                      <BlocksGallery
+                        category="Controls"
+                        display={activeTab === 8}
+                        onPushBlock={handlePushBlock}
+                        onPushBlockInside={handlePushBlockInside}
+                      />
+                      <Output display={activeTab === 9} html={innerHTML} />
+                      <Settings display={activeTab === 10} />
+                    </WideSidebar>
+                    <Preview
+                      html={innerHTML}
+                      components={components}
+                      onChangePreviewMode={handleChangePreviewMode}
+                      previewMode={previewMode}
+                    />
+                    <TreeViewSidebar />
+                  </>
+                }
+              />
+            </Routes>
           </div>
         </Router>
       </DndWrapper>
