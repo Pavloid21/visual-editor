@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { monokai } from "react-syntax-highlighter/dist/esm/styles/hljs";
-import "react-extensible-code-viewer/dist/index.css";
 import { useSelector } from "react-redux";
 
 const Container = styled.div`
