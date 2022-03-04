@@ -11,6 +11,8 @@ import box from "./box";
 import searchbar from "./searchbar";
 import switch_block from "./switch";
 import topappbar from "./topappbar";
+import lazyvstack from "./lazyvstack";
+import divider from "./divider";
 
 const blocks = {
   hstack,
@@ -26,6 +28,8 @@ const blocks = {
   searchbar,
   switch: switch_block,
   topappbar,
+  lazyvstack,
+  divider,
 };
 
 export default blocks;
