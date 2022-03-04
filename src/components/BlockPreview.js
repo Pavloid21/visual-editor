@@ -19,7 +19,7 @@ const BlockPreview = (props) => {
           item.id !== "topappbar"
         ) {
           props.onPushBlock(props.blockId);
-        } else {
+        } else if (item.id === "bottombar" || item.id === "topappbar") {
           dispatch({
             type:
               item.id === "bottombar"

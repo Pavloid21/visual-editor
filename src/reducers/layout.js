@@ -158,7 +158,7 @@ export default function reducer(state = initialState, action) {
       const newBlocks = [...state.blocks];
       const element =
         findInTree(newBlocks, action.blockUuid) ||
-        (action.blockUuid === state.bottomBar.uuid
+        (action.blockUuid === state.bottomBar?.uuid
           ? {
               ...state.bottomBar,
             }
