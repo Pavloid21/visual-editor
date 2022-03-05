@@ -82,7 +82,7 @@ const ApiSettings = (props) => {
               e.preventDefault();
             }}
           >
-            <div class="form-group">
+            <div className="form-group">
               <label>Endpoint name</label>
               <Controller
                 name="varName"
@@ -92,7 +92,7 @@ const ApiSettings = (props) => {
                 )}
               />
             </div>
-            <div class="form-group">
+            <div className="form-group">
               <label>URL</label>
               <Controller
                 name="url"
@@ -145,7 +145,7 @@ const ApiSettings = (props) => {
                 </RowContainer>
               ))}
             </div>
-            <button class="btn btn-primary" onClick={handleSubmit(onSubmit)}>
+            <button className="btn btn-primary" onClick={handleSubmit(onSubmit)}>
               {isEditing ? "Edit" : "Add"}
             </button>
           </form>
