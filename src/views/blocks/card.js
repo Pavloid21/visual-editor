@@ -10,7 +10,6 @@ import { observer } from "../../utils/observer";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import actionTypes from "../../constants/actionTypes";
-import "./common.css";
 
 const Card = styled.div`
   box-sizing: border-box;

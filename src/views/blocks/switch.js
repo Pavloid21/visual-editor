@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import "./common.css";
 
 const Switch = styled.label`
   font-size: 16px;

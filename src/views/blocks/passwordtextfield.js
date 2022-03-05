@@ -1,5 +1,4 @@
 import { makeid } from "../../utils/prepareModel";
-import "./common.css";
 
 const Component = (props) => {
   const { placeholder, placeholderColor, text, textColor, backgroundColor } =

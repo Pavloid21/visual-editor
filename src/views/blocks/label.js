@@ -1,5 +1,4 @@
 import React from "react";
-import "./common.css";
 
 const Component = ({ data, ...props }) => {
   const { alignment, text, textColor, fontSize } = data;

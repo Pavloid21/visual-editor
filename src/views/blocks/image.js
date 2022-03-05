@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import "./common.css";
 
 const Image = styled.img`
   display: flex;

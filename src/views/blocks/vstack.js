@@ -9,7 +9,6 @@ import { arrayMoveImmutable } from "array-move";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import actionTypes from "../../constants/actionTypes";
-import "./common.css";
 
 const VStack = styled.div`
   background-color: ${(props) => props.backgroundColor?.indexOf("#") >= 0 ? props.backgroundColor : "transparent"};
