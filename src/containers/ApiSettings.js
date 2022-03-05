@@ -12,18 +12,47 @@ const ApiSettings = (props) => {
     setValue,
     getValues,
     control,
+    watch,
     formState: { errors },
   } = useForm();
   const { fields, append, replace, remove } = useFieldArray({
     control,
     name: "headers",
   });
+  const paramsFieldsArray = useFieldArray({
+    control,
+    name: "params",
+  });
+  const watchFieldArray = watch("headers");
+  const watchParamsArray = watch("params");
+  const controlledFields = fields.map((field, index) => {
+    return {
+      ...field,
+      ...watchFieldArray[index],
+    };
+  });
+
+  const controlledParams = paramsFieldsArray.fields.map((field, index) => {
+    return {
+      ...field,
+      ...watchParamsArray[index],
+    };
+  });
+
   const handleAddHeaderButton = () => {
     append({
       key: "",
       value: "",
     });
   };
+
+  const handleAddParamButton = () => {
+    paramsFieldsArray.append({
+      key: "",
+      value: "",
+    });
+  };
+
   const [showForm, setAPIFormShow] = useState(false);
   const APIs = useSelector((state) => state.api.list);
   const [isEditing, setEditing] = useState(false);
@@ -38,6 +67,7 @@ const ApiSettings = (props) => {
     resetField("varName");
     resetField("url");
     resetField("headers");
+    resetField("params");
     setAPIFormShow(true);
   };
 
@@ -58,10 +88,13 @@ const ApiSettings = (props) => {
   };
 
   const handleItemClick = (index) => {
+    setSelected(index);
     setValue("varName", APIs[index].varName);
     setValue("url", APIs[index].url);
+    setValue("headers", APIs[index].headers);
+    setValue("params", APIs[index].params);
     replace(APIs[index].headers);
-    setSelected(index);
+    paramsFieldsArray.replace(APIs[index].params);
     setAPIFormShow(true);
     setEditing(true);
   };
@@ -118,14 +151,14 @@ const ApiSettings = (props) => {
                   Add header
                 </button>
               </div>
-              {fields.map((field, index) => (
-                <RowContainer>
+              {controlledFields.map((field, index) => (
+                <RowContainer key={field.id}>
                   <Controller
                     name={`headers.${index}.key`}
                     control={control}
-                    render={({ field }) => (
-                      <input {...field} placeholder="Key" />
-                    )}
+                    render={({ field }) => {
+                      return <input {...field} placeholder="Key" />;
+                    }}
                   />
                   <Controller
                     name={`headers.${index}.value`}
@@ -145,8 +178,54 @@ const ApiSettings = (props) => {
                 </RowContainer>
               ))}
             </div>
-            <button className="btn btn-primary" onClick={handleSubmit(onSubmit)}>
-              {isEditing ? "Edit" : "Add"}
+            <div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: "8px",
+                }}
+              >
+                <h5>Params</h5>
+                <button
+                  className="btn btn-primary"
+                  onClick={handleAddParamButton}
+                >
+                  Add parameter
+                </button>
+              </div>
+              {controlledParams.map((field, index) => (
+                <RowContainer key={field.id}>
+                  <Controller
+                    name={`params.${index}.key`}
+                    control={control}
+                    render={({ field }) => {
+                      return <input {...field} placeholder="Key" />;
+                    }}
+                  />
+                  <Controller
+                    name={`params.${index}.value`}
+                    control={control}
+                    render={({ field }) => (
+                      <input placeholder="Value" {...field} />
+                    )}
+                  />
+                  <RemoveButton
+                    className="material-icons"
+                    onClick={(e) => {
+                      paramsFieldsArray.remove(index);
+                    }}
+                  >
+                    remove_circle_outline
+                  </RemoveButton>
+                </RowContainer>
+              ))}
+            </div>
+            <button
+              className="btn btn-primary"
+              onClick={handleSubmit(onSubmit)}
+            >
+              {isEditing ? "Edit" : "Save"} API
             </button>
           </form>
           <hr />
@@ -156,7 +235,10 @@ const ApiSettings = (props) => {
         <label>APIs:</label>
         {APIs.map((item, index) => {
           return (
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div
+              style={{ display: "flex", justifyContent: "space-between" }}
+              key={`api_${index}`}
+            >
               <p onClick={() => handleItemClick(index)}>{item.varName}</p>
               <RemoveButton
                 className="material-icons"

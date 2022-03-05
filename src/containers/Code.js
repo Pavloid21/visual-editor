@@ -77,15 +77,17 @@ const Code = (props) => {
     const reference = { ...initial };
     if (api) {
       const constants = api.list.map((item) => {
+        const headers = item.headers?.map((header) => {
+          return `"${header.key}": "${header.value}"`;
+        });
+        const params = item.params?.map((param) => {
+          return `"${param.key}": "${param.value}"`;
+        });
         return `const ${item.varName} = await api.get("${item.url}"${
-          item.headers?.length
-            ? `, {"headers": {${item.headers
-                .map((header) => {
-                  return `"${header.key}": "${header.value}"`;
-                })
-                .join(",\r\n")}}}`
-            : ""
-        });`;
+          (headers || params) && `, {`
+        }${headers && `"headers": {${headers.join(",")}},`}${
+          params && `"params": {${params.join(",")}}`
+        }});`;
       });
       prepareJSON(reference);
       let jsonString = JSON.stringify(reference, null, 4);
