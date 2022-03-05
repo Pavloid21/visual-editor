@@ -74,10 +74,18 @@ const Code = (props) => {
   };
 
   useEffect(() => {
-    const reference = {...initial};
+    const reference = { ...initial };
     if (api) {
       const constants = api.list.map((item) => {
-        return `const ${item.varName} = await api.get("${item.url}");`;
+        return `const ${item.varName} = await api.get("${item.url}"${
+          item.headers?.length
+            ? `, {"headers": {${item.headers
+                .map((header) => {
+                  return `"${header.key}": "${header.value}"`;
+                })
+                .join(",\r\n")}}}`
+            : ""
+        });`;
       });
       prepareJSON(reference);
       let jsonString = JSON.stringify(reference, null, 4);

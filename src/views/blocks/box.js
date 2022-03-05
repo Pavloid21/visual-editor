@@ -15,19 +15,20 @@ const Box = styled.div`
   border: ${(props) => `${props.borderWidth}px solid ${props.borderColor}`};
   width: ${(props) => (props.size.width ? props.size.width + "px;" : "100%;")}
   height: ${(props) => props.size.height}px;
+  background-color: ${(props) => props.backgroundColor};
   display: flex;
   align-items: center;
   overflow: hidden;
 `;
 
 const SortableContainer = sortableContainer(
-  ({ drop, border, listItems, data, ...props }) => {
+  ({ drop, backgroundColor, listItems, data, ...props }) => {
     return (
       <Box
         {...data}
         {...props}
         ref={drop}
-        border={border}
+        backgroundColor={backgroundColor}
         className="draggable"
       >
         {listItems && renderHandlebars(listItems, "document2").components}
@@ -62,9 +63,9 @@ const Component = ({ data, uuid, listItems, ...props }) => {
   }));
 
   const isActive = canDrop && isOver;
-  let border = "none";
+  let backgroundColor = "transparent";
   if (isActive) {
-    border = "3px dashed green";
+    backgroundColor = "#f1f8ff";
   }
 
   const onSortEnd = ({ oldIndex, newIndex, nodes }) => {
@@ -82,7 +83,7 @@ const Component = ({ data, uuid, listItems, ...props }) => {
   return (
     <SortableContainer
       drop={drop}
-      border={border}
+      backgroundColor={backgroundColor}
       onSortEnd={onSortEnd}
       listItems={listItems}
       {...data}

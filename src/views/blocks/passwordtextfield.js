@@ -16,6 +16,7 @@ const Component = (props) => {
         style={{
           color: textColor,
           backgroundColor,
+          boxSizing: "border-box",
         }}
       />
       <style>

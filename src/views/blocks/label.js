@@ -12,6 +12,8 @@ const Component = ({ data, ...props }) => {
         color: textColor,
         fontSize: fontSize + "px",
         marginBottom: 0,
+        boxSizing: "border-box",
+        border: "1px dashed blue",
       }}
     >
       {text}

@@ -12,6 +12,8 @@ import actionTypes from "../../constants/actionTypes";
 import "./common.css";
 
 const HStack = styled.div`
+  box-sizing: border-box;
+  border: 1px dashed blue;
   background-color: ${(props) => props.backgroundColor};
   display: flex;
   justify-content: ${(props) =>
@@ -25,7 +27,6 @@ const HStack = styled.div`
   padding-bottom: ${(props) => props.padding.bottom}px;
   padding-left: ${(props) => props.padding.left}px;
   padding-right: ${(props) => props.padding.right}px;
-  border: ${(props) => props.border};
   gap: ${(props) => props.spacing}px;
   position: relative;
   ${(props) => {
@@ -36,12 +37,12 @@ const HStack = styled.div`
 `;
 
 const SortableContainer = sortableContainer(
-  ({ drop, border, listItems, data, ...props }) => {
+  ({ drop, backgroundColor, listItems, data, ...props }) => {
     return (
       <HStack
         {...data}
         {...props}
-        border={border}
+        backgroundColor={backgroundColor}
         ref={drop}
         className="draggable"
       >
@@ -77,9 +78,9 @@ const Component = ({ data, uuid, listItems, ...props }) => {
   }));
 
   const isActive = canDrop && isOver;
-  let border = "none";
+  let backgroundColor = data.backgroundColor;
   if (isActive) {
-    border = "3px dashed green";
+    backgroundColor = "#f1f8ff";
   }
 
   const onSortEnd = ({ oldIndex, newIndex, nodes }) => {
@@ -98,7 +99,7 @@ const Component = ({ data, uuid, listItems, ...props }) => {
     <SortableContainer
       axis="x"
       drop={drop}
-      border={border}
+      backgroundColor={backgroundColor}
       onSortEnd={onSortEnd}
       listItems={listItems}
       data={data}

@@ -13,6 +13,8 @@ import actionTypes from "../../constants/actionTypes";
 import "./common.css";
 
 const Card = styled.div`
+  box-sizing: border-box;
+  border: 1px dashed blue;
   border: ${(props) => props.border};
   background-color: ${(props) => props.backgroundColor};
   display: flex;
@@ -23,7 +25,8 @@ const Card = styled.div`
   padding-right: ${(props) => props.padding?.right}px;
   padding-bottom: ${(props) => props.padding?.bottom}px;
   padding-left: ${(props) => props.padding?.left}px;
-  height: ${(props) => (props.size?.height ? props.size?.height + "px" : "auto")};
+  height: ${(props) =>
+    props.size?.height ? props.size?.height + "px" : "auto"};
   box-shadow: ${(props) => elevation[props.elevation] || "none"};
   gap: ${(props) => props.spacing}px;
   border-radius: ${(props) => `
@@ -31,17 +34,18 @@ const Card = styled.div`
     ${props.corners?.topRightRadius}px 
     ${props.corners?.bottomRightRadius}px
     ${props.corners?.bottomLeftRadius}px 
-  `}
+  `};
 `;
 
 const SortableContainer = sortableContainer(
-  ({ drop, border, listItems, data, ...props }) => {
+  ({ drop, backgroundColor, listItems, data, ...props }) => {
+    console.log("backgroundColor", backgroundColor);
     return (
       <Card
-        ref={drop}
         {...data}
         {...props}
-        border={border}
+        backgroundColor={backgroundColor}
+        ref={drop}
         className="draggable"
       >
         {listItems && renderHandlebars(listItems, "document2").components}
@@ -76,9 +80,10 @@ const Component = ({ data, uuid, listItems, ...props }) => {
   }));
 
   const isActive = canDrop && isOver;
-  let border = "none";
+  let backgroundColor = data.backgroundColor;
   if (isActive) {
-    border = "3px dashed green";
+    console.log("isActive", isActive);
+    backgroundColor = "#f1f8ff";
   }
 
   const onSortEnd = ({ oldIndex, newIndex, nodes }) => {
@@ -96,11 +101,11 @@ const Component = ({ data, uuid, listItems, ...props }) => {
   return (
     <SortableContainer
       drop={drop}
-      border={border}
       onSortEnd={onSortEnd}
       listItems={listItems}
       {...data}
       {...props}
+      backgroundColor={backgroundColor}
       distance={1}
     />
   );

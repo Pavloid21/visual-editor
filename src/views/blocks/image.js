@@ -4,6 +4,8 @@ import "./common.css";
 
 const Image = styled.img`
   display: flex;
+  box-sizing: border-box;
+  border: 1px dashed blue;
   align-items: align-items: ${(props) =>
     props.alignment === "SPACEBETWEEN" ? "space-between" : props.alignment};
   width: ${(props) => (+props.size?.width ? props.size.width + "px" : "100%")};

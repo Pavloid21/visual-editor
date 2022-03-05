@@ -1,17 +1,29 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import actionTypes from "../constants/actionTypes";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { RemoveButton } from "./Inspector";
+import styled from "styled-components";
 
 const ApiSettings = (props) => {
   const {
     handleSubmit,
     resetField,
     setValue,
+    getValues,
     control,
     formState: { errors },
   } = useForm();
+  const { fields, append, replace, remove } = useFieldArray({
+    control,
+    name: "headers",
+  });
+  const handleAddHeaderButton = () => {
+    append({
+      key: "",
+      value: "",
+    });
+  };
   const [showForm, setAPIFormShow] = useState(false);
   const APIs = useSelector((state) => state.api.list);
   const [isEditing, setEditing] = useState(false);
@@ -25,6 +37,7 @@ const ApiSettings = (props) => {
   const handleAddButton = () => {
     resetField("varName");
     resetField("url");
+    resetField("headers");
     setAPIFormShow(true);
   };
 
@@ -47,6 +60,7 @@ const ApiSettings = (props) => {
   const handleItemClick = (index) => {
     setValue("varName", APIs[index].varName);
     setValue("url", APIs[index].url);
+    replace(APIs[index].headers);
     setSelected(index);
     setAPIFormShow(true);
     setEditing(true);
@@ -63,7 +77,11 @@ const ApiSettings = (props) => {
       <hr />
       {showForm && (
         <>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+            }}
+          >
             <div class="form-group">
               <label>Endpoint name</label>
               <Controller
@@ -84,7 +102,50 @@ const ApiSettings = (props) => {
                 )}
               />
             </div>
-            <button type="submit" class="btn btn-primary">
+            <div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: "8px",
+                }}
+              >
+                <h5>Headers</h5>
+                <button
+                  className="btn btn-primary"
+                  onClick={handleAddHeaderButton}
+                >
+                  Add header
+                </button>
+              </div>
+              {fields.map((field, index) => (
+                <RowContainer>
+                  <Controller
+                    name={`headers.${index}.key`}
+                    control={control}
+                    render={({ field }) => (
+                      <input {...field} placeholder="Key" />
+                    )}
+                  />
+                  <Controller
+                    name={`headers.${index}.value`}
+                    control={control}
+                    render={({ field }) => (
+                      <input placeholder="Value" {...field} />
+                    )}
+                  />
+                  <RemoveButton
+                    className="material-icons"
+                    onClick={(e) => {
+                      remove(index);
+                    }}
+                  >
+                    remove_circle_outline
+                  </RemoveButton>
+                </RowContainer>
+              ))}
+            </div>
+            <button class="btn btn-primary" onClick={handleSubmit(onSubmit)}>
               {isEditing ? "Edit" : "Add"}
             </button>
           </form>
@@ -115,5 +176,17 @@ const ApiSettings = (props) => {
     </div>
   );
 };
+
+const RowContainer = styled.div`
+  display: flex;
+  & * {
+    flex: 1 1 auto;
+    width: 100%;
+    margin-bottom: 8px;
+  }
+  & *:last-child {
+    width: 30px;
+  }
+`;
 
 export default ApiSettings;

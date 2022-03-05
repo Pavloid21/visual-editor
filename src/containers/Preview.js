@@ -86,7 +86,7 @@ const Preview = (props) => {
   const isActive = canDrop && isOver;
   let backgroundColor = "#FFFFFF";
   if (isActive) {
-    backgroundColor = "#BEF3FF";
+    backgroundColor = "#f1f8ff";
   }
 
   return (

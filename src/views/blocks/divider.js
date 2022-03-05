@@ -8,7 +8,7 @@ const Component = ({ data, ...props }) => {
       {...props}
       className="draggable"
       style={{
-        backgroundColor
+        backgroundColor,
       }}
     />
   );

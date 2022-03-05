@@ -15,6 +15,8 @@ const TopAppBar = styled.div`
   flex-direction: row;
   font-size: ${(props) => props.fontSize}px;
   justify-content: space-between;
+  box-sizing: border-box;
+  border: 1px dashed blue;
   & label {
     text-align: ${(props) => props.textAlignment};
     margin: 0;

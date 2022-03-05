@@ -42,6 +42,8 @@ const Switch = styled.label`
     display: inline-block;
     width: 100%;
     cursor: pointer;
+    box-sizing: border-box;
+    border: 1px dashed blue;
     &::before {
       content: "";
       float: right;
