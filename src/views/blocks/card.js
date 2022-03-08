@@ -10,6 +10,7 @@ import { observer } from "../../utils/observer";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import actionTypes from "../../constants/actionTypes";
+import card from "../../assets/card.svg";
 
 const Card = styled.div`
   box-sizing: border-box;
@@ -113,7 +114,7 @@ const Component = ({ data, uuid, listItems, ...props }) => {
 const block = {
   Component,
   name: "CARD",
-  previewImageUrl: "https://cdn-icons-png.flaticon.com/128/1239/1239779.png",
+  previewImageUrl: card,
   category: "Layouts",
   defaultData: {
     elevation: 3,

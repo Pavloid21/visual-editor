@@ -1,4 +1,5 @@
 import React from "react";
+import label from "../../assets/label.svg";
 
 const Component = ({ data, ...props }) => {
   const { alignment, text, textColor, fontSize } = data;
@@ -23,7 +24,7 @@ const Component = ({ data, ...props }) => {
 const block = {
   Component,
   name: "LABEL",
-  previewImageUrl: "",
+  previewImageUrl: label,
   category: "Controls",
   defaultData: {
     alignment: "CENTER",

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import bottombar from "../../assets/bottombar.svg";
 
 const BottomBar = styled.div`
   background-color: ${(props) => props.backgroundColor};
@@ -63,7 +64,7 @@ const Component = ({ data, ...props }) => {
 const block = {
   Component,
   name: "BOTTOMBAR",
-  previewImageUrl: "",
+  previewImageUrl: bottombar,
   category: "Controls",
   defaultData: {
     backgroundColor: "#423649",

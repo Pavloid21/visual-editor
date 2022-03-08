@@ -1,4 +1,5 @@
 import { makeid } from "../../utils/prepareModel";
+import passwordtextfield from "../../assets/passwordtextfield.svg";
 
 const Component = (props) => {
   const { placeholder, placeholderColor, text, textColor, backgroundColor } =
@@ -30,7 +31,7 @@ const Component = (props) => {
 const block = {
   Component,
   name: "PASSWORDTEXTFIELD",
-  previewImageUrl: "",
+  previewImageUrl: passwordtextfield,
   category: "Controls",
   defaultData: {
     placeholder: "Логин",

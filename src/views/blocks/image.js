@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import image from "../../assets/image.svg";
 
 const Image = styled.img`
   display: flex;
@@ -26,7 +27,7 @@ const Component = ({ data, ...props }) => {
 const block = {
   Component,
   name: "IMAGE",
-  previewImageUrl: "",
+  previewImageUrl: image,
   category: "Controls",
   defaultData: {
     imageUrl:

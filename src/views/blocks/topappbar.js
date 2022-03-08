@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import invertColor from "../../utils/invertColor";
+import topappbar from "../../assets/topappbar.svg"
 
 const TopAppBar = styled.div`
   padding-top: ${(props) => props.padding?.top}px;
@@ -68,7 +69,7 @@ const Component = ({ data, ...props }) => {
 const block = {
   Component,
   name: "TOPAPPBAR",
-  previewImageUrl: "",
+  previewImageUrl: topappbar,
   category: "Controls",
   defaultData: {
     fontSize: 16,

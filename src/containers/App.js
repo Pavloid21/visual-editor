@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import renderHandlebars from "../utils/renderHandlebars";
-import NarrowSidebar from "../components/NarrowSidebar";
-import WideSidebar from "../components/WideSidebar";
+import LeftSidebar from "../components/LeftSidebar";
 import TreeViewSidebar from "../components/TreeViewSidebar";
 import LoadScreen from "./LoadScreen";
 
@@ -22,6 +21,9 @@ import { DndWrapper } from "./DnDWrapper";
 import { observer } from "../utils/observer";
 import { findInTree } from "../reducers/layout";
 import ApiSettings from "./ApiSettings";
+import TopBar from "../components/TopBar";
+import GlobalStyles from "../constants/theme";
+import SideBarHeader from "../components/SideBarHeader";
 
 const App = () => {
   const layout = useSelector((state) => state.layout);
@@ -122,19 +124,21 @@ const App = () => {
   return (
     <div id="APP">
       <DndWrapper id="APP">
+        <TopBar />
         <Router>
-          <div className="wrapper d-flex">
+          <div className="wrapper d-flex" style={{paddingTop: "60px"}}>
             <Routes>
               <Route
                 path="/"
                 element={
                   <>
-                    <NarrowSidebar
+                    {/* <NarrowSidebar
                       onChangeActiveTab={handleChangeActiveTab}
                       activeTab={activeTab}
-                    />
-                    <WideSidebar>
-                      <Inspector display={activeTab === 0} />
+                    /> */}
+                    <LeftSidebar>
+                      <SideBarHeader title="Project name"/>
+                      {/* <Inspector display={activeTab === 0} />
                       <Search
                         display={activeTab === 1}
                         onPushBlock={handlePushBlock}
@@ -161,15 +165,14 @@ const App = () => {
                         onPushBlockInside={handlePushBlockInside}
                       />
                       <Output display={activeTab === 9} html={innerHTML} />
-                      <Settings display={activeTab === 10} />
-                    </WideSidebar>
+                      <Settings display={activeTab === 10} /> */}
+                    </LeftSidebar>
                     <Preview
                       html={innerHTML}
                       components={components}
                       onChangePreviewMode={handleChangePreviewMode}
                       previewMode={previewMode}
                     />
-                    <TreeViewSidebar />
                   </>
                 }
               />
@@ -177,6 +180,7 @@ const App = () => {
           </div>
         </Router>
       </DndWrapper>
+      <GlobalStyles />
     </div>
   );
 };

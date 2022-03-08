@@ -1,0 +1,89 @@
+import React from "react";
+import styled from "styled-components";
+import { ReactComponent as CollapseIcon } from "../assets/collapse.svg";
+import Input from "../components/Input";
+import BlockPreview from "../components/BlockPreview";
+import blocks from "../views/blocks";
+import { useDispatch } from "react-redux";
+import actionTypes from "../constants/actionTypes";
+
+const GalleryHeader = styled.div`
+  border-top: 1px solid var(--neo-gray);
+  border-bottom: 1px solid var(--neo-gray);
+  padding: 4px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  & span {
+    font-size: 20px;
+    line-height: 24px;
+  }
+`;
+
+const Container = styled.div`
+  padding: 4px 6px 0px 16px;
+  height: calc(100% - 46px);
+  & > div {
+    height: 100%;
+    overflow: auto;
+    display: grid;
+    grid-template-columns: 118px 118px 118px;
+    grid-template-rows: 118px 118px 118px;
+    column-gap: 18px;
+    row-gap: 18px;
+    padding-top: 10px;
+    padding-bottom: 50px;
+  }
+`;
+
+const Gallery = (props) => {
+  const dispatch = useDispatch();
+
+  const handlePushBlock = (blockId) => {
+    dispatch({
+      type: actionTypes.PUSH_BLOCK,
+      blockId,
+    });
+  };
+
+  const handlePushBlockInside = (blockId, uuid) => {
+    dispatch({
+      type: actionTypes.PUSH_BLOCK_INSIDE,
+      blockId,
+      uuid,
+    });
+  };
+
+  return (
+    <div>
+      <GalleryHeader>
+        <span>Components</span>
+        <CollapseIcon className="icon" />
+      </GalleryHeader>
+      <Container>
+        <Input placeholder="Filter components" />
+        <div>
+          {Object.keys(blocks).map((blockId) => {
+            const block = blocks[blockId];
+            // if (block.category === props.category) {
+            return (
+              <BlockPreview
+                key={blockId}
+                name={block.name}
+                blockId={blockId}
+                image={block.previewImageUrl}
+                onPushBlock={handlePushBlock}
+                onPushBlockInside={handlePushBlockInside}
+              />
+            );
+            // } else {
+            //   return null;
+            // }
+          })}
+        </div>
+      </Container>
+    </div>
+  );
+};
+
+export default Gallery;

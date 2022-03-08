@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import button from "../../assets/button.svg";
 
 const Button = styled.div`
   box-sizing: border-box;
@@ -36,7 +37,7 @@ const Component = (props) => {
 const block = {
   Component,
   name: "BUTTON",
-  previewImageUrl: "",
+  previewImageUrl: button,
   category: "Controls",
   defaultData: {
     action: "nextScreenName",

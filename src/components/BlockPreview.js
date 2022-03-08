@@ -4,6 +4,29 @@ import { useDrag } from "react-dnd";
 import { ItemTypes } from "../constants/actionTypes";
 import { useDispatch } from "react-redux";
 import actionTypes from "../constants/actionTypes";
+import styled from "styled-components";
+
+const Container = styled.div`
+  border: 1px dashed #b3b3b3;
+  box-sizing: border-box;
+  border-radius: 4px;
+  padding: 16px;
+  width: 118px;
+  height: 118px;
+  flex: 1 1 30%;
+  text-align: center;
+  & img {
+    width: 60px;
+    height: 60px;
+  }
+  & p {
+    margin-top: 13px;
+    margin-bottom: 0;
+    font-size: 12px;
+    line-height: 16px;
+    overflow-wrap: break-word;
+  }
+`;
 
 const BlockPreview = (props) => {
   const dispatch = useDispatch();
@@ -37,18 +60,10 @@ const BlockPreview = (props) => {
   const opacity = isDragging ? 0.4 : 1;
 
   return (
-    <div
-      className="card card-body p-2 shadow-lg block-entry mb-2"
-      style={{ opacity }}
-      ref={drag}
-    >
-      <img src={props.image} alt={props.name} className="img-fluid" />
-      <div className="prompt">
-        <div className="prompt-inside">
-          <div>{props.name}</div>
-        </div>
-      </div>
-    </div>
+    <Container style={{ opacity }} ref={drag}>
+      <img src={props.image} alt={props.name} />
+      <p>{props.name}</p>
+    </Container>
   );
 };
 

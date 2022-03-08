@@ -9,6 +9,7 @@ import { arrayMoveImmutable } from "array-move";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import actionTypes from "../../constants/actionTypes";
+import box from "../../assets/box.svg";
 
 const Box = styled.div`
   border: ${(props) => `${props.borderWidth}px solid ${props.borderColor}`};
@@ -95,7 +96,7 @@ const Component = ({ data, uuid, listItems, ...props }) => {
 const block = {
   Component,
   name: "BOX",
-  previewImageUrl: "https://cdn-icons-png.flaticon.com/128/1239/1239779.png",
+  previewImageUrl: box,
   category: "Layouts",
   defaultData: {
     borderColor: "#EFEFEF",

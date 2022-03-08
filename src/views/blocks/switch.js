@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import switch_ic from "../../assets/switch.svg";
 
 const Switch = styled.label`
   font-size: 16px;
@@ -83,7 +84,7 @@ const Component = ({ data, ...props }) => {
 const block = {
   Component,
   name: "SWITCH",
-  previewImageUrl: "",
+  previewImageUrl: switch_ic,
   category: "Controls",
   defaultData: {
     backgroundColor: "#FDB291",

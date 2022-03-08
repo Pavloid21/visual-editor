@@ -1,4 +1,5 @@
 import React from "react";
+import divider from "../../assets/divider.svg";
 
 const Component = ({ data, ...props }) => {
   const { backgroundColor } = data;
@@ -16,7 +17,7 @@ const Component = ({ data, ...props }) => {
 const block = {
   Component,
   name: "DIVIDER",
-  previewImageUrl: "",
+  previewImageUrl: divider,
   category: "Controls",
   defaultData: {
     backgroundColor: "#000000",

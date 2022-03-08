@@ -52,10 +52,10 @@ export default function TreeViewSidebar() {
   };
 
   return (
-    <div className="mh-100 d-flex flex-column inspector-wrapper">
-      <div className="sidebar-wrapper container-fluid p-2 pt-4">
-        <TreeMenu data={treeData} onClickItem={handleItemClick} />
-      </div>
-    </div>
+    // <div className="mh-100 d-flex flex-column inspector-wrapper">
+    //   <div className="sidebar-wrapper container-fluid p-2 pt-4">
+    <TreeMenu data={treeData} onClickItem={handleItemClick} />
+    //   </div>
+    // </div>
   );
 }
