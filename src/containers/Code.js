@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { monokai } from "react-syntax-highlighter/dist/esm/styles/hljs";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import actionTypes from "../constants/actionTypes";
 
 const Container = styled.div`
   display: ${(props) => (props.show ? "flex" : "none")};
@@ -22,13 +23,13 @@ const EditorWrapper = styled.div`
 `;
 
 const Code = (props) => {
-  const [code, setCode] = useState("");
+  const code = useSelector((state) => state.code);
+  const dispatch = useDispatch();
   const api = useSelector((state) => state.api);
   const bottomBar = useSelector((state) => state.layout.bottomBar);
   const appBar = useSelector((state) => state.layout.appBar);
   const blocks = useSelector((state) => state.layout.blocks);
   const initial = useSelector((state) => state.output);
-
   const buildJSONitem = (block) => {
     if (block.data.checked) {
       delete block.data.checked;
@@ -93,7 +94,7 @@ const Code = (props) => {
       let jsonString = JSON.stringify(reference, null, 4);
       jsonString = jsonString.replace(/"{{|}}"/g, "");
       constants.push(`return ${jsonString}`);
-      setCode(constants.join("\r\n"));
+      dispatch({ type: actionTypes.SAVE_CODE, code: constants.join("\r\n") });
     }
   }, [api, initial, blocks, bottomBar, appBar]);
   return (

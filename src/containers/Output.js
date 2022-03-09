@@ -6,6 +6,7 @@ const Output = (props) => {
   const bottomBar = useSelector((state) => state.layout.bottomBar);
   const appBar = useSelector((state) => state.layout.appBar);
   const initial = useSelector((state) => state.output);
+  const code = useSelector((state) => state.code);
 
   const buildJSONitem = (block) => {
     if (block.data.checked) {
@@ -41,7 +42,21 @@ const Output = (props) => {
 
   useEffect(() => {
     prepareJSON();
-  }, [blocks, bottomBar, appBar, initial]);
+  }, [blocks, bottomBar, appBar, initial, code]);
+
+  const handleSaveClick = () => {
+    fetch(`/api/v1/configurations/${initial.screen.replace(/\s/g, "_")}`, {
+      method: "PUT",
+      body: code,
+      headers: {
+        "Content-Type": "text/plain",
+      },
+    })
+      .then((response) => {})
+      .then(() => {
+        alert("SUCCESS");
+      });
+  };
 
   if (!props.display) return null;
 
@@ -59,6 +74,9 @@ const Output = (props) => {
           rows={10}
           value={JSON.stringify(initial, null, 4)}
         ></textarea>
+        <button className="btn btn-primary" onClick={handleSaveClick}>
+          Save
+        </button>
       </div>
     </div>
   );

@@ -20,6 +20,7 @@ const actionTypes = {
   ADD_API: "API/ADD_API",
   REMOVE_API_ITEM: "API/REMOVE_API_ITEM",
   EDIT_API: "API/EDIT_API",
+  SAVE_CODE: "CODE/SAVE_CODE",
 };
 
 export const ItemTypes = {
