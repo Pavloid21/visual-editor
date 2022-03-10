@@ -39,6 +39,9 @@ export default createGlobalStyle`
     &:hover {
       cursor: pointer;
       background-color: var(--light-orange);
+      & path {
+        fill: #333333;
+      }
     }
     &:active {
       background-color: var(--active-color);

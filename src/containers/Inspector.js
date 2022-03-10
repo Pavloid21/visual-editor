@@ -39,6 +39,8 @@ class Inspector extends Component {
         return (
           <div key={`${parentKey}_${index}`}>
             <Input
+              isWide
+              clearable
               label={config[el].name}
               debounceTimeout={500}
               type="text"
@@ -62,6 +64,7 @@ class Inspector extends Component {
               debounceTimeout={500}
               label={config[el].name}
               type="color"
+              isWide
               className="form-control"
               placeholder={config[el].name}
               value={endpoint ? endpoint[el] : null}
@@ -75,6 +78,7 @@ class Inspector extends Component {
         return (
           <div className="form-group" key={`${parentKey}_${index}`}>
             <Input
+              isWide
               label={config[el].name}
               debounceTimeout={500}
               type="number"

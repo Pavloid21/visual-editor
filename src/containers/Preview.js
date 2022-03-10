@@ -167,8 +167,12 @@ const Preview = (props) => {
     <>
       <Bar barState={barState}>
         <ButtonGroup>
-          <Button className="sm">iOS</Button>
-          <Button className="sm secondary">Android</Button>
+          {editorMode === "editor" && (
+            <>
+              <Button className="sm">iOS</Button>
+              <Button className="sm secondary">Android</Button>
+            </>
+          )}
         </ButtonGroup>
         <div className="mode_selector">
           <Screen
@@ -204,7 +208,9 @@ const Preview = (props) => {
         {editorMode === "json" && <Code show={isShowCode} />}
       </div>
       <ServiceBar barState={barState}>
-        {editorMode === "json" && <Save className="icon" onClick={handleSaveSnippet} />}
+        {editorMode === "json" && (
+          <Save className="icon" onClick={handleSaveSnippet} />
+        )}
       </ServiceBar>
     </>
   );
