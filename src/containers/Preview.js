@@ -12,6 +12,7 @@ import Button from "../components/Button";
 import { ReactComponent as Screen } from "../assets/screen.svg";
 import { ReactComponent as Json } from "../assets/json.svg";
 import { ReactComponent as Reference } from "../assets/preview.svg";
+import { ReactComponent as Save } from "../assets/save.svg";
 
 const Bar = styled.div`
   height: 60px;
@@ -23,6 +24,24 @@ const Bar = styled.div`
   padding-right: ${(props) => (props.barState.right ? "437px" : "16px")};
   padding-top: 10px;
   padding-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  & .mode_selector {
+    gap: 16px;
+    display: flex;
+  }
+`;
+
+const ServiceBar = styled.div`
+  height: 36px;
+  background: var(--background);
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding-left: ${(props) => (props.barState?.left ? "437px" : "16px")};
+  padding-right: ${(props) => (props.barState?.right ? "437px" : "16px")};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -79,11 +98,15 @@ const Preview = (props) => {
   }));
 
   const dispatch = useDispatch();
-  const editorMode = useSelector((state) => state.editorMode.mode);
   const [isShowCode, showCode] = useState(false);
   const [osMode, setOsMode] = useState(0);
+  const currentScreen = useSelector((state) => state.current);
+  const outputScreen = useSelector((state) => state.output.screen);
+  const editorMode = useSelector((state) => state.editorMode.mode);
   const layout = useSelector((state) => state.layout);
   const barState = useSelector((state) => state.sideBar);
+  const code = useSelector((state) => state.code);
+  const initial = useSelector((state) => state.output);
 
   useEffect(() => {
     const scrollY = localStorage.getItem("scrollY");
@@ -120,6 +143,20 @@ const Preview = (props) => {
     });
   };
 
+  const handleSaveSnippet = () => {
+    fetch(`/api/v1/configurations/${initial.screen.replace(/\s/g, "_")}`, {
+      method: "PUT",
+      body: code,
+      headers: {
+        "Content-Type": "text/plain",
+      },
+    })
+      .then((response) => {})
+      .then(() => {
+        alert("SUCCESS");
+      });
+  };
+
   const isActive = canDrop && isOver;
   let backgroundColor = "#FFFFFF";
   if (isActive) {
@@ -152,16 +189,6 @@ const Preview = (props) => {
         className="page-content-wrapper overflow-hidden d-flex justify-content-center"
         style={{ position: "relative", transform: "scale(0.9)" }}
       >
-        {/* <SourceCode>
-        <button
-          className="btn"
-          onClick={() => {
-            showCode(!isShowCode);
-          }}
-        >
-          <img src="https://icons.getbootstrap.com/assets/icons/code-slash.svg" />
-        </button>
-      </SourceCode> */}
         {editorMode === "editor" && (
           <IphoneX>
             <SortableContainer
@@ -176,6 +203,9 @@ const Preview = (props) => {
         )}
         {editorMode === "json" && <Code show={isShowCode} />}
       </div>
+      <ServiceBar barState={barState}>
+        {editorMode === "json" && <Save className="icon" onClick={handleSaveSnippet} />}
+      </ServiceBar>
     </>
   );
 };

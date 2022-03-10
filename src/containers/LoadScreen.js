@@ -16,7 +16,9 @@ const LoadScreen = (props) => {
   const [availableScreenes, setScreenes] = useState([]);
   const dispatch = useDispatch();
   useEffect(() => {
-    fetch("http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/configurations")
+    fetch(
+      "http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/configurations"
+    )
       .then((response) => response.json())
       .then((data) => {
         setScreenes(data);
@@ -67,12 +69,12 @@ const LoadScreen = (props) => {
       };
     }
     dispatch(action);
+    dispatch({ type: actionTypes.EDIT_SCREEN_NAME, screen: object.screen });
   };
 
   const changeHandler = (event) => {
     try {
       const json = JSON.parse(event.target.value);
-      // console.log("json", json);
       buildLayout(json);
     } catch (e) {
       console.log(e);
@@ -88,10 +90,16 @@ const LoadScreen = (props) => {
         return (
           <ScreenItem
             onClick={() => {
-              fetch(`http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/configurations/${screen}`)
+              fetch(
+                `http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/configurations/${screen}`
+              )
                 .then((response) => response.json())
                 .then((data) => {
                   try {
+                    dispatch({
+                      type: actionTypes.SET_CURRENT_SCREEN_NAME,
+                      current: screen,
+                    });
                     buildLayout(data);
                   } catch (e) {
                     console.log("e", e);
