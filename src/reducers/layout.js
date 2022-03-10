@@ -198,7 +198,7 @@ export default function reducer(state = initialState, action) {
     case actionTypes.SET_LAYOUT:
       return {
         ...state,
-        blocks: [action.layout],
+        blocks: [...action.layout],
         bottomBar: action.bottomBar,
         appBar: action.appBar,
       };
