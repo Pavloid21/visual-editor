@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { ReactComponent as IPhone } from "./iPhone_X.svg";
 
 const Wrapper = styled.div`
   filter: drop-shadow(1px 0px 0px #bbc0c5) drop-shadow(-1px 0px 0px #bbc0c5)
@@ -17,11 +18,11 @@ const IphoneX = (props) => {
         <div
           style={{
             position: "absolute",
-            width: "436px",
+            width: "433px",
             height: "836px",
             borderRadius: "37px",
             overflow: "hidden",
-            padding: "56px 30px 0px 30px",
+            padding: "56px 26px 0px",
             backgroundColor: appBar
               ? appBar.data.backgroundColor
               : "rgb(255, 255, 255)",
@@ -31,7 +32,8 @@ const IphoneX = (props) => {
           {props.children}
         </div>
       </Wrapper>
-      <svg
+      <IPhone />    
+      {/* <svg
         width="437"
         height="860"
         viewBox="0 0 437 860"
@@ -105,7 +107,7 @@ const IphoneX = (props) => {
           strokeWidth="3"
         />
         <circle cx="271" cy="36" r="2.5" stroke="#BBC0C5" strokeWidth="3" />
-      </svg>
+      </svg> */}
     </>
   );
 };

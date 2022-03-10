@@ -1,35 +1,23 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
 import renderHandlebars from "../utils/renderHandlebars";
 import LeftSidebar from "../components/LeftSidebar";
-import TreeViewSidebar from "../components/TreeViewSidebar";
-import LoadScreen from "./LoadScreen";
-
 import Preview from "./Preview";
-import BlocksGallery from "./BlocksGallery";
-import Search from "./Search";
-import Inspector from "./Inspector";
-import Settings from "./Settings";
-import Screen from "./Screen";
-
 import actionTypes from "../constants/actionTypes";
-import Output from "./Output";
-
 import { DndWrapper } from "./DnDWrapper";
 import { observer } from "../utils/observer";
 import { findInTree } from "../reducers/layout";
-import ApiSettings from "./ApiSettings";
 import TopBar from "../components/TopBar";
 import GlobalStyles from "../constants/theme";
-import SideBarHeader from "../components/SideBarHeader";
+import RightSidebar from "../components/RightSideBar";
 
 const App = () => {
   const layout = useSelector((state) => state.layout);
   const bottomBar = useSelector((state) => state.layout.bottomBar);
   const appBar = useSelector((state) => state.layout.appBar);
   const config = useSelector((state) => state.config);
+  const barState = useSelector((state) => state.sideBar);
   const dispatch = useDispatch();
   useEffect(() => {
     const handleMessage = (event) => {
@@ -63,21 +51,6 @@ const App = () => {
     dispatch({
       type: actionTypes.CHANGE_PREVIEW_MODE,
       mode,
-    });
-  };
-
-  const handlePushBlock = (blockId) => {
-    dispatch({
-      type: actionTypes.PUSH_BLOCK,
-      blockId,
-    });
-  };
-
-  const handlePushBlockInside = (blockId, uuid) => {
-    dispatch({
-      type: actionTypes.PUSH_BLOCK_INSIDE,
-      blockId,
-      uuid,
     });
   };
 
@@ -119,60 +92,43 @@ const App = () => {
     appBar
   );
   const innerHTML = schema;
-  const { activeTab, previewMode } = config;
+  const { previewMode } = config;
+
+  const handleAppClick = (e) => {
+    if (!e.target.onclick && e.target.localName !== "input") {
+      dispatch({
+        type: actionTypes.SET_SELECTED_BLOCK,
+        blockUuid: "",
+      });
+    }
+  };
 
   return (
-    <div id="APP">
+    <div id="APP" onClick={handleAppClick}>
       <DndWrapper id="APP">
         <TopBar />
         <Router>
-          <div className="wrapper d-flex" style={{paddingTop: "60px"}}>
+          <div
+            className="wrapper d-flex"
+            style={{
+              paddingTop: "60px",
+              justifyContent: "center",
+              height: "100vh",
+            }}
+          >
             <Routes>
               <Route
                 path="/"
                 element={
                   <>
-                    {/* <NarrowSidebar
-                      onChangeActiveTab={handleChangeActiveTab}
-                      activeTab={activeTab}
-                    /> */}
-                    <LeftSidebar>
-                      <SideBarHeader title="Project name"/>
-                      {/* <Inspector display={activeTab === 0} />
-                      <Search
-                        display={activeTab === 1}
-                        onPushBlock={handlePushBlock}
-                        onPushBlockInside={handlePushBlockInside}
-                      />
-                      <LoadScreen display={activeTab === 2} />
-                      <ApiSettings display={activeTab === 3} />
-                      <Screen
-                        category="screen"
-                        display={activeTab === 5}
-                        onPushBlock={handlePushBlock}
-                        onPushBlockInside={handlePushBlockInside}
-                      />
-                      <BlocksGallery
-                        category="Layouts"
-                        display={activeTab === 7}
-                        onPushBlock={handlePushBlock}
-                        onPushBlockInside={handlePushBlockInside}
-                      />
-                      <BlocksGallery
-                        category="Controls"
-                        display={activeTab === 8}
-                        onPushBlock={handlePushBlock}
-                        onPushBlockInside={handlePushBlockInside}
-                      />
-                      <Output display={activeTab === 9} html={innerHTML} />
-                      <Settings display={activeTab === 10} /> */}
-                    </LeftSidebar>
+                    <LeftSidebar display={barState.left} />
                     <Preview
                       html={innerHTML}
                       components={components}
                       onChangePreviewMode={handleChangePreviewMode}
                       previewMode={previewMode}
                     />
+                    <RightSidebar display={barState.right} />
                   </>
                 }
               />

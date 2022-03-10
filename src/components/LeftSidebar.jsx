@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import TreeMenu from "react-simple-tree-menu";
 import actionTypes from "../constants/actionTypes";
 import { observer } from "../utils/observer";
-import SideBarHeader from "./SideBarHeader";
+import SideBarHeader, { SideBarSubheader } from "./SideBarHeader";
 import Gallery from "../containers/Gallery";
 import SortableTree from "@nosferatu500/react-sortable-tree";
-import '@nosferatu500/react-sortable-tree/style.css';
-// import "react-sortable-tree/style.css";
+import FileExplorerTheme from "@nosferatu500/theme-file-explorer";
+import { ReactComponent as Copy } from "../assets/copy.svg";
+import { ReactComponent as Trash } from "../assets/trash.svg";
+import { ReactComponent as Plus } from "../assets/plus.svg";
+import LoadScreen from "../containers/LoadScreen";
 
 const Container = styled.div`
   min-width: 422px;
@@ -18,43 +20,35 @@ const Container = styled.div`
   flex-direction: column;
   border-right: 1px solid var(--neo-gray);
   height: calc(100vh - 60px);
+  z-index: 2;
   & > div {
     height: 50%;
   }
 `;
 
-export default function LeftSidebar({ children }) {
+export default function LeftSidebar({ children, ...props }) {
   const layout = useSelector((state) => state.layout.blocks);
+  const appBar = useSelector((state) => state.layout.appBar);
+  const bottomBar = useSelector((state) => state.layout.bottomBar);
+  const selectedBlock = useSelector((state) => state.layout.selectedBlockUuid);
+  const [activeTab, setActiveTab] = useState(1);
   const startTreeData = [
     {
       subtitle: "screen",
       title: "screen",
+      expanded: true,
       children: [],
     },
   ];
   const [treeData, setTree] = useState(startTreeData);
   const dispatch = useDispatch();
 
-  const buildJSONitem = (block) => {
-    if (block) {
-      const data = {
-        key: [block.uuid],
-        label: block.blockId.toUpperCase(),
-        nodes: [],
-      };
-      if (block.listItems) {
-        data.nodes = block.listItems.map((item) => buildJSONitem(item));
-      }
-      return data;
-    }
-    return null;
-  };
-
   const buildTreeitem = (block) => {
     if (block) {
       const data = {
         subtitle: block.uuid,
         title: block.blockId.toUpperCase(),
+        expanded: true,
         children: [],
       };
       if (block.listItems) {
@@ -65,27 +59,32 @@ export default function LeftSidebar({ children }) {
     return null;
   };
 
-  const prepareJSON = () => {
-    treeData[0].nodes = layout.map((block) => {
-      return buildJSONitem(block);
-    });
-  };
-
   const prepareTree = () => {
     const root = { ...treeData[0] };
     root.children = layout.map((block) => {
       return buildTreeitem(block);
     });
+    if (appBar) {
+      root.children.unshift({
+        title: "TOPAPPBAR",
+        subtitle: appBar?.uuid,
+      });
+    }
+    if (bottomBar) {
+      root.children.push({
+        title: "BOTTOMBAR",
+        subtitle: bottomBar?.uuid,
+      });
+    }
     setTree([root]);
   };
 
-  // prepareJSON();
   useEffect(() => {
     prepareTree();
-  }, [layout]);
+  }, [layout, appBar, bottomBar]);
 
   const handleItemClick = (item) => {
-    const uuid = item.key.split("/").slice(-1)[0];
+    const uuid = item.node.subtitle;
     if (uuid === "screen") {
       dispatch({
         type: actionTypes.CHANGE_ACTIVE_TAB,
@@ -95,18 +94,74 @@ export default function LeftSidebar({ children }) {
       observer.broadcast({ blockId: uuid, event: "click" });
     }
   };
-  console.log(treeData);
+
+  const handleDeleteBlock = (blockUuid) => {
+    dispatch({
+      type: actionTypes.DELETE_BLOCK,
+      blockUuid,
+    });
+  };
+
+  if (!props.display) {
+    return null;
+  }
+
   return (
     <Container>
       <div>
         <SideBarHeader title="Project name" />
-        {/* <TreeMenu data={treeData} onClickItem={handleItemClick} /> */}
-        <div style={{ height: 400, overflow: "auto"}}>
-          <SortableTree
+        <SideBarSubheader>
+          <div>
+            <span
+              className={activeTab === 0 ? "tab_active" : ""}
+              onClick={() => setActiveTab(0)}
+            >
+              Screens
+            </span>
+            <span
+              className={activeTab === 1 ? "tab_active" : ""}
+              onClick={() => setActiveTab(1)}
+            >
+              Structure
+            </span>
+          </div>
+          <Plus className="icon" />
+        </SideBarSubheader>
+        <div style={{ height: 344, overflow: "auto", padding: "14px" }}>
+          {activeTab === 0 && <LoadScreen display/>}
+          {activeTab === 1 && <SortableTree
             treeData={treeData}
             onChange={(treeData) => setTree(treeData)}
-            debugMode
-          />
+            theme={FileExplorerTheme}
+            generateNodeProps={(extendedNode) => {
+              return {
+                title: (
+                  <span
+                    className={`node ${
+                      selectedBlock === extendedNode.node.subtitle
+                        ? "node_selected"
+                        : ""
+                    }`}
+                    onClick={() => handleItemClick(extendedNode)}
+                  >
+                    {extendedNode.node.title}
+                  </span>
+                ),
+                buttons:
+                  extendedNode.node.subtitle === "screen"
+                    ? []
+                    : [
+                        <Copy className="icon" />,
+                        <Trash
+                          className="icon"
+                          onClick={() =>
+                            handleDeleteBlock(extendedNode.node.subtitle)
+                          }
+                        />,
+                      ],
+              };
+            }}
+          />}
         </div>
       </div>
       <Gallery />

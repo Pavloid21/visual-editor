@@ -8,11 +8,15 @@ const NeoButton = styled.button`
   border-radius: 4px;
   border: none;
   line-height: 20px;
+  border: 1px solid var(--main-color);
+  box-sizing: border-box;
   &:hover {
     background-color: var(--hover-color);
+    border: 1px solid var(--hover-color);
   }
   &:active {
     background-color: var(--active-color);
+    border: 1px solid var(--active-color);
   }
   &.secondary {
     background-color: #FFFFFF;
@@ -25,6 +29,9 @@ const NeoButton = styled.button`
       border: 1px solid var(--active-color);
       color: var(--active-color);
     }
+  }
+  &.sm {
+    padding: 10px 26px;    
   }
 `;
 

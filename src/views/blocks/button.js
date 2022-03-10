@@ -7,8 +7,8 @@ const Button = styled.div`
   font-size: ${(props) => props.fontSize}px;
   color: ${(props) => props.textColor};
   background-color: ${(props) => props.backgroundColor};
-  text-align: ${(props) => props.textAlignment};
   align-items: center;
+  justify-content:${(props) => props.textAlignment};
   display: flex;
   ${(props) => {
     if (props.shape?.type === "ALLCORNERSROUND") {

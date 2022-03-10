@@ -1,5 +1,8 @@
 import { createGlobalStyle } from "styled-components";
 export default createGlobalStyle`
+  body {
+    background: #FAFAFA;
+  }
   * {
     --background: #f3f3f3;
     --main-color: #F44532;
@@ -27,6 +30,12 @@ export default createGlobalStyle`
 
   .icon {
     border-radius: 4px;
+    &.active {
+      background-color: var(--main-color);
+      & path {
+        fill: #FFFFFF;
+      }
+    }
     &:hover {
       cursor: pointer;
       background-color: var(--light-orange);
@@ -37,5 +46,27 @@ export default createGlobalStyle`
         fill: #FFFFFF;
       }
     }
+  }
+
+  .rst__tree {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  .node_selected {
+    background-color: var(--light-orange);
+  }
+
+  .node {
+    padding: 4px;
+    border-radius: 4px;
+  }
+
+  .tab_active {
+    color: #333333 !important;
+  }
+
+  pre {
+    background: none !important;
   }
 `;

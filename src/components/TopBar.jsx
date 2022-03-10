@@ -5,6 +5,8 @@ import { ReactComponent as HideLeft } from "../assets/hide_left.svg";
 import { ReactComponent as HideRight } from "../assets/hide_right.svg";
 import { ReactComponent as Settings } from "../assets/settings.svg";
 import Button from "./Button";
+import { useDispatch } from "react-redux";
+import actionTypes from "../constants/actionTypes";
 
 const Bar = styled.div`
   height: 60px;
@@ -17,7 +19,7 @@ const Bar = styled.div`
   padding: 6px 16px;
   box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.05), 0px 4px 4px rgba(0, 0, 0, 0.05);
   position: fixed;
-  z-index: 2;
+  z-index: 3;
   & div {
     display: flex;
     position: relative;
@@ -45,17 +47,24 @@ const VerticalDivider = styled.div`
 `;
 
 const TopBar = () => {
+  const dispatch = useDispatch();
+  const handleHideLeft = () => {
+    dispatch({ type: actionTypes.TOGGLE_LEFT_BAR });
+  };
+  const handleHideRight = () => {
+    dispatch({ type: actionTypes.TOGGLE_RIGHT_BAR });
+  };
   return (
     <Bar>
       <div>
         <Logo className="icon" />
         <VerticalDivider />
-        <HideLeft className="icon" />
+        <HideLeft className="icon" onClick={handleHideLeft} />
       </div>
       <div>
         <div>
           <Button>Save application</Button>
-          <HideRight className="icon" />
+          <HideRight className="icon" onClick={handleHideRight}/>
           <Settings className="icon" />
         </div>
         <VerticalDivider />
