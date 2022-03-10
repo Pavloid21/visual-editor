@@ -44,7 +44,7 @@ const LoadScreen = (props) => {
     newBlock.listItems = tree?.length ? traverse(tree) : [];
     const action = {
       type: actionTypes.SET_LAYOUT,
-      layout: newBlock.listItems[0],
+      layout: newBlock.listItems,
     };
     if (object.bottomBar) {
       action.bottomBar = {

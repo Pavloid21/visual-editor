@@ -150,7 +150,7 @@ const Preview = (props) => {
       </Bar>
       <div
         className="page-content-wrapper overflow-hidden d-flex justify-content-center"
-        style={{ position: "relative", scale: "0.9" }}
+        style={{ position: "relative", transform: "scale(0.9)" }}
       >
         {/* <SourceCode>
         <button
