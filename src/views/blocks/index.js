@@ -1,3 +1,4 @@
+import screen from "../../assets/screen.svg";
 import vstack from "./vstack";
 import hstack from "./hstack";
 import basictextfield from "./input";
@@ -30,6 +31,9 @@ const blocks = {
   topappbar,
   lazyvstack,
   divider,
+  screen: {
+    previewImageUrl: screen,
+  },
 };
 
 export default blocks;

@@ -95,7 +95,12 @@ const App = () => {
   const { previewMode } = config;
 
   const handleAppClick = (e) => {
-    if (!e.target.onclick && e.target.localName !== "input") {
+    if (
+      !e.target.onclick &&
+      e.target.localName !== "input" &&
+      e.target.className !== "saturation-black"
+    ) {
+      console.log("e.target", e.target);
       dispatch({
         type: actionTypes.SET_SELECTED_BLOCK,
         blockUuid: "",

@@ -11,6 +11,7 @@ import { ReactComponent as Copy } from "../assets/copy.svg";
 import { ReactComponent as Trash } from "../assets/trash.svg";
 import { ReactComponent as Plus } from "../assets/plus.svg";
 import LoadScreen from "../containers/LoadScreen";
+import models from "../views/blocks/index";
 
 const Container = styled.div`
   min-width: 422px;
@@ -23,7 +24,14 @@ const Container = styled.div`
   z-index: 2;
   & > div {
     height: 50%;
+    overflow: hidden;
   }
+`;
+
+const Icon = styled.img`
+  width: 24px;
+  height: 24px;
+  margin-right: 6px;
 `;
 
 export default function LeftSidebar({ children, ...props }) {
@@ -127,41 +135,57 @@ export default function LeftSidebar({ children, ...props }) {
           </div>
           <Plus className="icon" />
         </SideBarSubheader>
-        <div style={{ height: 344, overflow: "auto", padding: "14px" }}>
-          {activeTab === 0 && <LoadScreen display/>}
-          {activeTab === 1 && <SortableTree
-            treeData={treeData}
-            onChange={(treeData) => setTree(treeData)}
-            theme={FileExplorerTheme}
-            generateNodeProps={(extendedNode) => {
-              return {
-                title: (
-                  <span
-                    className={`node ${
-                      selectedBlock === extendedNode.node.subtitle
-                        ? "node_selected"
-                        : ""
-                    }`}
-                    onClick={() => handleItemClick(extendedNode)}
-                  >
-                    {extendedNode.node.title}
-                  </span>
-                ),
-                buttons:
-                  extendedNode.node.subtitle === "screen"
-                    ? []
-                    : [
-                        <Copy className="icon" />,
-                        <Trash
-                          className="icon"
-                          onClick={() =>
-                            handleDeleteBlock(extendedNode.node.subtitle)
+        <div
+          style={{
+            height: "calc(100% - 104px)",
+            overflow: "auto",
+            padding: "14px",
+          }}
+        >
+          {activeTab === 0 && <LoadScreen display />}
+          {activeTab === 1 && (
+            <SortableTree
+              treeData={treeData}
+              onChange={(treeData) => setTree(treeData)}
+              theme={FileExplorerTheme}
+              generateNodeProps={(extendedNode) => {
+                return {
+                  title: (
+                    <section
+                      className={`node ${
+                        selectedBlock === extendedNode.node.subtitle
+                          ? "node_selected"
+                          : ""
+                      }`}
+                      onClick={() => handleItemClick(extendedNode)}
+                    >
+                      <span>
+                        <Icon
+                          src={
+                            models[extendedNode.node?.title?.toLowerCase()]
+                              ?.previewImageUrl
                           }
-                        />,
-                      ],
-              };
-            }}
-          />}
+                        />
+                        {extendedNode.node.title}
+                      </span>
+                    </section>
+                  ),
+                  buttons:
+                    extendedNode.node.subtitle === "screen"
+                      ? []
+                      : [
+                          <Copy className="icon" />,
+                          <Trash
+                            className="icon"
+                            onClick={() =>
+                              handleDeleteBlock(extendedNode.node.subtitle)
+                            }
+                          />,
+                        ],
+                };
+              }}
+            />
+          )}
         </div>
       </div>
       <Gallery />

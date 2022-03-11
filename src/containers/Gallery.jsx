@@ -37,6 +37,10 @@ const Container = styled.div`
   }
 `;
 
+const Wrapper = styled.div`
+  height: ${(props) => (props.show ? "50%" : "auto")};
+`;
+
 const Gallery = (props) => {
   const dispatch = useDispatch();
 
@@ -57,21 +61,24 @@ const Gallery = (props) => {
 
   const allBlocks = (filteredBlocks) => {
     return Object.keys(filteredBlocks || blocks).map((blockId) => {
-      const block = blocks[blockId];
-      return (
-        <BlockPreview
-          key={blockId}
-          name={block.name}
-          blockId={blockId}
-          image={block.previewImageUrl}
-          onPushBlock={handlePushBlock}
-          onPushBlockInside={handlePushBlockInside}
-        />
-      );
+      if (blockId !== "screen") {
+        const block = blocks[blockId];
+        return (
+          <BlockPreview
+            key={blockId}
+            name={block.name}
+            blockId={blockId}
+            image={block.previewImageUrl}
+            onPushBlock={handlePushBlock}
+            onPushBlockInside={handlePushBlockInside}
+          />
+        );
+      }
     });
   };
 
   const [gallery, setGallery] = useState(allBlocks());
+  const [show, toggleComponents] = useState(true);
 
   const handleFilterChange = (event) => {
     if (event.target.value) {
@@ -92,16 +99,24 @@ const Gallery = (props) => {
   };
 
   return (
-    <div>
+    <Wrapper show={show}>
       <GalleryHeader>
         <span>Components</span>
-        <CollapseIcon className="icon" />
+        <CollapseIcon
+          className="icon"
+          onClick={() => toggleComponents(!show)}
+        />
       </GalleryHeader>
-      <Container>
-        <Input placeholder="Filter components" onChange={handleFilterChange} />
-        <div>{gallery}</div>
-      </Container>
-    </div>
+      {show && (
+        <Container>
+          <Input
+            placeholder="Filter components"
+            onChange={handleFilterChange}
+          />
+          <div>{gallery}</div>
+        </Container>
+      )}
+    </Wrapper>
   );
 };
 

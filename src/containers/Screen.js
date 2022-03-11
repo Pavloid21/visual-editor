@@ -1,18 +1,23 @@
 import React from "react";
-import { DebounceInput } from "react-debounce-input";
 import { useSelector, useDispatch } from "react-redux";
+import Input from "../components/Input";
 import actionTypes from "../constants/actionTypes";
+import styled from "styled-components";
+
+const Container = styled.div`
+  padding: 14px;
+`;
 
 const Screen = (props) => {
   const screenName = useSelector((state) => state.output.screen);
   const dispatch = useDispatch();
   return props.display ? (
-    <div>
-      <h5>Category: {props.category}</h5>
-      <hr />
+    <Container>
       <div className="form-group">
-        <label>Screen name</label>
-        <DebounceInput
+        <Input
+          isWide
+          clearable
+          label="Screen name"
           debounceTimeout={500}
           type="text"
           className="form-control"
@@ -21,12 +26,12 @@ const Screen = (props) => {
           onChange={(e) =>
             dispatch({
               type: actionTypes.EDIT_SCREEN_NAME,
-              screen: e.target.value
+              screen: e.target.value,
             })
           }
         />
       </div>
-    </div>
+    </Container>
   ) : null;
 };
 

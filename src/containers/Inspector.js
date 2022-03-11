@@ -6,6 +6,18 @@ import blocks from "../views/blocks";
 import styled from "styled-components";
 import Input from "../components/Input";
 import { ReactComponent as Trash } from "../assets/trash.svg";
+import ColorPicker from "../components/ColorPicker";
+import { leadLetter } from "../constants/utils";
+import Button from "../components/Button";
+
+const Division = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e6e6e6;
+  margin-bottom: 8px;
+`;
 
 class Inspector extends Component {
   constructor(props) {
@@ -60,12 +72,10 @@ class Inspector extends Component {
       } else if (config[el].type === "color") {
         return (
           <div className="form-group" key={`${parentKey}_${index}`}>
-            <Input
+            <ColorPicker
               debounceTimeout={500}
               label={config[el].name}
-              type="color"
               isWide
-              className="form-control"
               placeholder={config[el].name}
               value={endpoint ? endpoint[el] : null}
               onChange={(e) =>
@@ -114,10 +124,12 @@ class Inspector extends Component {
         );
       } else if (endpoint && !Array.isArray(endpoint[el])) {
         return (
-          <div>
-            <p className="lead">{el}</p>
+          <section>
+            <Division style={{ marginTop: "16px" }}>
+              <span>{leadLetter(el)}</span>
+            </Division>
             {this.parseConfig(config[el], blockUuid, endpoint[el], el)}
-          </div>
+          </section>
         );
       }
     });
@@ -142,40 +154,44 @@ class Inspector extends Component {
     const blockUuid = this.props.layout.selectedBlockUuid;
     const block =
       findInTree(this.props.layout.blocks, blockUuid) ||
-      (this.props.layout.bottomBar?.uuid === blockUuid && this.props.layout.bottomBar) ||
-      (this.props.layout.appBar?.uuid === blockUuid && this.props.layout.appBar);
+      (this.props.layout.bottomBar?.uuid === blockUuid &&
+        this.props.layout.bottomBar) ||
+      (this.props.layout.appBar?.uuid === blockUuid &&
+        this.props.layout.appBar);
 
-    if (!block)
-      return null;
+    if (!block) return null;
 
     const config = blocks[block.blockId].config;
 
     return (
-      <div style={{ padding: "8px 16px", overflowY: "auto", height: "calc(100% - 60px)" }}>
+      <div
+        style={{
+          padding: "8px 16px",
+          overflowY: "auto",
+          height: "calc(100% - 60px)",
+        }}
+      >
         {this.parseConfig(config, blockUuid, block.data)}
         {block.data.navigationItems && (
           <div>
-            <h2>Navigation items</h2>
-            <hr />
+            <Division>
+              <span>Navigation items</span>
+            </Division>
             {block.data.navigationItems.map((element, index) => {
               return (
                 <div key={`navItem_${index}`}>
-                  <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <p className="lead">Button {index + 1}</p>
-                    <RemoveButton
-                      className="material-icons"
+                  <Division>
+                    <span>Button {index + 1}</span>
+                    <Trash
+                      className="icon"
                       onClick={(e) => {
                         this.props.dispatch({
                           type: actionTypes.REMOVE_BOTTOMBAR_ITEM,
                           index,
                         });
                       }}
-                    >
-                      <Trash className="icon"/>
-                    </RemoveButton>
-                  </div>
+                    />
+                  </Division>
                   {this.parseConfig(
                     config.navigationItems[0],
                     blockUuid,
@@ -186,8 +202,7 @@ class Inspector extends Component {
                 </div>
               );
             })}
-            <button
-              className="btn btn-primary"
+            <Button
               onClick={() => {
                 this.props.dispatch({
                   type: actionTypes.ADD_BOTTOMBAR_ITEM,
@@ -195,31 +210,32 @@ class Inspector extends Component {
               }}
             >
               Add item
-            </button>
+            </Button>
           </div>
         )}
         {block.data.appBarItems && (
           <div>
-            <h2>App bar items</h2>
-            <hr />
+            <Division>
+              <span>App bar items</span>
+            </Division>
             {block.data.appBarItems.map((element, index) => {
               return (
                 <div key={`navItem_${index}`}>
                   <div
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
-                    <p className="lead">Button {index + 1}</p>
-                    <RemoveButton
-                      className="material-icons"
-                      onClick={(e) => {
-                        this.props.dispatch({
-                          type: actionTypes.REMOVE_TOPAPPBAR_ITEM,
-                          index,
-                        });
-                      }}
-                    >
-                      <Trash className="icon"/>
-                    </RemoveButton>
+                    <Division>
+                      <span>Button {index + 1}</span>
+                      <Trash
+                        className="icon"
+                        onClick={(e) => {
+                          this.props.dispatch({
+                            type: actionTypes.REMOVE_TOPAPPBAR_ITEM,
+                            index,
+                          });
+                        }}
+                      />
+                    </Division>
                   </div>
                   {this.parseConfig(
                     config.appBarItems[0],
@@ -227,12 +243,10 @@ class Inspector extends Component {
                     block.data.appBarItems[index],
                     [index, "appBarItems"]
                   )}
-                  <hr />
                 </div>
               );
             })}
-            <button
-              className="btn btn-primary"
+            <Button
               onClick={() => {
                 this.props.dispatch({
                   type: actionTypes.ADD_TOPAPPBAR_ITEM,
@@ -240,7 +254,7 @@ class Inspector extends Component {
               }}
             >
               Add item
-            </button>
+            </Button>
           </div>
         )}
       </div>

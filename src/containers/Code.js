@@ -56,15 +56,15 @@ const Code = (props) => {
           return buildJSONitem(block);
         })
       : [];
-    if (bottomBar) {
-      initial.bottomBar = buildJSONitem(bottomBar);
-    } else {
-      delete initial.bottomBar;
-    }
     if (appBar) {
       initial.appBar = buildJSONitem(appBar);
     } else {
       delete initial.appBar;
+    }
+    if (bottomBar) {
+      initial.bottomBar = buildJSONitem(bottomBar);
+    } else {
+      delete initial.bottomBar;
     }
   };
 
@@ -86,6 +86,15 @@ const Code = (props) => {
       });
       prepareJSON(reference);
       let jsonString = JSON.stringify(reference, null, 4);
+      const listItemsString = jsonString.match(/"listItems":\s\[[^]*\],/g);
+      const appBarString = jsonString.match(/"appBar":\s{[^]*\s(5,6)?},/g);
+      const bottomBarString  = jsonString.match(/"bottomBar":\s{[^]*\s(5,6)?}/g);
+      jsonString = jsonString.replace(/"listItems":\s\[[^]*\],/g, "l$");
+      jsonString = jsonString.replace(/"appBar":\s{[^]*\s(5,6)?},/g, "a$");
+      jsonString = jsonString.replace(/"bottomBar":\s{[^]*\s(5,6)?}/g, "b$");
+      jsonString = jsonString.replace("l$", appBarString ? appBarString[0] : "");
+      jsonString = jsonString.replace("a$", listItemsString ? listItemsString[0] : "");
+      jsonString = jsonString.replace("b$", bottomBarString ? bottomBarString[0] : "");
       jsonString = jsonString.replace(/"{{|}}"/g, "");
       constants.push(`return ${jsonString}`);
       dispatch({ type: actionTypes.SAVE_CODE, code: constants.join("\r\n") });

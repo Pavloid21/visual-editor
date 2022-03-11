@@ -93,17 +93,17 @@ const block = {
     ],
   },
   config: {
-    textColor: { type: "color", name: "Text color" },
-    backgroundColor: { type: "color", name: "Background color" },
+    text: { type: "string", name: "Text" },
     fontSize: { type: "number", name: "Font size" },
+    textColor: { type: "color", name: "Text color" },
+    textAlignment: { type: "string", name: "Text alignment" },
+    backgroundColor: { type: "color", name: "Background color" },
     padding: {
       top: { type: "number", name: "Top" },
       bottom: { type: "number", name: "Bottom" },
       left: { type: "number", name: "Left" },
       right: { type: "number", name: "Right" },
     },
-    text: { type: "string", name: "Text" },
-    textAlignment: { type: "string", name: "Text alignment" },
     appBarItems: [
       {
         iconUrl: { type: "string", name: "Icon URL" },

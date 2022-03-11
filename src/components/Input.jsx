@@ -24,7 +24,7 @@ const NeoInput = styledComponents.input`
   border-radius: 4px;
   font-size: 14px;
   line-height: 20px;
-  padding: 8px 12px;
+  padding: 8px ${(props) => (props.clearable ? "36px" : "12px")} 8px 12px ;
   display: block;
   margin-top: 4px;
   &::placeholder {
@@ -35,7 +35,7 @@ const NeoInput = styledComponents.input`
   }
 `;
 
-const Label = styledComponents.label`
+export const Label = styledComponents.label`
   font-size: 12px;
   line-height: 16px;
   position: relative;
@@ -52,7 +52,7 @@ const Input = (props) => {
   return (
     <Container>
       {props.clearable && <Remove onClick={handleClear} />}
-      <Label>{props.label}</Label>
+      {props.label && <Label>{props.label}</Label>}
       <NeoInput ref={inputRef} {...props} />
     </Container>
   );
