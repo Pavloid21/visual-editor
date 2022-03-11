@@ -1,4 +1,5 @@
 import { makeid } from "../../utils/prepareModel";
+import text from "../../assets/text.svg";
 
 const Component = (props) => {
   const { placeholder, placeholderColor, text, textColor, backgroundColor } =
@@ -29,7 +30,7 @@ const Component = (props) => {
 const block = {
   Component,
   name: "BASICTEXTFIELD",
-  previewImageUrl: "",
+  previewImageUrl: text,
   category: "Controls",
   defaultData: {
     placeholder: "Логин",

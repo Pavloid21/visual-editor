@@ -1,24 +1,69 @@
 import React, { useEffect, useState } from "react";
 import { useDrop } from "react-dnd";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { sortableContainer } from "react-sortable-hoc";
-import { ItemTypes } from "../constants/actionTypes";
+import actionTypes, { ItemTypes } from "../constants/actionTypes";
 import { arrayMoveImmutable } from "array-move";
 import { observer } from "../utils/observer";
 import IphoneX from "../assets/mockups/IphoneX";
 import styled from "styled-components";
 import Code from "./Code";
+import Button from "../components/Button";
+import { ReactComponent as Screen } from "../assets/screen.svg";
+import { ReactComponent as Json } from "../assets/json.svg";
+import { ReactComponent as Reference } from "../assets/preview.svg";
+import { ReactComponent as Save } from "../assets/save.svg";
 
-const SourceCode = styled.div`
-  position: absolute;
+const Bar = styled.div`
+  height: 60px;
+  background: var(--background);
   width: 100%;
-  left: 16px;
-  & button {
-    padding: 10px;
-    background-color: white;
-    border: none;
-    border-radius: 2px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  position: absolute;
+  left: 0;
+  padding-left: ${(props) => (props.barState.left ? "437px" : "16px")};
+  padding-right: ${(props) => (props.barState.right ? "437px" : "16px")};
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  & .mode_selector {
+    gap: 16px;
+    display: flex;
+  }
+`;
+
+const ServiceBar = styled.div`
+  height: 36px;
+  background: var(--background);
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding-left: ${(props) => (props.barState?.left ? "437px" : "16px")};
+  padding-right: ${(props) => (props.barState?.right ? "437px" : "16px")};
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  & .mode_selector {
+    gap: 16px;
+    display: flex;
+  }
+`;
+
+const ButtonGroup = styled.div`
+  & button:not(:last-child) {
+    border-radius: 4px 0px 0px 4px;
+    border-right: none !important;
+  }
+
+  & button:last-child {
+    border-radius: 0px 4px 4px 0px;
+    border-left: none !important;
+  }
+  & button.secondary {
+    border: 1px solid #8c8c8c;
+    color: #333333;
   }
 `;
 
@@ -52,8 +97,16 @@ const Preview = (props) => {
     }),
   }));
 
+  const dispatch = useDispatch();
   const [isShowCode, showCode] = useState(false);
+  const [osMode, setOsMode] = useState(0);
+  const currentScreen = useSelector((state) => state.current);
+  const outputScreen = useSelector((state) => state.output.screen);
+  const editorMode = useSelector((state) => state.editorMode.mode);
   const layout = useSelector((state) => state.layout);
+  const barState = useSelector((state) => state.sideBar);
+  const code = useSelector((state) => state.code);
+  const initial = useSelector((state) => state.output);
 
   useEffect(() => {
     const scrollY = localStorage.getItem("scrollY");
@@ -83,6 +136,27 @@ const Preview = (props) => {
     });
   };
 
+  const handleModeClick = (mode) => {
+    dispatch({
+      type: actionTypes.SET_EDITOR_MODE,
+      mode,
+    });
+  };
+
+  const handleSaveSnippet = () => {
+    fetch(`/api/v1/configurations/${initial.screen.replace(/\s/g, "_")}`, {
+      method: "PUT",
+      body: code,
+      headers: {
+        "Content-Type": "text/plain",
+      },
+    })
+      .then((response) => {})
+      .then(() => {
+        alert("SUCCESS");
+      });
+  };
+
   const isActive = canDrop && isOver;
   let backgroundColor = "#FFFFFF";
   if (isActive) {
@@ -90,32 +164,55 @@ const Preview = (props) => {
   }
 
   return (
-    <div
-      className="page-content-wrapper overflow-hidden d-flex justify-content-center"
-      style={{ position: "relative" }}
-    >
-      <SourceCode>
-        <button
-          className="btn"
-          onClick={() => {
-            showCode(!isShowCode);
-          }}
-        >
-          <img src="https://icons.getbootstrap.com/assets/icons/code-slash.svg" />
-        </button>
-      </SourceCode>
-      <IphoneX>
-        <SortableContainer
-          drop={drop}
-          backgroundColor={backgroundColor}
-          onSortEnd={onSortEnd}
-          distance={1}
-        >
-          {props.components}
-        </SortableContainer>
-      </IphoneX>
-      <Code show={isShowCode} />
-    </div>
+    <>
+      <Bar barState={barState}>
+        <ButtonGroup>
+          {editorMode === "editor" && (
+            <>
+              <Button className="sm">iOS</Button>
+              <Button className="sm secondary">Android</Button>
+            </>
+          )}
+        </ButtonGroup>
+        <div className="mode_selector">
+          <Screen
+            className={`icon ${editorMode === "editor" ? "active" : ""}`}
+            onClick={() => handleModeClick("editor")}
+          />
+          <Json
+            className={`icon ${editorMode === "json" ? "active" : ""}`}
+            onClick={() => handleModeClick("json")}
+          />
+          <Reference
+            className={`icon ${editorMode === "preview" ? "active" : ""}`}
+            onClick={() => handleModeClick("preview")}
+          />
+        </div>
+      </Bar>
+      <div
+        className="page-content-wrapper overflow-hidden d-flex justify-content-center"
+        style={{ position: "relative", transform: "scale(0.9)" }}
+      >
+        {editorMode === "editor" && (
+          <IphoneX>
+            <SortableContainer
+              drop={drop}
+              backgroundColor={backgroundColor}
+              onSortEnd={onSortEnd}
+              distance={1}
+            >
+              {props.components}
+            </SortableContainer>
+          </IphoneX>
+        )}
+        {editorMode === "json" && <Code show={isShowCode} />}
+      </div>
+      <ServiceBar barState={barState}>
+        {editorMode === "json" && (
+          <Save className="icon" onClick={handleSaveSnippet} />
+        )}
+      </ServiceBar>
+    </>
   );
 };
 

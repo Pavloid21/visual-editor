@@ -17,7 +17,7 @@ const LoadScreen = (props) => {
   const dispatch = useDispatch();
   useEffect(() => {
     fetch(
-      "/api/v1/configurations"
+      "http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/configurations"
     )
       .then((response) => response.json())
       .then((data) => {
@@ -69,12 +69,12 @@ const LoadScreen = (props) => {
       };
     }
     dispatch(action);
+    dispatch({ type: actionTypes.EDIT_SCREEN_NAME, screen: object.screen });
   };
 
   const changeHandler = (event) => {
     try {
       const json = JSON.parse(event.target.value);
-      // console.log("json", json);
       buildLayout(json);
     } catch (e) {
       console.log(e);
@@ -86,40 +86,31 @@ const LoadScreen = (props) => {
   }
   return (
     <div>
-      <div className="d-flex justify-content-between align-items-center">
-        <h5>Load Screen</h5>
-      </div>
-      <hr />
-      <div>
-        <h3>Avaliable screenes</h3>
-        {availableScreenes.map((screen) => {
-          return (
-            <ScreenItem
-              onClick={() => {
-                fetch(
-                  `/api/v1/configurations/${screen}`
-                )
-                  .then((response) => response.json())
-                  .then((data) => {
-                    try {
-                      buildLayout(data);
-                    } catch (e) {
-                      console.log("e", e);
-                    }
-                  });
-              }}
-            >
-              {screen}
-            </ScreenItem>
-          );
-        })}
-      </div>
-      <label>Screen JSON</label>
-      <textarea
-        className="form-control"
-        rows={20}
-        onChange={changeHandler}
-      ></textarea>
+      {availableScreenes.map((screen) => {
+        return (
+          <ScreenItem
+            onClick={() => {
+              fetch(
+                `http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/configurations/${screen}`
+              )
+                .then((response) => response.json())
+                .then((data) => {
+                  try {
+                    dispatch({
+                      type: actionTypes.SET_CURRENT_SCREEN_NAME,
+                      current: screen,
+                    });
+                    buildLayout(data);
+                  } catch (e) {
+                    console.log("e", e);
+                  }
+                });
+            }}
+          >
+            {screen}
+          </ScreenItem>
+        );
+      })}
     </div>
   );
 };

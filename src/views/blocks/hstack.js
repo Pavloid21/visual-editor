@@ -9,6 +9,7 @@ import { observer } from "../../utils/observer";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import actionTypes from "../../constants/actionTypes";
+import hstack from "../../assets/hstack.svg";
 
 const HStack = styled.div`
   box-sizing: border-box;
@@ -111,7 +112,7 @@ const Component = ({ data, uuid, listItems, ...props }) => {
 const block = {
   Component,
   name: "HSTACK",
-  previewImageUrl: "https://cdn-icons-png.flaticon.com/128/1239/1239779.png",
+  previewImageUrl: hstack,
   category: "Layouts",
   defaultData: {
     alignment: "CENTER",

@@ -1,25 +1,19 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import SyntaxHighlighter from "react-syntax-highlighter";
-import { monokai } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { stackoverflowLight } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { useSelector, useDispatch } from "react-redux";
 import actionTypes from "../constants/actionTypes";
 
 const Container = styled.div`
-  display: ${(props) => (props.show ? "flex" : "none")};
+  display: flex;
   flex-direction: row;
   width: 100%;
-  position: fixed;
-  bottom: 0;
-  left: 0;
 `;
 
 const EditorWrapper = styled.div`
-  align-self: end;
-  max-height: 300px;
   overflow-y: auto;
   width: 100%;
-  flex: 1 1 auto;
 `;
 
 const Code = (props) => {
@@ -96,14 +90,15 @@ const Code = (props) => {
       constants.push(`return ${jsonString}`);
       dispatch({ type: actionTypes.SAVE_CODE, code: constants.join("\r\n") });
     }
-  }, [api, initial, blocks, bottomBar, appBar]);
+  }, [api, initial, blocks, bottomBar, appBar, code]);
   return (
     <Container {...props}>
       <EditorWrapper>
         <SyntaxHighlighter
           language="javascript"
-          style={monokai}
+          style={stackoverflowLight}
           showLineNumbers
+          wrapLongLines
         >
           {code}
         </SyntaxHighlighter>

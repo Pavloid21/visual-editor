@@ -9,6 +9,7 @@ import { arrayMoveImmutable } from "array-move";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import actionTypes from "../../constants/actionTypes";
+import lazyvstack from "../../assets/lazyvstack.svg";
 
 const LazyVStack = styled.div`
   background-color: ${(props) =>
@@ -122,7 +123,7 @@ const Component = ({ data, uuid, listItems, ...props }) => {
 const block = {
   Component,
   name: "LAZYVSTACK",
-  previewImageUrl: "https://cdn-icons-png.flaticon.com/128/1239/1239779.png",
+  previewImageUrl: lazyvstack,
   category: "Layouts",
   defaultData: {
     alignment: "CENTER",

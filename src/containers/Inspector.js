@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { DebounceInput } from "react-debounce-input";
 import actionTypes from "../constants/actionTypes";
 import blocks from "../views/blocks";
 import styled from "styled-components";
+import Input from "../components/Input";
+import { ReactComponent as Trash } from "../assets/trash.svg";
 
 class Inspector extends Component {
   constructor(props) {
@@ -36,12 +37,13 @@ class Inspector extends Component {
     return Object.keys(config).map((el, index) => {
       if (config[el].type === "string") {
         return (
-          <div className="form-group" key={`${parentKey}_${index}`}>
-            <label>{config[el].name}</label>
-            <DebounceInput
+          <div key={`${parentKey}_${index}`}>
+            <Input
+              isWide
+              clearable
+              label={config[el].name}
               debounceTimeout={500}
               type="text"
-              className="form-control"
               placeholder={config[el].name}
               value={endpoint ? endpoint[el] : null}
               onChange={(e) =>
@@ -58,10 +60,11 @@ class Inspector extends Component {
       } else if (config[el].type === "color") {
         return (
           <div className="form-group" key={`${parentKey}_${index}`}>
-            <label>{config[el].name}</label>
-            <DebounceInput
+            <Input
               debounceTimeout={500}
+              label={config[el].name}
               type="color"
+              isWide
               className="form-control"
               placeholder={config[el].name}
               value={endpoint ? endpoint[el] : null}
@@ -74,8 +77,9 @@ class Inspector extends Component {
       } else if (config[el].type === "number") {
         return (
           <div className="form-group" key={`${parentKey}_${index}`}>
-            <label>{config[el].name}</label>
-            <DebounceInput
+            <Input
+              isWide
+              label={config[el].name}
               debounceTimeout={500}
               type="number"
               className="form-control"
@@ -138,29 +142,16 @@ class Inspector extends Component {
     const blockUuid = this.props.layout.selectedBlockUuid;
     const block =
       findInTree(this.props.layout.blocks, blockUuid) ||
-      (this.props.layout.bottomBar?.uuid === blockUuid
-        ? this.props.layout.bottomBar
-        : this.props.layout.appBar);
+      (this.props.layout.bottomBar?.uuid === blockUuid && this.props.layout.bottomBar) ||
+      (this.props.layout.appBar?.uuid === blockUuid && this.props.layout.appBar);
 
     if (!block)
-      return (
-        <div className="text-center">First add and select block section</div>
-      );
+      return null;
 
     const config = blocks[block.blockId].config;
 
     return (
-      <div>
-        <div className="d-flex justify-content-between align-items-center">
-          <h5>Inspector {block.blockId.toUpperCase()}</h5>
-          <button
-            className="btn btn-outline-danger btn-sm"
-            onClick={() => this.handleDeleteBlock(blockUuid)}
-          >
-            Delete block
-          </button>
-        </div>
-        <hr />
+      <div style={{ padding: "8px 16px", overflowY: "auto", height: "calc(100% - 60px)" }}>
         {this.parseConfig(config, blockUuid, block.data)}
         {block.data.navigationItems && (
           <div>
@@ -182,7 +173,7 @@ class Inspector extends Component {
                         });
                       }}
                     >
-                      remove_circle_outline
+                      <Trash className="icon"/>
                     </RemoveButton>
                   </div>
                   {this.parseConfig(
@@ -227,7 +218,7 @@ class Inspector extends Component {
                         });
                       }}
                     >
-                      remove_circle_outline
+                      <Trash className="icon"/>
                     </RemoveButton>
                   </div>
                   {this.parseConfig(

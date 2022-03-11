@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import searchbar from "../../assets/searchbar.svg";
 
 const SearchBar = styled.div`
   & input {
@@ -46,7 +47,7 @@ const Component = (props) => {
 const block = {
   Component,
   name: "SEARCHBAR",
-  previewImageUrl: "",
+  previewImageUrl: searchbar,
   imgUrl: "https://icons.getbootstrap.com/assets/icons/search.svg",
   category: "Controls",
   defaultData: {

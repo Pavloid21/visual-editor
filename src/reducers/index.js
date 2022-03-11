@@ -4,6 +4,9 @@ import config from "./config";
 import layout from "./layout";
 import output from "./output";
 import api from "./apisettings";
+import sideBar from "./sideBar";
+import editorMode from "./editorMode";
+import current from "./current";
 import code from "./code";
 
 export default combineReducers({
@@ -11,5 +14,8 @@ export default combineReducers({
   layout,
   output,
   api,
+  sideBar,
+  editorMode,
+  current,
   code,
 });
