@@ -19,12 +19,18 @@ const Container = styled.div`
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   border-right: 1px solid var(--neo-gray);
   height: calc(100vh - 60px);
   z-index: 2;
+  & > div:nth-child(2n + 1) {
+    min-height: 50%;
+  }
   & > div {
-    height: 50%;
     overflow: hidden;
+    & .rst__virtualScrollOverride > div {
+      position: static !important;
+    }
   }
 `;
 

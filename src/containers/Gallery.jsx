@@ -37,11 +37,19 @@ const Container = styled.div`
   }
 `;
 
+const Collapse = styled(CollapseIcon)`
+  ${(props) => {
+    if (!props.collapse) {
+      return "transform: rotate(180deg);";
+    }
+  }}
+`;
+
 const Wrapper = styled.div`
   height: ${(props) => (props.show ? "50%" : "auto")};
 `;
 
-const Gallery = (props) => {
+const Gallery = () => {
   const dispatch = useDispatch();
 
   const handlePushBlock = (blockId) => {
@@ -102,8 +110,9 @@ const Gallery = (props) => {
     <Wrapper show={show}>
       <GalleryHeader>
         <span>Components</span>
-        <CollapseIcon
+        <Collapse
           className="icon"
+          collapse={show}
           onClick={() => toggleComponents(!show)}
         />
       </GalleryHeader>
