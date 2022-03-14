@@ -13,6 +13,7 @@ const Button = styled.div`
   align-items: center;
   justify-content: ${(props) => props.textAlignment};
   display: flex;
+  justify-content: space-between;
   border-width: ${(props) => props.borderWidth}px;
   border-color: ${(props) => props.borderColor};
   ${(props) => {
