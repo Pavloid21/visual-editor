@@ -11,18 +11,20 @@ const Container = styled.div`
   box-sizing: border-box;
   border-radius: 4px;
   padding: 16px;
+  ${(props) => (props.mode === "list" && "margin: 10px 0px;")};
   width: ${(props) => (props.mode === "grid" ? "118px" : "100%")};
   height: ${(props) => (props.mode === "grid" ? "118px" : "92px")};
-  ${(props) => props.mode === "list" && "display: flex; "}
+  ${(props) =>
+    props.mode === "list" && "display: flex; gap: 20px; align-items: center;"}
   ${(props) => props.mode === "grid" && "flex: 1 1 30%;"}
-  text-align: center;
+  text-align: ${(props) => (props.mode === "grid" ? "center" : "left")};
   & img {
     width: 60px;
     height: 60px;
   }
   & p {
-    margin-top: 13px;
-    margin-bottom: 0;
+    margin-top: ${(props) => (props.mode === "grid" ? "13px" : "0px")};
+    margin-bottom: ${(props) => (props.mode === "grid" ? "0" : "2px")};
     font-size: 12px;
     line-height: 16px;
     overflow-wrap: break-word;
@@ -63,8 +65,10 @@ const BlockPreview = (props) => {
   return (
     <Container style={{ opacity }} mode={props.mode} ref={drag}>
       <img src={props.image} alt={props.name} />
-      <p>{props.title}</p>
-      {props.mode === "list" && <p>{props.description}</p>}
+      <div>
+        <p>{props.title}</p>
+        {props.mode === "list" && <p>{props.description}</p>}
+      </div>
     </Container>
   );
 };
