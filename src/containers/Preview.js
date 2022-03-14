@@ -77,6 +77,8 @@ const SortableContainer = sortableContainer(
           backgroundColor,
           overflow: "hidden",
           position: "relative",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         {children}

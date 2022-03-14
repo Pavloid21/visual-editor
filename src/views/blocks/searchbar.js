@@ -3,7 +3,8 @@ import styled from "styled-components";
 import searchbar from "../../assets/searchbar.svg";
 
 const SearchBar = styled.div`
-  & input {
+  & > input {
+    pointer-events: none;
     &::placeholder {
       color: ${(props) => props.placeholderColor};
     }

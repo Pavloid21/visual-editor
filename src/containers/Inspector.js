@@ -79,7 +79,12 @@ class Inspector extends Component {
               placeholder={config[el].name}
               value={endpoint ? endpoint[el] : null}
               onChange={(e) =>
-                this.handleChangeBlockData(blockUuid, el, e.target.value)
+                this.handleChangeBlockData(
+                  blockUuid,
+                  el,
+                  e.target.value,
+                  parentKey
+                )
               }
             />
           </div>
@@ -115,7 +120,12 @@ class Inspector extends Component {
                 className="form-check-input"
                 checked={endpoint[el]}
                 onChange={(e) =>
-                  this.handleChangeBlockData(blockUuid, el, e.target.checked)
+                  this.handleChangeBlockData(
+                    blockUuid,
+                    el,
+                    e.target.checked,
+                    parentKey
+                  )
                 }
               />
               {config[el].name}

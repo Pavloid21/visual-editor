@@ -29,6 +29,12 @@ const HStack = styled.div`
   padding-right: ${(props) => props.padding.right}px;
   gap: ${(props) => props.spacing}px;
   position: relative;
+  border-radius: ${(props) => `
+    ${props.corners?.topLeftRadius}px 
+    ${props.corners?.topRightRadius}px 
+    ${props.corners?.bottomRightRadius}px
+    ${props.corners?.bottomLeftRadius}px 
+  `};
   ${(props) => {
     if (!props.alignment || props.alignment === "FILL") {
       return "width: 100%;";
@@ -125,6 +131,12 @@ const block = {
       left: "10",
       right: "10",
     },
+    corners: {
+      topLeftRadius: 0,
+      topRightRadius: 0,
+      bottomLeftRadius: 0,
+      bottomRightRadius: 0,
+    },
   },
   listItems: [],
   config: {
@@ -151,6 +163,24 @@ const block = {
       right: {
         type: "number",
         name: "Right",
+      },
+    },
+    corners: {
+      topLeftRadius: {
+        type: "number",
+        name: "Top left radius",
+      },
+      topRightRadius: {
+        type: "number",
+        name: "Top right radius",
+      },
+      bottomLeftRadius: {
+        type: "number",
+        name: "Bottom left radius",
+      },
+      bottomRightRadius: {
+        type: "number",
+        name: "Bottom right radius",
       },
     },
   },

@@ -1,6 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import button from "../../assets/button.svg";
+import { hexToRgb } from "../../constants/utils";
+
+const Wrapper = styled.div``;
 
 const Button = styled.div`
   box-sizing: border-box;
@@ -8,8 +11,20 @@ const Button = styled.div`
   color: ${(props) => props.textColor};
   background-color: ${(props) => props.backgroundColor};
   align-items: center;
-  justify-content:${(props) => props.textAlignment};
+  justify-content: ${(props) => props.textAlignment};
   display: flex;
+  border-width: ${(props) => props.borderWidth}px;
+  border-color: ${(props) => props.borderColor};
+  ${(props) => {
+    if (props.shadow) {
+      return `box-shadow: ${props.shadow?.offsetSize?.width}px ${
+        props.shadow?.offsetSize?.height
+      }px ${props.shadow?.radius}px rgba(${hexToRgb(props.shadow?.color).r}, ${
+        hexToRgb(props.shadow?.color).g
+      }, ${hexToRgb(props.shadow?.color).b}, ${props.shadow?.opacity});`;
+    }
+  }}
+
   ${(props) => {
     if (props.shape?.type === "ALLCORNERSROUND") {
       return `border-radius: ${props.shape.radius}px;`;
@@ -23,14 +38,30 @@ const Button = styled.div`
               };`;
     }
   }}
+  & > span {
+    font-size: inherit;
+    padding-top: ${(props) => props.buttonTextPadding?.top || 0}px;
+    padding-left: ${(props) => props.buttonTextPadding?.left || 0}px;
+    padding-right: ${(props) => props.buttonTextPadding?.right || 0}px;
+    padding-bottom: ${(props) => props.buttonTextPadding?.bottom || 0}px;
+  }
+  & > img {
+    padding-top: ${(props) => props.buttonImagePadding?.top || 0}px;
+    padding-left: ${(props) => props.buttonImagePadding?.left || 0}px;
+    padding-right: ${(props) => props.buttonImagePadding?.right || 0}px;
+    padding-bottom: ${(props) => props.buttonImagePadding?.bottom || 0}px;
+  }
 `;
 
 const Component = (props) => {
-  const { text } = props.data;
+  const { text, imageUrl } = props.data;
   return (
-    <Button className="btn draggable" {...props.data} {...props}>
-      {text}
-    </Button>
+    <Wrapper className="draggable" {...props.data} {...props}>
+      <Button {...props.data} {...props}>
+        <span>{text}</span>
+        {imageUrl && <img src={imageUrl} />}
+      </Button>
+    </Wrapper>
   );
 };
 
@@ -43,27 +74,66 @@ const block = {
     action: "nextScreenName",
     text: "Войти",
     fontSize: "24",
-    alignment: "CENTER",
     textColor: "#000000",
-    textAlignment: "center",
     backgroundColor: "#FFFFFF",
+    alignment: "CENTER",
+    textAlignment: "center",
+    imageUrl: "",
+    borderColor: "#EFEFEF",
+    borderWidth: 1,
+    buttonTextPadding: {
+      top: 16,
+      right: 16,
+      bottom: 16,
+      left: 16,
+    },
+    buttonImagePadding: {
+      top: 16,
+      right: 16,
+      bottom: 16,
+      left: 16,
+    },
     shape: {
       type: "ALLCORNERSROUND",
       radius: "4",
     },
     size: {
-      height: "48",
-      width: "230",
+      height: 48,
+      width: 230,
+    },
+    shadow: {
+      color: "#000000",
+      opacity: 0.3,
+      offsetSize: {
+        width: 0,
+        height: 0,
+      },
+      radius: 8,
     },
   },
   config: {
     action: { type: "string", name: "Action" },
     text: { type: "string", name: "Text" },
     fontSize: { type: "number", name: "Font size" },
-    alignment: { type: "string", name: "Alignment" },
-    textAlignment: { type: "string", name: "Text alignment" },
     textColor: { type: "color", name: "Text color" },
     backgroundColor: { type: "color", name: "Background color" },
+    borderColor: { type: "color", name: "Border color" },
+    borderWidth: { type: "number", name: "Border width" },
+    alignment: { type: "string", name: "Alignment" },
+    textAlignment: { type: "string", name: "Text alignment" },
+    buttonTextPadding: {
+      top: { type: "number", name: "Text padding top" },
+      right: { type: "number", name: "Text padding right" },
+      bottom: { type: "number", name: "Text padding bottom" },
+      left: { type: "number", name: "Text padding left" },
+    },
+    buttonImagePadding: {
+      top: { type: "number", name: "Image padding top" },
+      right: { type: "number", name: "Image padding right" },
+      bottom: { type: "number", name: "Image padding bottom" },
+      left: { type: "number", name: "Image padding left" },
+    },
+    imageUrl: { type: "string", name: "imageUrl" },
     shape: {
       type: { type: "string", name: "Shape type" },
       radius: { type: "number", name: "Shape radius" },
@@ -71,6 +141,15 @@ const block = {
     size: {
       height: { type: "number", name: "Height" },
       width: { type: "number", name: "Width" },
+    },
+    shadow: {
+      color: { type: "color", name: "Color" },
+      opacity: { type: "number", name: "Opacity" },
+      offsetSize: {
+        width: { type: "number", name: "Width" },
+        height: { type: "number", name: "Height" },
+      },
+      radius: { type: "number", name: "Radius" },
     },
   },
 };

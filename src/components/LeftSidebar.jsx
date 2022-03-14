@@ -24,7 +24,7 @@ const Container = styled.div`
   height: calc(100vh - 60px);
   z-index: 2;
   & > div:nth-child(2n + 1) {
-    height: 50%;
+    ${(props) => (props.show ? "height: 50%;" : "")}
   }
   & > div {
     overflow: hidden;
@@ -55,6 +55,7 @@ export default function LeftSidebar({ children, ...props }) {
     },
   ];
   const [treeData, setTree] = useState(startTreeData);
+  const [show, toggleComponents] = useState(true);
   const dispatch = useDispatch();
 
   const buildTreeitem = (block) => {
@@ -97,7 +98,8 @@ export default function LeftSidebar({ children, ...props }) {
     prepareTree();
   }, [layout, appBar, bottomBar]);
 
-  const handleItemClick = (item) => {
+  const handleItemClick = (event, item) => {
+    event.stopPropagation();
     const uuid = item.node.subtitle;
     if (uuid === "screen") {
       dispatch({
@@ -121,7 +123,7 @@ export default function LeftSidebar({ children, ...props }) {
   }
 
   return (
-    <Container>
+    <Container show={show}>
       <div>
         <SideBarHeader title="Project name" />
         <SideBarSubheader>
@@ -163,7 +165,7 @@ export default function LeftSidebar({ children, ...props }) {
                           ? "node_selected"
                           : ""
                       }`}
-                      onClick={() => handleItemClick(extendedNode)}
+                      onClick={(event) => handleItemClick(event, extendedNode)}
                     >
                       <span>
                         <Icon
@@ -194,7 +196,7 @@ export default function LeftSidebar({ children, ...props }) {
           )}
         </div>
       </div>
-      <Gallery />
+      <Gallery toggleComponents={toggleComponents} show={show} />
     </Container>
   );
 }

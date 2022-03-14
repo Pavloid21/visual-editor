@@ -1,14 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 import invertColor from "../../utils/invertColor";
-import topappbar from "../../assets/topappbar.svg"
+import topappbar from "../../assets/topappbar.svg";
 
 const TopAppBar = styled.div`
   padding-top: ${(props) => props.padding?.top}px;
   padding-bottom: ${(props) => props.padding?.bottom}px;
   padding-left: ${(props) => props.padding?.left}px;
   padding-right: ${(props) => props.padding?.right}px;
-  color: ${(props) => props.textColor || invertColor(props.backgroundColor, true)};
+  color: ${(props) =>
+    props.textColor || invertColor(props.backgroundColor, true)};
   background-color: ${(props) => props.backgroundColor};
   z-index: 2;
   width: 100%;
@@ -83,6 +84,9 @@ const block = {
       right: 16,
     },
     text: "App Bar",
+    action: {
+      url: "backScreen",
+    },
     appBarItems: [
       {
         iconUrl: "https://icons.getbootstrap.com/assets/icons/search.svg",
@@ -103,6 +107,9 @@ const block = {
       bottom: { type: "number", name: "Bottom" },
       left: { type: "number", name: "Left" },
       right: { type: "number", name: "Right" },
+    },
+    action: {
+      url: { type: "string", name: "URL" },
     },
     appBarItems: [
       {

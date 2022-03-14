@@ -12,13 +12,16 @@ import actionTypes from "../../constants/actionTypes";
 import vstack from "../../assets/vstack.svg";
 
 const VStack = styled.div`
+  height: ${(props) =>
+    props.wrapContent === "WRAPCONTENTHEIGHT" ? "auto" : "100%"};
   background-color: ${(props) =>
     props.backgroundColor?.indexOf("#") >= 0
       ? props.backgroundColor
       : "transparent"};
   display: flex;
-  align-items: ${(props) =>
-    props.alignment === "SPACEBETWEEN" ? "space-between" : props.alignment};
+  justify-content: ${(props) =>
+    props.distribution === "SPACEBETWEEN" ? "space-between" : props.alignment};
+  align-items: ${props => props.alignment};
   flex-direction: column;
   padding-top: ${(props) => props.padding?.top}px;
   padding-bottom: ${(props) => props.padding?.bottom}px;
@@ -26,7 +29,12 @@ const VStack = styled.div`
   padding-right: ${(props) => props.padding?.right}px;
   border: 1px dashed blue;
   box-sizing: border-box;
-  gap: ${(props) => props.spacing}px;
+  border-radius: ${(props) => `
+    ${props.corners?.topLeftRadius}px 
+    ${props.corners?.topRightRadius}px 
+    ${props.corners?.bottomRightRadius}px
+    ${props.corners?.bottomLeftRadius}px 
+  `};
 `;
 
 const SortableContainer = sortableContainer(
@@ -109,19 +117,27 @@ const block = {
   defaultData: {
     alignment: "CENTER",
     backgroundColor: "#C6C6C6",
-    spacing: 16,
+    distribution: "",
+    wrapContent: "",
     padding: {
       top: "100",
       bottom: "100",
       left: "10",
       right: "10",
     },
+    corners: {
+      topLeftRadius: 0,
+      topRightRadius: 0,
+      bottomLeftRadius: 0,
+      bottomRightRadius: 0,
+    },
   },
   listItems: [],
   config: {
     alignment: { type: "string", name: "Alignment" },
     backgroundColor: { type: "color", name: "Background color" },
-    spacing: { type: "number", name: "Spacing" },
+    distribution: { type: "string", name: "Distribution" },
+    wrapContent: { type: "string", name: "Wrap content" },
     padding: {
       top: {
         type: "number",
@@ -138,6 +154,24 @@ const block = {
       right: {
         type: "number",
         name: "Right",
+      },
+    },
+    corners: {
+      topLeftRadius: {
+        type: "number",
+        name: "Top left radius",
+      },
+      topRightRadius: {
+        type: "number",
+        name: "Top right radius",
+      },
+      bottomLeftRadius: {
+        type: "number",
+        name: "Bottom left radius",
+      },
+      bottomRightRadius: {
+        type: "number",
+        name: "Bottom right radius",
       },
     },
   },

@@ -2,13 +2,14 @@ import React from "react";
 import styled from "styled-components";
 import switch_ic from "../../assets/switch.svg";
 
-const Switch = styled.label`
+const Switch = styled.div`
   font-size: 16px;
   line-height: 1.5;
   position: relative;
   display: inline-block;
   margin-bottom: 0;
   z-index: 0;
+  width: fit-content;
   & input:checked + span::before {
     background-color: ${(props) => props.thumbOnColor};
   }
@@ -17,6 +18,7 @@ const Switch = styled.label`
     transform: translateX(16px);
   }
   & input {
+    pointer-events: none;
     z-index: -1;
     appearance: none;
     position: absolute;
@@ -39,6 +41,7 @@ const Switch = styled.label`
     }
   }
   & span {
+    pointer-events: none;
     display: inline-block;
     width: 100%;
     cursor: pointer;

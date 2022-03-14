@@ -6,7 +6,7 @@ const BottomBar = styled.div`
   background-color: ${(props) => props.backgroundColor};
   padding: 16px 0px 16px 0px;
   bottom: 0;
-  position: absolute;
+  margin-top: auto;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -51,7 +51,10 @@ const Component = ({ data, ...props }) => {
     <BottomBar {...data} {...props}>
       {buttons.map((item, index) => {
         return (
-          <div className={!index && "active"}>
+          <div
+            className={item.isNestedScreen && "active"}
+            key={`bottomBarItem_${index}`}
+          >
             <Icon className="item_icon" iconUrl={item.iconUrl}></Icon>
             <label>{item.screenName}</label>
           </div>
@@ -73,20 +76,25 @@ const block = {
     navigationItems: [
       {
         screenName: "Auth",
-        iconUrl: "https://icons.getbootstrap.com/assets/icons/box-arrow-in-right.svg",
+        isNestedScreen: true,
+        iconUrl:
+          "https://icons.getbootstrap.com/assets/icons/box-arrow-in-right.svg",
         action: {
           url: "screenAuth",
         },
       },
       {
         screenName: "Contacts",
-        iconUrl: "https://icons.getbootstrap.com/assets/icons/person-lines-fill.svg",
+        isNestedScreen: false,
+        iconUrl:
+          "https://icons.getbootstrap.com/assets/icons/person-lines-fill.svg",
         action: {
           url: "screenContacts",
         },
       },
       {
         screenName: "Settings",
+        isNestedScreen: false,
         iconUrl: "https://icons.getbootstrap.com/assets/icons/gear.svg",
         action: {
           url: "screenSettings",
@@ -107,6 +115,7 @@ const block = {
     navigationItems: [
       {
         screenName: { type: "string", name: "Screen name" },
+        isNestedScreen: { type: "boolean", name: "Is nested screen" },
         iconUrl: { type: "string", name: "Icon URL" },
         action: {
           url: { type: "string", name: "URL" },

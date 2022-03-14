@@ -167,7 +167,24 @@ export default function reducer(state = initialState, action) {
         element.data[action.parentKey[1]][action.parentKey[0]][action.key] =
           action.value;
       } else if (action.parentKey) {
-        element.data[action.parentKey][action.key] = action.value;
+        const findDataBlock = (data, parentKey, key) => {
+          let ref = null;
+          Object.keys(data).forEach((item) => {
+            if (item === parentKey) {
+              ref = data[item];
+            } else if (typeof data[item] === "object" && !ref) {
+              ref = findDataBlock(data[item], parentKey, key);
+            }
+          });
+          return ref;
+        };
+        const valueKeeper = findDataBlock(
+          element.data,
+          action.parentKey,
+          action.key
+        );
+        console.log('valueKeeper', valueKeeper)
+        valueKeeper[action.key] = action.value;
       } else {
         element.data[action.key] = action.value;
       }

@@ -49,7 +49,7 @@ const Wrapper = styled.div`
   height: ${(props) => (props.show ? "50%" : "auto")};
 `;
 
-const Gallery = () => {
+const Gallery = (props) => {
   const dispatch = useDispatch();
 
   const handlePushBlock = (blockId) => {
@@ -86,7 +86,6 @@ const Gallery = () => {
   };
 
   const [gallery, setGallery] = useState(allBlocks());
-  const [show, toggleComponents] = useState(true);
 
   const handleFilterChange = (event) => {
     if (event.target.value) {
@@ -107,16 +106,16 @@ const Gallery = () => {
   };
 
   return (
-    <Wrapper show={show}>
+    <Wrapper show={props.show}>
       <GalleryHeader>
         <span>Components</span>
         <Collapse
           className="icon"
-          collapse={show}
-          onClick={() => toggleComponents(!show)}
+          collapse={props.show}
+          onClick={() => props.toggleComponents(!props.show)}
         />
       </GalleryHeader>
-      {show && (
+      {props.show && (
         <Container>
           <Input
             placeholder="Filter components"
