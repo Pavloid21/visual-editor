@@ -11,7 +11,6 @@ const Button = styled.div`
   color: ${(props) => props.textColor};
   background-color: ${(props) => props.backgroundColor};
   align-items: center;
-  justify-content: ${(props) => props.textAlignment};
   display: flex;
   justify-content: space-between;
   border-width: ${(props) => props.borderWidth}px;
@@ -40,7 +39,9 @@ const Button = styled.div`
     }
   }}
   & > span {
+    width: 100%;
     font-size: inherit;
+    text-align: ${(props) => props.textAlignment};
     padding-top: ${(props) => props.buttonTextPadding?.top || 0}px;
     padding-left: ${(props) => props.buttonTextPadding?.left || 0}px;
     padding-right: ${(props) => props.buttonTextPadding?.right || 0}px;

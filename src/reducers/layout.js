@@ -108,6 +108,9 @@ export default function reducer(state = initialState, action) {
       };
       return nextState;
     case actionTypes.PUSH_BLOCK_INSIDE:
+      if (action.blockId === "bottombar" || action.blockId === "topappbar") {
+        return state;
+      }
       const target = findInTree(state.blocks, action.uuid);
       const list = blocks[action.blockId].listItems;
       const newBloc = {
@@ -183,7 +186,7 @@ export default function reducer(state = initialState, action) {
           action.parentKey,
           action.key
         );
-        console.log('valueKeeper', valueKeeper)
+        console.log("valueKeeper", valueKeeper);
         valueKeeper[action.key] = action.value;
       } else {
         element.data[action.key] = action.value;
