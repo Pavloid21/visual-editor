@@ -24,7 +24,7 @@ const Container = styled.div`
   height: calc(100vh - 60px);
   z-index: 2;
   & > div:nth-child(2n + 1) {
-    min-height: 50%;
+    height: 50%;
   }
   & > div {
     overflow: hidden;
