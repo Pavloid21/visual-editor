@@ -2,6 +2,7 @@ import passwordtextfield from "../../assets/passwordtextfield.svg";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
+  width: 100%;
   & > input {
     pointer-events: none;
     color: ${(props) => props.textColor};
