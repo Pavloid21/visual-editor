@@ -33,6 +33,7 @@ const blocks = {
   divider,
   screen: {
     previewImageUrl: screen,
+    name: "screen",
   },
 };
 

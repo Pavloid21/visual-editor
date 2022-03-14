@@ -87,6 +87,8 @@ const Component = ({ data, ...props }) => {
 const block = {
   Component,
   name: "SWITCH",
+  title: "Switches",
+  description: "A control that toggles between on and off states.",
   previewImageUrl: switch_ic,
   category: "Controls",
   defaultData: {

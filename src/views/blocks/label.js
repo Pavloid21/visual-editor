@@ -30,6 +30,9 @@ const Component = ({ data, ...props }) => {
 const block = {
   Component,
   name: "LABEL",
+  title: "Label",
+  description:
+    "A standard label for user interface items, consisting of an icon with a title.",
   previewImageUrl: label,
   category: "Controls",
   defaultData: {

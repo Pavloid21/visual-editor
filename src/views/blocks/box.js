@@ -96,6 +96,9 @@ const Component = ({ data, uuid, listItems, ...props }) => {
 const block = {
   Component,
   name: "BOX",
+  title: "Box",
+  description:
+    "A stylized view, with an optional label, that visually collects a logical grouping of content.",
   previewImageUrl: box,
   category: "Layouts",
   defaultData: {

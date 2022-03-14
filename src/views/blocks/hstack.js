@@ -118,6 +118,8 @@ const Component = ({ data, uuid, listItems, ...props }) => {
 const block = {
   Component,
   name: "HSTACK",
+  title: "HStack",
+  description: "A view that arranges its children in a horizontal line.",
   previewImageUrl: hstack,
   category: "Layouts",
   defaultData: {

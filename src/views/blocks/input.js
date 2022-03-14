@@ -34,6 +34,9 @@ const Component = ({ data, ...props }) => {
 const block = {
   Component,
   name: "BASICTEXTFIELD",
+  title: "Text",
+  description:
+    "Filled text fields have more visual emphasis than outlined text fields, making them stand out when surrounded by other content and components.",
   previewImageUrl: text,
   category: "Controls",
   defaultData: {

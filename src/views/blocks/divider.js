@@ -9,6 +9,7 @@ const Component = ({ data, ...props }) => {
       className="draggable"
       style={{
         backgroundColor,
+        width: "100%",
       }}
     />
   );
@@ -17,6 +18,8 @@ const Component = ({ data, ...props }) => {
 const block = {
   Component,
   name: "DIVIDER",
+  title: "Divider",
+  description: "A visual element that can be used to separate other content.",
   previewImageUrl: divider,
   category: "Controls",
   defaultData: {

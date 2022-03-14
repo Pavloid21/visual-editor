@@ -11,9 +11,10 @@ const Container = styled.div`
   box-sizing: border-box;
   border-radius: 4px;
   padding: 16px;
-  width: 118px;
-  height: 118px;
-  flex: 1 1 30%;
+  width: ${(props) => (props.mode === "grid" ? "118px" : "100%")};
+  height: ${(props) => (props.mode === "grid" ? "118px" : "92px")};
+  ${(props) => props.mode === "list" && "display: flex; "}
+  ${(props) => props.mode === "grid" && "flex: 1 1 30%;"}
   text-align: center;
   & img {
     width: 60px;
@@ -60,9 +61,10 @@ const BlockPreview = (props) => {
   const opacity = isDragging ? 0.4 : 1;
 
   return (
-    <Container style={{ opacity }} ref={drag}>
+    <Container style={{ opacity }} mode={props.mode} ref={drag}>
       <img src={props.image} alt={props.name} />
-      <p>{props.name}</p>
+      <p>{props.title}</p>
+      {props.mode === "list" && <p>{props.description}</p>}
     </Container>
   );
 };

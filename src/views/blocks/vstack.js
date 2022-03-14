@@ -112,6 +112,8 @@ const Component = ({ data, uuid, listItems, ...props }) => {
 const block = {
   Component,
   name: "VSTACK",
+  title: "VStack",
+  description: "A view that arranges its children in a vertical line.",
   previewImageUrl: vstack,
   category: "Layouts",
   defaultData: {

@@ -68,6 +68,9 @@ const Component = (props) => {
 const block = {
   Component,
   name: "BUTTON",
+  title: "Button",
+  description:
+    "Displays a button icon the user can click to initiate an action.",
   previewImageUrl: button,
   category: "Controls",
   defaultData: {

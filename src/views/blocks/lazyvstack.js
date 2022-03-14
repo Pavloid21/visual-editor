@@ -123,6 +123,9 @@ const Component = ({ data, uuid, listItems, ...props }) => {
 const block = {
   Component,
   name: "LAZYVSTACK",
+  title: "LazyVStack",
+  description:
+    "A view that arranges its children in a line that grows vertically, creating items only as needed.",
   previewImageUrl: lazyvstack,
   category: "Layouts",
   defaultData: {

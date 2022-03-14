@@ -114,6 +114,8 @@ const Component = ({ data, uuid, listItems, ...props }) => {
 const block = {
   Component,
   name: "CARD",
+  title: "Card",
+  description: "Cards contain content and actions about a single subject.",
   previewImageUrl: card,
   category: "Layouts",
   defaultData: {

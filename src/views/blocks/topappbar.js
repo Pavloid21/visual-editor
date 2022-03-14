@@ -70,6 +70,9 @@ const Component = ({ data, ...props }) => {
 const block = {
   Component,
   name: "TOPAPPBAR",
+  title: "App bars: top",
+  description:
+    "The top app bar displays information and actions relating to the current screen.",
   previewImageUrl: topappbar,
   category: "Controls",
   defaultData: {

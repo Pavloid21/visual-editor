@@ -27,6 +27,8 @@ const Component = ({ data, ...props }) => {
 const block = {
   Component,
   name: "IMAGE",
+  title: "Image",
+  description: "A view that displays an image.",
   previewImageUrl: image,
   category: "Controls",
   defaultData: {

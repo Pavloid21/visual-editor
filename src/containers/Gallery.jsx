@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { ReactComponent as CollapseIcon } from "../assets/collapse.svg";
+import { ReactComponent as GridIcon } from "../assets/grid.svg";
+import { ReactComponent as ListIcon } from "../assets/list.svg";
 import Input from "../components/Input";
 import BlockPreview from "../components/BlockPreview";
 import blocks from "../views/blocks";
@@ -27,11 +29,15 @@ const Container = styled.div`
     height: calc(100% - 50px);
     overflow-y: auto;
     overflow-x: hidden;
-    display: grid;
-    grid-template-columns: 118px 118px 118px;
+    display: ${(props) => (props.mode === "grid" ? "grid" : "flex")};
+    ${(props) =>
+      props.mode === "grid"
+        ? `grid-template-columns: 118px 118px 118px;
     grid-template-rows: 118px 118px 118px;
     column-gap: 18px;
-    row-gap: 18px;
+    row-gap: 18px;`
+        : ""}
+    ${(props) => (props.mode === "list" ? `flex-direction: column;` : "")}
     padding-top: 10px;
     padding-bottom: 10px;
   }
@@ -67,14 +73,18 @@ const Gallery = (props) => {
     });
   };
 
-  const allBlocks = (filteredBlocks) => {
+  const [viewMode, setMode] = useState("grid");
+
+  const allBlocks = (filteredBlocks, viewMode = "grid") => {
     return Object.keys(filteredBlocks || blocks).map((blockId) => {
       if (blockId !== "screen") {
         const block = blocks[blockId];
         return (
           <BlockPreview
+            mode={viewMode}
             key={blockId}
-            name={block.name}
+            title={block.title}
+            description={block.description}
             blockId={blockId}
             image={block.previewImageUrl}
             onPushBlock={handlePushBlock}
@@ -87,11 +97,17 @@ const Gallery = (props) => {
 
   const [gallery, setGallery] = useState(allBlocks());
 
+  const handleModeChange = (event, mode) => {
+    event.stopPropagation();
+    setMode(mode);
+    setGallery(allBlocks(null, mode));
+  };
+
   const handleFilterChange = (event) => {
     if (event.target.value) {
       const filteredKeys = Object.keys(blocks).filter((blockId) => {
         const block = blocks[blockId];
-        if (block.name.indexOf(event.target.value) >= 0) {
+        if (block.name.indexOf(event.target.value.toUpperCase()) >= 0) {
           return true;
         }
       });
@@ -109,14 +125,27 @@ const Gallery = (props) => {
     <Wrapper show={props.show}>
       <GalleryHeader>
         <span>Components</span>
-        <Collapse
-          className="icon"
-          collapse={props.show}
-          onClick={() => props.toggleComponents(!props.show)}
-        />
+        <div>
+          {viewMode === "grid" ? (
+            <ListIcon
+              className="icon"
+              onClick={(e) => handleModeChange(e, "list")}
+            />
+          ) : (
+            <GridIcon
+              className="icon"
+              onClick={(e) => handleModeChange(e, "grid")}
+            />
+          )}
+          <Collapse
+            className="icon"
+            collapse={props.show}
+            onClick={() => props.toggleComponents(!props.show)}
+          />
+        </div>
       </GalleryHeader>
       {props.show && (
-        <Container>
+        <Container mode={viewMode}>
           <Input
             placeholder="Filter components"
             onChange={handleFilterChange}

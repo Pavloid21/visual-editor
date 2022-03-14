@@ -67,6 +67,9 @@ const Component = ({ data, ...props }) => {
 const block = {
   Component,
   name: "BOTTOMBAR",
+  title: "Bottom navigation",
+  description:
+    "Bottom navigation bars allow movement between primary destinations in an app.",
   previewImageUrl: bottombar,
   category: "Controls",
   defaultData: {

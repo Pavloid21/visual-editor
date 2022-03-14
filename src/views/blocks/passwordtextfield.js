@@ -8,7 +8,7 @@ const Wrapper = styled.div`
     color: ${(props) => props.textColor};
     background-color: ${(props) => props.backgroundColor};
     box-sizing: border-box;
-    text-align: ${props => props.textAlignment};
+    text-align: ${(props) => props.textAlignment};
     & ::placeholder {
       color: ${(props) => props.placeholderColor};
     }
@@ -33,6 +33,8 @@ const Component = (props) => {
 const block = {
   Component,
   name: "PASSWORDTEXTFIELD",
+  title: "PasswordField",
+  description: "A control into which the user securely enters private text.",
   previewImageUrl: passwordtextfield,
   category: "Controls",
   defaultData: {

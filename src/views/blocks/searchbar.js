@@ -48,6 +48,8 @@ const Component = (props) => {
 const block = {
   Component,
   name: "SEARCHBAR",
+  title: "Search",
+  description: "Search allows users to quickly find app content.",
   previewImageUrl: searchbar,
   imgUrl: "https://icons.getbootstrap.com/assets/icons/search.svg",
   category: "Controls",
