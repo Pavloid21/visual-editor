@@ -7,6 +7,7 @@ const initialState = {
   blocks: [],
   selectedBlockUuid: "",
   documentId: "document2",
+  selectedScreen: null,
 };
 
 export const findInTree = (tree, uuid) => {
@@ -221,6 +222,11 @@ export default function reducer(state = initialState, action) {
         blocks: [...action.layout],
         bottomBar: action.bottomBar,
         appBar: action.appBar,
+      };
+    case actionTypes.SELECT_SCREEN:
+      return {
+        ...state,
+        selectedScreen: action.screen,
       };
     default:
       return state;

@@ -25,6 +25,7 @@ const actionTypes = {
   TOGGLE_RIGHT_BAR: "UI/TOGGLE_RIGHT_BAR",
   SET_EDITOR_MODE: "UI/SET_EDITOR_MODE",
   SAVE_CODE: "CODE/SAVE_CODE",
+  SELECT_SCREEN: "SCREEN/SELECT_SCREEN",
 };
 
 export const ItemTypes = {
