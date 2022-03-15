@@ -10,20 +10,20 @@ const Container = styled.div`
   border: 1px dashed #b3b3b3;
   box-sizing: border-box;
   border-radius: 4px;
-  padding: 16px;
-  ${(props) => (props.mode === "list" && "margin: 10px 0px;")};
-  width: ${(props) => (props.mode === "grid" ? "118px" : "100%")};
+  ${(props) => (props.mode === "list" && "margin: 10px 0px; padding: 16px;")};
+  width: ${(props) => (props.mode === "grid" ? "118px" : "390px")};
   height: ${(props) => (props.mode === "grid" ? "118px" : "92px")};
   ${(props) =>
     props.mode === "list" && "display: flex; gap: 20px; align-items: center;"}
   ${(props) => props.mode === "grid" && "flex: 1 1 30%;"}
   text-align: ${(props) => (props.mode === "grid" ? "center" : "left")};
   & img {
+    margin-top: ${(props) => (props.mode === "grid" ? "16px" : "0px")};
     width: 60px;
     height: 60px;
   }
   & p {
-    margin-top: ${(props) => (props.mode === "grid" ? "13px" : "0px")};
+    padding: ${(props) => (props.mode === "grid" ? "13px 8px" : "0px")};
     margin-bottom: ${(props) => (props.mode === "grid" ? "0" : "2px")};
     font-size: 12px;
     line-height: 16px;
