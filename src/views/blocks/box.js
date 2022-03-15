@@ -13,8 +13,8 @@ import box from "../../assets/box.svg";
 
 const Box = styled.div`
   border: ${(props) => `${props.borderWidth}px solid ${props.borderColor}`};
-  width: ${(props) => (props.size.width ? props.size.width + "px;" : "100%;")}
-  height: ${(props) => props.size.height}px;
+  width: ${(props) => (props.size?.width ? props.size.width + "px;" : "100%;")}
+  height: ${(props) => props.size?.height}px;
   background-color: ${(props) => props.backgroundColor};
   display: flex;
   align-items: center;

@@ -23,10 +23,10 @@ const HStack = styled.div`
   text-align: ${(props) => props.alignment};
   flex-direction: row;
   align-items: center;
-  padding-top: ${(props) => props.padding.top}px;
-  padding-bottom: ${(props) => props.padding.bottom}px;
-  padding-left: ${(props) => props.padding.left}px;
-  padding-right: ${(props) => props.padding.right}px;
+  padding-top: ${(props) => props.padding?.top}px;
+  padding-bottom: ${(props) => props.padding?.bottom}px;
+  padding-left: ${(props) => props.padding?.left}px;
+  padding-right: ${(props) => props.padding?.right}px;
   gap: ${(props) => props.spacing}px;
   position: relative;
   border-radius: ${(props) => `

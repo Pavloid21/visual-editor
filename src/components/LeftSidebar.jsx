@@ -61,10 +61,9 @@ export default function LeftSidebar({ children, ...props }) {
 
   const buildTreeitem = (block) => {
     if (block) {
-      console.log("block :>> ", block);
       const data = {
-        subtitle: block.uuid,
-        title: block.blockId.toUpperCase(),
+        subtitle: block.uuid || v4(),
+        title: block.type,
         expanded: true,
         children: [],
       };
@@ -77,8 +76,11 @@ export default function LeftSidebar({ children, ...props }) {
   };
 
   const prepareTree = (treeData) => {
-    const root = { ...treeData };
-    root.children = layout.map((block) => {
+    const root = { ...treeData.value };
+    root.subtitle = "screen";
+    root.title = "Screen";
+    root.uuid = treeData.uuid;
+    root.children = treeData.value.listItems.map((block) => {
       return buildTreeitem(block);
     });
     if (appBar) {
@@ -155,16 +157,22 @@ export default function LeftSidebar({ children, ...props }) {
             `http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/screens/${screen}`
           )
             .then((response) => response.json())
-            .then((data) => data)
             .catch((e) => {
-              console.log('e :>> ', e);
+              console.log("e :>> ", e);
             });
         });
-        console.log("screenesArr :>> ", screenesArr);
-        Promise.all(screenLayouts).then((resolves) => {
-          // setScreenes();
-          console.log("resolves :>> ", resolves);
-        });
+        Promise.allSettled(screenesArr)
+          .then((resolves) => {
+            const layouts = [];
+            resolves.forEach((result) => {
+              if (result.status === "fulfilled" && result.value.screen) {
+                layouts.push({ uuid: v4(), value: result.value });
+              }
+            });
+            setScreenes(layouts);
+            setTree(layouts.map((layout) => prepareTree(layout)));
+          })
+          .catch(console.log);
       });
     const screenLayouts = availableScreenes.map((screen) => {
       if (screen.uuid === selectedScreen) {
@@ -196,7 +204,7 @@ export default function LeftSidebar({ children, ...props }) {
         (screen) => screen.uuid === item.node.uuid
       )[0];
       console.log("screenLayout :>> ", screenLayout);
-      buildLayout(screenLayout.layout);
+      buildLayout(screenLayout.value);
     } else {
       observer.broadcast({ blockId: uuid, event: "click" });
     }
@@ -227,6 +235,9 @@ export default function LeftSidebar({ children, ...props }) {
     ]);
     setTree([...treeData, prepareTree(startTreeData)]);
   };
+
+  // console.log("availableScreenes :>> ", availableScreenes);
+  // console.log("treeData :>> ", treeData);
 
   return (
     <Container show={show}>
@@ -280,7 +291,7 @@ export default function LeftSidebar({ children, ...props }) {
                             ?.previewImageUrl
                         }
                       />
-                      {extendedNode.node.title}
+                      {extendedNode.node.screen || extendedNode.node.title}
                     </span>
                   </section>
                 ),
