@@ -5,7 +5,7 @@ import { ReactComponent as HideLeft } from "../assets/hide_left.svg";
 import { ReactComponent as HideRight } from "../assets/hide_right.svg";
 import { ReactComponent as Settings } from "../assets/settings.svg";
 import Button from "./Button";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import actionTypes from "../constants/actionTypes";
 
 const Bar = styled.div`
@@ -48,6 +48,7 @@ const VerticalDivider = styled.div`
 
 const TopBar = () => {
   const dispatch = useDispatch();
+  const editedScreens = useSelector((state) => state.layout.snippets);
   const handleHideLeft = () => {
     dispatch({ type: actionTypes.TOGGLE_LEFT_BAR });
   };
@@ -56,7 +57,19 @@ const TopBar = () => {
   };
   const handleSaveApplication = (event) => {
     event.stopPropagation();
-  }
+    editedScreens.map((item) =>
+      fetch(
+        `http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/admin/screens/${item.endpoint}`,
+        {
+          method: "PUT",
+          body: item.snippet.replace(/\n/g, ""),
+          headers: {
+            "Content-Type": "application/javascript",
+          },
+        }
+      )
+    );
+  };
   return (
     <Bar>
       <div>
@@ -67,7 +80,7 @@ const TopBar = () => {
       <div>
         <div>
           <Button onClick={handleSaveApplication}>Save application</Button>
-          <HideRight className="icon" onClick={handleHideRight}/>
+          <HideRight className="icon" onClick={handleHideRight} />
           <Settings className="icon" />
         </div>
         <VerticalDivider />

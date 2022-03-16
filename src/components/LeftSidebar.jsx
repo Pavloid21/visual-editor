@@ -224,7 +224,7 @@ export default function LeftSidebar({ children, ...props }) {
         screen: output,
         snippet: {
           screenID: selectedScreen,
-          endpoint: screenLayout.screenEndpoint,
+          endpoint: output.replace(/\s/g, "_"),
           snippet: snippet({
             screen: output,
             listItems: layout,
