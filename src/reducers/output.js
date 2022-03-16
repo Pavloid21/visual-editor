@@ -10,7 +10,7 @@ export default function reducer(state = initialState, action) {
     case actionTypes.EDIT_SCREEN_NAME:
       return {
         ...state,
-        screen: action.screen
+        screen: action.screen,
       };
     default:
       return state;

@@ -12,6 +12,7 @@ import actionTypes from "../../constants/actionTypes";
 import lazyvstack from "../../assets/lazyvstack.svg";
 
 const LazyVStack = styled.div`
+  overflow-y: scroll;
   background-color: ${(props) =>
     props.backgroundColor?.indexOf("#") >= 0
       ? props.backgroundColor

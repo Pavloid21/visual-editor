@@ -146,17 +146,17 @@ const Preview = (props) => {
   };
 
   const handleSaveSnippet = () => {
-    fetch(`/api/v1/configurations/${initial.screen.replace(/\s/g, "_")}`, {
-      method: "PUT",
-      body: code.replace(/\s/g, "").replace(/\n/g, ""),
-      headers: {
-        "Content-Type": "application/javascript",
-      },
-    })
-      .then((response) => {})
-      .then(() => {
-        alert("SUCCESS");
-      });
+    // fetch(`/api/v1/configurations/${initial.screen.replace(/\s/g, "_")}`, {
+    //   method: "PUT",
+    //   body: code.replace(/\s/g, "").replace(/\n/g, ""),
+    //   headers: {
+    //     "Content-Type": "application/javascript",
+    //   },
+    // })
+    //   .then((response) => {})
+    //   .then(() => {
+    //     alert("SUCCESS");
+    //   });
   };
 
   const isActive = canDrop && isOver;

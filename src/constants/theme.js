@@ -72,4 +72,13 @@ export default createGlobalStyle`
   pre {
     background: none !important;
   }
+
+  .rstcustom__row {
+    width: 100%;
+    & > div {
+      & > div:first-child {
+        display: none;
+      }
+    }
+  }
 `;

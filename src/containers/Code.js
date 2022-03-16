@@ -85,6 +85,7 @@ const Code = (props) => {
         }});`;
       });
       prepareJSON(reference);
+      console.log('reference', reference)
       let jsonString = JSON.stringify(reference, null, 4);
       jsonString = jsonString.replace(/"{{|}}"/g, "");
       constants.push(`return ${jsonString}`);

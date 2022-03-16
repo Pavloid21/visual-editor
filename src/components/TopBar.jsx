@@ -54,6 +54,9 @@ const TopBar = () => {
   const handleHideRight = () => {
     dispatch({ type: actionTypes.TOGGLE_RIGHT_BAR });
   };
+  const handleSaveApplication = (event) => {
+    event.stopPropagation();
+  }
   return (
     <Bar>
       <div>
@@ -63,7 +66,7 @@ const TopBar = () => {
       </div>
       <div>
         <div>
-          <Button>Save application</Button>
+          <Button onClick={handleSaveApplication}>Save application</Button>
           <HideRight className="icon" onClick={handleHideRight}/>
           <Settings className="icon" />
         </div>

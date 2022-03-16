@@ -8,6 +8,8 @@ const initialState = {
   selectedBlockUuid: "",
   documentId: "document2",
   selectedScreen: null,
+  editedScreens: [],
+  snippets: [],
 };
 
 export const findInTree = (tree, uuid) => {
@@ -227,7 +229,28 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         selectedScreen: action.screen,
+        editedScreens: [...state.editedScreens, action.screen],
       };
+    case actionTypes.EDIT_SCREEN_NAME:
+      if (action.snippet?.screenID) {
+        const next = [...state.snippets];
+        let finded = false;
+        state.snippets.forEach((item, index) => {
+          if (item.screenID === action.snippet.screenID) {
+            next[index] = action.snippet;
+            finded = true;
+          }
+        });
+        if (!finded) {
+          next.push(action.snippet);
+        }
+        return {
+          ...state,
+          snippets: [...next],
+        };
+      } else {
+        return state;
+      }
     default:
       return state;
   }

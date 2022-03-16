@@ -10,7 +10,6 @@ import FileExplorerTheme from "@nosferatu500/theme-file-explorer";
 import { ReactComponent as Copy } from "../assets/copy.svg";
 import { ReactComponent as Trash } from "../assets/trash.svg";
 import { ReactComponent as Plus } from "../assets/plus.svg";
-import LoadScreen from "../containers/LoadScreen";
 import models from "../views/blocks/index";
 import v4 from "uuid/dist/v4";
 
@@ -44,17 +43,13 @@ const Icon = styled.img`
 export default function LeftSidebar({ children, ...props }) {
   const layout = useSelector((state) => state.layout.blocks);
   const appBar = useSelector((state) => state.layout.appBar);
+  const api = useSelector((state) => state.api);
+  const output = useSelector((state) => state.output.screen);
   const bottomBar = useSelector((state) => state.layout.bottomBar);
   const selectedBlock = useSelector((state) => state.layout.selectedBlockUuid);
   const selectedScreen = useSelector((state) => state.layout.selectedScreen);
   const [activeTab, setActiveTab] = useState(0);
   const [availableScreenes, setScreenes] = useState([]);
-  const startTreeData = {
-    subtitle: "screen",
-    title: "screen",
-    expanded: false,
-    children: [],
-  };
   const [treeData, setTree] = useState([]);
   const [show, toggleComponents] = useState(true);
   const dispatch = useDispatch();
@@ -63,7 +58,7 @@ export default function LeftSidebar({ children, ...props }) {
     if (block) {
       const data = {
         subtitle: block.uuid,
-        title: block.type,
+        title: block.blockId.toUpperCase(),
         expanded: true,
         children: [],
       };
@@ -80,6 +75,8 @@ export default function LeftSidebar({ children, ...props }) {
     root.subtitle = "screen";
     root.title = "Screen";
     root.uuid = treeData.uuid;
+    root.endpoint = treeData.screenEndpoint;
+    root.expanded = treeData.uuid === selectedScreen;
     root.children = treeData.value.listItems.map((block) => {
       return buildTreeitem(block);
     });
@@ -95,11 +92,10 @@ export default function LeftSidebar({ children, ...props }) {
         subtitle: bottomBar?.uuid,
       });
     }
-    // setTree([root]);
     return root;
   };
 
-  const buildLayout = (object) => {
+  const buildLayout = ({ screen, object }) => {
     const tree = object.listItems;
     let newBlock = {
       screen: object.screen,
@@ -142,9 +138,7 @@ export default function LeftSidebar({ children, ...props }) {
         },
       };
     }
-    return newBlock;
-    // dispatch(action);
-    // dispatch({ type: actionTypes.EDIT_SCREEN_NAME, screen: object.screen });
+    return { newBlock, action, screenEndpoint: screen };
   };
 
   useEffect(() => {
@@ -158,6 +152,7 @@ export default function LeftSidebar({ children, ...props }) {
             `http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/screens/${screen}`
           )
             .then((response) => response.json())
+            .then((data) => ({ screen, object: data }))
             .catch((e) => {
               console.log("e :>> ", e);
             });
@@ -166,8 +161,16 @@ export default function LeftSidebar({ children, ...props }) {
           .then((resolves) => {
             const layouts = [];
             resolves.forEach((result) => {
-              if (result.status === "fulfilled" && result.value.screen) {
-                layouts.push({ uuid: v4(), value: buildLayout(result.value) });
+              if (result.status === "fulfilled" && result.value.object.screen) {
+                const { newBlock, action, screenEndpoint } = buildLayout(
+                  result.value
+                );
+                layouts.push({
+                  uuid: v4(),
+                  value: newBlock,
+                  action,
+                  screenEndpoint,
+                });
               }
             });
             setScreenes(layouts);
@@ -177,7 +180,6 @@ export default function LeftSidebar({ children, ...props }) {
       });
     const screenLayouts = availableScreenes.map((screen) => {
       if (screen.uuid === selectedScreen) {
-        console.log(screen, layout);
         return {
           layout: layout,
           uuid: screen.uuid,
@@ -186,13 +188,125 @@ export default function LeftSidebar({ children, ...props }) {
       return screen;
     });
     setScreenes(screenLayouts);
-  }, [layout, appBar, bottomBar]);
+  }, []);
+
+  useEffect(() => {
+    const layouts = [];
+    availableScreenes.forEach((item) => {
+      if (item.uuid === selectedScreen) {
+        layouts.push({
+          ...item,
+          action: {
+            ...item.action,
+            layout: layout,
+          },
+          value: {
+            ...item.value,
+            listItems: layout,
+          },
+        });
+      } else {
+        layouts.push(item);
+      }
+    });
+    const screenLayout = availableScreenes.filter(
+      (screen) => screen.uuid === selectedScreen
+    )[0];
+    if (screenLayout) {
+      console.log('screenLayout 2:>> ', screenLayout);
+      dispatch({
+        type: actionTypes.EDIT_SCREEN_NAME,
+        screen: output,
+        snippet: {
+          screenID: selectedScreen,
+          endpoint: screenLayout.screenEndpoint,
+          snippet: snippet({
+            screen: output,
+            listItems: layout,
+          }),
+        },
+      });
+    }
+    setScreenes(layouts);
+    setTree(layouts.map((layout) => prepareTree(layout)));
+  }, [layout, appBar, bottomBar, output]);
+
+  const buildJSONitem = (block) => {
+    if (block.data.checked) {
+      delete block.data.checked;
+    }
+    const settingsUI = {};
+    Object.keys(block.data).forEach((key) => {
+      if (
+        typeof block.data[key] === "string" &&
+        block.data[key].indexOf("{{") >= 0
+      ) {
+        settingsUI[key] = `${block.data[key]
+          .replace("{{", "")
+          .replace("}}", "")}`;
+      }
+      settingsUI[key] = block.data[key];
+    });
+    const data = {
+      type: block.blockId.toUpperCase(),
+      settingsUI: settingsUI,
+    };
+    if (block.listItems) {
+      data.listItems = block.listItems.map((item) => buildJSONitem(item));
+    }
+    return data;
+  };
+
+  const prepareJSON = (initial) => {
+    initial.listItems = layout[0]
+      ? layout.map((block) => {
+          return buildJSONitem(block);
+        })
+      : [];
+    if (appBar) {
+      initial.appBar = buildJSONitem(appBar);
+    } else {
+      delete initial.appBar;
+    }
+    if (bottomBar) {
+      initial.bottomBar = buildJSONitem(bottomBar);
+    } else {
+      delete initial.bottomBar;
+    }
+  };
+
+  const snippet = (initial) => {
+    const reference = { ...initial };
+    if (api) {
+      const constants = api.list.map((item) => {
+        const headers = item.headers?.map((header) => {
+          return `"${header.key}": "${header.value}"`;
+        });
+        const params = item.params?.map((param) => {
+          return `"${param.key}": "${param.value}"`;
+        });
+        return `const ${item.varName} = await api.get("${item.url}"${
+          (headers || params) && `, {`
+        }${headers && `"headers": {${headers.join(",")}},`}${
+          params && `"params": {${params.join(",")}}`
+        }});`;
+      });
+      prepareJSON(reference);
+      let jsonString = JSON.stringify(reference, null, 4);
+      jsonString = jsonString.replace(/"{{|}}"/g, "");
+      constants.push(`return ${jsonString}`);
+      return constants.join("\r\n");
+    }
+  };
 
   const handleItemClick = (event, item) => {
     event.stopPropagation();
-    console.log("extendedNode :>> ", item.node);
     const uuid = item.node.subtitle;
     if (uuid === "screen") {
+      const screenLayout = availableScreenes.filter(
+        (screen) => screen.uuid === item.node.uuid
+      )[0];
+      console.log('screenLayout :>> ', item.node);
       dispatch({
         type: actionTypes.CHANGE_ACTIVE_TAB,
         index: 5,
@@ -201,11 +315,23 @@ export default function LeftSidebar({ children, ...props }) {
         type: actionTypes.SELECT_SCREEN,
         screen: item.node.uuid,
       });
-      const screenLayout = availableScreenes.filter(
-        (screen) => screen.uuid === item.node.uuid
-      )[0];
-      console.log("screenLayout :>> ", screenLayout);
-      // buildLayout(screenLayout.value);
+      dispatch({
+        type: actionTypes.SET_SELECTED_BLOCK,
+        selectedBlockUuid: "",
+      });
+      dispatch({
+        type: actionTypes.EDIT_SCREEN_NAME,
+        screen: item.node.screen,
+        snippet: {
+          screenID: selectedScreen,
+          endpoint: item.node.endpoint,
+          snippet: snippet({
+            screen: screenLayout.value.screen,
+            listItems: layout,
+          }),
+        },
+      });
+      dispatch(screenLayout.action);
     } else {
       observer.broadcast({ blockId: uuid, event: "click" });
     }
@@ -223,22 +349,18 @@ export default function LeftSidebar({ children, ...props }) {
   }
 
   const handleAddScreen = () => {
-    startTreeData.uuid = v4();
-    setScreenes([
-      ...availableScreenes,
-      {
-        layout: {
-          screen: "screen name",
-          listItems: [],
-        },
-        uuid: startTreeData.uuid,
+    const layouts = [...availableScreenes];
+    const { newBlock, action, screenEndpoint } = buildLayout({
+      screen: "new_screen",
+      object: {
+        screen: "new screen",
+        listItems: [],
       },
-    ]);
-    setTree([...treeData, prepareTree(startTreeData)]);
+    });
+    layouts.push({ uuid: v4(), value: newBlock, action, screenEndpoint });
+    setScreenes(layouts);
+    setTree(layouts.map((layout) => prepareTree(layout)));
   };
-
-  // console.log("availableScreenes :>> ", availableScreenes);
-  // console.log("treeData :>> ", treeData);
 
   return (
     <Container show={show}>
@@ -292,7 +414,7 @@ export default function LeftSidebar({ children, ...props }) {
                             ?.previewImageUrl
                         }
                       />
-                      {extendedNode.node.screen || extendedNode.node.title}
+                      {extendedNode.node.endpoint || extendedNode.node.title}
                     </span>
                   </section>
                 ),
