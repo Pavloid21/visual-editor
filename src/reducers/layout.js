@@ -237,7 +237,11 @@ export default function reducer(state = initialState, action) {
         let finded = false;
         state.snippets.forEach((item, index) => {
           if (item.screenID === action.snippet.screenID) {
-            next[index] = { ...next[index], snippet: action.snippet.snippet };
+            next[index] = {
+              ...next[index],
+              endpoint: action.snippet.endpoint,
+              snippet: action.snippet.snippet,
+            };
             finded = true;
           }
         });
