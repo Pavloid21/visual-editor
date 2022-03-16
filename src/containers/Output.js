@@ -45,7 +45,7 @@ const Output = (props) => {
   }, [blocks, bottomBar, appBar, initial, code]);
 
   const handleSaveClick = () => {
-    fetch(`/api/v1/configurations/${initial.screen.replace(/\s/g, "_")}`, {
+    fetch(`/api/v1/screens/${initial.screen.replace(/\s/g, "_")}`, {
       method: "PUT",
       body: code,
       headers: {

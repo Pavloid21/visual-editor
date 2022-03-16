@@ -17,7 +17,7 @@ const LoadScreen = (props) => {
   const dispatch = useDispatch();
   useEffect(() => {
     fetch(
-      "http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/configurations"
+      "http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/admin/screens"
     )
       .then((response) => response.json())
       .then((data) => {
@@ -91,7 +91,7 @@ const LoadScreen = (props) => {
           <ScreenItem
             onClick={() => {
               fetch(
-                `http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/configurations/${screen}`
+                `http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/screens/${screen}`
               )
                 .then((response) => response.json())
                 .then((data) => {

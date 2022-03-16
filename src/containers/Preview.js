@@ -146,7 +146,7 @@ const Preview = (props) => {
   };
 
   const handleSaveSnippet = () => {
-    fetch(`/api/v1/configurations/${initial.screen.replace(/\s/g, "_")}`, {
+    fetch(`/api/v1/screens/${initial.screen.replace(/\s/g, "_")}`, {
       method: "PUT",
       body: code.replace(/\s/g, "").replace(/\n/g, ""),
       headers: {
