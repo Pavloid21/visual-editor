@@ -209,11 +209,16 @@ export default function LeftSidebar({ children, ...props }) {
         layouts.push(item);
       }
     });
+    
+    setScreenes(layouts);
+    setTree(layouts.map((layout) => prepareTree(layout)));
+  }, [layout, appBar, bottomBar, output]);
+
+  useEffect(() => {
     const screenLayout = availableScreenes.filter(
       (screen) => screen.uuid === selectedScreen
     )[0];
     if (screenLayout) {
-      console.log('screenLayout 2:>> ', screenLayout);
       dispatch({
         type: actionTypes.EDIT_SCREEN_NAME,
         screen: output,
@@ -227,9 +232,7 @@ export default function LeftSidebar({ children, ...props }) {
         },
       });
     }
-    setScreenes(layouts);
-    setTree(layouts.map((layout) => prepareTree(layout)));
-  }, [layout, appBar, bottomBar, output]);
+  }, [output])
 
   const buildJSONitem = (block) => {
     if (block.data.checked) {
@@ -306,7 +309,6 @@ export default function LeftSidebar({ children, ...props }) {
       const screenLayout = availableScreenes.filter(
         (screen) => screen.uuid === item.node.uuid
       )[0];
-      console.log('screenLayout :>> ', item.node);
       dispatch({
         type: actionTypes.CHANGE_ACTIVE_TAB,
         index: 5,
@@ -323,10 +325,10 @@ export default function LeftSidebar({ children, ...props }) {
         type: actionTypes.EDIT_SCREEN_NAME,
         screen: item.node.screen,
         snippet: {
-          screenID: selectedScreen,
+          screenID: item.node.uuid,
           endpoint: item.node.endpoint,
           snippet: snippet({
-            screen: screenLayout.value.screen,
+            screen: item.node.screen,
             listItems: layout,
           }),
         },
