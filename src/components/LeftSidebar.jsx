@@ -62,7 +62,7 @@ export default function LeftSidebar({ children, ...props }) {
   const buildTreeitem = (block) => {
     if (block) {
       const data = {
-        subtitle: block.uuid || v4(),
+        subtitle: block.uuid,
         title: block.type,
         expanded: true,
         children: [],
@@ -142,8 +142,9 @@ export default function LeftSidebar({ children, ...props }) {
         },
       };
     }
-    dispatch(action);
-    dispatch({ type: actionTypes.EDIT_SCREEN_NAME, screen: object.screen });
+    return newBlock;
+    // dispatch(action);
+    // dispatch({ type: actionTypes.EDIT_SCREEN_NAME, screen: object.screen });
   };
 
   useEffect(() => {
@@ -166,7 +167,7 @@ export default function LeftSidebar({ children, ...props }) {
             const layouts = [];
             resolves.forEach((result) => {
               if (result.status === "fulfilled" && result.value.screen) {
-                layouts.push({ uuid: v4(), value: result.value });
+                layouts.push({ uuid: v4(), value: buildLayout(result.value) });
               }
             });
             setScreenes(layouts);
@@ -204,7 +205,7 @@ export default function LeftSidebar({ children, ...props }) {
         (screen) => screen.uuid === item.node.uuid
       )[0];
       console.log("screenLayout :>> ", screenLayout);
-      buildLayout(screenLayout.value);
+      // buildLayout(screenLayout.value);
     } else {
       observer.broadcast({ blockId: uuid, event: "click" });
     }

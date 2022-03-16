@@ -149,6 +149,7 @@ class Inspector extends Component {
     if (!this.props.display) return null;
 
     const findInTree = (tree, uuid) => {
+      // console.log('tree', tree)
       let result = null;
       for (let item of tree) {
         if (item && item.uuid === uuid) {
@@ -168,6 +169,9 @@ class Inspector extends Component {
         this.props.layout.bottomBar) ||
       (this.props.layout.appBar?.uuid === blockUuid &&
         this.props.layout.appBar);
+
+    // console.log('blockUuid', blockUuid)
+    // console.log('blocks', this.props.layout.blocks)
 
     if (!block) return null;
 
