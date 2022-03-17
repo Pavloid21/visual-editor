@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import actionTypes from "../../constants/actionTypes";
 import vstack from "../../assets/vstack.svg";
+import Wrapper from "../../utils/wrapper";
 
 const VStack = styled.div`
   height: ${(props) =>
@@ -21,13 +22,12 @@ const VStack = styled.div`
   display: flex;
   justify-content: ${(props) =>
     props.distribution === "SPACEBETWEEN" ? "space-between" : props.alignment};
-  align-items: ${props => props.alignment};
+  align-items: ${(props) => props.alignment};
   flex-direction: column;
   padding-top: ${(props) => props.padding?.top}px;
   padding-bottom: ${(props) => props.padding?.bottom}px;
   padding-left: ${(props) => props.padding?.left}px;
   padding-right: ${(props) => props.padding?.right}px;
-  border: 1px dashed blue;
   box-sizing: border-box;
   border-radius: ${(props) => `
     ${props.corners?.topLeftRadius}px 
@@ -40,15 +40,17 @@ const VStack = styled.div`
 const SortableContainer = sortableContainer(
   ({ drop, backgroundColor, listItems, data, ...props }) => {
     return (
-      <VStack
-        {...data}
-        {...props}
-        ref={drop}
-        backgroundColor={backgroundColor}
-        className="draggable"
-      >
-        {listItems && renderHandlebars(listItems, "document2").components}
-      </VStack>
+      <Wrapper id={props.id}>
+        <VStack
+          {...data}
+          {...props}
+          ref={drop}
+          backgroundColor={backgroundColor}
+          className="draggable"
+        >
+          {listItems && renderHandlebars(listItems, "document2").components}
+        </VStack>
+      </Wrapper>
     );
   }
 );

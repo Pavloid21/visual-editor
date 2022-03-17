@@ -1,11 +1,11 @@
 import React from "react";
 import styledComponents from "styled-components";
 import label from "../../assets/label.svg";
+import Wrapper from "../../utils/wrapper";
 
 const Label = styledComponents.div`
   text-align: ${(props) => props.alignment};
   width: 100%;
-  border: 1px dashed blue;
   box-sizing: border-box;
   & > span {
     display: block;
@@ -21,9 +21,11 @@ const Label = styledComponents.div`
 const Component = ({ data, ...props }) => {
   const { text } = data;
   return (
-    <Label {...props} {...data} className="draggable">
-      <span>{text}</span>
-    </Label>
+    <Wrapper id={props.id}>
+      <Label {...props} {...data} className="draggable">
+        <span>{text}</span>
+      </Label>
+    </Wrapper>
   );
 };
 

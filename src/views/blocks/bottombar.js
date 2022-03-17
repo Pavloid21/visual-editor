@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import bottombar from "../../assets/bottombar.svg";
+import Wrapper from "../../utils/wrapper";
 
 const BottomBar = styled.div`
   background-color: ${(props) => props.backgroundColor};
@@ -48,19 +49,21 @@ const Component = ({ data, ...props }) => {
     buttons.push(navigationItems[index]);
   }
   return (
-    <BottomBar {...data} {...props}>
-      {buttons.map((item, index) => {
-        return (
-          <div
-            className={item.isNestedScreen && "active"}
-            key={`bottomBarItem_${index}`}
-          >
-            <Icon className="item_icon" iconUrl={item.iconUrl}></Icon>
-            <label>{item.screenName}</label>
-          </div>
-        );
-      })}
-    </BottomBar>
+    <Wrapper id={props.id} style={{ marginTop: "auto" }}>
+      <BottomBar {...data} {...props}>
+        {buttons.map((item, index) => {
+          return (
+            <div
+              className={item.isNestedScreen && "active"}
+              key={`bottomBarItem_${index}`}
+            >
+              <Icon className="item_icon" iconUrl={item.iconUrl}></Icon>
+              <label>{item.screenName}</label>
+            </div>
+          );
+        })}
+      </BottomBar>
+    </Wrapper>
   );
 };
 

@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import actionTypes from "../../constants/actionTypes";
 import lazyvstack from "../../assets/lazyvstack.svg";
+import Wrapper from "../../utils/wrapper";
 
 const LazyVStack = styled.div`
   overflow-y: scroll;
@@ -47,20 +48,22 @@ const LazyVStack = styled.div`
 const SortableContainer = sortableContainer(
   ({ drop, backgroundColor, listItems, data, ...props }) => {
     return (
-      <LazyVStack
-        {...data}
-        {...props}
-        ref={drop}
-        backgroundColor={backgroundColor}
-        className="draggable"
-      >
-        {listItems &&
-          renderHandlebars(listItems, "document2").components.map(
-            (component) => {
-              return <div className="lazevstack_row">{component}</div>;
-            }
-          )}
-      </LazyVStack>
+      <Wrapper id={props.id}>
+        <LazyVStack
+          {...data}
+          {...props}
+          ref={drop}
+          backgroundColor={backgroundColor}
+          className="draggable"
+        >
+          {listItems &&
+            renderHandlebars(listItems, "document2").components.map(
+              (component) => {
+                return <div className="lazevstack_row">{component}</div>;
+              }
+            )}
+        </LazyVStack>
+      </Wrapper>
     );
   }
 );

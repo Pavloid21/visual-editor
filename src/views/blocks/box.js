@@ -10,10 +10,11 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import actionTypes from "../../constants/actionTypes";
 import box from "../../assets/box.svg";
+import Wrapper from "../../utils/wrapper";
 
 const Box = styled.div`
   border: ${(props) => `${props.borderWidth}px solid ${props.borderColor}`};
-  width: ${(props) => (props.size?.width ? props.size.width + "px;" : "100%;")}
+  width: ${(props) => (props.size?.width ? props.size.width + "px" : "100%")};
   height: ${(props) => props.size?.height}px;
   background-color: ${(props) => props.backgroundColor};
   display: flex;
@@ -24,15 +25,17 @@ const Box = styled.div`
 const SortableContainer = sortableContainer(
   ({ drop, backgroundColor, listItems, data, ...props }) => {
     return (
-      <Box
-        {...data}
-        {...props}
-        ref={drop}
-        backgroundColor={backgroundColor}
-        className="draggable"
-      >
-        {listItems && renderHandlebars(listItems, "document2").components}
-      </Box>
+      <Wrapper id={props.id}>
+        <Box
+          {...data}
+          {...props}
+          ref={drop}
+          backgroundColor={backgroundColor}
+          className="draggable"
+        >
+          {listItems && renderHandlebars(listItems, "document2").components}
+        </Box>
+      </Wrapper>
     );
   }
 );

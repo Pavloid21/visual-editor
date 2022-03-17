@@ -1,14 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 import image from "../../assets/image.svg";
+import Wrapper from "../../utils/wrapper";
 
 const Image = styled.img`
   display: flex;
   box-sizing: border-box;
-  border: 1px dashed blue;
-  align-items: align-items: ${(props) =>
+  align-items: ${(props) =>
     props.alignment === "SPACEBETWEEN" ? "space-between" : props.alignment};
   width: ${(props) => (+props.size?.width ? props.size.width + "px" : "100%")};
+  z-index: 90;
   height: ${(props) =>
     +props.size?.height ? props.size.height + "px" : "auto"};
   ${(props) => {
@@ -20,7 +21,9 @@ const Image = styled.img`
 
 const Component = ({ data, ...props }) => {
   return (
-    <Image {...data} {...props} className="draggable" src={data.imageUrl} />
+    <Wrapper id={props.id}>
+      <Image {...data} {...props} className="draggable" src={data.imageUrl} />
+    </Wrapper>
   );
 };
 

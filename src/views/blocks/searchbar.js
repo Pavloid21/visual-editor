@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import searchbar from "../../assets/searchbar.svg";
+import Wrapper from "../../utils/wrapper";
 
 const SearchBar = styled.div`
   & > input {
@@ -34,14 +35,16 @@ const SearchBar = styled.div`
 const Component = (props) => {
   const { placeholder, text } = props.data;
   return (
-    <SearchBar {...props.data} {...props}>
-      <input
-        type="text"
-        className="form-control draggable"
-        placeholder={placeholder}
-        value={text}
-      />
-    </SearchBar>
+    <Wrapper id={props.id}>
+      <SearchBar {...props.data} {...props}>
+        <input
+          type="text"
+          className="form-control draggable"
+          placeholder={placeholder}
+          value={text}
+        />
+      </SearchBar>
+    </Wrapper>
   );
 };
 

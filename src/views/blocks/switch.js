@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import switch_ic from "../../assets/switch.svg";
+import Wrapper from "../../utils/wrapper";
 
 const Switch = styled.div`
   font-size: 16px;
@@ -29,7 +30,7 @@ const Switch = styled.div`
     border-radius: 50%;
     width: 40px;
     height: 40px;
-    background-color: ${(props) => props.backgroundColor}
+    background-color: ${(props) => props.backgroundColor};
     outline: none;
     opacity: 0;
     transform: scale(1);
@@ -46,7 +47,6 @@ const Switch = styled.div`
     width: 100%;
     cursor: pointer;
     box-sizing: border-box;
-    border: 1px dashed blue;
     &::before {
       content: "";
       float: right;
@@ -77,10 +77,12 @@ const Switch = styled.div`
 
 const Component = ({ data, ...props }) => {
   return (
-    <Switch {...props} {...data} className="draggable">
-      <input type="checkbox" checked={data.checked} />
-      <span></span>
-    </Switch>
+    <Wrapper id={props.id}>
+      <Switch {...props} {...data} className="draggable">
+        <input type="checkbox" checked={data.checked} />
+        <span></span>
+      </Switch>
+    </Wrapper>
   );
 };
 

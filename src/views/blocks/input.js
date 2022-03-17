@@ -1,5 +1,6 @@
 import text from "../../assets/text.svg";
 import styled from "styled-components";
+import Wrapper from "../../utils/wrapper";
 
 const Input = styled.div`
   color: ${(props) => props.textColor};
@@ -22,12 +23,14 @@ const Input = styled.div`
 
 const Component = ({ data, ...props }) => {
   return (
-    <Input {...props} {...data}>
-      {!data.text && data.placeholder && (
-        <span className="placeholder">{data.placeholder}</span>
-      )}
-      {data.text && <span>{data.text}</span>}
-    </Input>
+    <Wrapper id={props.id}>
+      <Input {...props} {...data}>
+        {!data.text && data.placeholder && (
+          <span className="placeholder">{data.placeholder}</span>
+        )}
+        {data.text && <span>{data.text}</span>}
+      </Input>
+    </Wrapper>
   );
 };
 

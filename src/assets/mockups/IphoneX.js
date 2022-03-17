@@ -13,7 +13,7 @@ const IphoneX = (props) => {
         <div
           style={{
             position: "absolute",
-            width: "433px",
+            width: "428px",
             height: "836px",
             borderRadius: "37px",
             overflow: "hidden",

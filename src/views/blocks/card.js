@@ -11,14 +11,13 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import actionTypes from "../../constants/actionTypes";
 import card from "../../assets/card.svg";
+import Wrapper from "../../utils/wrapper";
 
 const Card = styled.div`
   box-sizing: border-box;
-  border: 1px dashed blue;
   border: ${(props) => props.border};
   background-color: ${(props) => props.backgroundColor};
   display: flex;
-  overflow: auto;
   align-items: ${(props) => props.alignment};
   flex-direction: column;
   padding-top: ${(props) => props.padding?.top}px;
@@ -41,15 +40,17 @@ const SortableContainer = sortableContainer(
   ({ drop, backgroundColor, listItems, data, ...props }) => {
     console.log("backgroundColor", backgroundColor);
     return (
-      <Card
-        {...data}
-        {...props}
-        backgroundColor={backgroundColor}
-        ref={drop}
-        className="draggable"
-      >
-        {listItems && renderHandlebars(listItems, "document2").components}
-      </Card>
+      <Wrapper id={props.id}>
+        <Card
+          {...data}
+          {...props}
+          backgroundColor={backgroundColor}
+          ref={drop}
+          className="draggable"
+        >
+          {listItems && renderHandlebars(listItems, "document2").components}
+        </Card>
+      </Wrapper>
     );
   }
 );

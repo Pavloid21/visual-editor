@@ -1,7 +1,8 @@
 import passwordtextfield from "../../assets/passwordtextfield.svg";
 import styled from "styled-components";
+import Wrapper from "../../utils/wrapper";
 
-const Wrapper = styled.div`
+const Container = styled.div`
   width: 100%;
   & > input {
     pointer-events: none;
@@ -18,14 +19,16 @@ const Wrapper = styled.div`
 const Component = (props) => {
   const { placeholder, text } = props.data;
   return (
-    <Wrapper className="draggable" {...props} {...props.data}>
-      <input
-        {...props}
-        type="password"
-        className="form-control"
-        placeholder={placeholder}
-        value={text}
-      />
+    <Wrapper id={props.id}>
+      <Container className="draggable" {...props} {...props.data}>
+        <input
+          {...props}
+          type="password"
+          className="form-control"
+          placeholder={placeholder}
+          value={text}
+        />
+      </Container>
     </Wrapper>
   );
 };

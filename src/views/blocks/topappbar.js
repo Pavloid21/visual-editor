@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import invertColor from "../../utils/invertColor";
 import topappbar from "../../assets/topappbar.svg";
+import Wrapper from "../../utils/wrapper";
 
 const TopAppBar = styled.div`
   padding-top: ${(props) => props.padding?.top}px;
@@ -52,18 +53,20 @@ const Component = ({ data, ...props }) => {
     buttons.push(appBarItems[index]);
   }
   return (
-    <TopAppBar {...data} {...props}>
-      <label>{data.text}</label>
-      <div style={{ display: "flex", flexDirection: "row", gap: "16px" }}>
-        {buttons.map((item) => {
-          return (
-            <div>
-              <Icon className="item_icon" iconUrl={item.iconUrl}></Icon>
-            </div>
-          );
-        })}
-      </div>
-    </TopAppBar>
+    <Wrapper id={props.id} style={{ padding: 0 }}>
+      <TopAppBar {...data} {...props}>
+        <label>{data.text}</label>
+        <div style={{ display: "flex", flexDirection: "row", gap: "16px" }}>
+          {buttons.map((item) => {
+            return (
+              <div>
+                <Icon className="item_icon" iconUrl={item.iconUrl}></Icon>
+              </div>
+            );
+          })}
+        </div>
+      </TopAppBar>
+    </Wrapper>
   );
 };
 

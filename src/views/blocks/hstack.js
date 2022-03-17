@@ -10,10 +10,9 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import actionTypes from "../../constants/actionTypes";
 import hstack from "../../assets/hstack.svg";
+import Wrapper from "../../utils/wrapper";
 
 const HStack = styled.div`
-  box-sizing: border-box;
-  border: 1px dashed blue;
   background-color: ${(props) => props.backgroundColor};
   display: flex;
   justify-content: ${(props) =>
@@ -45,15 +44,17 @@ const HStack = styled.div`
 const SortableContainer = sortableContainer(
   ({ drop, backgroundColor, listItems, data, ...props }) => {
     return (
-      <HStack
-        {...data}
-        {...props}
-        backgroundColor={backgroundColor}
-        ref={drop}
-        className="draggable"
-      >
-        {listItems && renderHandlebars(listItems, "document2").components}
-      </HStack>
+      <Wrapper id={props.id}>
+        <HStack
+          {...data}
+          {...props}
+          backgroundColor={backgroundColor}
+          ref={drop}
+          className="draggable"
+        >
+          {listItems && renderHandlebars(listItems, "document2").components}
+        </HStack>
+      </Wrapper>
     );
   }
 );

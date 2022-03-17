@@ -2,10 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import button from "../../assets/button.svg";
 import { hexToRgb } from "../../constants/utils";
-
-const Wrapper = styled.div``;
+import Wrapper from "../../utils/wrapper";
 
 const Button = styled.div`
+  position: relative;
   box-sizing: border-box;
   font-size: ${(props) => props.fontSize}px;
   color: ${(props) => props.textColor};
@@ -58,8 +58,8 @@ const Button = styled.div`
 const Component = (props) => {
   const { text, imageUrl } = props.data;
   return (
-    <Wrapper className="draggable" {...props.data} {...props}>
-      <Button {...props.data} {...props}>
+    <Wrapper id={props.id}>
+      <Button className="draggable" {...props.data} {...props}>
         <span>{text}</span>
         {imageUrl && <img src={imageUrl} />}
       </Button>
@@ -75,8 +75,8 @@ const block = {
     "Displays a button icon the user can click to initiate an action.",
   previewImageUrl: button,
   category: "Controls",
+  action: { url: "nextScreenName" },
   defaultData: {
-    action: "nextScreenName",
     text: "Войти",
     fontSize: "24",
     textColor: "#000000",
@@ -117,7 +117,12 @@ const block = {
     },
   },
   config: {
-    action: { type: "string", name: "Action" },
+    action: {
+      url: {
+        type: "string",
+        name: "Action",
+      },
+    },
     text: { type: "string", name: "Text" },
     fontSize: { type: "number", name: "Font size" },
     textColor: { type: "color", name: "Text color" },

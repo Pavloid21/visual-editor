@@ -1,17 +1,20 @@
 import React from "react";
 import divider from "../../assets/divider.svg";
+import Wrapper from "../../utils/wrapper";
 
 const Component = ({ data, ...props }) => {
   const { backgroundColor } = data;
   return (
-    <hr
-      {...props}
-      className="draggable"
-      style={{
-        backgroundColor,
-        width: "100%",
-      }}
-    />
+    <Wrapper id={props.id}>
+      <hr
+        {...props}
+        className="draggable"
+        style={{
+          backgroundColor,
+          width: "100%",
+        }}
+      />
+    </Wrapper>
   );
 };
 

@@ -11,6 +11,7 @@ import { findInTree } from "../reducers/layout";
 import TopBar from "../components/TopBar";
 import GlobalStyles from "../constants/theme";
 import RightSidebar from "../components/RightSideBar";
+import HighlightedElement from "../components/HighlightedElement";
 
 const App = () => {
   const layout = useSelector((state) => state.layout);
@@ -142,6 +143,7 @@ const App = () => {
         </Router>
       </DndWrapper>
       <GlobalStyles />
+      <HighlightedElement />
     </div>
   );
 };
