@@ -11,10 +11,10 @@ const Wrapper = styled.div`
   height: ${(props) => props.height + 20}px;
   left: ${(props) => props.left}px;
   top: ${(props) => props.top - 20}px;
-  background-color: white;
   box-shadow: 0px 2px 10px rgba(51, 51, 51, 0.1),
     0px 3px 8px rgba(244, 69, 50, 0.15);
   & > .options {
+    background-color: white;
     display: flex;
     background-color: #ffffff;
     padding: 4px;
@@ -86,7 +86,7 @@ export default function HighlightedElement() {
           <Remove className="icon" onClick={handleRemove} />
         </div>
       </div>
-      <div ref={ref}></div>
+      <div ref={ref} style={{visibility: "hidden"}}></div>
     </Wrapper>
   );
 }
