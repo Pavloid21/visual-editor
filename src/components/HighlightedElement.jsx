@@ -68,13 +68,21 @@ export default function HighlightedElement() {
     });
   };
 
+  const handleClone = (event) => {
+    event.stopPropagation();
+    dispatch({
+      type: actionTypes.CLONE_BLOCK,
+      blockUuid: selectedBlock,
+    });
+  };
+
   const { width, height, left, top } = position;
 
   return (
     <Wrapper width={width} height={height} left={left} top={top}>
       <div className="options">
         <div>
-          <Copy className="icon" />
+          <Copy className="icon" onClick={handleClone} />
           <Remove className="icon" onClick={handleRemove} />
         </div>
       </div>

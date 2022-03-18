@@ -2,6 +2,7 @@ import actionTypes from "../constants/actionTypes";
 import blocks from "../views/blocks/";
 import { v4 as uuidv4 } from "uuid";
 import { getData } from "../utils/prepareModel";
+import { v4 } from "uuid";
 
 const initialState = {
   blocks: [],
@@ -33,6 +34,19 @@ const removeFromList = (tree, uuid) => {
       result.splice(index, 1);
     } else if (item.listItems) {
       item.listItems = removeFromList(item.listItems, uuid);
+    }
+  });
+  return result;
+};
+
+const cloneToList = (tree, uuid) => {
+  const result = [...tree];
+  tree.forEach((item) => {
+    if (item.uuid === uuid) {
+      const newItem = {...item, uuid: v4()}
+      result.push(newItem);
+    } else if (item.listItems) {
+      item.listItems = cloneToList(item.listItems, uuid);
     }
   });
   return result;
@@ -255,6 +269,21 @@ export default function reducer(state = initialState, action) {
       } else {
         return state;
       }
+    case actionTypes.CLONE_BLOCK:
+      const blocksArray = [...state.blocks];
+      const withClone = cloneToList(blocksArray, action.blockUuid);
+      const stateRef = { ...state };
+      if (action.blockUuid === state.bottomBar?.uuid) {
+        delete stateRef.bottomBar;
+      }
+      if (action.blockUuid === state.appBar?.uuid) {
+        delete stateRef.appBar;
+      }
+      return {
+        ...stateRef,
+        blocks: [...withClone],
+        selectedBlockUuid: "",
+      };
     default:
       return state;
   }

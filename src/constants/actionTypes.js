@@ -26,6 +26,7 @@ const actionTypes = {
   SET_EDITOR_MODE: "UI/SET_EDITOR_MODE",
   SAVE_CODE: "CODE/SAVE_CODE",
   SELECT_SCREEN: "SCREEN/SELECT_SCREEN",
+  CLONE_BLOCK: "LAYOUT/CLONE_BLOCK",
 };
 
 export const ItemTypes = {

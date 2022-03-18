@@ -209,7 +209,7 @@ export default function LeftSidebar({ children, ...props }) {
         layouts.push(item);
       }
     });
-    
+
     setScreenes(layouts);
     setTree(layouts.map((layout) => prepareTree(layout)));
   }, [layout, appBar, bottomBar, output]);
@@ -232,7 +232,7 @@ export default function LeftSidebar({ children, ...props }) {
         },
       });
     }
-  }, [output])
+  }, [output]);
 
   const buildJSONitem = (block) => {
     if (block.data.checked) {
@@ -346,6 +346,13 @@ export default function LeftSidebar({ children, ...props }) {
     });
   };
 
+  const handleCloneBlock = (blockUuid) => {
+    dispatch({
+      type: actionTypes.CLONE_BLOCK,
+      blockUuid,
+    });
+  };
+
   if (!props.display) {
     return null;
   }
@@ -424,7 +431,12 @@ export default function LeftSidebar({ children, ...props }) {
                   extendedNode.node.subtitle === "screen"
                     ? [<Copy className="icon" />, <Trash className="icon" />]
                     : [
-                        <Copy className="icon" />,
+                        <Copy
+                          className="icon"
+                          onClick={() =>
+                            handleCloneBlock(extendedNode.node.subtitle)
+                          }
+                        />,
                         <Trash
                           className="icon"
                           onClick={() =>
