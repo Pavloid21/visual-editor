@@ -371,6 +371,48 @@ export default function LeftSidebar({ children, ...props }) {
     setTree(layouts.map((layout) => prepareTree(layout)));
   };
 
+  const handleDeleteScreen = (event, node) => {
+    event.stopPropagation();
+    const newTree = treeData.filter((item) => item.uuid !== node.uuid);
+    setTree(newTree);
+    dispatch({
+      type: actionTypes.SELECT_SCREEN,
+      delete: true,
+      screen: node.uuid,
+    });
+    dispatch({
+      type: actionTypes.EDIT_SCREEN_NAME,
+      screen: node.screen,
+      snippet: {
+        screenID: node.uuid,
+        endpoint: node.endpoint,
+        snippet: snippet({
+          screen: node.screen,
+          listItems: layout,
+        }),
+      },
+    });
+  };
+
+  const handleCloneScreen = (event, screenUuid) => {
+    event.stopPropagation();
+    let cloneIndex = null;
+    treeData.forEach((item, index) => {
+      if (item.uuid === screenUuid) {
+        cloneIndex = index;
+      }
+    });
+    if (cloneIndex) {
+      const screens = [...availableScreenes];
+      screens.push({
+        ...screens[cloneIndex],
+        uuid: v4(),
+      });
+      setScreenes(screens);
+      setTree(screens.map((layout) => prepareTree(layout)));
+    }
+  };
+
   return (
     <Container show={show}>
       <div>
@@ -399,7 +441,6 @@ export default function LeftSidebar({ children, ...props }) {
             padding: "14px",
           }}
         >
-          {/* {activeTab === 0 && <LoadScreen display />} */}
           <SortableTree
             treeData={treeData}
             onChange={(treeData) => setTree(treeData)}
@@ -429,7 +470,20 @@ export default function LeftSidebar({ children, ...props }) {
                 ),
                 buttons:
                   extendedNode.node.subtitle === "screen"
-                    ? [<Copy className="icon" />, <Trash className="icon" />]
+                    ? [
+                        <Copy
+                          className="icon"
+                          onClick={(event) => {
+                            handleCloneScreen(event, extendedNode.node.uuid);
+                          }}
+                        />,
+                        <Trash
+                          className="icon"
+                          onClick={(event) =>
+                            handleDeleteScreen(event, extendedNode.node)
+                          }
+                        />,
+                      ]
                     : [
                         <Copy
                           className="icon"

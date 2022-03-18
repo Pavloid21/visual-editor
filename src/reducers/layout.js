@@ -10,6 +10,7 @@ const initialState = {
   documentId: "document2",
   selectedScreen: null,
   editedScreens: [],
+  deletedScreens: [],
   snippets: [],
 };
 
@@ -43,7 +44,7 @@ const cloneToList = (tree, uuid) => {
   const result = [...tree];
   tree.forEach((item) => {
     if (item.uuid === uuid) {
-      const newItem = {...item, uuid: v4()}
+      const newItem = { ...item, uuid: v4() };
       result.push(newItem);
     } else if (item.listItems) {
       item.listItems = cloneToList(item.listItems, uuid);
@@ -240,11 +241,17 @@ export default function reducer(state = initialState, action) {
         appBar: action.appBar,
       };
     case actionTypes.SELECT_SCREEN:
-      return {
-        ...state,
-        selectedScreen: action.screen,
-        editedScreens: [...state.editedScreens, action.screen],
-      };
+      let nextScreenState = { ...state };
+      if (action.delete) {
+        nextScreenState.deletedScreens.push(action.screen);
+      } else {
+        nextScreenState = {
+          ...state,
+          selectedScreen: action.screen,
+          editedScreens: [...state.editedScreens, action.screen],
+        };
+      }
+      return nextScreenState;
     case actionTypes.EDIT_SCREEN_NAME:
       if (action.snippet?.screenID) {
         const next = [...state.snippets];

@@ -282,10 +282,7 @@ export default function RightSidebar({ children, ...props }) {
                     />
                   </RowContainer>
                 ))}
-                <Button
-                  className="btn btn-primary"
-                  onClick={handleSubmit(onSubmit)}
-                >
+                <Button onClick={handleSubmit(onSubmit)}>
                   {isEditing ? "Edit" : "Save"} API
                 </Button>
               </form>

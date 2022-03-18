@@ -48,7 +48,9 @@ const VerticalDivider = styled.div`
 
 const TopBar = () => {
   const dispatch = useDispatch();
-  const editedScreens = useSelector((state) => state.layout.snippets);
+  const snippets = useSelector((state) => state.layout.snippets);
+  const deletedScreens = useSelector((state) => state.layout.deletedScreens);
+  const editedScreens = useSelector((state) => state.layout.editedScreens);
   const handleHideLeft = () => {
     dispatch({ type: actionTypes.TOGGLE_LEFT_BAR });
   };
@@ -57,18 +59,31 @@ const TopBar = () => {
   };
   const handleSaveApplication = (event) => {
     event.stopPropagation();
-    editedScreens.map((item) =>
-      fetch(
-        `http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/admin/screens/${item.endpoint}`,
-        {
-          method: "PUT",
-          body: item.snippet.replace(/\n/g, ""),
-          headers: {
-            "Content-Type": "application/javascript",
-          },
-        }
-      )
-    );
+    snippets.forEach((item) => {
+      if (editedScreens.includes(item.screenID)) {
+        fetch(
+          `http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/admin/screens/${item.endpoint}`,
+          {
+            method: "PUT",
+            body: item.snippet.replace(/\n/g, ""),
+            headers: {
+              "Content-Type": "application/javascript",
+            },
+          }
+        );
+      }
+    });
+    snippets.forEach((item) => {
+      if (deletedScreens.includes(item.screenID)) {
+        console.log("item.uuid :>> ", item.screenID);
+        fetch(
+          `http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/admin/screens/${item.endpoint}`,
+          {
+            method: "DELETE",
+          }
+        );
+      }
+    });
   };
   return (
     <Bar>
