@@ -9,7 +9,7 @@ import { arrayMoveImmutable } from "array-move";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import actionTypes from "../../constants/actionTypes";
-import vstack from "../../assets/vstack.svg";
+import lists from "../../assets/lists.svg";
 import Wrapper from "../../utils/wrapper";
 
 const List = styled.div`
@@ -102,9 +102,10 @@ const Component = ({ settingsUI, uuid, listItems, ...props }) => {
 const block = {
   Component,
   name: "LIST",
-  title: "List",
-  description: "A view that arranges its children in a vertical line.",
-  previewImageUrl: vstack,
+  title: "Lists",
+  description:
+    "A container that presents rows of data arranged in a single column, optionally providing the ability to select one or more members.",
+  previewImageUrl: lists,
   category: "Layouts",
   defaultInteractiveOptions: {
     dataSource: "",
