@@ -14,6 +14,7 @@ import switch_block from "./switch";
 import topappbar from "./topappbar";
 import lazyvstack from "./lazyvstack";
 import divider from "./divider";
+import list from "./list";
 
 const blocks = {
   hstack,
@@ -31,6 +32,7 @@ const blocks = {
   topappbar,
   lazyvstack,
   divider,
+  list,
   screen: {
     previewImageUrl: screen,
     name: "screen",

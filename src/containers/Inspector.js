@@ -171,7 +171,7 @@ class Inspector extends Component {
 
     if (!block) return null;
 
-    const config = blocks[block.blockId].config;
+    const { config, interactive } = blocks[block.blockId];
 
     return (
       <div
@@ -181,6 +181,7 @@ class Inspector extends Component {
           height: "calc(100% - 60px)",
         }}
       >
+        {interactive && this.parseConfig(interactive, blockUuid, block.interactive)}
         {this.parseConfig(config, blockUuid, block.settingsUI)}
         {block.settingsUI.navigationItems && (
           <div>

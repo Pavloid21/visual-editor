@@ -105,13 +105,18 @@ export default function reducer(state = initialState, action) {
       return { ...state, appBar: { ...newAppBar } };
     case actionTypes.PUSH_BLOCK:
       const listItems = blocks[action.blockId].listItems;
-      const newBlock = {
+      let newBlock = {
         uuid: uuidv4(),
         blockId: action.blockId,
         settingsUI: {
           ...getData(blocks[action.blockId].defaultData),
         },
       };
+      if (blocks[action.blockId].defaultInteractiveOptions) {
+        newBlock.interactive = {
+          ...getData(blocks[action.blockId].defaultInteractiveOptions),
+        };
+      }
       if (listItems) {
         newBlock.listItems = listItems;
       }
@@ -138,6 +143,11 @@ export default function reducer(state = initialState, action) {
           ...getData(blocks[action.blockId].defaultData),
         },
       };
+      if (blocks[action.blockId].defaultInteractiveOptions) {
+        newBloc.interactive = {
+          ...getData(blocks[action.blockId].defaultInteractiveOptions),
+        };
+      }
       if (list) {
         newBloc.listItems = list;
       }
@@ -201,7 +211,7 @@ export default function reducer(state = initialState, action) {
           return ref;
         };
         const valueKeeper = findDataBlock(
-          element.settingsUI,
+          { settingsUI: element.settingsUI, interactive: element.interactive },
           action.parentKey,
           action.key
         );

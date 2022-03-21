@@ -28,16 +28,27 @@ const Code = (props) => {
     if (block.settingsUI.checked) {
       delete block.settingsUI.checked;
     }
+    console.log("block", block);
     const settingsUI = {};
+    const interactive = {};
     Object.keys(block.settingsUI).forEach((key) => {
       if (typeof block.settingsUI[key] === "string") {
         settingsUI[key] = `${block.settingsUI[key].replace(/"{{|}}"/g, "")}`;
       }
       settingsUI[key] = block.settingsUI[key];
     });
+    if (block.interactive) {
+      Object.keys(block.interactive).forEach((key) => {
+        if (typeof block.interactive[key] === "string") {
+          interactive[key] = `${block.interactive[key].replace(/"{{|}}"/g, "")}`;
+        }
+        interactive[key] = block.interactive[key];
+      });
+    }
     const data = {
       type: block.blockId.toUpperCase(),
-      settingsUI: settingsUI,
+      ...interactive,
+      settingsUI,
     };
     if (block.listItems) {
       data.listItems = block.listItems.map((item) => buildJSONitem(item));
@@ -64,7 +75,7 @@ const Code = (props) => {
   };
 
   useEffect(() => {
-    const reference = { ...initial };
+    let reference = { ...initial };
     if (api) {
       const constants = api.list.map((item) => {
         const headers = item.headers?.map((header) => {

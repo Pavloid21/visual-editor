@@ -37,6 +37,7 @@ const Wrapper = styled.div`
 
 export default function HighlightedElement() {
   const selectedBlock = useSelector((state) => state.layout.selectedBlockUuid);
+  const uiMode = useSelector((state) => state.editorMode.mode);
   const dispatch = useDispatch();
   const [position, setPosition] = useState({});
   const ref = useRef(null);
@@ -56,7 +57,7 @@ export default function HighlightedElement() {
     }
   }, [selectedBlock]);
 
-  if (!selectedBlock) {
+  if (!selectedBlock || uiMode !== "editor") {
     return null;
   }
 

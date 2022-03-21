@@ -75,7 +75,9 @@ const block = {
     "Displays a button icon the user can click to initiate an action.",
   previewImageUrl: button,
   category: "Controls",
-  action: { url: "nextScreenName" },
+  defaultInteractiveOptions: {
+    action: { url: "nextScreenName" },
+  },
   defaultData: {
     text: "Войти",
     fontSize: "24",
@@ -116,13 +118,15 @@ const block = {
       radius: 8,
     },
   },
-  config: {
+  interactive: {
     action: {
       url: {
         type: "string",
-        name: "Action",
+        name: "Action URL",
       },
     },
+  },
+  config: {
     text: { type: "string", name: "Text" },
     fontSize: { type: "number", name: "Font size" },
     textColor: { type: "color", name: "Text color" },
