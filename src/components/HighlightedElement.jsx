@@ -44,16 +44,18 @@ export default function HighlightedElement() {
   useEffect(() => {
     if (selectedBlock) {
       const element = document.getElementById(selectedBlock);
-      const clone = element.cloneNode(true);
-      const rect = element.getBoundingClientRect();
-      setPosition({
-        width: rect.width,
-        height: rect.height,
-        left: rect.left,
-        top: rect.top,
-      });
-      ref.current.innerHTML = "";
-      ref.current.appendChild(clone);
+      if (element) {
+        const clone = element.cloneNode(true);
+        const rect = element.getBoundingClientRect();
+        setPosition({
+          width: rect.width,
+          height: rect.height,
+          left: rect.left,
+          top: rect.top,
+        });
+        ref.current.innerHTML = "";
+        ref.current.appendChild(clone);
+      }
     }
   }, [selectedBlock]);
 
