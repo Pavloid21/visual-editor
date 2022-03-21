@@ -217,7 +217,11 @@ export default function reducer(state = initialState, action) {
         );
         valueKeeper[action.key] = action.value;
       } else {
-        element.settingsUI[action.key] = action.value;
+        if (element.settingsUI[action.key] !== undefined) {
+          element.settingsUI[action.key] = action.value;
+        } else {
+          element.interactive[action.key] = action.value;
+        }
       }
       return {
         ...state,
