@@ -59,7 +59,7 @@ export default function reducer(state = initialState, action) {
       const appBar = {
         uuid: uuidv4(),
         blockId: action.blockId,
-        data: {
+        settingsUI: {
           ...getData(blocks[action.blockId].defaultData),
         },
       };
@@ -108,7 +108,7 @@ export default function reducer(state = initialState, action) {
       const newBlock = {
         uuid: uuidv4(),
         blockId: action.blockId,
-        data: {
+        settingsUI: {
           ...getData(blocks[action.blockId].defaultData),
         },
       };
@@ -134,7 +134,7 @@ export default function reducer(state = initialState, action) {
       const newBloc = {
         uuid: uuidv4(),
         blockId: action.blockId,
-        data: {
+        settingsUI: {
           ...getData(blocks[action.blockId].defaultData),
         },
       };
