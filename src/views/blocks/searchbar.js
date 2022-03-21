@@ -2,6 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import searchbar from "../../assets/searchbar.svg";
 import Wrapper from "../../utils/wrapper";
+import { useDrop } from "react-dnd";
+import { ItemTypes } from "../../constants/actionTypes";
+import { observer } from "../../utils/observer";
+import { sortableContainer } from "react-sortable-hoc";
+import { arrayMoveImmutable } from "array-move";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import actionTypes from "../../constants/actionTypes";
+import renderHandlebars from "../../utils/renderHandlebars";
 
 const SearchBar = styled.div`
   & > input {
@@ -32,19 +41,82 @@ const SearchBar = styled.div`
   }
 `;
 
-const Component = (props) => {
-  const { placeholder, text } = props.data;
+const SortableContainer = sortableContainer(
+  ({ drop, backgroundColor, listItems, text, placeholder, data, ...props }) => {
+    return (
+      <Wrapper id={props.id}>
+        <SearchBar
+          {...props.data}
+          {...props}
+          ref={drop}
+          backgroundColor={backgroundColor}
+        >
+          <input
+            type="text"
+            className="form-control draggable"
+            placeholder={placeholder}
+            value={text}
+          />
+          {listItems && renderHandlebars(listItems, "document2").components}
+        </SearchBar>
+      </Wrapper>
+    );
+  }
+);
+
+const Component = ({ data, uuid, listItems, ...props }) => {
+  const dispatch = useDispatch();
+  const layout = useSelector((state) => state.layout);
+  const [{ canDrop, isOver, target }, drop] = useDrop(() => ({
+    accept: ItemTypes.BOX,
+    drop: (item) => {
+      if (target.isOver()) {
+        dispatch({
+          type: actionTypes.PUSH_BLOCK_INSIDE,
+          blockId: item.id,
+          uuid,
+        });
+      }
+      return {
+        uuid,
+        target: target.targetId,
+      };
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver({ shallow: true }),
+      canDrop: monitor.canDrop(),
+      target: monitor,
+    }),
+  }));
+
+  const isActive = canDrop && isOver;
+  let backgroundColor = data.backgroundColor;
+  if (isActive) {
+    backgroundColor = "#f1f8ff";
+  }
+
+  const onSortEnd = ({ oldIndex, newIndex, nodes }) => {
+    const newOrder = arrayMoveImmutable(nodes, oldIndex, newIndex).map((item) =>
+      item.node.getAttribute("id")
+    );
+    observer.broadcast({
+      layout,
+      newOrder,
+      parentID: nodes[0].node.parentNode.getAttribute("id"),
+      event: "sorted",
+    });
+  };
+
   return (
-    <Wrapper id={props.id}>
-      <SearchBar {...props.data} {...props}>
-        <input
-          type="text"
-          className="form-control draggable"
-          placeholder={placeholder}
-          value={text}
-        />
-      </SearchBar>
-    </Wrapper>
+    <SortableContainer
+      drop={drop}
+      onSortEnd={onSortEnd}
+      listItems={listItems}
+      {...data}
+      {...props}
+      backgroundColor={backgroundColor}
+      distance={1}
+    />
   );
 };
 

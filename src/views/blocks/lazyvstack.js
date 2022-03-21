@@ -13,7 +13,7 @@ import lazyvstack from "../../assets/lazyvstack.svg";
 import Wrapper from "../../utils/wrapper";
 
 const LazyVStack = styled.div`
-  overflow-y: scroll;
+  overflow-y: auto;
   background-color: ${(props) =>
     props.backgroundColor?.indexOf("#") >= 0
       ? props.backgroundColor

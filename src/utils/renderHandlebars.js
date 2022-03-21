@@ -23,8 +23,8 @@ function render(layoutBlocks, documentId, bottomBar, appBar) {
   const components = [];
   const innerHTML = layoutBlocks[0] ? layoutBlocks.reduce((acc, layoutBlock) => {
     let blockHTML;
-    if (blocks[layoutBlock.blockId.toLowerCase()].Component) {
-      const Component = blocks[layoutBlock.blockId.toLowerCase()].Component;
+    if (blocks[layoutBlock.blockId.toLowerCase()]?.Component) {
+      const Component = blocks[layoutBlock.blockId.toLowerCase()]?.Component;
       components.push(
         <SortableItem
           id={layoutBlock.uuid}
