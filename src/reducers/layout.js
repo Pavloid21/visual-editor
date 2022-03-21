@@ -68,40 +68,40 @@ export default function reducer(state = initialState, action) {
       const bottomBar = {
         uuid: uuidv4(),
         blockId: action.blockId,
-        data: {
+        settingsUI: {
           ...getData(blocks[action.blockId].defaultData),
         },
       };
       return { ...state, bottomBar };
     case actionTypes.ADD_BOTTOMBAR_ITEM:
-      const extendedItems = [...state.bottomBar.data.navigationItems];
+      const extendedItems = [...state.bottomBar.settingsUI.navigationItems];
       extendedItems.push({
         ...blocks.bottombar.defaultData.navigationItems[0],
         uuid: uuidv4(),
       });
       const bar = { ...state.bottomBar };
-      bar.data.navigationItems = extendedItems;
+      bar.settingsUI.navigationItems = extendedItems;
       return { ...state, bottomBar: { ...bar } };
     case actionTypes.ADD_TOPAPPBAR_ITEM:
-      const nextItems = [...state.appBar.data.appBarItems];
+      const nextItems = [...state.appBar.settingsUI.appBarItems];
       nextItems.push({
         ...blocks.topappbar.defaultData.appBarItems[0],
         uuid: uuidv4(),
       });
       const abar = { ...state.appBar };
-      abar.data.appBarItems = nextItems;
+      abar.settingsUI.appBarItems = nextItems;
       return { ...state, appBar: { ...abar } };
     case actionTypes.REMOVE_BOTTOMBAR_ITEM:
-      const newBarItems = [...state.bottomBar.data.navigationItems];
+      const newBarItems = [...state.bottomBar.settingsUI.navigationItems];
       newBarItems.splice(action.index, 1);
       const newBottomBar = { ...state.bottomBar };
-      newBottomBar.data.navigationItems = newBarItems;
+      newBottomBar.settingsUI.navigationItems = newBarItems;
       return { ...state, bottomBar: { ...newBottomBar } };
     case actionTypes.REMOVE_TOPAPPBAR_ITEM:
-      const newAppBarItems = [...state.appBar.data.appBarItems];
+      const newAppBarItems = [...state.appBar.settingsUI.appBarItems];
       newAppBarItems.splice(action.index, 1);
       const newAppBar = { ...state.appBar };
-      newAppBar.data.appBarItems = newAppBarItems;
+      newAppBar.settingsUI.appBarItems = newAppBarItems;
       return { ...state, appBar: { ...newAppBar } };
     case actionTypes.PUSH_BLOCK:
       const listItems = blocks[action.blockId].listItems;
@@ -185,8 +185,9 @@ export default function reducer(state = initialState, action) {
             }
           : { ...state.appBar });
       if (action.parentKey && Array.isArray(action.parentKey)) {
-        element.data[action.parentKey[1]][action.parentKey[0]][action.key] =
-          action.value;
+        element.settingsUI[action.parentKey[1]][action.parentKey[0]][
+          action.key
+        ] = action.value;
       } else if (action.parentKey) {
         const findDataBlock = (data, parentKey, key) => {
           let ref = null;
@@ -200,14 +201,13 @@ export default function reducer(state = initialState, action) {
           return ref;
         };
         const valueKeeper = findDataBlock(
-          element.data,
+          element.settingsUI,
           action.parentKey,
           action.key
         );
-        console.log("valueKeeper", valueKeeper);
         valueKeeper[action.key] = action.value;
       } else {
-        element.data[action.key] = action.value;
+        element.settingsUI[action.key] = action.value;
       }
       return {
         ...state,

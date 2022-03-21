@@ -106,7 +106,7 @@ export default function LeftSidebar({ children, ...props }) {
         let reference = {};
         reference.uuid = v4();
         reference.blockId = item.type.toLowerCase();
-        reference.data = item.settingsUI;
+        reference.settingsUI = item.settingsUI;
         if (item.listItems) {
           reference.listItems = traverse(item.listItems);
         }
@@ -122,7 +122,7 @@ export default function LeftSidebar({ children, ...props }) {
       action.bottomBar = {
         blockId: "bottombar",
         uuid: v4(),
-        data: {
+        settingsUI: {
           ...object.bottomBar.settingsUI,
           navigationItems: object.bottomBar.navigationItems,
         },
@@ -130,7 +130,7 @@ export default function LeftSidebar({ children, ...props }) {
     }
     if (object.appBar) {
       action.appBar = {
-        blockId: "topappbar",
+        settingsUI: "topappbar",
         uuid: v4(),
         data: {
           ...object.appBar.settingsUI,
@@ -235,24 +235,19 @@ export default function LeftSidebar({ children, ...props }) {
   }, [output]);
 
   const buildJSONitem = (block) => {
-    if (block.data.checked) {
-      delete block.data.checked;
+    if (block.settingsUI.checked) {
+      delete block.settingsUI.checked;
     }
     const settingsUI = {};
-    Object.keys(block.data).forEach((key) => {
-      if (
-        typeof block.data[key] === "string" &&
-        block.data[key].indexOf("{{") >= 0
-      ) {
-        settingsUI[key] = `${block.data[key]
-          .replace("{{", "")
-          .replace("}}", "")}`;
+    Object.keys(block.settingsUI).forEach((key) => {
+      if (typeof block.settingsUI[key] === "string") {
+        settingsUI[key] = `${block.settingsUI[key].replace(/{{|}}/g, "")}`;
       }
-      settingsUI[key] = block.data[key];
+      settingsUI[key] = block.settingsUI[key];
     });
     const data = {
       type: block.blockId.toUpperCase(),
-      settingsUI: settingsUI,
+      settingsUI,
     };
     if (block.listItems) {
       data.listItems = block.listItems.map((item) => buildJSONitem(item));

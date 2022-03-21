@@ -19,10 +19,10 @@ const Image = styled.img`
   }}
 `;
 
-const Component = ({ data, ...props }) => {
+const Component = ({ settingsUI, ...props }) => {
   return (
     <Wrapper id={props.id}>
-      <Image {...data} {...props} className="draggable" src={data.imageUrl} />
+      <Image {...settingsUI} {...props} className="draggable" src={settingsUI.imageUrl} />
     </Wrapper>
   );
 };

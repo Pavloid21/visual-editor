@@ -21,14 +21,14 @@ const Input = styled.div`
   }
 `;
 
-const Component = ({ data, ...props }) => {
+const Component = ({ settingsUI, ...props }) => {
   return (
     <Wrapper id={props.id}>
-      <Input {...props} {...data}>
-        {!data.text && data.placeholder && (
-          <span className="placeholder">{data.placeholder}</span>
+      <Input {...props} {...settingsUI}>
+        {!settingsUI.text && settingsUI.placeholder && (
+          <span className="placeholder">{settingsUI.placeholder}</span>
         )}
-        {data.text && <span>{data.text}</span>}
+        {settingsUI.text && <span>{settingsUI.text}</span>}
       </Input>
     </Wrapper>
   );

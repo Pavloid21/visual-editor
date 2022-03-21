@@ -46,7 +46,6 @@ const Input = (props) => {
 
   const handleClear = (event) => {
     inputRef.current.value = "";
-    console.log(inputRef);
   };
 
   return (

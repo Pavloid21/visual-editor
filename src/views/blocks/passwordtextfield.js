@@ -17,10 +17,10 @@ const Container = styled.div`
 `;
 
 const Component = (props) => {
-  const { placeholder, text } = props.data;
+  const { placeholder, text } = props.settingsUI;
   return (
     <Wrapper id={props.id}>
-      <Container className="draggable" {...props} {...props.data}>
+      <Container className="draggable" {...props} {...props.settingsUI}>
         <input
           {...props}
           type="password"

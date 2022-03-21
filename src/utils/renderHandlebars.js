@@ -8,7 +8,7 @@ import { observer } from "./observer";
 const SortableItem = sortableElement(({ layoutBlock, Component, ...props }) => {
   return (
     <Component
-      {...{ ...layoutBlock, uuid: layoutBlock.uuid }}
+      {...layoutBlock}
       {...props}
       onClick={(e) => {
         e.preventDefault();
@@ -21,29 +21,32 @@ const SortableItem = sortableElement(({ layoutBlock, Component, ...props }) => {
 
 function render(layoutBlocks, documentId, bottomBar, appBar) {
   const components = [];
-  const innerHTML = layoutBlocks[0] ? layoutBlocks.reduce((acc, layoutBlock) => {
-    let blockHTML;
-    if (blocks[layoutBlock.blockId.toLowerCase()]?.Component) {
-      const Component = blocks[layoutBlock.blockId.toLowerCase()]?.Component;
-      components.push(
-        <SortableItem
-          id={layoutBlock.uuid}
-          key={layoutBlock.uuid}
-          index={components.length}
-          Component={Component}
-          layoutBlock={layoutBlock}
-        />
-      );
-    }
+  const innerHTML = layoutBlocks[0]
+    ? layoutBlocks.reduce((acc, layoutBlock) => {
+        let blockHTML;
+        if (blocks[layoutBlock.blockId.toLowerCase()]?.Component) {
+          const Component =
+            blocks[layoutBlock.blockId.toLowerCase()]?.Component;
+          components.push(
+            <SortableItem
+              id={layoutBlock.uuid}
+              key={layoutBlock.uuid}
+              index={components.length}
+              Component={Component}
+              layoutBlock={layoutBlock}
+            />
+          );
+        }
 
-    const sectionTemplate = handlebars.compile(section);
-    const sectionHTML = sectionTemplate({
-      content: blockHTML,
-      uuid: layoutBlock.uuid,
-    });
+        const sectionTemplate = handlebars.compile(section);
+        const sectionHTML = sectionTemplate({
+          content: blockHTML,
+          uuid: layoutBlock.uuid,
+        });
 
-    return `${acc}${sectionHTML}`;
-  }, ``) : null;
+        return `${acc}${sectionHTML}`;
+      }, ``)
+    : null;
 
   if (bottomBar) {
     const Component = blocks[bottomBar.blockId.toLowerCase()].Component;

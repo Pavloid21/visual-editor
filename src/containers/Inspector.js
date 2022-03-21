@@ -181,13 +181,13 @@ class Inspector extends Component {
           height: "calc(100% - 60px)",
         }}
       >
-        {this.parseConfig(config, blockUuid, block.data)}
-        {block.data.navigationItems && (
+        {this.parseConfig(config, blockUuid, block.settingsUI)}
+        {block.settingsUI.navigationItems && (
           <div>
             <Division>
               <span>Navigation items</span>
             </Division>
-            {block.data.navigationItems.map((element, index) => {
+            {block.settingsUI.navigationItems.map((element, index) => {
               return (
                 <div key={`navItem_${index}`}>
                   <Division>
@@ -205,7 +205,7 @@ class Inspector extends Component {
                   {this.parseConfig(
                     config.navigationItems[0],
                     blockUuid,
-                    block.data.navigationItems[index],
+                    block.settingsUI.navigationItems[index],
                     [index, "navigationItems"]
                   )}
                   <hr />
@@ -223,12 +223,12 @@ class Inspector extends Component {
             </Button>
           </div>
         )}
-        {block.data.appBarItems && (
+        {block.settingsUI.appBarItems && (
           <div>
             <Division>
               <span>App bar items</span>
             </Division>
-            {block.data.appBarItems.map((element, index) => {
+            {block.settingsUI.appBarItems.map((element, index) => {
               return (
                 <div key={`navItem_${index}`}>
                   <div
@@ -250,7 +250,7 @@ class Inspector extends Component {
                   {this.parseConfig(
                     config.appBarItems[0],
                     blockUuid,
-                    block.data.appBarItems[index],
+                    block.settingsUI.appBarItems[index],
                     [index, "appBarItems"]
                   )}
                 </div>

@@ -75,11 +75,11 @@ const Switch = styled.div`
   }
 `;
 
-const Component = ({ data, ...props }) => {
+const Component = ({ settingsUI, ...props }) => {
   return (
     <Wrapper id={props.id}>
-      <Switch {...props} {...data} className="draggable">
-        <input type="checkbox" checked={data.checked} />
+      <Switch {...props} {...settingsUI} className="draggable">
+        <input type="checkbox" checked={settingsUI.checked} />
         <span></span>
       </Switch>
     </Wrapper>

@@ -46,16 +46,16 @@ const Icon = styled.div`
   mask: url(${(props) => props.iconUrl}) no-repeat center;
 `;
 
-const Component = ({ data, ...props }) => {
-  const { appBarItems } = data;
+const Component = ({ settingsUI, ...props }) => {
+  const { appBarItems } = settingsUI;
   const buttons = [];
   for (let index in appBarItems) {
     buttons.push(appBarItems[index]);
   }
   return (
     <Wrapper id={props.id} style={{ padding: 0 }}>
-      <TopAppBar {...data} {...props}>
-        <label>{data.text}</label>
+      <TopAppBar {...settingsUI} {...props}>
+        <label>{settingsUI.text}</label>
         <div style={{ display: "flex", flexDirection: "row", gap: "16px" }}>
           {buttons.map((item) => {
             return (

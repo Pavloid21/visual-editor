@@ -23,11 +23,11 @@ const Box = styled.div`
 `;
 
 const SortableContainer = sortableContainer(
-  ({ drop, backgroundColor, listItems, data, ...props }) => {
+  ({ drop, backgroundColor, listItems, settingsUI, ...props }) => {
     return (
       <Wrapper id={props.id}>
         <Box
-          {...data}
+          {...settingsUI}
           {...props}
           ref={drop}
           backgroundColor={backgroundColor}
@@ -40,7 +40,7 @@ const SortableContainer = sortableContainer(
   }
 );
 
-const Component = ({ data, uuid, listItems, ...props }) => {
+const Component = ({ settingsUI, uuid, listItems, ...props }) => {
   const dispatch = useDispatch();
   const layout = useSelector((state) => state.layout);
   const [{ canDrop, isOver, target }, drop] = useDrop(() => ({
@@ -89,7 +89,7 @@ const Component = ({ data, uuid, listItems, ...props }) => {
       backgroundColor={backgroundColor}
       onSortEnd={onSortEnd}
       listItems={listItems}
-      {...data}
+      {...settingsUI}
       {...props}
       distance={1}
     />

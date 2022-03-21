@@ -37,12 +37,12 @@ const Card = styled.div`
 `;
 
 const SortableContainer = sortableContainer(
-  ({ drop, backgroundColor, listItems, data, ...props }) => {
+  ({ drop, backgroundColor, listItems, settingsUI, ...props }) => {
     console.log("backgroundColor", backgroundColor);
     return (
       <Wrapper id={props.id}>
         <Card
-          {...data}
+          {...settingsUI}
           {...props}
           backgroundColor={backgroundColor}
           ref={drop}
@@ -55,7 +55,7 @@ const SortableContainer = sortableContainer(
   }
 );
 
-const Component = ({ data, uuid, listItems, ...props }) => {
+const Component = ({ settingsUI, uuid, listItems, ...props }) => {
   const dispatch = useDispatch();
   const layout = useSelector((state) => state.layout);
   const [{ canDrop, isOver, target }, drop] = useDrop(() => ({
@@ -81,7 +81,7 @@ const Component = ({ data, uuid, listItems, ...props }) => {
   }));
 
   const isActive = canDrop && isOver;
-  let backgroundColor = data.backgroundColor;
+  let backgroundColor = settingsUI.backgroundColor;
   if (isActive) {
     console.log("isActive", isActive);
     backgroundColor = "#f1f8ff";
@@ -104,7 +104,7 @@ const Component = ({ data, uuid, listItems, ...props }) => {
       drop={drop}
       onSortEnd={onSortEnd}
       listItems={listItems}
-      {...data}
+      {...settingsUI}
       {...props}
       backgroundColor={backgroundColor}
       distance={1}

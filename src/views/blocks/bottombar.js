@@ -42,15 +42,15 @@ const Icon = styled.div`
   mask: url(${(props) => props.iconUrl}) no-repeat center;
 `;
 
-const Component = ({ data, ...props }) => {
-  const { navigationItems } = data;
+const Component = ({ settingsUI, ...props }) => {
+  const { navigationItems } = settingsUI;
   const buttons = [];
   for (let index in navigationItems) {
     buttons.push(navigationItems[index]);
   }
   return (
     <Wrapper id={props.id} style={{ marginTop: "auto" }}>
-      <BottomBar {...data} {...props}>
+      <BottomBar {...settingsUI} {...props}>
         {buttons.map((item, index) => {
           return (
             <div

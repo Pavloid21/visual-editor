@@ -18,11 +18,11 @@ const Label = styledComponents.div`
   }
 `;
 
-const Component = ({ data, ...props }) => {
-  const { text } = data;
+const Component = ({ settingsUI, ...props }) => {
+  const { text } = settingsUI;
   return (
     <Wrapper id={props.id}>
-      <Label {...props} {...data} className="draggable">
+      <Label {...props} {...settingsUI} className="draggable">
         <span>{text}</span>
       </Label>
     </Wrapper>

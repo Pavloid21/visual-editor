@@ -25,20 +25,15 @@ const Code = (props) => {
   const blocks = useSelector((state) => state.layout.blocks);
   const initial = useSelector((state) => state.output);
   const buildJSONitem = (block) => {
-    if (block.data.checked) {
-      delete block.data.checked;
+    if (block.settingsUI.checked) {
+      delete block.settingsUI.checked;
     }
     const settingsUI = {};
-    Object.keys(block.data).forEach((key) => {
-      if (
-        typeof block.data[key] === "string" &&
-        block.data[key].indexOf("{{") >= 0
-      ) {
-        settingsUI[key] = `${block.data[key]
-          .replace("{{", "")
-          .replace("}}", "")}`;
+    Object.keys(block.settingsUI).forEach((key) => {
+      if (typeof block.settingsUI[key] === "string") {
+        settingsUI[key] = `${block.settingsUI[key].replace(/"{{|}}"/g, "")}`;
       }
-      settingsUI[key] = block.data[key];
+      settingsUI[key] = block.settingsUI[key];
     });
     const data = {
       type: block.blockId.toUpperCase(),
@@ -85,7 +80,6 @@ const Code = (props) => {
         }});`;
       });
       prepareJSON(reference);
-      console.log('reference', reference)
       let jsonString = JSON.stringify(reference, null, 4);
       jsonString = jsonString.replace(/"{{|}}"/g, "");
       constants.push(`return ${jsonString}`);

@@ -52,7 +52,7 @@ const LoadScreen = (props) => {
       action.bottomBar = {
         blockId: "bottombar",
         uuid: v4(),
-        data: {
+        settingsUI: {
           ...object.bottomBar.settingsUI,
           navigationItems: object.bottomBar.navigationItems,
         },
@@ -62,7 +62,7 @@ const LoadScreen = (props) => {
       action.appBar = {
         blockId: "topappbar",
         uuid: v4(),
-        data: {
+        settingsUI: {
           ...object.appBar.settingsUI,
           appBarItems: object.appBar.appBarItems,
         },

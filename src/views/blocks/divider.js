@@ -2,8 +2,8 @@ import React from "react";
 import divider from "../../assets/divider.svg";
 import Wrapper from "../../utils/wrapper";
 
-const Component = ({ data, ...props }) => {
-  const { backgroundColor } = data;
+const Component = ({ settingsUI, ...props }) => {
+  const { backgroundColor } = settingsUI;
   return (
     <Wrapper id={props.id}>
       <hr

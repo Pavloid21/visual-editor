@@ -42,11 +42,11 @@ const HStack = styled.div`
 `;
 
 const SortableContainer = sortableContainer(
-  ({ drop, backgroundColor, listItems, data, ...props }) => {
+  ({ drop, backgroundColor, listItems, settingsUI, ...props }) => {
     return (
       <Wrapper id={props.id}>
         <HStack
-          {...data}
+          {...settingsUI}
           {...props}
           backgroundColor={backgroundColor}
           ref={drop}
@@ -59,7 +59,7 @@ const SortableContainer = sortableContainer(
   }
 );
 
-const Component = ({ data, uuid, listItems, ...props }) => {
+const Component = ({ settingsUI, uuid, listItems, ...props }) => {
   const dispatch = useDispatch();
   const layout = useSelector((state) => state.layout);
   const [{ canDrop, isOver, target }, drop] = useDrop(() => ({
@@ -85,7 +85,7 @@ const Component = ({ data, uuid, listItems, ...props }) => {
   }));
 
   const isActive = canDrop && isOver;
-  let backgroundColor = data.backgroundColor;
+  let backgroundColor = settingsUI.backgroundColor;
   if (isActive) {
     backgroundColor = "#f1f8ff";
   }
@@ -109,7 +109,7 @@ const Component = ({ data, uuid, listItems, ...props }) => {
       backgroundColor={backgroundColor}
       onSortEnd={onSortEnd}
       listItems={listItems}
-      data={data}
+      settingsUI={settingsUI}
       {...props}
       distance={1}
     />

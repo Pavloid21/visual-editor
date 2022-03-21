@@ -56,10 +56,10 @@ const Button = styled.div`
 `;
 
 const Component = (props) => {
-  const { text, imageUrl } = props.data;
+  const { text, imageUrl } = props.settingsUI;
   return (
     <Wrapper id={props.id}>
-      <Button className="draggable" {...props.data} {...props}>
+      <Button className="draggable" {...props.settingsUI} {...props}>
         <span>{text}</span>
         {imageUrl && <img src={imageUrl} />}
       </Button>
