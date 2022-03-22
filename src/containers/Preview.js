@@ -74,7 +74,7 @@ const Container = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  & > *:first-child {
+  & > *:not(:last-child) {
     overflow-y: auto;
   }
 `;
@@ -83,7 +83,15 @@ const SortableContainer = sortableContainer(
   ({ children, drop, backgroundColor }) => {
     return (
       <Container backgroundColor={backgroundColor} ref={drop}>
-        {children}
+        <div>
+          {children.map((child, index) => {
+            if (index !== children.length - 1) {
+              return child;
+            }
+            return null;
+          })}
+        </div>
+        {children[children.length - 1]}
       </Container>
     );
   }
