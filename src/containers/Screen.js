@@ -18,9 +18,7 @@ const Screen = (props) => {
           isWide
           clearable
           label="Screen name"
-          debounceTimeout={500}
           type="text"
-          className="form-control"
           placeholder="Screen name"
           value={screenName}
           onChange={(e) =>

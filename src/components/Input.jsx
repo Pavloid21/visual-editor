@@ -1,6 +1,7 @@
-import React, { useRef } from "react";
+import React from "react";
 import styledComponents from "styled-components";
 import { ReactComponent as Remove } from "../assets/circle_cross.svg";
+import Input from "rc-input";
 
 const Container = styledComponents.section`
   position: relative;
@@ -15,23 +16,25 @@ const Container = styledComponents.section`
   }
 `;
 
-const NeoInput = styledComponents.input`
-  background: #FFFFFF;
-  width: ${(props) => (props.isWide ? "100%" : "auto")};
-  border: 1px solid var(--neo-gray);
-  height: 30px;
-  box-sizing: border-box;
-  border-radius: 4px;
-  font-size: 14px;
-  line-height: 20px;
-  padding: 8px ${(props) => (props.clearable ? "36px" : "12px")} 8px 12px ;
-  display: block;
-  margin-top: 4px;
-  &::placeholder {
-    color: #B3B3B3;
-  }
-  &:hover {
-    border: 1px solid #2A356C;
+const StyledNeoInput = styledComponents(Input)`
+& > input  {
+    background: #FFFFFF;
+    width: ${(props) => (props.isWide ? "100%" : "auto")};
+    border: 1px solid var(--neo-gray);
+    height: 30px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 20px;
+    padding: 8px ${(props) => (props.clearable ? "36px" : "12px")} 8px 12px ;
+    display: block;
+    margin-top: 4px;
+    &::placeholder {
+      color: #B3B3B3;
+    }
+    &:hover {
+      border: 1px solid #2A356C;
+    }
   }
 `;
 
@@ -41,20 +44,17 @@ export const Label = styledComponents.label`
   position: relative;
 `;
 
-const Input = (props) => {
-  const inputRef = useRef(null);
-
-  const handleClear = (event) => {
-    inputRef.current.value = "";
-  };
-
+const NeoInput = (props) => {
   return (
     <Container>
-      {props.clearable && <Remove onClick={handleClear} />}
       {props.label && <Label>{props.label}</Label>}
-      <NeoInput ref={inputRef} {...props} />
+      <StyledNeoInput
+        allowClear={props.clearable && { clearIcon: <Remove /> }}
+        bordered={false}
+        {...props}
+      />
     </Container>
   );
 };
 
-export default Input;
+export default NeoInput;
