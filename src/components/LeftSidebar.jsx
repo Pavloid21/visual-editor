@@ -150,10 +150,52 @@ export default function LeftSidebar({ children, ...props }) {
       .then((screenes) => {
         const screenesArr = screenes.map((screen, index) => {
           return fetch(
-            `http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/screens/${screen}`
+            `http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/admin/screens/${screen}`
           )
-            .then((response) => response.json())
-            .then((data) => ({ screen, object: data }))
+            .then((response) => response.text())
+            .then((data) => {
+              require(["esprima"], function (parser) {
+                const walker = (data, template = {}) => {
+                  data.forEach((property) => {
+                    if (property.value.type == "Literal") {
+                      template[property.key.value] = property.value.value;
+                    }
+                    if (property.value.type == "ArrayExpression") {
+                      template[property.key.value] =
+                        property.value.elements.map((element) =>
+                          walker(element.properties)
+                        );
+                    }
+                    if (property.value.type == "ObjectExpression") {
+                      template[property.key.value] = walker(
+                        property.value.properties
+                      );
+                    }
+                  });
+                  return template;
+                };
+                try {
+                  const syntax = parser.parse(`async function a() {${data}}`);
+                  const snippetBody = syntax.body[0].body.body;
+                  snippetBody.forEach((statement) => {
+                    if (statement.type === "ReturnStatement") {
+                      const properties = statement.argument.properties;
+                      // properties.forEach((property) => {
+                      //   console.log(
+                      //     "statement :>> ",
+                      //     property.key.value,
+                      //     property.value.type
+                      //   );
+                      // });
+                      console.log(walker(properties));
+                    }
+                  });
+                } catch (e) {
+                  console.log("parse error :>> ", e);
+                }
+              });
+              return { screen, object: data };
+            })
             .catch((e) => {
               console.log("e :>> ", e);
             });
