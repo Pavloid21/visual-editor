@@ -154,7 +154,8 @@ export default function LeftSidebar({ children, ...props }) {
           )
             .then((response) => response.text())
             .then((data) => {
-              require(["esprima"], function (parser) {
+              const template = {};
+              require(["esprima"], (parser) => {
                 const walker = (data, template = {}) => {
                   data.forEach((property) => {
                     if (property.value.type == "Literal") {
@@ -179,22 +180,16 @@ export default function LeftSidebar({ children, ...props }) {
                   const snippetBody = syntax.body[0].body.body;
                   snippetBody.forEach((statement) => {
                     if (statement.type === "ReturnStatement") {
-                      const properties = statement.argument.properties;
-                      // properties.forEach((property) => {
-                      //   console.log(
-                      //     "statement :>> ",
-                      //     property.key.value,
-                      //     property.value.type
-                      //   );
-                      // });
-                      console.log(walker(properties));
+                      const result = walker(statement.argument.properties, template);
+                      console.log(result);
+                      return { screen, object: result };
                     }
                   });
                 } catch (e) {
                   console.log("parse error :>> ", e);
                 }
               });
-              return { screen, object: data };
+              return { screen, object: template };
             })
             .catch((e) => {
               console.log("e :>> ", e);
