@@ -5,6 +5,7 @@ import actionTypes from "../constants/actionTypes";
 import { observer } from "../utils/observer";
 import SideBarHeader, { SideBarSubheader } from "./SideBarHeader";
 import Gallery from "../containers/Gallery";
+import Actions from "./Actions";
 import SortableTree from "@nosferatu500/react-sortable-tree";
 import FileExplorerTheme from "@nosferatu500/theme-file-explorer";
 import { ReactComponent as Copy } from "../assets/copy.svg";
@@ -408,6 +409,8 @@ export default function LeftSidebar({ children, ...props }) {
     }
   };
 
+  const handleAddAction = () => {};
+
   return (
     <Container show={show}>
       <div>
@@ -427,76 +430,82 @@ export default function LeftSidebar({ children, ...props }) {
               Actions
             </span>
           </div>
-          <Plus className="icon" onClick={handleAddScreen} />
-        </SideBarSubheader>
-        <div
-          style={{
-            height: "calc(100% - 104px)",
-            overflow: "auto",
-            padding: "14px",
-          }}
-        >
-          <SortableTree
-            treeData={treeData}
-            onChange={(treeData) => setTree(treeData)}
-            theme={FileExplorerTheme}
-            generateNodeProps={(extendedNode) => {
-              return {
-                title: (
-                  <section
-                    className={`node ${
-                      selectedBlock === extendedNode.node.subtitle ||
-                      selectedScreen === extendedNode.node.uuid
-                        ? "node_selected"
-                        : ""
-                    }`}
-                    onClick={(event) => handleItemClick(event, extendedNode)}
-                  >
-                    <span>
-                      <Icon
-                        src={
-                          models[extendedNode.node?.title?.toLowerCase()]
-                            ?.previewImageUrl
-                        }
-                      />
-                      {extendedNode.node.endpoint || extendedNode.node.title}
-                    </span>
-                  </section>
-                ),
-                buttons:
-                  extendedNode.node.subtitle === "screen"
-                    ? [
-                        <Copy
-                          className="icon"
-                          onClick={(event) => {
-                            handleCloneScreen(event, extendedNode.node.uuid);
-                          }}
-                        />,
-                        <Trash
-                          className="icon"
-                          onClick={(event) =>
-                            handleDeleteScreen(event, extendedNode.node)
-                          }
-                        />,
-                      ]
-                    : [
-                        <Copy
-                          className="icon"
-                          onClick={() =>
-                            handleCloneBlock(extendedNode.node.subtitle)
-                          }
-                        />,
-                        <Trash
-                          className="icon"
-                          onClick={() =>
-                            handleDeleteBlock(extendedNode.node.subtitle)
-                          }
-                        />,
-                      ],
-              };
-            }}
+          <Plus
+            className="icon"
+            onClick={activeTab === 0 ? handleAddScreen : handleAddAction}
           />
-        </div>
+        </SideBarSubheader>
+        {activeTab === 0 && (
+          <div
+            style={{
+              height: "calc(100% - 104px)",
+              overflow: "auto",
+              padding: "14px",
+            }}
+          >
+            <SortableTree
+              treeData={treeData}
+              onChange={(treeData) => setTree(treeData)}
+              theme={FileExplorerTheme}
+              generateNodeProps={(extendedNode) => {
+                return {
+                  title: (
+                    <section
+                      className={`node ${
+                        selectedBlock === extendedNode.node.subtitle ||
+                        selectedScreen === extendedNode.node.uuid
+                          ? "node_selected"
+                          : ""
+                      }`}
+                      onClick={(event) => handleItemClick(event, extendedNode)}
+                    >
+                      <span>
+                        <Icon
+                          src={
+                            models[extendedNode.node?.title?.toLowerCase()]
+                              ?.previewImageUrl
+                          }
+                        />
+                        {extendedNode.node.endpoint || extendedNode.node.title}
+                      </span>
+                    </section>
+                  ),
+                  buttons:
+                    extendedNode.node.subtitle === "screen"
+                      ? [
+                          <Copy
+                            className="icon"
+                            onClick={(event) => {
+                              handleCloneScreen(event, extendedNode.node.uuid);
+                            }}
+                          />,
+                          <Trash
+                            className="icon"
+                            onClick={(event) =>
+                              handleDeleteScreen(event, extendedNode.node)
+                            }
+                          />,
+                        ]
+                      : [
+                          <Copy
+                            className="icon"
+                            onClick={() =>
+                              handleCloneBlock(extendedNode.node.subtitle)
+                            }
+                          />,
+                          <Trash
+                            className="icon"
+                            onClick={() =>
+                              handleDeleteBlock(extendedNode.node.subtitle)
+                            }
+                          />,
+                        ],
+                };
+              }}
+            />
+          </div>
+        )}
+        {activeTab === 1 && <Actions />}
       </div>
       <Gallery toggleComponents={toggleComponents} show={show} />
     </Container>

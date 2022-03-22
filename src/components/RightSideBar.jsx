@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import SideBarHeader from "./SideBarHeader";
 import Inspector from "../containers/Inspector";
 import Screen from "../containers/Screen";
 import Button from "../components/Button";
 import actionTypes from "../constants/actionTypes";
+import ActionForm from "../containers/ActionForm";
 import { useSelector, useDispatch } from "react-redux";
 import { ReactComponent as Plus } from "../assets/plus.svg";
 import { ReactComponent as Remove } from "../assets/trash.svg";
@@ -60,15 +61,16 @@ export default function RightSidebar({ children, ...props }) {
   const APIs = useSelector((state) => state.api.list);
   const activeTab = useSelector((state) => state.config.activeTab);
   const selectedBlock = useSelector((state) => state.layout.selectedBlockUuid);
+  const avaliableActions = useSelector((state) => state.actions.list);
   const [showForm, setAPIFormShow] = useState(false);
   const [isEditing, setEditing] = useState(false);
   const [selected, setSelected] = useState();
+  const [selectedAction, setSelectedAction] = useState(null);
   const dispatch = useDispatch();
   const {
     handleSubmit,
     resetField,
     setValue,
-    getValues,
     control,
     watch,
     formState: { errors },
@@ -147,6 +149,11 @@ export default function RightSidebar({ children, ...props }) {
     setEditing(true);
   };
 
+  useEffect(() => {
+    const selected = avaliableActions.filter((action) => action.selected)[0];
+    setSelectedAction(selected);
+  }, [avaliableActions]);
+
   if (!props.display) {
     return null;
   }
@@ -156,6 +163,7 @@ export default function RightSidebar({ children, ...props }) {
       <div>
         <SideBarHeader title="Properties" />
         <Inspector display />
+        {selectedAction && <ActionForm action={selectedAction} />}
         {activeTab === 5 && (
           <Screen
             category="screen"
@@ -164,7 +172,7 @@ export default function RightSidebar({ children, ...props }) {
             onPushBlockInside={() => {}}
           />
         )}
-        {!selectedBlock && (
+        {!selectedBlock && !selectedAction && (
           <APIContainer>
             <div>
               <span>API Settings</span>

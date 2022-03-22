@@ -109,6 +109,7 @@ const Preview = (props) => {
   const editorMode = useSelector((state) => state.editorMode.mode);
   const layout = useSelector((state) => state.layout);
   const barState = useSelector((state) => state.sideBar);
+  const actions = useSelector((state) => state.actions.list);
   const code = useSelector((state) => state.code);
   const initial = useSelector((state) => state.output);
 
@@ -144,6 +145,10 @@ const Preview = (props) => {
     dispatch({
       type: actionTypes.SET_EDITOR_MODE,
       mode,
+    });
+    dispatch({
+      type: actionTypes.SET_ACTIONS,
+      list: actions.map((action) => ({ ...action, selected: false })),
     });
   };
 

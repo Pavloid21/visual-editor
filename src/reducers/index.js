@@ -8,6 +8,7 @@ import sideBar from "./sideBar";
 import editorMode from "./editorMode";
 import current from "./current";
 import code from "./code";
+import actions from "./actions";
 
 export default combineReducers({
   config,
@@ -18,4 +19,5 @@ export default combineReducers({
   editorMode,
   current,
   code,
+  actions,
 });
