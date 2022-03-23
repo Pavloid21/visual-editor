@@ -104,12 +104,16 @@ export default function LeftSidebar({ children, ...props }) {
     };
     const traverse = function (tree) {
       return tree.map((item) => {
+        const { settingsUI, action, listItems } = item;
         let reference = {};
         reference.uuid = v4();
         reference.blockId = item.type.toLowerCase();
-        reference.settingsUI = item.settingsUI;
-        if (item.listItems) {
-          reference.listItems = traverse(item.listItems);
+        reference.settingsUI = settingsUI;
+        if (listItems) {
+          reference.listItems = traverse(listItems);
+        }
+        if (action) {
+          reference.interactive = { action };
         }
         return reference;
       });
@@ -184,12 +188,10 @@ export default function LeftSidebar({ children, ...props }) {
                   const snippetBody = syntax.body[0].body.body;
                   snippetBody.forEach((statement) => {
                     if (statement.type === "ReturnStatement") {
-                      console.log("statement :>> ", statement);
                       const result = walker(
                         statement.argument.properties,
                         template
                       );
-                      console.log(result);
                       return { screen, object: result };
                     }
                   });
@@ -285,15 +287,25 @@ export default function LeftSidebar({ children, ...props }) {
       delete block.settingsUI.checked;
     }
     const settingsUI = {};
+    const interactive = {};
     Object.keys(block.settingsUI).forEach((key) => {
       if (typeof block.settingsUI[key] === "string") {
         settingsUI[key] = `${block.settingsUI[key].replace(/{{|}}/g, "")}`;
       }
       settingsUI[key] = block.settingsUI[key];
     });
+    if (block.interactive) {
+      Object.keys(block.interactive).forEach((key) => {
+        if (typeof block.interactive[key] === "string") {
+          interactive[key] = `${block.interactive[key]?.replace(/{{|}}/g, "")}`;
+        }
+        interactive[key] = block.interactive[key];
+      });
+    }
     const data = {
       type: block.blockId.toUpperCase(),
       settingsUI,
+      interactive,
     };
     if (block.listItems) {
       data.listItems = block.listItems.map((item) => buildJSONitem(item));
