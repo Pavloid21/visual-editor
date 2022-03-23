@@ -158,16 +158,20 @@ export default function LeftSidebar({ children, ...props }) {
               require(["esprima"], (parser) => {
                 const walker = (data, template = {}) => {
                   data.forEach((property) => {
-                    if (property.value.type == "Literal") {
+                    if (property.value.type === "Literal") {
                       template[property.key.value] = property.value.value;
                     }
-                    if (property.value.type == "ArrayExpression") {
+                    if (property.value.type === "ArrayExpression") {
                       template[property.key.value] =
-                        property.value.elements.map((element) =>
-                          walker(element.properties)
-                        );
+                        property.value.elements.map((element) => {
+                          if (element.type === "ObjectExpression") {
+                            return walker(element.properties);
+                          } else if (element.type === "Literal") {
+                            return element.value;
+                          }
+                        });
                     }
-                    if (property.value.type == "ObjectExpression") {
+                    if (property.value.type === "ObjectExpression") {
                       template[property.key.value] = walker(
                         property.value.properties
                       );
@@ -180,7 +184,11 @@ export default function LeftSidebar({ children, ...props }) {
                   const snippetBody = syntax.body[0].body.body;
                   snippetBody.forEach((statement) => {
                     if (statement.type === "ReturnStatement") {
-                      const result = walker(statement.argument.properties, template);
+                      console.log("statement :>> ", statement);
+                      const result = walker(
+                        statement.argument.properties,
+                        template
+                      );
                       console.log(result);
                       return { screen, object: result };
                     }
