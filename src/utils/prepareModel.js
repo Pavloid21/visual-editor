@@ -28,3 +28,87 @@ export function getData(defaultData) {
   prepareModel(defaultData, result);
   return result;
 }
+
+export const buildJSONitem = (block, mode) => {
+  if (block.settingsUI.checked) {
+    delete block.settingsUI.checked;
+  }
+  const settingsUI = {};
+  const interactive = {};
+  Object.keys(block.settingsUI).forEach((key) => {
+    if (typeof block.settingsUI[key] === "string") {
+      settingsUI[key] = `${block.settingsUI[key].replace(/{{|}}/g, "")}`;
+    }
+    settingsUI[key] = block.settingsUI[key];
+  });
+  if (block.interactive) {
+    Object.keys(block.interactive).forEach((key) => {
+      if (typeof block.interactive[key] === "string") {
+        interactive[key] = `${block.interactive[key]?.replace(/{{|}}/g, "")}`;
+      }
+      interactive[key] = block.interactive[key];
+    });
+  }
+  let data = {
+    type: block.blockId.toUpperCase(),
+    settingsUI,
+  };
+  if (mode === "code") {
+    data = { ...data, ...interactive };
+  } else {
+    data.interactive = interactive;
+  }
+  if (block.listItems) {
+    data.listItems = block.listItems.map((item) => buildJSONitem(item, mode));
+  }
+  return data;
+};
+
+export const prepareJSON = (initial, layout, appBar, bottomBar, mode) => {
+  initial.listItems = layout[0]
+    ? layout.map((block) => {
+        return buildJSONitem(block, mode);
+      })
+    : [];
+  if (appBar) {
+    initial.appBar = buildJSONitem(appBar, mode);
+  } else {
+    delete initial.appBar;
+  }
+  if (bottomBar) {
+    initial.bottomBar = buildJSONitem(bottomBar, mode);
+  } else {
+    delete initial.bottomBar;
+  }
+};
+
+export const snippet = (
+  initial,
+  api,
+  layout,
+  appBar,
+  bottomBar,
+  mode = "edit"
+) => {
+  const reference = { ...initial };
+  if (api) {
+    const constants = api.list.map((item) => {
+      const headers = item.headers?.map((header) => {
+        return `"${header.key}": "${header.value}"`;
+      });
+      const params = item.params?.map((param) => {
+        return `"${param.key}": "${param.value}"`;
+      });
+      return `const ${item.varName} = await api.get("${item.url}"${
+        (headers || params) && `, {`
+      }${headers && `"headers": {${headers.join(",")}},`}${
+        params && `"params": {${params.join(",")}}`
+      }});`;
+    });
+    prepareJSON(reference, layout, appBar, bottomBar, mode);
+    let jsonString = JSON.stringify(reference, null, 4);
+    jsonString = jsonString.replace(/"{{|}}"/g, "");
+    constants.push(`return ${jsonString}`);
+    return constants.join("\r\n");
+  }
+};

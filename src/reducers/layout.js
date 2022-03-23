@@ -14,6 +14,56 @@ const initialState = {
   snippets: [],
 };
 
+const buildLayout = ({ screen, object }) => {
+  const tree = object.listItems;
+  let newBlock = {
+    screen: object.screen,
+    listItems: [],
+  };
+  const traverse = function (tree) {
+    return tree.map((item) => {
+      const { settingsUI, action, listItems } = item;
+      let reference = {};
+      reference.uuid = v4();
+      reference.blockId = item.type.toLowerCase();
+      reference.settingsUI = settingsUI;
+      if (listItems) {
+        reference.listItems = traverse(listItems);
+      }
+      if (action) {
+        reference.interactive = { action };
+      }
+      return reference;
+    });
+  };
+  newBlock.listItems = tree?.length ? traverse(tree) : [];
+  const action = {
+    type: actionTypes.SET_LAYOUT,
+    layout: newBlock.listItems,
+  };
+  if (object.bottomBar) {
+    action.bottomBar = {
+      blockId: "bottombar",
+      uuid: v4(),
+      settingsUI: {
+        ...object.bottomBar.settingsUI,
+        navigationItems: object.bottomBar.navigationItems,
+      },
+    };
+  }
+  if (object.appBar) {
+    action.appBar = {
+      settingsUI: "topappbar",
+      uuid: v4(),
+      data: {
+        ...object.appBar.settingsUI,
+        appBarItems: object.appBar.appBarItems,
+      },
+    };
+  }
+  return { newBlock, action, screenEndpoint: screen };
+};
+
 export const findInTree = (tree, uuid) => {
   let result = null;
   tree.forEach((item) => {
@@ -215,7 +265,11 @@ export default function reducer(state = initialState, action) {
           action.parentKey,
           action.key
         );
-        valueKeeper[action.key] = action.value;
+        if (valueKeeper) {
+          valueKeeper[action.key] = action.value;
+        } else {
+          element.settingsUI[action.parentKey] = { [action.key]: action.value };
+        }
       } else {
         if (element.settingsUI[action.key] !== undefined) {
           element.settingsUI[action.key] = action.value;

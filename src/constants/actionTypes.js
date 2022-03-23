@@ -28,6 +28,7 @@ const actionTypes = {
   SAVE_CODE: "CODE/SAVE_CODE",
   SELECT_SCREEN: "SCREEN/SELECT_SCREEN",
   CLONE_BLOCK: "LAYOUT/CLONE_BLOCK",
+  SET_SNIPPET: "SNIPPET/SET_SNIPPET",
 };
 
 export const ItemTypes = {

@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { stackoverflowLight } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { useSelector, useDispatch } from "react-redux";
 import actionTypes from "../constants/actionTypes";
+import { snippet } from "../utils/prepareModel";
 
 const Container = styled.div`
   display: flex;
@@ -21,82 +22,40 @@ const Code = (props) => {
   const dispatch = useDispatch();
   const api = useSelector((state) => state.api);
   const bottomBar = useSelector((state) => state.layout.bottomBar);
+  const selectedScreen = useSelector((state) => state.layout.selectedScreen);
   const appBar = useSelector((state) => state.layout.appBar);
   const blocks = useSelector((state) => state.layout.blocks);
   const initial = useSelector((state) => state.output);
-  const buildJSONitem = (block) => {
-    if (block.settingsUI.checked) {
-      delete block.settingsUI.checked;
-    }
-    console.log("block", block);
-    const settingsUI = {};
-    const interactive = {};
-    Object.keys(block.settingsUI).forEach((key) => {
-      if (typeof block.settingsUI[key] === "string") {
-        settingsUI[key] = `${block.settingsUI[key].replace(/"{{|}}"/g, "")}`;
-      }
-      settingsUI[key] = block.settingsUI[key];
-    });
-    if (block.interactive) {
-      Object.keys(block.interactive).forEach((key) => {
-        if (typeof block.interactive[key] === "string") {
-          interactive[key] = `${block.interactive[key].replace(/"{{|}}"/g, "")}`;
-        }
-        interactive[key] = block.interactive[key];
-      });
-    }
-    const data = {
-      type: block.blockId.toUpperCase(),
-      ...interactive,
-      settingsUI,
-    };
-    if (block.listItems) {
-      data.listItems = block.listItems.map((item) => buildJSONitem(item));
-    }
-    return data;
-  };
+  const snippets = useSelector((state) => state.layout.snippets);
+  const [prefix, setPrefix] = useState("");
 
-  const prepareJSON = (initial) => {
-    initial.listItems = blocks[0]
-      ? blocks.map((block) => {
-          return buildJSONitem(block);
-        })
-      : [];
-    if (appBar) {
-      initial.appBar = buildJSONitem(appBar);
-    } else {
-      delete initial.appBar;
-    }
-    if (bottomBar) {
-      initial.bottomBar = buildJSONitem(bottomBar);
-    } else {
-      delete initial.bottomBar;
-    }
-  };
-
+  // useEffect(() => {
+  //   // if (api) {
+  //   //   const constants = snippet(
+  //   //     initial,
+  //   //     api,
+  //   //     blocks,
+  //   //     appBar,
+  //   //     bottomBar,
+  //   //     "code"
+  //   //   );
+  //   //   dispatch({ type: actionTypes.SAVE_CODE, code: constants });
+  //   // }
+  // }, [api, initial, blocks, bottomBar, appBar, code]);
   useEffect(() => {
-    let reference = { ...initial };
-    if (api) {
-      const constants = api.list.map((item) => {
-        const headers = item.headers?.map((header) => {
-          return `"${header.key}": "${header.value}"`;
+    if (snippets) {
+      const screenID = snippets.filter(
+        (item) => item.screenID === selectedScreen
+      )[0]?.endpoint;
+      return fetch(
+        `http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/admin/screens/${screenID}`
+      )
+        .then((response) => response.text())
+        .then((data) => {
+          setPrefix(data.match(/.*return/gs));
         });
-        const params = item.params?.map((param) => {
-          return `"${param.key}": "${param.value}"`;
-        });
-        return `const ${item.varName} = await api.get("${item.url}"${
-          (headers || params) && `, {`
-        }${headers && `"headers": {${headers.join(",")}},`}${
-          params && `"params": {${params.join(",")}}`
-        }});`;
-      });
-      prepareJSON(reference);
-      let jsonString = JSON.stringify(reference, null, 4);
-      jsonString = jsonString.replace(/"{{|}}"/g, "");
-      constants.push(`return ${jsonString}`);
-      dispatch({ type: actionTypes.SAVE_CODE, code: constants.join("\r\n") });
     }
-  }, [api, initial, blocks, bottomBar, appBar, code]);
+  }, [snippets]);
   return (
     <Container {...props}>
       <EditorWrapper>
@@ -106,7 +65,10 @@ const Code = (props) => {
           showLineNumbers
           wrapLongLines
         >
-          {code}
+          {prefix +
+            snippets
+              .filter((item) => item.screenID === selectedScreen)[0]
+              ?.snippet.replace("return", "")}
         </SyntaxHighlighter>
       </EditorWrapper>
     </Container>

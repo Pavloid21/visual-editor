@@ -13,6 +13,7 @@ import { ReactComponent as Trash } from "../assets/trash.svg";
 import { ReactComponent as Plus } from "../assets/plus.svg";
 import models from "../views/blocks/index";
 import v4 from "uuid/dist/v4";
+import { snippet } from "../utils/prepareModel";
 
 const Container = styled.div`
   min-width: 422px;
@@ -199,7 +200,10 @@ export default function LeftSidebar({ children, ...props }) {
                   console.log("parse error :>> ", e);
                 }
               });
-              return { screen, object: template };
+              return {
+                screen,
+                object: template,
+              };
             })
             .catch((e) => {
               console.log("e :>> ", e);
@@ -273,87 +277,21 @@ export default function LeftSidebar({ children, ...props }) {
         snippet: {
           screenID: selectedScreen,
           endpoint: output.replace(/\s/g, "_"),
-          snippet: snippet({
-            screen: output,
-            listItems: layout,
-          }),
+          snippet: snippet(
+            {
+              screen: output,
+              listItems: layout,
+            },
+            api,
+            layout,
+            appBar,
+            bottomBar,
+            "code"
+          ),
         },
       });
     }
   }, [output]);
-
-  const buildJSONitem = (block) => {
-    if (block.settingsUI.checked) {
-      delete block.settingsUI.checked;
-    }
-    const settingsUI = {};
-    const interactive = {};
-    Object.keys(block.settingsUI).forEach((key) => {
-      if (typeof block.settingsUI[key] === "string") {
-        settingsUI[key] = `${block.settingsUI[key].replace(/{{|}}/g, "")}`;
-      }
-      settingsUI[key] = block.settingsUI[key];
-    });
-    if (block.interactive) {
-      Object.keys(block.interactive).forEach((key) => {
-        if (typeof block.interactive[key] === "string") {
-          interactive[key] = `${block.interactive[key]?.replace(/{{|}}/g, "")}`;
-        }
-        interactive[key] = block.interactive[key];
-      });
-    }
-    const data = {
-      type: block.blockId.toUpperCase(),
-      settingsUI,
-      interactive,
-    };
-    if (block.listItems) {
-      data.listItems = block.listItems.map((item) => buildJSONitem(item));
-    }
-    return data;
-  };
-
-  const prepareJSON = (initial) => {
-    initial.listItems = layout[0]
-      ? layout.map((block) => {
-          return buildJSONitem(block);
-        })
-      : [];
-    if (appBar) {
-      initial.appBar = buildJSONitem(appBar);
-    } else {
-      delete initial.appBar;
-    }
-    if (bottomBar) {
-      initial.bottomBar = buildJSONitem(bottomBar);
-    } else {
-      delete initial.bottomBar;
-    }
-  };
-
-  const snippet = (initial) => {
-    const reference = { ...initial };
-    if (api) {
-      const constants = api.list.map((item) => {
-        const headers = item.headers?.map((header) => {
-          return `"${header.key}": "${header.value}"`;
-        });
-        const params = item.params?.map((param) => {
-          return `"${param.key}": "${param.value}"`;
-        });
-        return `const ${item.varName} = await api.get("${item.url}"${
-          (headers || params) && `, {`
-        }${headers && `"headers": {${headers.join(",")}},`}${
-          params && `"params": {${params.join(",")}}`
-        }});`;
-      });
-      prepareJSON(reference);
-      let jsonString = JSON.stringify(reference, null, 4);
-      jsonString = jsonString.replace(/"{{|}}"/g, "");
-      constants.push(`return ${jsonString}`);
-      return constants.join("\r\n");
-    }
-  };
 
   const handleItemClick = (event, item) => {
     event.stopPropagation();
@@ -380,10 +318,16 @@ export default function LeftSidebar({ children, ...props }) {
         snippet: {
           screenID: item.node.uuid,
           endpoint: item.node.endpoint,
-          snippet: snippet({
-            screen: item.node.screen,
-            listItems: layout,
-          }),
+          snippet: snippet(
+            {
+              screen: item.node.screen,
+              listItems: layout,
+            },
+            api,
+            layout,
+            appBar,
+            bottomBar
+          ),
         },
       });
       dispatch(screenLayout.action);
