@@ -154,10 +154,6 @@ const Preview = (props) => {
       type: actionTypes.SET_EDITOR_MODE,
       mode,
     });
-    dispatch({
-      type: actionTypes.SET_ACTIONS,
-      list: actions.map((action) => ({ ...action, selected: false })),
-    });
   };
 
   const handleSaveSnippet = () => {
