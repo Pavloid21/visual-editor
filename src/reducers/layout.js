@@ -359,6 +359,19 @@ export default function reducer(state = initialState, action) {
         blocks: [...withClone],
         selectedBlockUuid: "",
       };
+    case actionTypes.SET_SNIPPET:
+      const snippetsRef = [...state.snippets];
+      const snippetRef = snippetsRef.filter(
+        (item) => item.screenID === action.selectedScreen
+      )[0];
+      if (snippetRef) {
+        snippetRef.snippet = action.snippet;
+        return {
+          ...state,
+          snippets: snippetsRef,
+        };
+      }
+      return state;
     default:
       return state;
   }

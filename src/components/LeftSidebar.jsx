@@ -13,7 +13,7 @@ import { ReactComponent as Trash } from "../assets/trash.svg";
 import { ReactComponent as Plus } from "../assets/plus.svg";
 import models from "../views/blocks/index";
 import v4 from "uuid/dist/v4";
-import { snippet } from "../utils/prepareModel";
+import { snippet, walker } from "../utils/prepareModel";
 
 const Container = styled.div`
   min-width: 422px;
@@ -161,29 +161,6 @@ export default function LeftSidebar({ children, ...props }) {
             .then((data) => {
               const template = {};
               require(["esprima"], (parser) => {
-                const walker = (data, template = {}) => {
-                  data.forEach((property) => {
-                    if (property.value.type === "Literal") {
-                      template[property.key.value] = property.value.value;
-                    }
-                    if (property.value.type === "ArrayExpression") {
-                      template[property.key.value] =
-                        property.value.elements.map((element) => {
-                          if (element.type === "ObjectExpression") {
-                            return walker(element.properties);
-                          } else if (element.type === "Literal") {
-                            return element.value;
-                          }
-                        });
-                    }
-                    if (property.value.type === "ObjectExpression") {
-                      template[property.key.value] = walker(
-                        property.value.properties
-                      );
-                    }
-                  });
-                  return template;
-                };
                 try {
                   const syntax = parser.parse(`async function a() {${data}}`);
                   const snippetBody = syntax.body[0].body.body;

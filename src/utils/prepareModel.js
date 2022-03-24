@@ -107,8 +107,28 @@ export const snippet = (
     });
     prepareJSON(reference, layout, appBar, bottomBar, mode);
     let jsonString = JSON.stringify(reference, null, 4);
-    jsonString = jsonString.replace(/"{{|}}"/g, "");
     constants.push(`return ${jsonString}`);
     return constants.join("\r\n");
   }
+};
+
+export const walker = (data, template = {}) => {
+  data.forEach((property) => {
+    if (property.value.type === "Literal") {
+      template[property.key.value] = property.value.value;
+    }
+    if (property.value.type === "ArrayExpression") {
+      template[property.key.value] = property.value.elements.map((element) => {
+        if (element.type === "ObjectExpression") {
+          return walker(element.properties);
+        } else if (element.type === "Literal") {
+          return element.value;
+        }
+      });
+    }
+    if (property.value.type === "ObjectExpression") {
+      template[property.key.value] = walker(property.value.properties);
+    }
+  });
+  return template;
 };

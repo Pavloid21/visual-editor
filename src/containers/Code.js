@@ -29,19 +29,24 @@ const Code = (props) => {
   const snippets = useSelector((state) => state.layout.snippets);
   const [prefix, setPrefix] = useState("");
 
-  // useEffect(() => {
-  //   // if (api) {
-  //   //   const constants = snippet(
-  //   //     initial,
-  //   //     api,
-  //   //     blocks,
-  //   //     appBar,
-  //   //     bottomBar,
-  //   //     "code"
-  //   //   );
-  //   //   dispatch({ type: actionTypes.SAVE_CODE, code: constants });
-  //   // }
-  // }, [api, initial, blocks, bottomBar, appBar, code]);
+  useEffect(() => {
+    if (api) {
+      const constants = snippet(
+        initial,
+        api,
+        blocks,
+        appBar,
+        bottomBar,
+        "code"
+      );
+      dispatch({ type: actionTypes.SAVE_CODE, code: constants });
+      dispatch({
+        type: actionTypes.SET_SNIPPET,
+        snippet: constants,
+        selectedScreen,
+      });
+    }
+  }, [api, initial, blocks, bottomBar, appBar, code]);
   useEffect(() => {
     if (snippets) {
       const screenID = snippets.filter(
@@ -65,10 +70,10 @@ const Code = (props) => {
           showLineNumbers
           wrapLongLines
         >
-          {prefix +
+          {(prefix || "return") +
             snippets
               .filter((item) => item.screenID === selectedScreen)[0]
-              ?.snippet.replace("return", "")}
+              ?.snippet.replace("return", "").replace(/"{{|}}"/g, "")}
         </SyntaxHighlighter>
       </EditorWrapper>
     </Container>
