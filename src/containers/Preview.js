@@ -77,6 +77,9 @@ const Container = styled.div`
   & > *:not(:last-child) {
     overflow-y: auto;
   }
+  & > :first-child {
+    overflow: initial;
+  }
 `;
 
 const SortableContainer = sortableContainer(

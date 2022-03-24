@@ -13,8 +13,8 @@ import vstack from "../../assets/vstack.svg";
 import Wrapper from "../../utils/wrapper";
 
 const VStack = styled.div`
-  height: ${(props) =>
-    props.wrapContent === "WRAPCONTENTHEIGHT" ? "auto" : "100%"};
+  flex: ${(props) =>
+    props.wrapContent === "WRAPCONTENTHEIGHT" ? "0 1 auto" : "1 1 auto"};
   background-color: ${(props) =>
     props.backgroundColor?.indexOf("#") >= 0
       ? props.backgroundColor
@@ -29,18 +29,19 @@ const VStack = styled.div`
   padding-left: ${(props) => props.padding?.left}px;
   padding-right: ${(props) => props.padding?.right}px;
   box-sizing: border-box;
+  overflow: auto;
   border-radius: ${(props) => `
-    ${props.corners?.topLeftRadius}px 
-    ${props.corners?.topRightRadius}px 
-    ${props.corners?.bottomRightRadius}px
-    ${props.corners?.bottomLeftRadius}px 
+    ${props.corners?.topLeftRadius || 0}px 
+    ${props.corners?.topRightRadius || 0}px 
+    ${props.corners?.bottomRightRadius || 0}px
+    ${props.corners?.bottomLeftRadius || 0}px 
   `};
 `;
 
 const SortableContainer = sortableContainer(
   ({ drop, backgroundColor, listItems, settingsUI, ...props }) => {
     return (
-      <Wrapper id={props.id}>
+      <Wrapper id={props.id} {...settingsUI}>
         <VStack
           {...settingsUI}
           {...props}

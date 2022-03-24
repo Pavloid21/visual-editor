@@ -236,7 +236,7 @@ export default function reducer(state = initialState, action) {
         blocks: blocksRef,
       };
     case actionTypes.CHANGE_BLOCK_DATA:
-      const newBlocks = [...state.blocks];
+      const newBlocks = JSON.parse(JSON.stringify(state.blocks));
       const element =
         findInTree(newBlocks, action.blockUuid) ||
         (action.blockUuid === state.bottomBar?.uuid
@@ -248,7 +248,8 @@ export default function reducer(state = initialState, action) {
         element.settingsUI[action.parentKey[1]][action.parentKey[0]][
           action.key
         ] = action.value;
-      } else if (action.parentKey) {
+      } 
+      else if (action.parentKey) {
         const findDataBlock = (data, parentKey, key) => {
           let ref = null;
           Object.keys(data).forEach((item) => {
@@ -273,7 +274,7 @@ export default function reducer(state = initialState, action) {
       } else {
         if (element.settingsUI[action.key] !== undefined) {
           element.settingsUI[action.key] = action.value;
-        } else {
+        } else if (element.interactive) {
           element.interactive[action.key] = action.value;
         }
       }
@@ -356,7 +357,7 @@ export default function reducer(state = initialState, action) {
       }
       return {
         ...stateRef,
-        blocks: [...withClone],
+        blocks: withClone,
         selectedBlockUuid: "",
       };
     case actionTypes.SET_SNIPPET:

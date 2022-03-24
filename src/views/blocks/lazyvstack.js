@@ -32,6 +32,7 @@ const LazyVStack = styled.div`
     return props.alignment;
   }};
   flex-direction: column;
+  flex: 1 1 auto;
   padding-top: ${(props) => props.padding?.top}px;
   padding-bottom: ${(props) => props.padding?.bottom}px;
   padding-left: ${(props) => props.padding?.left}px;
