@@ -13,6 +13,9 @@ import fullScreenIcon from "../assets/full-screen.svg";
 import CustomModal from "../components/Modal";
 import { useModal } from "../utils/hooks";
 import Button from "../components/Button";
+import ButtonSelector from "../components/ButtonSelector";
+import { useSelector, useDispatch } from "react-redux";
+import actionTypes from "../constants/actionTypes";
 
 const Container = styled.div`
   padding: 16px;
@@ -48,26 +51,68 @@ const EditorWrapper = styled.div`
 `;
 
 const ActionForm = ({ action }) => {
+  const dispatch = useDispatch();
   const { setValue, getValues, control } = useForm();
+  const snippets = useSelector((state) => state.actions);
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal();
   useEffect(() => {
     setValue("actionName", action.action);
+    setValue("type", action.type);
     setValue("code", action.object);
   }, [action]);
 
   const handleSave = () => {
-    const { actionName, code } = getValues();
-    fetch(
-      "http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/admin/actions/" +
-        actionName,
-      {
-        method: "PUT",
-        body: code,
-        headers: {
-          "Content-Type": "application/javascript",
-        },
+    const { actionName, code, type } = getValues();
+    const nextActions = [...snippets.actions];
+    const nextData = [...snippets.data];
+    const key = action.type === "action" ? "actions" : "data";
+    snippets[key].forEach((item, index) => {
+      const ref = type === "data" ? nextData : nextActions;
+      if (item.action === actionName) {
+        ref.splice(index, 1);
+        if (type === "data") {
+          dispatch({
+            type: actionTypes.SET_ACTIONS,
+            actions: nextActions,
+            data: [
+              ...nextData,
+              {
+                action: actionName,
+                object: code,
+              },
+            ],
+          });
+        } else {
+          dispatch({
+            type: actionTypes.SET_ACTIONS,
+            actions: [
+              ...nextActions,
+              {
+                action: actionName,
+                object: code,
+              },
+            ],
+            data: nextData,
+          });
+        }
+      } else {
+        const param = type === "action" ? "actions" : "data";
+        dispatch({
+          type: actionTypes.SET_ACTIONS,
+          [param]: [
+            ...snippets[param],
+            {
+              action: actionName,
+              object: code,
+            },
+          ],
+        });
       }
-    );
+    });
+    dispatch({
+      type: actionTypes.SELECT_ACTION,
+      selected: null,
+    });
   };
 
   return (
@@ -87,6 +132,18 @@ const ActionForm = ({ action }) => {
                 label="Action name"
                 clearable
                 isWide
+                {...field}
+              />
+            )}
+          />
+          <Controller
+            name="type"
+            control={control}
+            render={({ field }) => (
+              <ButtonSelector
+                label="Action type"
+                variants={["data", "action"]}
+                titles={["Data usage", "Custom action"]}
                 {...field}
               />
             )}
@@ -130,7 +187,7 @@ const ActionForm = ({ action }) => {
           />
         </form>
         <div className="buttons">
-          <Button className="secondary">Back</Button>
+          {/* <Button className="secondary">Back</Button> */}
           <Button onClick={handleSave}>Save</Button>
         </div>
       </Container>

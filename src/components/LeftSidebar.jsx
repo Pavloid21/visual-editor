@@ -174,7 +174,7 @@ export default function LeftSidebar({ children, ...props }) {
                     }
                   });
                 } catch (e) {
-                  console.log("parse error :>> ", e);
+                  // console.log("parse error :>> ", e);
                 }
               });
               return {
@@ -345,6 +345,17 @@ export default function LeftSidebar({ children, ...props }) {
     setTree(layouts.map((layout) => prepareTree(layout)));
   };
 
+  const handleAddAction = () => {
+    const added = {
+      action: "new_action",
+      object: "",
+    }
+    dispatch({
+      type: actionTypes.ADD_ACTION,
+      action: added,
+    });
+  };
+
   const handleDeleteScreen = (event, node) => {
     event.stopPropagation();
     const newTree = treeData.filter((item) => item.uuid !== node.uuid);
@@ -386,8 +397,6 @@ export default function LeftSidebar({ children, ...props }) {
       setTree(screens.map((layout) => prepareTree(layout)));
     }
   };
-
-  const handleAddAction = () => {};
 
   return (
     <Container show={show}>

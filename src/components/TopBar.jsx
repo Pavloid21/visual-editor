@@ -49,6 +49,17 @@ const VerticalDivider = styled.div`
 const TopBar = () => {
   const dispatch = useDispatch();
   const snippets = useSelector((state) => state.layout.snippets);
+  const actions = useSelector((state) => [
+    ...state.actions.actions.map((item) => ({ ...item, type: "actions" })),
+    ...state.actions.data.map((item) => ({ ...item, type: "data" })),
+  ]);
+  const deletedActions = useSelector((state) => [
+    ...state.actions.deleted.actions.map((item) => ({
+      ...item,
+      type: "actions",
+    })),
+    ...state.actions.deleted.data.map((item) => ({ ...item, type: "data" })),
+  ]);
   const deletedScreens = useSelector((state) => state.layout.deletedScreens);
   const editedScreens = useSelector((state) => state.layout.editedScreens);
   const handleHideLeft = () => {
@@ -75,7 +86,6 @@ const TopBar = () => {
     });
     snippets.forEach((item) => {
       if (deletedScreens.includes(item.screenID)) {
-        console.log("item.uuid :>> ", item.screenID);
         fetch(
           `http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/admin/screens/${item.endpoint}`,
           {
@@ -83,6 +93,27 @@ const TopBar = () => {
           }
         );
       }
+    });
+
+    actions.forEach((item) => {
+      fetch(
+        `http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/admin/${item.type}/${item.action}`,
+        {
+          method: "PUT",
+          body: item.object,
+          headers: {
+            "Content-Type": "application/javascript",
+          },
+        }
+      );
+    });
+    deletedActions.forEach((item) => {
+      fetch(
+        `http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/admin/${item.type}/${item.action}`,
+        {
+          method: "DELETE",
+        }
+      );
     });
   };
   return (

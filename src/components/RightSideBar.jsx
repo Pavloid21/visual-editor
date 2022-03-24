@@ -61,11 +61,10 @@ export default function RightSidebar({ children, ...props }) {
   const APIs = useSelector((state) => state.api.list);
   const activeTab = useSelector((state) => state.config.activeTab);
   const selectedBlock = useSelector((state) => state.layout.selectedBlockUuid);
-  const avaliableActions = useSelector((state) => state.actions.list);
+  const selectedAction = useSelector((state) => state.actions.selected);
   const [showForm, setAPIFormShow] = useState(false);
   const [isEditing, setEditing] = useState(false);
   const [selected, setSelected] = useState();
-  const [selectedAction, setSelectedAction] = useState(null);
   const dispatch = useDispatch();
   const {
     handleSubmit,
@@ -148,11 +147,6 @@ export default function RightSidebar({ children, ...props }) {
     setAPIFormShow(true);
     setEditing(true);
   };
-
-  useEffect(() => {
-    const selected = avaliableActions.filter((action) => action.selected)[0];
-    setSelectedAction(selected);
-  }, [avaliableActions]);
 
   if (!props.display) {
     return null;
