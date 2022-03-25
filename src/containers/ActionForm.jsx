@@ -160,7 +160,6 @@ const ActionForm = ({ action }) => {
                       className="fullScreen"
                       onClick={(e) => {
                         e.stopPropagation();
-                        console.log("toggleModal", toggleModal);
                         toggleModal();
                       }}
                     ></button>

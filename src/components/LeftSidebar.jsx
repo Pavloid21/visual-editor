@@ -78,6 +78,7 @@ export default function LeftSidebar({ children, ...props }) {
     root.title = "Screen";
     root.uuid = treeData.uuid;
     root.endpoint = treeData.screenEndpoint;
+    root.logic = treeData.logic;
     root.expanded = treeData.uuid === selectedScreen;
     root.children = treeData.value.listItems.map((block) => {
       return buildTreeitem(block);
@@ -170,7 +171,10 @@ export default function LeftSidebar({ children, ...props }) {
                         statement.argument.properties,
                         template
                       );
-                      return { screen, object: result };
+                      return {
+                        screen,
+                        object: result,
+                      };
                     }
                   });
                 } catch (e) {
@@ -180,6 +184,7 @@ export default function LeftSidebar({ children, ...props }) {
               return {
                 screen,
                 object: template,
+                logic: data.match(/.*return/gs),
               };
             })
             .catch((e) => {
@@ -199,6 +204,7 @@ export default function LeftSidebar({ children, ...props }) {
                   value: newBlock,
                   action,
                   screenEndpoint,
+                  logic: result.value.logic[0]
                 });
               }
             });
@@ -295,6 +301,7 @@ export default function LeftSidebar({ children, ...props }) {
         snippet: {
           screenID: item.node.uuid,
           endpoint: item.node.endpoint,
+          logic: item.node.logic,
           snippet: snippet(
             {
               screen: item.node.screen,
@@ -349,7 +356,7 @@ export default function LeftSidebar({ children, ...props }) {
     const added = {
       action: "new_action",
       object: "",
-    }
+    };
     dispatch({
       type: actionTypes.ADD_ACTION,
       action: added,

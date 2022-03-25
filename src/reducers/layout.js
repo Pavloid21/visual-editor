@@ -248,8 +248,7 @@ export default function reducer(state = initialState, action) {
         element.settingsUI[action.parentKey[1]][action.parentKey[0]][
           action.key
         ] = action.value;
-      } 
-      else if (action.parentKey) {
+      } else if (action.parentKey) {
         const findDataBlock = (data, parentKey, key) => {
           let ref = null;
           Object.keys(data).forEach((item) => {

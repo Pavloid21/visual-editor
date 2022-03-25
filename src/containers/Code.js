@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { stackoverflowLight } from "react-syntax-highlighter/dist/esm/styles/hljs";
@@ -27,12 +27,14 @@ const Code = (props) => {
   const blocks = useSelector((state) => state.layout.blocks);
   const initial = useSelector((state) => state.output);
   const snippets = useSelector((state) => state.layout.snippets);
-  const [prefix, setPrefix] = useState("");
 
   useEffect(() => {
     if (api) {
       const constants = snippet(
-        initial,
+        {
+          screen: initial.screen,
+          listItems: blocks,
+        },
         api,
         blocks,
         appBar,
@@ -47,20 +49,7 @@ const Code = (props) => {
       });
     }
   }, [api, initial, blocks, bottomBar, appBar, code]);
-  useEffect(() => {
-    if (snippets) {
-      const screenID = snippets.filter(
-        (item) => item.screenID === selectedScreen
-      )[0]?.endpoint;
-      return fetch(
-        `http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/admin/screens/${screenID}`
-      )
-        .then((response) => response.text())
-        .then((data) => {
-          setPrefix(data.match(/.*return/gs));
-        });
-    }
-  }, [snippets]);
+
   return (
     <Container {...props}>
       <EditorWrapper>
@@ -70,10 +59,10 @@ const Code = (props) => {
           showLineNumbers
           wrapLongLines
         >
-          {(prefix || "return") +
+          {(initial.logic || "return") +
             snippets
               .filter((item) => item.screenID === selectedScreen)[0]
-              ?.snippet.replace("return", "").replace(/"{{|}}"/g, "")}
+              ?.snippet.replace(/"{{|}}"/g, "")}
         </SyntaxHighlighter>
       </EditorWrapper>
     </Container>

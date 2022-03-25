@@ -76,7 +76,10 @@ const TopBar = () => {
           `http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/admin/screens/${item.endpoint}`,
           {
             method: "PUT",
-            body: item.snippet.replace(/\n/g, ""),
+            body: `${item.logic.replace(/return$/g, "")}${item.snippet.replace(
+              /\n/g,
+              ""
+            )}`,
             headers: {
               "Content-Type": "application/javascript",
             },
