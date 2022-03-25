@@ -37,7 +37,6 @@ const TopAppBar = styled.div`
       background-color: ${(props) => props.textColor || "black"};
     }
   }
-  }
 `;
 
 const Icon = styled.div`
@@ -53,7 +52,11 @@ const Component = ({ settingsUI, ...props }) => {
     buttons.push(appBarItems[index]);
   }
   return (
-    <Wrapper id={props.id} style={{ padding: 0 }}>
+    <Wrapper
+      id={props.id}
+      style={{ padding: 0 }}
+      wrapContent="WRAPCONTENTHEIGHT"
+    >
       <TopAppBar {...settingsUI} {...props}>
         <label>{settingsUI.text}</label>
         <div style={{ display: "flex", flexDirection: "row", gap: "16px" }}>

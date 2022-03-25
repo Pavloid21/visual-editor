@@ -19,7 +19,7 @@ const IphoneX = (props) => {
             overflow: "hidden",
             padding: "56px 26px 0px",
             backgroundColor: appBar
-              ? appBar.data.backgroundColor
+              ? appBar.settingsUI.backgroundColor
               : "rgb(255, 255, 255)",
             clipPath: "url(#maskRect1)",
           }}

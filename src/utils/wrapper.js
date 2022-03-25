@@ -6,12 +6,12 @@ const Wrapper = styled.div`
   padding: 2px;
   border-radius: 4px;
   border: 1px dashed var(--main-color);
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  flex: ${(props) =>
-    props.wrapContent === "WRAPCONTENTHEIGHT" ? "0 1 auto" : "1 1 auto"};
-  overflow: auto;
+  display: grid;
+  align-items: ${(props) =>
+    props.wrapContent === "WRAPCONTENTHEIGHT" ? "start" : "stretch"};
+  ${(props) =>
+    props.wrapContent === "WRAPCONTENTHEIGHT" ? "align-self: start" : ""};
+  overflow-y: auto;
 `;
 
 export default Wrapper;
