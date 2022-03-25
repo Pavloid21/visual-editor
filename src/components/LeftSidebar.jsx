@@ -195,7 +195,7 @@ export default function LeftSidebar({ children, ...props }) {
           .then((resolves) => {
             const layouts = [];
             resolves.forEach((result) => {
-              if (result.status === "fulfilled" && result.value.object.screen) {
+              if (result.status === "fulfilled" && result.value?.object.screen) {
                 const { newBlock, action, screenEndpoint } = buildLayout(
                   result.value
                 );
