@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { ReactComponent as CollapseIcon } from "../assets/collapse.svg";
 import { ReactComponent as GridIcon } from "../assets/grid.svg";
@@ -6,7 +6,8 @@ import { ReactComponent as ListIcon } from "../assets/list.svg";
 import Input from "../components/Input";
 import BlockPreview from "../components/BlockPreview";
 import blocks from "../views/blocks";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { snippet } from "../utils/prepareModel";
 import actionTypes from "../constants/actionTypes";
 
 const GalleryHeader = styled.div`
@@ -57,7 +58,30 @@ const Wrapper = styled.div`
 
 const Gallery = (props) => {
   const dispatch = useDispatch();
-
+  const output = useSelector((state) => state.output.screen);
+  const selectedScreen = useSelector((state) => state.layout.selectedScreen);
+  const layout = useSelector((state) => state.layout.blocks);
+  const appBar = useSelector((state) => state.layout.appBar);
+  const api = useSelector((state) => state.api);
+  const bottomBar = useSelector((state) => state.layout.bottomBar);
+  useEffect(() => {
+    const constants = snippet(
+      {
+        screen: output,
+        listItems: layout,
+      },
+      api,
+      layout,
+      appBar,
+      bottomBar,
+      "code"
+    );
+    dispatch({
+      type: actionTypes.SET_SNIPPET,
+      snippet: constants,
+      selectedScreen,
+    });
+  }, [layout]);
   const handlePushBlock = (blockId) => {
     dispatch({
       type: actionTypes.PUSH_BLOCK,

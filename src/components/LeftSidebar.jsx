@@ -254,24 +254,31 @@ export default function LeftSidebar({ children, ...props }) {
       (screen) => screen.uuid === selectedScreen
     )[0];
     if (screenLayout) {
+      const constants = snippet(
+        {
+          screen: output,
+          listItems: layout,
+        },
+        api,
+        layout,
+        appBar,
+        bottomBar,
+        "code"
+      );
       dispatch({
         type: actionTypes.EDIT_SCREEN_NAME,
         screen: output,
         snippet: {
           screenID: selectedScreen,
           endpoint: output.replace(/\s/g, "_"),
-          snippet: snippet(
-            {
-              screen: output,
-              listItems: layout,
-            },
-            api,
-            layout,
-            appBar,
-            bottomBar,
-            "code"
-          ),
+          snippet: constants,
         },
+      });
+      dispatch({ type: actionTypes.SAVE_CODE, code: constants });
+      dispatch({
+        type: actionTypes.SET_SNIPPET,
+        snippet: constants,
+        selectedScreen,
       });
     }
   }, [output]);
