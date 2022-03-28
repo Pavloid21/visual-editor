@@ -77,6 +77,9 @@ const block = {
     "The top app bar displays information and actions relating to the current screen.",
   previewImageUrl: topappbar,
   category: "Controls",
+  defaultInteractiveOptions: {
+    action: { url: "nextScreenName", fields: ["field1", "field2"], target: "" },
+  },
   defaultData: {
     fontSize: 16,
     textColor: "#E9E8EA",
@@ -121,6 +124,16 @@ const block = {
         iconUrl: { type: "string", name: "Icon URL" },
       },
     ],
+  },
+  interactive: {
+    action: {
+      url: {
+        type: "string",
+        name: "Action URL",
+      },
+      target: { type: "string", name: "Target" },
+      fields: { type: "array", name: "Fields set" },
+    },
   },
 };
 

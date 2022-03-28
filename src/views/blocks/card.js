@@ -119,6 +119,9 @@ const block = {
   description: "Cards contain content and actions about a single subject.",
   previewImageUrl: card,
   category: "Layouts",
+  defaultInteractiveOptions: {
+    action: { url: "nextScreenName", fields: ["field1", "field2"], target: "" },
+  },
   defaultData: {
     elevation: 3,
     alignment: "CENTER",
@@ -172,6 +175,16 @@ const block = {
     },
     size: {
       height: { type: "number", name: "Height" },
+    },
+  },
+  interactive: {
+    action: {
+      url: {
+        type: "string",
+        name: "Action URL",
+      },
+      target: { type: "string", name: "Target" },
+      fields: { type: "array", name: "Fields set" },
     },
   },
 };

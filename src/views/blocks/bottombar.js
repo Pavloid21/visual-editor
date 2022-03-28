@@ -75,6 +75,9 @@ const block = {
     "Bottom navigation bars allow movement between primary destinations in an app.",
   previewImageUrl: bottombar,
   category: "Controls",
+  defaultInteractiveOptions: {
+    action: { url: "nextScreenName", fields: ["field1", "field2"], target: "" },
+  },
   defaultData: {
     backgroundColor: "#423649",
     bottomIconSelectedColor: "#E9E8EA",
@@ -128,6 +131,16 @@ const block = {
         },
       },
     ],
+  },
+  interactive: {
+    action: {
+      url: {
+        type: "string",
+        name: "Action URL",
+      },
+      target: { type: "string", name: "Target" },
+      fields: { type: "array", name: "Fields set" },
+    },
   },
 };
 

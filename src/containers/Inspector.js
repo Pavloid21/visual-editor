@@ -132,6 +132,29 @@ class Inspector extends Component {
             </label>
           </div>
         );
+      } else if (config[el].type === "array") {
+        return (
+          <div className="form-group" key={`${parentKey}_${index}`}>
+            <Input
+              isWide
+              clearable
+              label={config[el].name}
+              debounceTimeout={500}
+              type="text"
+              placeholder={config[el].name}
+              value={endpoint ? endpoint[el]?.join(",") : null}
+              onChange={(e) => {
+                const toArray = e.target.value.replace(/s/g, "").split(",");
+                return this.handleChangeBlockData(
+                  blockUuid,
+                  el,
+                  toArray,
+                  parentKey
+                );
+              }}
+            />
+          </div>
+        );
       } else if (endpoint && !Array.isArray(endpoint[el])) {
         return (
           <section>
@@ -181,7 +204,8 @@ class Inspector extends Component {
           height: "calc(100% - 60px)",
         }}
       >
-        {interactive && this.parseConfig(interactive, blockUuid, block.interactive)}
+        {interactive &&
+          this.parseConfig(interactive, blockUuid, block.interactive)}
         {this.parseConfig(config, blockUuid, block.settingsUI)}
         {block.settingsUI.navigationItems && (
           <div>

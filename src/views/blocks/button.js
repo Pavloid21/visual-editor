@@ -76,7 +76,7 @@ const block = {
   previewImageUrl: button,
   category: "Controls",
   defaultInteractiveOptions: {
-    action: { url: "nextScreenName" },
+    action: { url: "nextScreenName", fields: ["field1", "field2"], target: "" },
   },
   defaultData: {
     text: "Войти",
@@ -124,6 +124,8 @@ const block = {
         type: "string",
         name: "Action URL",
       },
+      target: { type: "string", name: "Target" },
+      fields: { type: "array", name: "Fields set" },
     },
   },
   config: {
