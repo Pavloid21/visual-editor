@@ -72,8 +72,8 @@ const Container = styled.div`
   background-color: ${(props) => props.backgroundColor};
   overflow: hidden;
   position: relative;
-  display: grid;
-  /* flex-direction: column; */
+  display: flex;
+  flex-direction: column;
   & > *:not(:last-child) {
     overflow-y: auto;
   }
@@ -86,17 +86,15 @@ const SortableContainer = sortableContainer(
   ({ children, drop, backgroundColor }) => {
     return (
       <Container backgroundColor={backgroundColor} ref={drop}>
-        {/* {children.length > 1 && (
-          <div>
-            {children.map((child, index) => {
-              if (index !== children.length - 1) {
-                return child;
-              }
-              return null;
-            })}
-          </div>
-        )} */}
-        {children}
+        <div>
+          {children.map((child, index) => {
+            if (index !== children.length - 1) {
+              return child;
+            }
+            return null;
+          })}
+        </div>
+        {children[children.length - 1]}
       </Container>
     );
   }

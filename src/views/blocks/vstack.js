@@ -13,17 +13,13 @@ import vstack from "../../assets/vstack.svg";
 import Wrapper from "../../utils/wrapper";
 
 const VStack = styled.div`
-  /* flex: ${(props) =>
-    props.wrapContent === "WRAPCONTENTHEIGHT" ? "0 1 auto" : "1 1 auto"}; */
+  flex: ${(props) =>
+    props.wrapContent === "WRAPCONTENTHEIGHT" ? "0 1 auto" : "1 1 auto"};
   background-color: ${(props) =>
     props.backgroundColor?.indexOf("#") >= 0
       ? props.backgroundColor
       : "transparent"};
-  /* display: flex; */
-  display: grid;
-  grid-template-columns: repeat(1fr);
-  grid-template-rows: ${(props) =>
-    props.wrapContent === "WRAPCONTENTHEIGHT" ? "min-content" : "1fr"};
+  display: flex;
   justify-content: ${(props) =>
     props.distribution === "SPACEBETWEEN" ? "space-between" : props.alignment};
   align-items: ${(props) => props.alignment};
@@ -33,8 +29,7 @@ const VStack = styled.div`
   padding-left: ${(props) => props.padding?.left}px;
   padding-right: ${(props) => props.padding?.right}px;
   box-sizing: border-box;
-  align-items: start;
-  /* overflow-y: auto; */
+  overflow: auto;
   border-radius: ${(props) => `
     ${props.corners?.topLeftRadius || 0}px 
     ${props.corners?.topRightRadius || 0}px 
@@ -46,7 +41,7 @@ const VStack = styled.div`
 const SortableContainer = sortableContainer(
   ({ drop, backgroundColor, listItems, settingsUI, ...props }) => {
     return (
-      <Wrapper id={props.id} wrapContent={props.wrapContent}>
+      <Wrapper id={props.id} {...settingsUI}>
         <VStack
           {...settingsUI}
           {...props}

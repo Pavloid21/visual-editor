@@ -49,7 +49,6 @@ const NeoInput = (props) => {
     <Container>
       {props.label && <Label>{props.label}</Label>}
       <StyledNeoInput
-        onClick={(e) => e.stopPropagation()}
         allowClear={props.clearable && { clearIcon: <Remove /> }}
         bordered={false}
         {...props}
