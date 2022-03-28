@@ -10,8 +10,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: ${(props) =>
-    props.wrapContent === "WRAPCONTENTHEIGHT" ? "0 1 auto" : "1 1 auto"};
-  overflow: auto;
+    props.wrapContent === "WRAPCONTENTHEIGHT" ? "0 1 auto" : ""};
 `;
 
 export default Wrapper;

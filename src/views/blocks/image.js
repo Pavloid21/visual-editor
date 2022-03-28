@@ -21,8 +21,13 @@ const Image = styled.img`
 
 const Component = ({ settingsUI, ...props }) => {
   return (
-    <Wrapper id={props.id}>
-      <Image {...settingsUI} {...props} className="draggable" src={settingsUI.imageUrl} />
+    <Wrapper id={props.id} style={{ alignItems: "center" }}>
+      <Image
+        {...settingsUI}
+        {...props}
+        className="draggable"
+        src={settingsUI.imageUrl}
+      />
     </Wrapper>
   );
 };

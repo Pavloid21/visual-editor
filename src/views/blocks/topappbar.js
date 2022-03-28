@@ -37,7 +37,6 @@ const TopAppBar = styled.div`
       background-color: ${(props) => props.textColor || "black"};
     }
   }
-  }
 `;
 
 const Icon = styled.div`
