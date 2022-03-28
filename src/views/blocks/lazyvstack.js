@@ -19,6 +19,7 @@ const LazyVStack = styled.div`
       ? props.backgroundColor
       : "transparent"};
   display: flex;
+  gap: ${props => props.spacing}px;
   justify-content: ${(props) =>
     props.distribution === "SPACEBETWEEN"
       ? "space-between"
@@ -37,7 +38,6 @@ const LazyVStack = styled.div`
   padding-bottom: ${(props) => props.padding?.bottom}px;
   padding-left: ${(props) => props.padding?.left}px;
   padding-right: ${(props) => props.padding?.right}px;
-  border: 1px dashed blue;
   box-sizing: border-box;
   & .lazevstack_row {
     height: ${(props) => props.rowHeight}px;
@@ -138,6 +138,7 @@ const block = {
     backgroundColor: "#C6C6C6",
     distribution: "SPACEBETWEEN",
     rowHeight: 58,
+    spacing: 16,
     padding: {
       top: "100",
       bottom: "100",
@@ -151,6 +152,7 @@ const block = {
     backgroundColor: { type: "color", name: "Background color" },
     distribution: { type: "string", name: "Distribution" },
     rowHeight: { type: "number", name: "Row height" },
+    spacing: { type: "number", name: "Spacing" },
     padding: {
       top: {
         type: "number",

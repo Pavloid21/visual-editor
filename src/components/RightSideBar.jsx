@@ -153,7 +153,7 @@ export default function RightSidebar({ children, ...props }) {
   }
 
   return (
-    <Container>
+    <Container onClick={(e) => e.stopPropagation()}>
       <div>
         <SideBarHeader title="Properties" />
         <Inspector display />

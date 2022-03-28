@@ -56,9 +56,9 @@ const Button = styled.div`
 `;
 
 const Component = (props) => {
-  const { text, imageUrl } = props.settingsUI;
+  const { text, imageUrl, alignment } = props.settingsUI;
   return (
-    <Wrapper id={props.id}>
+    <Wrapper id={props.id} style={{ alignItems: alignment }}>
       <Button className="draggable" {...props.settingsUI} {...props}>
         <span>{text}</span>
         {imageUrl && <img src={imageUrl} />}

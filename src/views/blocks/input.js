@@ -42,6 +42,9 @@ const block = {
     "Filled text fields have more visual emphasis than outlined text fields, making them stand out when surrounded by other content and components.",
   previewImageUrl: text,
   category: "Controls",
+  defaultInteractiveOptions: {
+    field: "field_name",
+  },
   defaultData: {
     placeholder: "Логин",
     placeholderColor: "#7F7F7F",
@@ -67,6 +70,9 @@ const block = {
       width: { type: "number", name: "Width" },
       height: { type: "number", name: "Height" },
     },
+  },
+  interactive: {
+    field: { type: "string", name: "Field name" },
   },
 };
 

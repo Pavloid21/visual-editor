@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 import { Label } from "./Input";
 
@@ -24,7 +24,7 @@ const Container = styled.span`
     border: 1px solid var(--neo-gray);
     margin-right: 8px;
     background: ${(props) => props.color};
-    &: hover {
+    &:hover {
       cursor: pointer;
     }
   }
@@ -70,20 +70,10 @@ const Container = styled.span`
 const ColorPicker = ({ value, onChange, ...rest }) => {
   const colorRef = useRef(null);
 
-  const handleColorClick = () => {
-    console.log("colorRef.current :>> ", colorRef.current);
-    const event = new Event("click", { bubbles: true });
-    colorRef.current.focus();
-    colorRef.current.dispatchEvent(
-      new KeyboardEvent("keyup", { key: "Enter" })
-    );
-  };
-
   return (
     <Wrapper>
       {rest.label && <Label>{rest.label}</Label>}
       <Container color={value}>
-        {/* <span className="swatch" onClick={handleColorClick}></span> */}
         <input ref={colorRef} type="color" value={value} onChange={onChange} />
         <input type="text" value={value} onChange={onChange} {...rest} />
       </Container>

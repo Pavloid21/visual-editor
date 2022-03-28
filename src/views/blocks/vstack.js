@@ -29,7 +29,7 @@ const VStack = styled.div`
   padding-left: ${(props) => props.padding?.left}px;
   padding-right: ${(props) => props.padding?.right}px;
   box-sizing: border-box;
-  overflow: auto;
+  gap: ${(props) => props.spacing}px;
   border-radius: ${(props) => `
     ${props.corners?.topLeftRadius || 0}px 
     ${props.corners?.topRightRadius || 0}px 
@@ -41,7 +41,7 @@ const VStack = styled.div`
 const SortableContainer = sortableContainer(
   ({ drop, backgroundColor, listItems, settingsUI, ...props }) => {
     return (
-      <Wrapper id={props.id} {...settingsUI}>
+      <Wrapper id={props.id} {...settingsUI} scroll={props.scroll}>
         <VStack
           {...settingsUI}
           {...props}
@@ -124,6 +124,8 @@ const block = {
     backgroundColor: "#C6C6C6",
     distribution: "",
     wrapContent: "",
+    spacing: 0,
+    scroll: false,
     padding: {
       top: "100",
       bottom: "100",
@@ -143,6 +145,8 @@ const block = {
     backgroundColor: { type: "color", name: "Background color" },
     distribution: { type: "string", name: "Distribution" },
     wrapContent: { type: "string", name: "Wrap content" },
+    spacing: { type: "number", name: "Spacing" },
+    scroll: { type: "boolean", name: "Scroll" },
     padding: {
       top: {
         type: "number",

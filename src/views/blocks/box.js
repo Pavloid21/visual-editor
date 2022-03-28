@@ -16,7 +16,10 @@ const Box = styled.div`
   border: ${(props) => `${props.borderWidth}px solid ${props.borderColor}`};
   width: ${(props) => (props.size?.width ? props.size.width + "px" : "100%")};
   height: ${(props) => props.size?.height}px;
-  background-color: ${(props) => props.backgroundColor};
+  background-color: ${(props) =>
+    props.backgroundColor?.indexOf("#") >= 0
+      ? props.backgroundColor
+      : "transparent"};
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -25,7 +28,7 @@ const Box = styled.div`
 const SortableContainer = sortableContainer(
   ({ drop, backgroundColor, listItems, settingsUI, ...props }) => {
     return (
-      <Wrapper id={props.id}>
+      <Wrapper id={props.id} {...settingsUI}>
         <Box
           {...settingsUI}
           {...props}
@@ -66,7 +69,7 @@ const Component = ({ settingsUI, uuid, listItems, ...props }) => {
   }));
 
   const isActive = canDrop && isOver;
-  let backgroundColor = "transparent";
+  let backgroundColor = settingsUI.backgroundColor;
   if (isActive) {
     backgroundColor = "#f1f8ff";
   }
@@ -86,11 +89,11 @@ const Component = ({ settingsUI, uuid, listItems, ...props }) => {
   return (
     <SortableContainer
       drop={drop}
-      backgroundColor={backgroundColor}
       onSortEnd={onSortEnd}
       listItems={listItems}
       {...settingsUI}
       {...props}
+      backgroundColor={backgroundColor}
       distance={1}
     />
   );
@@ -107,6 +110,7 @@ const block = {
   defaultData: {
     borderColor: "#EFEFEF",
     borderWidth: 1,
+    backgroundColor: "#FFFFFF",
     size: {
       height: 56,
       width: 100,
@@ -116,6 +120,7 @@ const block = {
   config: {
     borderColor: { type: "color", name: "Border color" },
     borderWidth: { type: "number", name: "Border width" },
+    backgroundColor: { type: "color", name: "Background color" },
     size: {
       height: {
         type: "number",

@@ -9,8 +9,8 @@ const Wrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  flex: ${(props) =>
-    props.wrapContent === "WRAPCONTENTHEIGHT" ? "0 1 auto" : ""};
+  flex: ${(props) => props.wrapContent === "WRAPCONTENTHEIGHT" && "0 1 auto"};
+  ${(props) => props.scroll && "flex: 1 1 auto; overflow-y: auto"};
 `;
 
 export default Wrapper;

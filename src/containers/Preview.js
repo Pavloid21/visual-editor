@@ -70,7 +70,7 @@ const ButtonGroup = styled.div`
 const Container = styled.div`
   height: 100%;
   background-color: ${(props) => props.backgroundColor};
-  overflow: auto;
+  /* overflow: auto; */
   position: relative;
   display: flex;
   flex-direction: column;

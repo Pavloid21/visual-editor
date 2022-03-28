@@ -15,6 +15,10 @@ const Label = styledComponents.div`
     text-align: ${(props) => props.textAlignment};
     color: ${(props) => props.textColor};
     font-size: ${(props) => props.fontSize}px;
+    padding-top: ${(props) => props.padding?.top}px;
+    padding-bottom: ${(props) => props.padding?.bottom}px;
+    padding-left: ${(props) => props.padding?.left}px;
+    padding-right: ${(props) => props.padding?.right}px;
   }
 `;
 
@@ -47,6 +51,12 @@ const block = {
       width: 100,
       height: 48,
     },
+    padding: {
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+    },
     fontWeight: "REGULAR",
   },
   config: {
@@ -59,6 +69,24 @@ const block = {
     size: {
       width: { type: "number", name: "Width" },
       height: { type: "number", name: "Height" },
+    },
+    padding: {
+      top: {
+        type: "number",
+        name: "Top",
+      },
+      bottom: {
+        type: "number",
+        name: "Bottom",
+      },
+      left: {
+        type: "number",
+        name: "Left",
+      },
+      right: {
+        type: "number",
+        name: "Right",
+      },
     },
   },
 };

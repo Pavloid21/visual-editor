@@ -109,8 +109,8 @@ const Component = ({ settingsUI, uuid, listItems, ...props }) => {
       backgroundColor={backgroundColor}
       onSortEnd={onSortEnd}
       listItems={listItems}
-      settingsUI={settingsUI}
       {...props}
+      settingsUI={settingsUI}
       distance={1}
     />
   );
