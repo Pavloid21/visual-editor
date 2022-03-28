@@ -125,7 +125,9 @@ const TopBar = () => {
       </div>
       <div>
         <div>
-          <Button onClick={handleSaveApplication}>Save application</Button>
+          <Button onClick={handleSaveApplication} disabled>
+            Save application
+          </Button>
           <HideRight className="icon" onClick={handleHideRight} />
           <Settings className="icon" />
         </div>
