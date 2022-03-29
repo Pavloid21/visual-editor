@@ -13,6 +13,9 @@ import actionTypes from "../../constants/actionTypes";
 import renderHandlebars from "../../utils/renderHandlebars";
 
 const SearchBar = styled.div`
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
   & > input {
     pointer-events: none;
     &::placeholder {
@@ -42,7 +45,15 @@ const SearchBar = styled.div`
 `;
 
 const SortableContainer = sortableContainer(
-  ({ drop, backgroundColor, listItems, text, placeholder, settingsUI, ...props }) => {
+  ({
+    drop,
+    backgroundColor,
+    listItems,
+    text,
+    placeholder,
+    settingsUI,
+    ...props
+  }) => {
     return (
       <Wrapper id={props.id}>
         <SearchBar

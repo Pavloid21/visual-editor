@@ -13,13 +13,12 @@ import lazyvstack from "../../assets/lazyvstack.svg";
 import Wrapper from "../../utils/wrapper";
 
 const LazyVStack = styled.div`
-  overflow-y: auto;
+  flex: 1 1 auto;
   background-color: ${(props) =>
     props.backgroundColor?.indexOf("#") >= 0
       ? props.backgroundColor
       : "transparent"};
   display: flex;
-  gap: ${props => props.spacing}px;
   justify-content: ${(props) =>
     props.distribution === "SPACEBETWEEN"
       ? "space-between"
@@ -33,13 +32,13 @@ const LazyVStack = styled.div`
     return props.alignment;
   }};
   flex-direction: column;
-  flex: 1 1 auto;
   padding-top: ${(props) => props.padding?.top}px;
   padding-bottom: ${(props) => props.padding?.bottom}px;
   padding-left: ${(props) => props.padding?.left}px;
   padding-right: ${(props) => props.padding?.right}px;
   box-sizing: border-box;
-  & .lazevstack_row {
+  gap: ${(props) => props.spacing}px;
+  & .lazyvstack_row {
     height: ${(props) => props.rowHeight}px;
     display: flex;
     align-items: center;
@@ -49,7 +48,7 @@ const LazyVStack = styled.div`
 const SortableContainer = sortableContainer(
   ({ drop, backgroundColor, listItems, settingsUI, ...props }) => {
     return (
-      <Wrapper id={props.id}>
+      <Wrapper id={props.id} scroll>
         <LazyVStack
           {...settingsUI}
           {...props}
@@ -60,7 +59,7 @@ const SortableContainer = sortableContainer(
           {listItems &&
             renderHandlebars(listItems, "document2").components.map(
               (component) => {
-                return <div className="lazevstack_row">{component}</div>;
+                return <div className="lazyvstack_row">{component}</div>;
               }
             )}
         </LazyVStack>

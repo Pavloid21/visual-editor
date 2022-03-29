@@ -79,6 +79,8 @@ const Container = styled.div`
   }
   & > :first-child {
     overflow: initial;
+    max-height: 100%;
+    display: flex;
   }
 `;
 
