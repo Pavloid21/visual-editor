@@ -15,6 +15,7 @@ import topappbar from "./topappbar";
 import lazyvstack from "./lazyvstack";
 import divider from "./divider";
 import list from "./list";
+import collection from "./collection";
 
 const blocks = {
   hstack,
@@ -33,6 +34,7 @@ const blocks = {
   lazyvstack,
   divider,
   list,
+  collection,
   screen: {
     previewImageUrl: screen,
     name: "screen",
