@@ -216,7 +216,7 @@ export default function LeftSidebar({ children, ...props }) {
     const screenLayouts = availableScreenes.map((screen) => {
       if (screen.uuid === selectedScreen) {
         return {
-          layout: layout,
+          layout,
           uuid: screen.uuid,
         };
       }

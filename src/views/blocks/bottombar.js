@@ -49,7 +49,7 @@ const Component = ({ settingsUI, ...props }) => {
     buttons.push(navigationItems[index]);
   }
   return (
-    <Wrapper id={props.id} style={{ position: "sticky", bottom: 0 }}>
+    <Wrapper id={props.id} style={{ position: "sticky", bottom: 0, marginTop: "auto" }}>
       <BottomBar {...settingsUI} {...props}>
         {buttons.map((item, index) => {
           return (
