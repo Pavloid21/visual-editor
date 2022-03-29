@@ -5,13 +5,13 @@ import renderHandlebars from "../../utils/renderHandlebars";
 import styled from "styled-components";
 import { sortableContainer } from "react-sortable-hoc";
 import { arrayMoveImmutable } from "array-move";
-import { elevation } from "../../constants/classes";
 import { observer } from "../../utils/observer";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import actionTypes from "../../constants/actionTypes";
 import card from "../../assets/card.svg";
 import Wrapper from "../../utils/wrapper";
+import { hexToRgb } from "../../constants/utils";
 
 const Card = styled.div`
   box-sizing: border-box;
@@ -26,7 +26,10 @@ const Card = styled.div`
   padding-left: ${(props) => props.padding?.left}px;
   height: ${(props) =>
     props.size?.height ? props.size?.height + "px" : "auto"};
-  box-shadow: ${(props) => elevation[props.elevation] || "none"};
+  box-shadow: ${(props) => {
+    const RGB = hexToRgb(props.shadow?.color);
+    return `${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px 8px rgba(${RGB.r}, ${RGB.g}, ${RGB.b}, ${props.shadow?.opacity})`;
+  }};
   gap: ${(props) => props.spacing}px;
   border-radius: ${(props) => `
     ${props.corners?.topLeftRadius}px 
@@ -136,11 +139,23 @@ const block = {
     size: {
       height: 0,
     },
+    shape: {
+      type: "ROUND",
+      radius: 20,
+    },
     corners: {
       topLeftRadius: 20,
       topRightRadius: 20,
       bottomLeftRadius: 0,
       bottomRightRadius: 0,
+    },
+    shadow: {
+      color: "#000000",
+      opacity: 0.5,
+      offsetSize: {
+        width: 0,
+        height: 0,
+      },
     },
   },
   listItems: [],
@@ -149,11 +164,23 @@ const block = {
     alignment: { type: "string", name: "Alignment" },
     backgroundColor: { type: "color", name: "Background color" },
     spacing: { type: "number", name: "Spacing" },
+    shape: {
+      type: { type: "string", name: "Type" },
+      radius: { type: "number", name: "Radius" },
+    },
     corners: {
       topLeftRadius: { type: "number", name: "Top left radius" },
       topRightRadius: { type: "number", name: "Top right radius" },
       bottomLeftRadius: { type: "number", name: "Bottom left radius" },
       bottomRightRadius: { type: "number", name: "Bottom right radius" },
+    },
+    shadow: {
+      color: { type: "color", name: "Shadow color" },
+      opacity: { type: "number", name: "Opacity" },
+      offsetSize: {
+        width: { type: "number", name: "Width" },
+        height: { type: "number", name: "Height" },
+      },
     },
     padding: {
       top: {
