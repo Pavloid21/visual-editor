@@ -55,7 +55,7 @@ const SortableContainer = sortableContainer(
     ...props
   }) => {
     return (
-      <Wrapper id={props.id}>
+      <Wrapper id={props.id} style={{ maxHeight: "100%" }}>
         <SearchBar
           {...props.settingsUI}
           {...props}
