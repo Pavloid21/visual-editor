@@ -1,7 +1,6 @@
-import React from "react";
 import styled from "styled-components";
 
-const NeoButton = styled.button`
+export const Button = styled.button<React.HTMLProps<HTMLButtonElement>>`
   background-color: var(--main-color);
   color: #ffffff;
   padding: 10px 32px;
@@ -47,9 +46,3 @@ const NeoButton = styled.button`
     }
   }}
 `;
-
-const Button = (props) => {
-  return <NeoButton {...props}>{props.children}</NeoButton>;
-};
-
-export default Button;

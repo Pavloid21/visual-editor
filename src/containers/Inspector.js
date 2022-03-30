@@ -8,7 +8,7 @@ import Input from "../components/Input";
 import { ReactComponent as Trash } from "../assets/trash.svg";
 import ColorPicker from "../components/ColorPicker";
 import { leadLetter } from "../constants/utils";
-import Button from "../components/Button";
+import {Button} from "../components/controls";
 
 const Division = styled.div`
   width: 100%;
