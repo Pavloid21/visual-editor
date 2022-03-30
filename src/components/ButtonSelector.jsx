@@ -34,9 +34,6 @@ const ButtonGroup = styled.div`
 
 const ButtonSelector = (props) => {
   const { label, variants, titles, value } = props;
-  const handleValueChange = (nextValue) => {
-    props.onChange(nextValue);
-  };
   return (
     <Container>
       {label && <Label>{label}</Label>}
@@ -45,7 +42,7 @@ const ButtonSelector = (props) => {
           return (
             <Button
               className={`sm ${variant !== value && "secondary"}`}
-              onClick={() => handleValueChange(variant)}
+              onClick={() => props.onChange(variant)}
             >
               {titles[index]}
             </Button>
