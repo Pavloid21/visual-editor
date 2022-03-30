@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import styled from "styled-components";
 import Button from "./Button";
 import { Label } from "./Input";
@@ -34,22 +34,12 @@ const ButtonGroup = styled.div`
 
 const ButtonSelector = (props) => {
   const { label, variants, titles, value } = props;
-  const inputRef = useRef(null);
   const handleValueChange = (nextValue) => {
-    let event = new Event("input", { bubbles: true });
-    event.simulated = true;
-    inputRef.current.value = nextValue;
     props.onChange(nextValue);
   };
   return (
     <Container>
       {label && <Label>{label}</Label>}
-      <input
-        type="text"
-        ref={inputRef}
-        {...props}
-        style={{ visibility: "hidden" }}
-      />
       <ButtonGroup>
         {variants.map((variant, index) => {
           return (
