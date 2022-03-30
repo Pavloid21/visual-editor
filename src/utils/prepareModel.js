@@ -64,16 +64,16 @@ export const buildJSONitem = (block, mode) => {
   return data;
 };
 
-export const prepareJSON = (initial, layout, appBar, bottomBar, mode) => {
+export const prepareJSON = (initial, layout, topAppBar, bottomBar, mode) => {
   initial.listItems = layout[0]
     ? layout.map((block) => {
         return buildJSONitem(block, mode);
       })
     : [];
-  if (appBar) {
-    initial.appBar = buildJSONitem(appBar, mode);
+  if (topAppBar) {
+    initial.topAppBar = buildJSONitem(topAppBar, mode);
   } else {
-    delete initial.appBar;
+    delete initial.topAppBar;
   }
   if (bottomBar) {
     initial.bottomBar = buildJSONitem(bottomBar, mode);
@@ -86,7 +86,7 @@ export const snippet = (
   initial,
   api,
   layout,
-  appBar,
+  topAppBar,
   bottomBar,
   mode = "edit"
 ) => {
@@ -105,7 +105,7 @@ export const snippet = (
         params && `"params": {${params.join(",")}}`
       }});`;
     });
-    prepareJSON(reference, layout, appBar, bottomBar, mode);
+    prepareJSON(reference, layout, topAppBar, bottomBar, mode);
     let jsonString = JSON.stringify(reference, null, 4);
     constants.push(`return ${jsonString}`);
     return constants.join("\r\n");

@@ -51,13 +51,13 @@ const buildLayout = ({ screen, object }) => {
       },
     };
   }
-  if (object.appBar) {
-    action.appBar = {
+  if (object.topAppBar) {
+    action.topAppBar = {
       settingsUI: "topappbar",
       uuid: v4(),
-      data: {
-        ...object.appBar.settingsUI,
-        appBarItems: object.appBar.appBarItems,
+      settingsUI: {
+        ...object.topAppBar.settingsUI,
+        topAppBarItems: object.topAppBar.topAppBarItems,
       },
     };
   }
@@ -106,14 +106,14 @@ const cloneToList = (tree, uuid) => {
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case actionTypes.PUSH_TOPAPPBAR:
-      const appBar = {
+      const topAppBar = {
         uuid: uuidv4(),
         blockId: action.blockId,
         settingsUI: {
           ...getData(blocks[action.blockId].defaultData),
         },
       };
-      return { ...state, appBar };
+      return { ...state, topAppBar };
     case actionTypes.PUSH_BOTTOMBAR:
       const bottomBar = {
         uuid: uuidv4(),
@@ -133,14 +133,14 @@ export default function reducer(state = initialState, action) {
       bar.settingsUI.navigationItems = extendedItems;
       return { ...state, bottomBar: { ...bar } };
     case actionTypes.ADD_TOPAPPBAR_ITEM:
-      const nextItems = [...state.appBar.settingsUI.appBarItems];
+      const nextItems = [...state.topAppBar.settingsUI.topAppBarItems];
       nextItems.push({
-        ...blocks.topappbar.defaultData.appBarItems[0],
+        ...blocks.topappbar.defaultData.topAppBarItems[0],
         uuid: uuidv4(),
       });
-      const abar = { ...state.appBar };
-      abar.settingsUI.appBarItems = nextItems;
-      return { ...state, appBar: { ...abar } };
+      const abar = { ...state.topAppBar };
+      abar.settingsUI.topAppBarItems = nextItems;
+      return { ...state, topAppBar: { ...abar } };
     case actionTypes.REMOVE_BOTTOMBAR_ITEM:
       const newBarItems = [...state.bottomBar.settingsUI.navigationItems];
       newBarItems.splice(action.index, 1);
@@ -148,11 +148,11 @@ export default function reducer(state = initialState, action) {
       newBottomBar.settingsUI.navigationItems = newBarItems;
       return { ...state, bottomBar: { ...newBottomBar } };
     case actionTypes.REMOVE_TOPAPPBAR_ITEM:
-      const newAppBarItems = [...state.appBar.settingsUI.appBarItems];
+      const newAppBarItems = [...state.topAppBar.settingsUI.topAppBarItems];
       newAppBarItems.splice(action.index, 1);
-      const newAppBar = { ...state.appBar };
-      newAppBar.settingsUI.appBarItems = newAppBarItems;
-      return { ...state, appBar: { ...newAppBar } };
+      const newAppBar = { ...state.topAppBar };
+      newAppBar.settingsUI.topAppBarItems = newAppBarItems;
+      return { ...state, topAppBar: { ...newAppBar } };
     case actionTypes.PUSH_BLOCK:
       const listItems = blocks[action.blockId].listItems;
       let newBlock = {
@@ -243,7 +243,7 @@ export default function reducer(state = initialState, action) {
           ? {
               ...state.bottomBar,
             }
-          : { ...state.appBar });
+          : { ...state.topAppBar });
       if (action.parentKey && Array.isArray(action.parentKey)) {
         element.settingsUI[action.parentKey[1]][action.parentKey[0]][
           action.key
@@ -288,8 +288,8 @@ export default function reducer(state = initialState, action) {
       if (action.blockUuid === state.bottomBar?.uuid) {
         delete stateReference.bottomBar;
       }
-      if (action.blockUuid === state.appBar?.uuid) {
-        delete stateReference.appBar;
+      if (action.blockUuid === state.topAppBar?.uuid) {
+        delete stateReference.topAppBar;
       }
       return {
         ...stateReference,
@@ -306,7 +306,7 @@ export default function reducer(state = initialState, action) {
         ...state,
         blocks: [...action.layout],
         bottomBar: action.bottomBar,
-        appBar: action.appBar,
+        topAppBar: action.topAppBar,
       };
     case actionTypes.SELECT_SCREEN:
       let nextScreenState = { ...state };
@@ -351,8 +351,8 @@ export default function reducer(state = initialState, action) {
       if (action.blockUuid === state.bottomBar?.uuid) {
         delete stateRef.bottomBar;
       }
-      if (action.blockUuid === state.appBar?.uuid) {
-        delete stateRef.appBar;
+      if (action.blockUuid === state.topAppBar?.uuid) {
+        delete stateRef.topAppBar;
       }
       return {
         ...stateRef,

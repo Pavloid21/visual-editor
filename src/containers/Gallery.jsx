@@ -61,7 +61,7 @@ const Gallery = (props) => {
   const output = useSelector((state) => state.output.screen);
   const selectedScreen = useSelector((state) => state.layout.selectedScreen);
   const layout = useSelector((state) => state.layout.blocks);
-  const appBar = useSelector((state) => state.layout.appBar);
+  const topAppBar = useSelector((state) => state.layout.topAppBar);
   const api = useSelector((state) => state.api);
   const bottomBar = useSelector((state) => state.layout.bottomBar);
   useEffect(() => {
@@ -72,7 +72,7 @@ const Gallery = (props) => {
       },
       api,
       layout,
-      appBar,
+      topAppBar,
       bottomBar,
       "code"
     );

@@ -9,7 +9,7 @@ import { arrayMoveImmutable } from "array-move";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import actionTypes from "../../constants/actionTypes";
-import lists from "../../assets/lists.svg";
+import collection from "../../assets/collection.svg";
 import Wrapper from "../../utils/wrapper";
 
 const Collection = styled.div`
@@ -126,7 +126,7 @@ const block = {
   title: "Collection",
   description:
     "A container that presents rows of data arranged in a single column, optionally providing the ability to select one or more members.",
-  previewImageUrl: lists,
+  previewImageUrl: collection,
   category: "Layouts",
   defaultInteractiveOptions: {
     dataSource: "",

@@ -81,6 +81,7 @@ const Container = styled.div`
     overflow: initial;
     max-height: 100%;
     display: flex;
+    flex-direction: column;
   }
 `;
 

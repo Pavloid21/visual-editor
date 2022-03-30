@@ -23,7 +23,7 @@ const Code = (props) => {
   const api = useSelector((state) => state.api);
   const bottomBar = useSelector((state) => state.layout.bottomBar);
   const selectedScreen = useSelector((state) => state.layout.selectedScreen);
-  const appBar = useSelector((state) => state.layout.appBar);
+  const topAppBar = useSelector((state) => state.layout.topAppBar);
   const blocks = useSelector((state) => state.layout.blocks);
   const initial = useSelector((state) => state.output);
   const snippets = useSelector((state) => state.layout.snippets);
@@ -37,7 +37,7 @@ const Code = (props) => {
         },
         api,
         blocks,
-        appBar,
+        topAppBar,
         bottomBar,
         "code"
       );
@@ -48,7 +48,7 @@ const Code = (props) => {
         selectedScreen,
       });
     }
-  }, [api, initial, blocks, bottomBar, appBar, code]);
+  }, [api, initial, blocks, bottomBar, topAppBar, code]);
 
   return (
     <Container {...props}>

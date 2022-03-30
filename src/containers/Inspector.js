@@ -189,8 +189,8 @@ class Inspector extends Component {
       findInTree(this.props.layout.blocks, blockUuid) ||
       (this.props.layout.bottomBar?.uuid === blockUuid &&
         this.props.layout.bottomBar) ||
-      (this.props.layout.appBar?.uuid === blockUuid &&
-        this.props.layout.appBar);
+      (this.props.layout.topAppBar?.uuid === blockUuid &&
+        this.props.layout.topAppBar);
 
     if (!block) return null;
 
@@ -248,12 +248,12 @@ class Inspector extends Component {
             </Button>
           </div>
         )}
-        {block.settingsUI.appBarItems && (
+        {block.settingsUI.topAppBarItems && (
           <div>
             <Division>
               <span>App bar items</span>
             </Division>
-            {block.settingsUI.appBarItems.map((element, index) => {
+            {block.settingsUI.topAppBarItems.map((element, index) => {
               return (
                 <div key={`navItem_${index}`}>
                   <div
@@ -273,10 +273,10 @@ class Inspector extends Component {
                     </Division>
                   </div>
                   {this.parseConfig(
-                    config.appBarItems[0],
+                    config.topAppBarItems[0],
                     blockUuid,
-                    block.settingsUI.appBarItems[index],
-                    [index, "appBarItems"]
+                    block.settingsUI.topAppBarItems[index],
+                    [index, "topAppBarItems"]
                   )}
                 </div>
               );

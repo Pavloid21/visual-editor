@@ -46,10 +46,10 @@ const Icon = styled.div`
 `;
 
 const Component = ({ settingsUI, ...props }) => {
-  const { appBarItems } = settingsUI;
+  const { topAppBarItems } = settingsUI;
   const buttons = [];
-  for (let index in appBarItems) {
-    buttons.push(appBarItems[index]);
+  for (let index in topAppBarItems) {
+    buttons.push(topAppBarItems[index]);
   }
   return (
     <Wrapper id={props.id} style={{ padding: 0 }}>
@@ -95,7 +95,7 @@ const block = {
     action: {
       url: "backScreen",
     },
-    appBarItems: [
+    topAppBarItems: [
       {
         iconUrl: "https://icons.getbootstrap.com/assets/icons/search.svg",
       },
@@ -119,7 +119,7 @@ const block = {
     action: {
       url: { type: "string", name: "URL" },
     },
-    appBarItems: [
+    topAppBarItems: [
       {
         iconUrl: { type: "string", name: "Icon URL" },
       },

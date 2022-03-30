@@ -16,7 +16,7 @@ import HighlightedElement from "../components/HighlightedElement";
 const App = () => {
   const layout = useSelector((state) => state.layout);
   const bottomBar = useSelector((state) => state.layout.bottomBar);
-  const appBar = useSelector((state) => state.layout.appBar);
+  const topAppBar = useSelector((state) => state.layout.topAppBar);
   const config = useSelector((state) => state.config);
   const barState = useSelector((state) => state.sideBar);
   const dispatch = useDispatch();
@@ -90,7 +90,7 @@ const App = () => {
     layout.blocks,
     layout.documentId,
     bottomBar,
-    appBar
+    topAppBar
   );
   const innerHTML = schema;
   const { previewMode } = config;

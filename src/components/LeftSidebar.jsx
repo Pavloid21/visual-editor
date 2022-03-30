@@ -44,7 +44,7 @@ const Icon = styled.img`
 
 export default function LeftSidebar({ children, ...props }) {
   const layout = useSelector((state) => state.layout.blocks);
-  const appBar = useSelector((state) => state.layout.appBar);
+  const topAppBar = useSelector((state) => state.layout.topAppBar);
   const api = useSelector((state) => state.api);
   const output = useSelector((state) => state.output.screen);
   const bottomBar = useSelector((state) => state.layout.bottomBar);
@@ -83,10 +83,10 @@ export default function LeftSidebar({ children, ...props }) {
     root.children = treeData.value.listItems.map((block) => {
       return buildTreeitem(block);
     });
-    if (appBar) {
+    if (topAppBar) {
       root.children.unshift({
         title: "TOPAPPBAR",
-        subtitle: appBar?.uuid,
+        subtitle: topAppBar?.uuid,
       });
     }
     if (bottomBar) {
@@ -106,11 +106,12 @@ export default function LeftSidebar({ children, ...props }) {
     };
     const traverse = function (tree) {
       return tree.map((item) => {
-        const { settingsUI, action, listItems } = item;
+        const { settingsUI, action, listItems, ...interactive } = item;
         let reference = {};
         reference.uuid = v4();
         reference.blockId = item.type.toLowerCase();
         reference.settingsUI = settingsUI;
+        reference.interactive = interactive;
         if (listItems) {
           reference.listItems = traverse(listItems);
         }
@@ -135,13 +136,13 @@ export default function LeftSidebar({ children, ...props }) {
         },
       };
     }
-    if (object.appBar) {
-      action.appBar = {
-        settingsUI: "topappbar",
+    if (object.topAppBar) {
+      action.topAppBar = {
+        blockId: "topappbar",
         uuid: v4(),
-        data: {
-          ...object.appBar.settingsUI,
-          appBarItems: object.appBar.appBarItems,
+        settingsUI: {
+          ...object.topAppBar.settingsUI,
+          topAppBarItems: object.topAppBar.topAppBarItems,
         },
       };
     }
@@ -195,7 +196,10 @@ export default function LeftSidebar({ children, ...props }) {
           .then((resolves) => {
             const layouts = [];
             resolves.forEach((result) => {
-              if (result.status === "fulfilled" && result.value?.object.screen) {
+              if (
+                result.status === "fulfilled" &&
+                result.value?.object.screen
+              ) {
                 const { newBlock, action, screenEndpoint } = buildLayout(
                   result.value
                 );
@@ -204,7 +208,7 @@ export default function LeftSidebar({ children, ...props }) {
                   value: newBlock,
                   action,
                   screenEndpoint,
-                  logic: result.value.logic[0]
+                  logic: result.value.logic[0],
                 });
               }
             });
@@ -247,7 +251,7 @@ export default function LeftSidebar({ children, ...props }) {
 
     setScreenes(layouts);
     setTree(layouts.map((layout) => prepareTree(layout)));
-  }, [layout, appBar, bottomBar, output]);
+  }, [layout, topAppBar, bottomBar, output]);
 
   useEffect(() => {
     const screenLayout = availableScreenes.filter(
@@ -261,7 +265,7 @@ export default function LeftSidebar({ children, ...props }) {
         },
         api,
         layout,
-        appBar,
+        topAppBar,
         bottomBar,
         "code"
       );
@@ -316,7 +320,7 @@ export default function LeftSidebar({ children, ...props }) {
             },
             api,
             layout,
-            appBar,
+            topAppBar,
             bottomBar
           ),
         },

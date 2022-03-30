@@ -6,7 +6,7 @@ import { ReactComponent as IPhone } from "./iPhone_X.svg";
 const Wrapper = styled.div``;
 
 const IphoneX = (props) => {
-  const appBar = useSelector((state) => state.layout.appBar);
+  const topAppBar = useSelector((state) => state.layout.topAppBar);
   return (
     <>
       <Wrapper>
@@ -18,8 +18,8 @@ const IphoneX = (props) => {
             borderRadius: "37px",
             overflow: "hidden",
             padding: "56px 26px 0px",
-            backgroundColor: appBar
-              ? appBar.data.backgroundColor
+            backgroundColor: topAppBar
+              ? topAppBar.blockId.backgroundColor
               : "rgb(255, 255, 255)",
             clipPath: "url(#maskRect1)",
           }}

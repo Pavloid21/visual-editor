@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 const Output = (props) => {
   const blocks = useSelector((state) => state.layout.blocks);
   const bottomBar = useSelector((state) => state.layout.bottomBar);
-  const appBar = useSelector((state) => state.layout.appBar);
+  const topAppBar = useSelector((state) => state.layout.topAppBar);
   const initial = useSelector((state) => state.output);
   const code = useSelector((state) => state.code);
 
@@ -33,16 +33,16 @@ const Output = (props) => {
     } else {
       delete initial.bottomBar;
     }
-    if (appBar) {
-      initial.appBar = buildJSONitem(appBar);
+    if (topAppBar) {
+      initial.topAppBar = buildJSONitem(topAppBar);
     } else {
-      delete initial.appBar;
+      delete initial.topAppBar;
     }
   };
 
   useEffect(() => {
     prepareJSON();
-  }, [blocks, bottomBar, appBar, initial, code]);
+  }, [blocks, bottomBar, topAppBar, initial, code]);
 
   const handleSaveClick = () => {
     fetch(`/api/v1/admin/screens/${initial.screen.replace(/\s/g, "_")}`, {

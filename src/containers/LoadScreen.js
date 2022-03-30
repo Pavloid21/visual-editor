@@ -58,13 +58,13 @@ const LoadScreen = (props) => {
         },
       };
     }
-    if (object.appBar) {
-      action.appBar = {
+    if (object.topAppBar) {
+      action.topAppBar = {
         blockId: "topappbar",
         uuid: v4(),
         settingsUI: {
-          ...object.appBar.settingsUI,
-          appBarItems: object.appBar.appBarItems,
+          ...object.topAppBar.settingsUI,
+          topAppBarItems: object.topAppBar.topAppBarItems,
         },
       };
     }
