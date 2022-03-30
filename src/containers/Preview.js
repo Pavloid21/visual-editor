@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { useDrop } from "react-dnd";
-import { useDispatch, useSelector } from "react-redux";
-import { sortableContainer } from "react-sortable-hoc";
-import actionTypes, { ItemTypes } from "../constants/actionTypes";
-import { arrayMoveImmutable } from "array-move";
-import { observer } from "../utils/observer";
-import IphoneX from "../assets/mockups/IphoneX";
-import styled from "styled-components";
-import Code from "./Code";
-import Button from "../components/Button";
-import { ReactComponent as Screen } from "../assets/screen.svg";
-import { ReactComponent as Json } from "../assets/json.svg";
-import { ReactComponent as Reference } from "../assets/preview.svg";
-import { ReactComponent as Save } from "../assets/save.svg";
+import React, {useEffect, useState} from 'react';
+import {useDrop} from 'react-dnd';
+import {useDispatch, useSelector} from 'react-redux';
+import {sortableContainer} from 'react-sortable-hoc';
+import actionTypes, {ItemTypes} from '../constants/actionTypes';
+import {arrayMoveImmutable} from 'array-move';
+import {observer} from '../utils/observer';
+import IphoneX from '../assets/mockups/IphoneX';
+import styled from 'styled-components';
+import Code from './Code';
+import {ReactComponent as Screen} from '../assets/screen.svg';
+import {ReactComponent as Json} from '../assets/json.svg';
+import {ReactComponent as Reference} from '../assets/preview.svg';
+import {ReactComponent as Save} from '../assets/save.svg';
+import MobileSelect from './MobileSelect';
 
 const Bar = styled.div`
   height: 60px;
@@ -20,8 +20,8 @@ const Bar = styled.div`
   width: 100%;
   position: absolute;
   left: 0;
-  padding-left: ${(props) => (props.barState.left ? "437px" : "16px")};
-  padding-right: ${(props) => (props.barState.right ? "437px" : "16px")};
+  padding-left: ${(props) => (props.barState.left ? '437px' : '16px')};
+  padding-right: ${(props) => (props.barState.right ? '437px' : '16px')};
   padding-top: 10px;
   padding-bottom: 10px;
   display: flex;
@@ -40,30 +40,14 @@ const ServiceBar = styled.div`
   position: absolute;
   left: 0;
   bottom: 0;
-  padding-left: ${(props) => (props.barState?.left ? "437px" : "16px")};
-  padding-right: ${(props) => (props.barState?.right ? "437px" : "16px")};
+  padding-left: ${(props) => (props.barState?.left ? '437px' : '16px')};
+  padding-right: ${(props) => (props.barState?.right ? '437px' : '16px')};
   display: flex;
   justify-content: space-between;
   align-items: center;
   & .mode_selector {
     gap: 16px;
     display: flex;
-  }
-`;
-
-const ButtonGroup = styled.div`
-  & button:not(:last-child) {
-    border-radius: 4px 0px 0px 4px;
-    border-right: none !important;
-  }
-
-  & button:last-child {
-    border-radius: 0px 4px 4px 0px;
-    border-left: none !important;
-  }
-  & button.secondary {
-    border: 1px solid #8c8c8c;
-    color: #333333;
   }
 `;
 
@@ -85,32 +69,30 @@ const Container = styled.div`
   }
 `;
 
-const SortableContainer = sortableContainer(
-  ({ children, drop, backgroundColor }) => {
-    return (
-      <Container backgroundColor={backgroundColor} ref={drop}>
-        <div>
-          {children.map((child, index) => {
-            if (index !== children.length - 1) {
-              return child;
-            }
-            return null;
-          })}
-        </div>
-        {children[children.length - 1]}
-      </Container>
-    );
-  }
-);
+const SortableContainer = sortableContainer(({children, drop, backgroundColor}) => {
+  return (
+    <Container backgroundColor={backgroundColor} ref={drop}>
+      <div>
+        {children.map((child, index) => {
+          if (index !== children.length - 1) {
+            return child;
+          }
+          return null;
+        })}
+      </div>
+      {children[children.length - 1]}
+    </Container>
+  );
+});
 
 const Preview = (props) => {
-  const [{ canDrop, isOver }, drop] = useDrop(() => ({
+  const [{canDrop, isOver}, drop] = useDrop(() => ({
     accept: ItemTypes.BOX,
     drop: (item) => {
       return;
     },
     collect: (monitor) => ({
-      isOver: monitor.isOver({ shallow: true }),
+      isOver: monitor.isOver({shallow: true}),
       canDrop: monitor.canDrop(),
     }),
   }));
@@ -128,8 +110,8 @@ const Preview = (props) => {
   const initial = useSelector((state) => state.output);
 
   useEffect(() => {
-    const scrollY = localStorage.getItem("scrollY");
-    const bodyHeight = localStorage.getItem("bodyHeight");
+    const scrollY = localStorage.getItem('scrollY');
+    const bodyHeight = localStorage.getItem('bodyHeight');
     if (scrollY) {
       window.scrollTo(0, scrollY);
     }
@@ -138,20 +120,18 @@ const Preview = (props) => {
       window.scroll(0, scrollY);
     }
 
-    window.addEventListener("scroll", () => {
-      localStorage.setItem("scrollY", window.scrollY);
+    window.addEventListener('scroll', () => {
+      localStorage.setItem('scrollY', window.scrollY);
     });
   });
 
-  const onSortEnd = ({ oldIndex, newIndex, nodes }) => {
-    const newOrder = arrayMoveImmutable(nodes, oldIndex, newIndex).map((item) =>
-      item.node.getAttribute("id")
-    );
+  const onSortEnd = ({oldIndex, newIndex, nodes}) => {
+    const newOrder = arrayMoveImmutable(nodes, oldIndex, newIndex).map((item) => item.node.getAttribute('id'));
     observer.broadcast({
       layout,
       newOrder,
-      parentID: nodes[0].node.parentNode.getAttribute("id"),
-      event: "sorted",
+      parentID: nodes[0].node.parentNode.getAttribute('id'),
+      event: 'sorted',
     });
   };
 
@@ -177,59 +157,42 @@ const Preview = (props) => {
   };
 
   const isActive = canDrop && isOver;
-  let backgroundColor = "#FFFFFF";
+  let backgroundColor = '#FFFFFF';
   if (isActive) {
-    backgroundColor = "#f1f8ff";
+    backgroundColor = '#f1f8ff';
   }
 
   return (
     <>
       <Bar barState={barState}>
-        <ButtonGroup>
-          {editorMode === "editor" && (
-            <>
-              <Button className="sm">iOS</Button>
-              <Button className="sm secondary">Android</Button>
-            </>
-          )}
-        </ButtonGroup>
+        {editorMode === 'editor' && <MobileSelect editorMode={editorMode} />}
         <div className="mode_selector">
           <Screen
-            className={`icon ${editorMode === "editor" ? "active" : ""}`}
-            onClick={() => handleModeClick("editor")}
+            className={`icon ${editorMode === 'editor' ? 'active' : ''}`}
+            onClick={() => handleModeClick('editor')}
           />
-          <Json
-            className={`icon ${editorMode === "json" ? "active" : ""}`}
-            onClick={() => handleModeClick("json")}
-          />
+          <Json className={`icon ${editorMode === 'json' ? 'active' : ''}`} onClick={() => handleModeClick('json')} />
           <Reference
-            className={`icon ${editorMode === "preview" ? "active" : ""}`}
-            onClick={() => handleModeClick("preview")}
+            className={`icon ${editorMode === 'preview' ? 'active' : ''}`}
+            onClick={() => handleModeClick('preview')}
           />
         </div>
       </Bar>
       <div
         className="page-content-wrapper overflow-hidden d-flex justify-content-center"
-        style={{ position: "relative", transform: "scale(0.9)" }}
+        style={{position: 'relative', transform: 'scale(0.9)'}}
       >
-        {editorMode === "editor" && (
+        {editorMode === 'editor' && (
           <IphoneX>
-            <SortableContainer
-              drop={drop}
-              backgroundColor={backgroundColor}
-              onSortEnd={onSortEnd}
-              distance={1}
-            >
+            <SortableContainer drop={drop} backgroundColor={backgroundColor} onSortEnd={onSortEnd} distance={1}>
               {props.components}
             </SortableContainer>
           </IphoneX>
         )}
-        {editorMode === "json" && <Code show={isShowCode} />}
+        {editorMode === 'json' && <Code show={isShowCode} />}
       </div>
       <ServiceBar barState={barState}>
-        {editorMode === "json" && (
-          <Save className="icon" onClick={handleSaveSnippet} />
-        )}
+        {editorMode === 'json' && <Save className="icon" onClick={handleSaveSnippet} />}
       </ServiceBar>
     </>
   );

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import SideBarHeader from "./SideBarHeader";
 import Inspector from "../containers/Inspector";
 import Screen from "../containers/Screen";
-import Button from "../components/Button";
+import {Button} from "../components/controls";
 import actionTypes from "../constants/actionTypes";
 import ActionForm from "../containers/ActionForm";
 import { useSelector, useDispatch } from "react-redux";

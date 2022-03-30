@@ -12,7 +12,7 @@ import { Label } from "../components/Input";
 import fullScreenIcon from "../assets/full-screen.svg";
 import CustomModal from "../components/Modal";
 import { useModal } from "../utils/hooks";
-import Button from "../components/Button";
+import {Button} from "../components/controls";
 import ButtonSelector from "../components/ButtonSelector";
 import { useSelector, useDispatch } from "react-redux";
 import actionTypes from "../constants/actionTypes";

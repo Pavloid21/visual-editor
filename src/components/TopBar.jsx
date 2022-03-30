@@ -4,7 +4,7 @@ import { ReactComponent as Logo } from "../assets/logo.svg";
 import { ReactComponent as HideLeft } from "../assets/hide_left.svg";
 import { ReactComponent as HideRight } from "../assets/hide_right.svg";
 import { ReactComponent as Settings } from "../assets/settings.svg";
-import Button from "./Button";
+import {Button} from "components/controls";
 import { useDispatch, useSelector } from "react-redux";
 import actionTypes from "../constants/actionTypes";
 
