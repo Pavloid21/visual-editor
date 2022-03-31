@@ -1,7 +1,8 @@
 export interface IButtonSelector {
     label?: string;
     buttons: IButton[];
-    onChange: (button: string) => void;
+    onChange(button: string): void;
+    className?: string;
     value: string;
 }
 
