@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button} from '../../components/controls';
-import {Label} from '../Input';
+import {Label} from '../controls';
 import {ButtonGroup, Container} from '../../components/layouts';
 import {IButtonSelector} from './types';
 

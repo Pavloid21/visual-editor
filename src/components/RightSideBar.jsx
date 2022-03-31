@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import SideBarHeader from "./SideBarHeader";
-import Inspector from "../containers/Inspector";
-import Screen from "../containers/Screen";
-import {Button} from "../components/controls";
-import actionTypes from "../constants/actionTypes";
-import ActionForm from "../containers/ActionForm";
-import { useSelector, useDispatch } from "react-redux";
-import { ReactComponent as Plus } from "../assets/plus.svg";
-import { ReactComponent as Remove } from "../assets/trash.svg";
-import { ReactComponent as Pencil } from "../assets/pencil.svg";
-import Input from "./Input";
-import { useForm, useFieldArray, Controller } from "react-hook-form";
+import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
+import SideBarHeader from './SideBarHeader';
+import Inspector from '../containers/Inspector';
+import Screen from '../containers/Screen';
+import {Button} from '../components/controls';
+import actionTypes from '../constants/actionTypes';
+import ActionForm from '../containers/ActionForm';
+import {useSelector, useDispatch} from 'react-redux';
+import {ReactComponent as Plus} from '../assets/plus.svg';
+import {ReactComponent as Remove} from '../assets/trash.svg';
+import {ReactComponent as Pencil} from '../assets/pencil.svg';
+import {Input} from './controls';
+import {useForm, useFieldArray, Controller} from 'react-hook-form';
 
 const Container = styled.div`
   min-width: 422px;
@@ -57,7 +57,7 @@ const APIRow = styled.section`
   align-items: center;
 `;
 
-export default function RightSidebar({ children, ...props }) {
+export default function RightSidebar({children, ...props}) {
   const APIs = useSelector((state) => state.api.list);
   const activeTab = useSelector((state) => state.config.activeTab);
   const selectedBlock = useSelector((state) => state.layout.selectedBlockUuid);
@@ -72,19 +72,19 @@ export default function RightSidebar({ children, ...props }) {
     setValue,
     control,
     watch,
-    formState: { errors },
+    formState: {errors},
   } = useForm();
-  const { fields, append, replace, remove } = useFieldArray({
+  const {fields, append, replace, remove} = useFieldArray({
     control,
-    name: "headers",
+    name: 'headers',
   });
   const paramsFieldsArray = useFieldArray({
     control,
-    name: "params",
+    name: 'params',
   });
 
-  const watchFieldArray = watch("headers");
-  const watchParamsArray = watch("params");
+  const watchFieldArray = watch('headers');
+  const watchParamsArray = watch('params');
   const controlledFields = fields.map((field, index) => {
     return {
       ...field,
@@ -100,23 +100,23 @@ export default function RightSidebar({ children, ...props }) {
 
   const handleAddHeaderButton = () => {
     append({
-      key: "",
-      value: "",
+      key: '',
+      value: '',
     });
   };
 
   const handleAddParamButton = () => {
     paramsFieldsArray.append({
-      key: "",
-      value: "",
+      key: '',
+      value: '',
     });
   };
 
   const handleAddButton = () => {
-    resetField("varName");
-    resetField("url");
-    resetField("headers");
-    resetField("params");
+    resetField('varName');
+    resetField('url');
+    resetField('headers');
+    resetField('params');
     setAPIFormShow(true);
   };
 
@@ -138,10 +138,10 @@ export default function RightSidebar({ children, ...props }) {
 
   const handleItemClick = (index) => {
     setSelected(index);
-    setValue("varName", APIs[index].varName);
-    setValue("url", APIs[index].url);
-    setValue("headers", APIs[index].headers);
-    setValue("params", APIs[index].params);
+    setValue('varName', APIs[index].varName);
+    setValue('url', APIs[index].url);
+    setValue('headers', APIs[index].headers);
+    setValue('params', APIs[index].params);
     replace(APIs[index].headers);
     paramsFieldsArray.replace(APIs[index].params);
     setAPIFormShow(true);
@@ -159,12 +159,7 @@ export default function RightSidebar({ children, ...props }) {
         <Inspector display />
         {selectedAction && <ActionForm action={selectedAction} />}
         {activeTab === 5 && (
-          <Screen
-            category="screen"
-            display={activeTab === 5}
-            onPushBlock={() => {}}
-            onPushBlockInside={() => {}}
-          />
+          <Screen category="screen" display={activeTab === 5} onPushBlock={() => {}} onPushBlockInside={() => {}} />
         )}
         {!selectedBlock && !selectedAction && (
           <APIContainer>
@@ -181,28 +176,12 @@ export default function RightSidebar({ children, ...props }) {
                 <Controller
                   name="varName"
                   control={control}
-                  render={({ field }) => (
-                    <Input
-                      type="text"
-                      label="Endpoint name"
-                      clearable
-                      isWide
-                      {...field}
-                    />
-                  )}
+                  render={({field}) => <Input type="text" label="Endpoint name" clearable isWide {...field} />}
                 />
                 <Controller
                   name="url"
                   control={control}
-                  render={({ field }) => (
-                    <Input
-                      type="text"
-                      label="URL"
-                      clearable
-                      isWide
-                      {...field}
-                    />
-                  )}
+                  render={({field}) => <Input type="text" label="URL" clearable isWide {...field} />}
                 />
                 <div>
                   <span>Headers</span>
@@ -213,28 +192,14 @@ export default function RightSidebar({ children, ...props }) {
                     <Controller
                       name={`headers.${index}.key`}
                       control={control}
-                      render={({ field }) => {
-                        return (
-                          <Input
-                            placeholder="Key"
-                            label="Key"
-                            clearable
-                            {...field}
-                          />
-                        );
+                      render={({field}) => {
+                        return <Input placeholder="Key" label="Key" clearable {...field} />;
                       }}
                     />
                     <Controller
                       name={`headers.${index}.value`}
                       control={control}
-                      render={({ field }) => (
-                        <Input
-                          placeholder="Value"
-                          label="Value"
-                          clearable
-                          {...field}
-                        />
-                      )}
+                      render={({field}) => <Input placeholder="Value" label="Value" clearable {...field} />}
                     />
                     <Remove
                       className="icon"
@@ -253,28 +218,14 @@ export default function RightSidebar({ children, ...props }) {
                     <Controller
                       name={`params.${index}.key`}
                       control={control}
-                      render={({ field }) => {
-                        return (
-                          <Input
-                            placeholder="Key"
-                            label="Key"
-                            clearable
-                            {...field}
-                          />
-                        );
+                      render={({field}) => {
+                        return <Input placeholder="Key" label="Key" clearable {...field} />;
                       }}
                     />
                     <Controller
                       name={`params.${index}.value`}
                       control={control}
-                      render={({ field }) => (
-                        <Input
-                          placeholder="Value"
-                          label="Value"
-                          clearable
-                          {...field}
-                        />
-                      )}
+                      render={({field}) => <Input placeholder="Value" label="Value" clearable {...field} />}
                     />
                     <Remove
                       className="icon"
@@ -284,26 +235,18 @@ export default function RightSidebar({ children, ...props }) {
                     />
                   </RowContainer>
                 ))}
-                <Button onClick={handleSubmit(onSubmit)}>
-                  {isEditing ? "Edit" : "Save"} API
-                </Button>
+                <Button onClick={handleSubmit(onSubmit)}>{isEditing ? 'Edit' : 'Save'} API</Button>
               </form>
             )}
-            <div style={{ marginTop: "16px" }}>
+            <div style={{marginTop: '16px'}}>
               <span>API List</span>
             </div>
             {APIs.map((item, index) => {
               return (
-                <APIRow
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                  key={`api_${index}`}
-                >
+                <APIRow style={{display: 'flex', justifyContent: 'space-between'}} key={`api_${index}`}>
                   <span>{item.varName}</span>
                   <span>
-                    <Pencil
-                      className="icon"
-                      onClick={() => handleItemClick(index)}
-                    />
+                    <Pencil className="icon" onClick={() => handleItemClick(index)} />
                     <Remove
                       className="icon"
                       onClick={(e) => {

@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
-import { Label } from "./Input";
+import { Label } from "./controls";
 
 const Wrapper = styled.section`
   position: relative;
