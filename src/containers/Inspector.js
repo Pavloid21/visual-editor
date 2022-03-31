@@ -1,14 +1,13 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import actionTypes from "../constants/actionTypes";
-import blocks from "../views/blocks";
-import styled from "styled-components";
-import Input from "../components/Input";
-import { ReactComponent as Trash } from "../assets/trash.svg";
-import ColorPicker from "../components/ColorPicker";
-import { leadLetter } from "../constants/utils";
-import {Button} from "../components/controls";
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import actionTypes from '../constants/actionTypes';
+import blocks from '../views/blocks';
+import styled from 'styled-components';
+import {ReactComponent as Trash} from '../assets/trash.svg';
+import ColorPicker from '../components/ColorPicker';
+import {leadLetter} from '../constants/utils';
+import {Button, Input} from '../components/controls';
 
 const Division = styled.div`
   width: 100%;
@@ -47,7 +46,7 @@ class Inspector extends Component {
 
   parseConfig(config, blockUuid, endpoint, parentKey) {
     return Object.keys(config).map((el, index) => {
-      if (config[el].type === "string") {
+      if (config[el].type === 'string') {
         return (
           <div key={`${parentKey}_${index}`}>
             <Input
@@ -58,18 +57,11 @@ class Inspector extends Component {
               type="text"
               placeholder={config[el].name}
               value={endpoint ? endpoint[el] : null}
-              onChange={(e) =>
-                this.handleChangeBlockData(
-                  blockUuid,
-                  el,
-                  e.target.value,
-                  parentKey
-                )
-              }
+              onChange={(e) => this.handleChangeBlockData(blockUuid, el, e.target.value, parentKey)}
             />
           </div>
         );
-      } else if (config[el].type === "color") {
+      } else if (config[el].type === 'color') {
         return (
           <div className="form-group" key={`${parentKey}_${index}`}>
             <ColorPicker
@@ -78,18 +70,11 @@ class Inspector extends Component {
               isWide
               placeholder={config[el].name}
               value={endpoint ? endpoint[el] : null}
-              onChange={(e) =>
-                this.handleChangeBlockData(
-                  blockUuid,
-                  el,
-                  e.target.value,
-                  parentKey
-                )
-              }
+              onChange={(e) => this.handleChangeBlockData(blockUuid, el, e.target.value, parentKey)}
             />
           </div>
         );
-      } else if (config[el].type === "number") {
+      } else if (config[el].type === 'number') {
         return (
           <div className="form-group" key={`${parentKey}_${index}`}>
             <Input
@@ -100,39 +85,25 @@ class Inspector extends Component {
               className="form-control"
               placeholder={config[el].name}
               value={endpoint ? endpoint[el] : null}
-              onChange={(e) =>
-                this.handleChangeBlockData(
-                  blockUuid,
-                  el,
-                  e.target.value,
-                  parentKey
-                )
-              }
+              onChange={(e) => this.handleChangeBlockData(blockUuid, el, e.target.value, parentKey)}
             />
           </div>
         );
-      } else if (config[el].type === "boolean") {
+      } else if (config[el].type === 'boolean') {
         return (
           <div className="form-check" key={`${parentKey}_${index}`}>
             <label>
               <input
-                type={"checkbox"}
+                type={'checkbox'}
                 className="form-check-input"
                 checked={endpoint[el]}
-                onChange={(e) =>
-                  this.handleChangeBlockData(
-                    blockUuid,
-                    el,
-                    e.target.checked,
-                    parentKey
-                  )
-                }
+                onChange={(e) => this.handleChangeBlockData(blockUuid, el, e.target.checked, parentKey)}
               />
               {config[el].name}
             </label>
           </div>
         );
-      } else if (config[el].type === "array") {
+      } else if (config[el].type === 'array') {
         return (
           <div className="form-group" key={`${parentKey}_${index}`}>
             <Input
@@ -142,15 +113,10 @@ class Inspector extends Component {
               debounceTimeout={500}
               type="text"
               placeholder={config[el].name}
-              value={endpoint ? endpoint[el]?.join(",") : null}
+              value={endpoint ? endpoint[el]?.join(',') : null}
               onChange={(e) => {
-                const toArray = e.target.value.replace(/s/g, "").split(",");
-                return this.handleChangeBlockData(
-                  blockUuid,
-                  el,
-                  toArray,
-                  parentKey
-                );
+                const toArray = e.target.value.replace(/s/g, '').split(',');
+                return this.handleChangeBlockData(blockUuid, el, toArray, parentKey);
               }}
             />
           </div>
@@ -158,7 +124,7 @@ class Inspector extends Component {
       } else if (endpoint && !Array.isArray(endpoint[el])) {
         return (
           <section>
-            <Division style={{ marginTop: "16px" }}>
+            <Division style={{marginTop: '16px'}}>
               <span>{leadLetter(el)}</span>
             </Division>
             {this.parseConfig(config[el], blockUuid, endpoint[el], el)}
@@ -187,25 +153,22 @@ class Inspector extends Component {
     const blockUuid = this.props.layout.selectedBlockUuid;
     const block =
       findInTree(this.props.layout.blocks, blockUuid) ||
-      (this.props.layout.bottomBar?.uuid === blockUuid &&
-        this.props.layout.bottomBar) ||
-      (this.props.layout.topAppBar?.uuid === blockUuid &&
-        this.props.layout.topAppBar);
+      (this.props.layout.bottomBar?.uuid === blockUuid && this.props.layout.bottomBar) ||
+      (this.props.layout.topAppBar?.uuid === blockUuid && this.props.layout.topAppBar);
 
     if (!block) return null;
 
-    const { config, interactive } = blocks[block.blockId];
+    const {config, interactive} = blocks[block.blockId];
 
     return (
       <div
         style={{
-          padding: "8px 16px",
-          overflowY: "auto",
-          height: "calc(100% - 60px)",
+          padding: '8px 16px',
+          overflowY: 'auto',
+          height: 'calc(100% - 60px)',
         }}
       >
-        {interactive &&
-          this.parseConfig(interactive, blockUuid, block.interactive)}
+        {interactive && this.parseConfig(interactive, blockUuid, block.interactive)}
         {this.parseConfig(config, blockUuid, block.settingsUI)}
         {block.settingsUI.navigationItems && (
           <div>
@@ -227,12 +190,10 @@ class Inspector extends Component {
                       }}
                     />
                   </Division>
-                  {this.parseConfig(
-                    config.navigationItems[0],
-                    blockUuid,
-                    block.settingsUI.navigationItems[index],
-                    [index, "navigationItems"]
-                  )}
+                  {this.parseConfig(config.navigationItems[0], blockUuid, block.settingsUI.navigationItems[index], [
+                    index,
+                    'navigationItems',
+                  ])}
                   <hr />
                 </div>
               );
@@ -256,9 +217,7 @@ class Inspector extends Component {
             {block.settingsUI.topAppBarItems.map((element, index) => {
               return (
                 <div key={`navItem_${index}`}>
-                  <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
+                  <div style={{display: 'flex', justifyContent: 'space-between'}}>
                     <Division>
                       <span>Button {index + 1}</span>
                       <Trash
@@ -272,12 +231,10 @@ class Inspector extends Component {
                       />
                     </Division>
                   </div>
-                  {this.parseConfig(
-                    config.topAppBarItems[0],
-                    blockUuid,
-                    block.settingsUI.topAppBarItems[index],
-                    [index, "topAppBarItems"]
-                  )}
+                  {this.parseConfig(config.topAppBarItems[0], blockUuid, block.settingsUI.topAppBarItems[index], [
+                    index,
+                    'topAppBarItems',
+                  ])}
                 </div>
               );
             })}
@@ -315,6 +272,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({ dispatch });
+const mapDispatchToProps = (dispatch) => ({dispatch});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Inspector);

@@ -1,14 +1,14 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import Input, { Label } from "../components/Input";
-import actionTypes from "../constants/actionTypes";
-import styled from "styled-components";
-import Editor from "react-simple-code-editor";
-import fullScreenIcon from "../assets/full-screen.svg";
-import { useModal } from "../utils/hooks";
-import Prism from "prismjs";
-import { stackoverflowLight } from "react-syntax-highlighter/dist/esm/styles/hljs";
-import CustomModal from "../components/Modal";
+import React from 'react';
+import {useSelector, useDispatch} from 'react-redux';
+import {Input, Label} from '../components/controls';
+import actionTypes from '../constants/actionTypes';
+import styled from 'styled-components';
+import Editor from 'react-simple-code-editor';
+import fullScreenIcon from '../assets/full-screen.svg';
+import {useModal} from '../utils/hooks';
+import Prism from 'prismjs';
+import {stackoverflowLight} from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import CustomModal from '../components/Modal';
 
 const Container = styled.div`
   padding: 14px;
@@ -68,9 +68,7 @@ const Screen = (props) => {
             ></button>
             <Editor
               textareaClassName="code"
-              highlight={(code) =>
-                Prism.highlight(code, Prism.languages.js, "javascript")
-              }
+              highlight={(code) => Prism.highlight(code, Prism.languages.js, 'javascript')}
               onValueChange={(value) => {
                 dispatch({
                   type: actionTypes.EDIT_LOGIC,
@@ -79,25 +77,20 @@ const Screen = (props) => {
               }}
               style={{
                 ...stackoverflowLight,
-                fontSize: "16px",
-                lineHeight: "20px",
+                fontSize: '16px',
+                lineHeight: '20px',
               }}
               tabSize={4}
               insertSpaces
-              value={logic || ""}
+              value={logic || ''}
             />
           </EditorWrapper>
         </>
       </div>
-      <CustomModal
-        isActive={itemModalOpen}
-        handleClose={() => setItemModalOpen(false)}
-      >
+      <CustomModal isActive={itemModalOpen} handleClose={() => setItemModalOpen(false)}>
         <EditorWrapper icon={fullScreenIcon}>
           <Editor
-            highlight={(code) =>
-              Prism.highlight(code, Prism.languages.js, "javascript")
-            }
+            highlight={(code) => Prism.highlight(code, Prism.languages.js, 'javascript')}
             onValueChange={(value) => {
               dispatch({
                 type: actionTypes.EDIT_LOGIC,
@@ -106,12 +99,12 @@ const Screen = (props) => {
             }}
             style={{
               ...stackoverflowLight,
-              fontSize: "16px",
-              lineHeight: "20px",
+              fontSize: '16px',
+              lineHeight: '20px',
             }}
             tabSize={4}
             insertSpaces
-            value={logic || ""}
+            value={logic || ''}
           />
         </EditorWrapper>
       </CustomModal>

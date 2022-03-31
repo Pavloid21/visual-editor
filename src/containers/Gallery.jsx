@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { ReactComponent as CollapseIcon } from "../assets/collapse.svg";
-import { ReactComponent as GridIcon } from "../assets/grid.svg";
-import { ReactComponent as ListIcon } from "../assets/list.svg";
-import Input from "../components/Input";
-import BlockPreview from "../components/BlockPreview";
-import blocks from "../views/blocks";
-import { useDispatch, useSelector } from "react-redux";
-import { snippet } from "../utils/prepareModel";
-import actionTypes from "../constants/actionTypes";
+import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
+import {ReactComponent as CollapseIcon} from '../assets/collapse.svg';
+import {ReactComponent as GridIcon} from '../assets/grid.svg';
+import {ReactComponent as ListIcon} from '../assets/list.svg';
+import {Input} from '../components/controls';
+import BlockPreview from '../components/BlockPreview';
+import blocks from '../views/blocks';
+import {useDispatch, useSelector} from 'react-redux';
+import {snippet} from '../utils/prepareModel';
+import actionTypes from '../constants/actionTypes';
 
 const GalleryHeader = styled.div`
   border-top: 1px solid var(--neo-gray);
@@ -30,15 +30,15 @@ const Container = styled.div`
     height: calc(100% - 50px);
     overflow-y: auto;
     overflow-x: hidden;
-    display: ${(props) => (props.mode === "grid" ? "grid" : "flex")};
+    display: ${(props) => (props.mode === 'grid' ? 'grid' : 'flex')};
     ${(props) =>
-      props.mode === "grid"
+      props.mode === 'grid'
         ? `grid-template-columns: 118px 118px 118px;
     grid-template-rows: 118px 118px 118px;
     column-gap: 18px;
     row-gap: 18px;`
-        : ""}
-    ${(props) => (props.mode === "list" ? `flex-direction: column;` : "")}
+        : ''}
+    ${(props) => (props.mode === 'list' ? `flex-direction: column;` : '')}
     padding-top: 10px;
     padding-bottom: 10px;
   }
@@ -47,13 +47,13 @@ const Container = styled.div`
 const Collapse = styled(CollapseIcon)`
   ${(props) => {
     if (!props.collapse) {
-      return "transform: rotate(180deg);";
+      return 'transform: rotate(180deg);';
     }
   }}
 `;
 
 const Wrapper = styled.div`
-  height: ${(props) => (props.show ? "50%" : "auto")};
+  height: ${(props) => (props.show ? '50%' : 'auto')};
 `;
 
 const Gallery = (props) => {
@@ -74,7 +74,7 @@ const Gallery = (props) => {
       layout,
       topAppBar,
       bottomBar,
-      "code"
+      'code'
     );
     dispatch({
       type: actionTypes.SET_SNIPPET,
@@ -97,11 +97,11 @@ const Gallery = (props) => {
     });
   };
 
-  const [viewMode, setMode] = useState("grid");
+  const [viewMode, setMode] = useState('grid');
 
-  const allBlocks = (filteredBlocks, viewMode = "grid") => {
+  const allBlocks = (filteredBlocks, viewMode = 'grid') => {
     return Object.keys(filteredBlocks || blocks).map((blockId) => {
-      if (blockId !== "screen") {
+      if (blockId !== 'screen') {
         const block = blocks[blockId];
         return (
           <BlockPreview
@@ -150,30 +150,17 @@ const Gallery = (props) => {
       <GalleryHeader>
         <span>Components</span>
         <div>
-          {viewMode === "grid" ? (
-            <ListIcon
-              className="icon"
-              onClick={(e) => handleModeChange(e, "list")}
-            />
+          {viewMode === 'grid' ? (
+            <ListIcon className="icon" onClick={(e) => handleModeChange(e, 'list')} />
           ) : (
-            <GridIcon
-              className="icon"
-              onClick={(e) => handleModeChange(e, "grid")}
-            />
+            <GridIcon className="icon" onClick={(e) => handleModeChange(e, 'grid')} />
           )}
-          <Collapse
-            className="icon"
-            collapse={props.show}
-            onClick={() => props.toggleComponents(!props.show)}
-          />
+          <Collapse className="icon" collapse={props.show} onClick={() => props.toggleComponents(!props.show)} />
         </div>
       </GalleryHeader>
       {props.show && (
         <Container mode={viewMode}>
-          <Input
-            placeholder="Filter components"
-            onChange={handleFilterChange}
-          />
+          <Input placeholder="Filter components" onChange={handleFilterChange} />
           <div>{gallery}</div>
         </Container>
       )}
