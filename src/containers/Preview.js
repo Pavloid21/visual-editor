@@ -165,7 +165,7 @@ const Preview = (props) => {
   return (
     <>
       <Bar barState={barState}>
-        {editorMode === 'editor' && <MobileSelect editorMode={editorMode} />}
+        {editorMode === 'editor' && <MobileSelect />}
         <div className="mode_selector">
           <Screen
             className={`icon ${editorMode === 'editor' ? 'active' : ''}`}
