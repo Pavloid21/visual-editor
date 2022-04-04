@@ -1,6 +1,8 @@
-import actionTypes from "../constants/actionTypes";
+import {AnyAction} from 'redux';
+import actionTypes from '../constants/actionTypes';
+import {ActionItem, Actions} from './types';
 
-const initialState = {
+const initialState: Actions = {
   actions: [],
   data: [],
   selected: null,
@@ -10,10 +12,10 @@ const initialState = {
   },
 };
 
-export default function reducer(state = initialState, action) {
+export default function reducer(state = initialState, action: AnyAction) {
   switch (action.type) {
     case actionTypes.SET_ACTIONS:
-      const newSet = {};
+      const newSet: {[x: string]: any} = {};
       if (action.actions) {
         newSet.actions = action.actions;
       }
@@ -35,8 +37,8 @@ export default function reducer(state = initialState, action) {
         actions: [...state.actions, action.action],
       };
     case actionTypes.DELETE_ACTION:
-      let removed;
-      if (action.selected.type === "action") {
+      let removed: ActionItem[] = [];
+      if (action.selected.type === 'action') {
         const actions = [...state.actions];
         state.actions.forEach((item, index) => {
           if (item.action === action.selected.action) {
@@ -46,9 +48,9 @@ export default function reducer(state = initialState, action) {
         return {
           ...state,
           actions,
-          deleted: { ...state.deleted, actions: [...removed] },
+          deleted: {...state.deleted, actions: [...removed]},
         };
-      } else if (action.selected.type === "data") {
+      } else if (action.selected.type === 'data') {
         const data = [...state.data];
         state.data.forEach((item, index) => {
           if (item.action === action.selected.action) {
@@ -58,7 +60,7 @@ export default function reducer(state = initialState, action) {
         return {
           ...state,
           data,
-          deleted: { ...state.deleted, data: [...removed] },
+          deleted: {...state.deleted, data: [...removed]},
         };
       }
       return state;
