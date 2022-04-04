@@ -70,9 +70,10 @@ const Container = styled.div`
 `;
 
 const SortableContainer = sortableContainer(({children, drop, backgroundColor}) => {
+  const bottomBar = useSelector((state) => state.layout.bottomBar)
   return (
     <Container backgroundColor={backgroundColor} ref={drop}>
-      <div>
+      <div style={{flex: bottomBar ? 1 : "none"}}>
         {children.map((child, index) => {
           if (index !== children.length - 1) {
             return child;
@@ -99,15 +100,9 @@ const Preview = (props) => {
 
   const dispatch = useDispatch();
   const [isShowCode, showCode] = useState(false);
-  const [osMode, setOsMode] = useState(0);
-  const currentScreen = useSelector((state) => state.current);
-  const outputScreen = useSelector((state) => state.output.screen);
   const editorMode = useSelector((state) => state.editorMode.mode);
   const layout = useSelector((state) => state.layout);
   const barState = useSelector((state) => state.sideBar);
-  const actions = useSelector((state) => state.actions.list);
-  const code = useSelector((state) => state.code);
-  const initial = useSelector((state) => state.output);
 
   useEffect(() => {
     const scrollY = localStorage.getItem('scrollY');

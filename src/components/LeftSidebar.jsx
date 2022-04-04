@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
-import actionTypes from "../constants/actionTypes";
-import { observer } from "../utils/observer";
-import SideBarHeader, { SideBarSubheader } from "./SideBarHeader";
-import Gallery from "../containers/Gallery";
-import Actions from "./Actions";
-import SortableTree from "@nosferatu500/react-sortable-tree";
-import FileExplorerTheme from "@nosferatu500/theme-file-explorer";
-import { ReactComponent as Copy } from "../assets/copy.svg";
-import { ReactComponent as Trash } from "../assets/trash.svg";
-import { ReactComponent as Plus } from "../assets/plus.svg";
-import models from "../views/blocks/index";
-import v4 from "uuid/dist/v4";
-import { snippet, walker } from "../utils/prepareModel";
+import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
+import {useSelector, useDispatch} from 'react-redux';
+import actionTypes from '../constants/actionTypes';
+import {observer} from '../utils/observer';
+import SideBarHeader, {SideBarSubheader} from './SideBarHeader';
+import Gallery from '../containers/Gallery';
+import Actions from './Actions';
+import SortableTree from '@nosferatu500/react-sortable-tree';
+import FileExplorerTheme from '@nosferatu500/theme-file-explorer';
+import {ReactComponent as Copy} from '../assets/copy.svg';
+import {ReactComponent as Trash} from '../assets/trash.svg';
+import {ReactComponent as Plus} from '../assets/plus.svg';
+import models from '../views/blocks/index';
+import v4 from 'uuid/dist/v4';
+import {snippet, walker} from '../utils/prepareModel';
+import {getScreenesList, getScreenByName} from '../services/ApiService';
 
 const Container = styled.div`
   min-width: 422px;
@@ -26,7 +27,7 @@ const Container = styled.div`
   height: calc(100vh - 60px);
   z-index: 2;
   & > div:nth-child(2n + 1) {
-    ${(props) => (props.show ? "height: 50%;" : "")}
+    ${(props) => (props.show ? 'height: 50%;' : '')}
   }
   & > div {
     overflow: hidden;
@@ -42,7 +43,7 @@ const Icon = styled.img`
   margin-right: 6px;
 `;
 
-export default function LeftSidebar({ children, ...props }) {
+export default function LeftSidebar({children, ...props}) {
   const layout = useSelector((state) => state.layout.blocks);
   const topAppBar = useSelector((state) => state.layout.topAppBar);
   const api = useSelector((state) => state.api);
@@ -73,9 +74,9 @@ export default function LeftSidebar({ children, ...props }) {
   };
 
   const prepareTree = (treeData) => {
-    const root = { ...treeData.value };
-    root.subtitle = "screen";
-    root.title = "Screen";
+    const root = {...treeData.value};
+    root.subtitle = 'screen';
+    root.title = 'Screen';
     root.uuid = treeData.uuid;
     root.endpoint = treeData.screenEndpoint;
     root.logic = treeData.logic;
@@ -85,20 +86,20 @@ export default function LeftSidebar({ children, ...props }) {
     });
     if (topAppBar) {
       root.children.unshift({
-        title: "TOPAPPBAR",
+        title: 'TOPAPPBAR',
         subtitle: topAppBar?.uuid,
       });
     }
     if (bottomBar) {
       root.children.push({
-        title: "BOTTOMBAR",
+        title: 'BOTTOMBAR',
         subtitle: bottomBar?.uuid,
       });
     }
     return root;
   };
 
-  const buildLayout = ({ screen, object }) => {
+  const buildLayout = ({screen, object}) => {
     const tree = object.listItems;
     let newBlock = {
       screen: object.screen,
@@ -106,7 +107,7 @@ export default function LeftSidebar({ children, ...props }) {
     };
     const traverse = function (tree) {
       return tree.map((item) => {
-        const { settingsUI, action, listItems, ...interactive } = item;
+        const {settingsUI, action, listItems, ...interactive} = item;
         let reference = {};
         reference.uuid = v4();
         reference.blockId = item.type.toLowerCase();
@@ -116,7 +117,7 @@ export default function LeftSidebar({ children, ...props }) {
           reference.listItems = traverse(listItems);
         }
         if (action) {
-          reference.interactive = { action };
+          reference.interactive = {action};
         }
         return reference;
       });
@@ -128,7 +129,7 @@ export default function LeftSidebar({ children, ...props }) {
     };
     if (object.bottomBar) {
       action.bottomBar = {
-        blockId: "bottombar",
+        blockId: 'bottombar',
         uuid: v4(),
         settingsUI: {
           ...object.bottomBar.settingsUI,
@@ -138,7 +139,7 @@ export default function LeftSidebar({ children, ...props }) {
     }
     if (object.topAppBar) {
       action.topAppBar = {
-        blockId: "topappbar",
+        blockId: 'topappbar',
         uuid: v4(),
         settingsUI: {
           ...object.topAppBar.settingsUI,
@@ -146,32 +147,25 @@ export default function LeftSidebar({ children, ...props }) {
         },
       };
     }
-    return { newBlock, action, screenEndpoint: screen };
+    return {newBlock, action, screenEndpoint: screen};
   };
 
   useEffect(() => {
-    fetch(
-      "http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/admin/screens/"
-    )
-      .then((response) => response.json())
+    getScreenesList()
+      .then((response) => response.data)
       .then((screenes) => {
-        const screenesArr = screenes.map((screen, index) => {
-          return fetch(
-            `http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/admin/screens/${screen}`
-          )
-            .then((response) => response.text())
+        const screenesArr = screenes.map((screen) => {
+          return getScreenByName(screen)
+            .then((response) => response.data)
             .then((data) => {
               const template = {};
-              require(["esprima"], (parser) => {
+              require(['esprima'], (parser) => {
                 try {
                   const syntax = parser.parse(`async function a() {${data}}`);
                   const snippetBody = syntax.body[0].body.body;
                   snippetBody.forEach((statement) => {
-                    if (statement.type === "ReturnStatement") {
-                      const result = walker(
-                        statement.argument.properties,
-                        template
-                      );
+                    if (statement.type === 'ReturnStatement') {
+                      const result = walker(statement.argument.properties, template);
                       return {
                         screen,
                         object: result,
@@ -189,20 +183,15 @@ export default function LeftSidebar({ children, ...props }) {
               };
             })
             .catch((e) => {
-              console.log("e :>> ", e);
+              console.log('e :>> ', e);
             });
         });
         Promise.allSettled(screenesArr)
           .then((resolves) => {
             const layouts = [];
             resolves.forEach((result) => {
-              if (
-                result.status === "fulfilled" &&
-                result.value?.object.screen
-              ) {
-                const { newBlock, action, screenEndpoint } = buildLayout(
-                  result.value
-                );
+              if (result.status === 'fulfilled' && result.value?.object.screen) {
+                const {newBlock, action, screenEndpoint} = buildLayout(result.value);
                 layouts.push({
                   uuid: v4(),
                   value: newBlock,
@@ -254,9 +243,7 @@ export default function LeftSidebar({ children, ...props }) {
   }, [layout, topAppBar, bottomBar, output]);
 
   useEffect(() => {
-    const screenLayout = availableScreenes.filter(
-      (screen) => screen.uuid === selectedScreen
-    )[0];
+    const screenLayout = availableScreenes.filter((screen) => screen.uuid === selectedScreen)[0];
     if (screenLayout) {
       const constants = snippet(
         {
@@ -267,18 +254,18 @@ export default function LeftSidebar({ children, ...props }) {
         layout,
         topAppBar,
         bottomBar,
-        "code"
+        'code'
       );
       dispatch({
         type: actionTypes.EDIT_SCREEN_NAME,
         screen: output,
         snippet: {
           screenID: selectedScreen,
-          endpoint: output.replace(/\s/g, "_"),
+          endpoint: output.replace(/\s/g, '_'),
           snippet: constants,
         },
       });
-      dispatch({ type: actionTypes.SAVE_CODE, code: constants });
+      dispatch({type: actionTypes.SAVE_CODE, code: constants});
       dispatch({
         type: actionTypes.SET_SNIPPET,
         snippet: constants,
@@ -290,10 +277,8 @@ export default function LeftSidebar({ children, ...props }) {
   const handleItemClick = (event, item) => {
     event.stopPropagation();
     const uuid = item.node.subtitle;
-    if (uuid === "screen") {
-      const screenLayout = availableScreenes.filter(
-        (screen) => screen.uuid === item.node.uuid
-      )[0];
+    if (uuid === 'screen') {
+      const screenLayout = availableScreenes.filter((screen) => screen.uuid === item.node.uuid)[0];
       dispatch({
         type: actionTypes.CHANGE_ACTIVE_TAB,
         index: 5,
@@ -304,7 +289,7 @@ export default function LeftSidebar({ children, ...props }) {
       });
       dispatch({
         type: actionTypes.SET_SELECTED_BLOCK,
-        selectedBlockUuid: "",
+        selectedBlockUuid: '',
       });
       dispatch({
         type: actionTypes.EDIT_SCREEN_NAME,
@@ -327,7 +312,7 @@ export default function LeftSidebar({ children, ...props }) {
       });
       dispatch(screenLayout.action);
     } else {
-      observer.broadcast({ blockId: uuid, event: "click" });
+      observer.broadcast({blockId: uuid, event: 'click'});
     }
   };
 
@@ -351,22 +336,22 @@ export default function LeftSidebar({ children, ...props }) {
 
   const handleAddScreen = () => {
     const layouts = [...availableScreenes];
-    const { newBlock, action, screenEndpoint } = buildLayout({
-      screen: "new_screen",
+    const {newBlock, action, screenEndpoint} = buildLayout({
+      screen: 'new_screen',
       object: {
-        screen: "new screen",
+        screen: 'new screen',
         listItems: [],
       },
     });
-    layouts.push({ uuid: v4(), value: newBlock, action, screenEndpoint });
+    layouts.push({uuid: v4(), value: newBlock, action, screenEndpoint});
     setScreenes(layouts);
     setTree(layouts.map((layout) => prepareTree(layout)));
   };
 
   const handleAddAction = () => {
     const added = {
-      action: "new_action",
-      object: "",
+      action: 'new_action',
+      object: '',
     };
     dispatch({
       type: actionTypes.ADD_ACTION,
@@ -422,30 +407,21 @@ export default function LeftSidebar({ children, ...props }) {
         <SideBarHeader title="Project name" />
         <SideBarSubheader>
           <div>
-            <span
-              className={activeTab === 0 ? "tab_active" : ""}
-              onClick={() => setActiveTab(0)}
-            >
+            <span className={activeTab === 0 ? 'tab_active' : ''} onClick={() => setActiveTab(0)}>
               Screens
             </span>
-            <span
-              className={activeTab === 1 ? "tab_active" : ""}
-              onClick={() => setActiveTab(1)}
-            >
+            <span className={activeTab === 1 ? 'tab_active' : ''} onClick={() => setActiveTab(1)}>
               Actions
             </span>
           </div>
-          <Plus
-            className="icon"
-            onClick={activeTab === 0 ? handleAddScreen : handleAddAction}
-          />
+          <Plus className="icon" onClick={activeTab === 0 ? handleAddScreen : handleAddAction} />
         </SideBarSubheader>
         {activeTab === 0 && (
           <div
             style={{
-              height: "calc(100% - 104px)",
-              overflow: "auto",
-              padding: "14px",
+              height: 'calc(100% - 104px)',
+              overflow: 'auto',
+              padding: '14px',
             }}
           >
             <SortableTree
@@ -457,26 +433,20 @@ export default function LeftSidebar({ children, ...props }) {
                   title: (
                     <section
                       className={`node ${
-                        selectedBlock === extendedNode.node.subtitle ||
-                        selectedScreen === extendedNode.node.uuid
-                          ? "node_selected"
-                          : ""
+                        selectedBlock === extendedNode.node.subtitle || selectedScreen === extendedNode.node.uuid
+                          ? 'node_selected'
+                          : ''
                       }`}
                       onClick={(event) => handleItemClick(event, extendedNode)}
                     >
                       <span>
-                        <Icon
-                          src={
-                            models[extendedNode.node?.title?.toLowerCase()]
-                              ?.previewImageUrl
-                          }
-                        />
+                        <Icon src={models[extendedNode.node?.title?.toLowerCase()]?.previewImageUrl} />
                         {extendedNode.node.endpoint || extendedNode.node.title}
                       </span>
                     </section>
                   ),
                   buttons:
-                    extendedNode.node.subtitle === "screen"
+                    extendedNode.node.subtitle === 'screen'
                       ? [
                           <Copy
                             className="icon"
@@ -484,26 +454,11 @@ export default function LeftSidebar({ children, ...props }) {
                               handleCloneScreen(event, extendedNode.node.uuid);
                             }}
                           />,
-                          <Trash
-                            className="icon"
-                            onClick={(event) =>
-                              handleDeleteScreen(event, extendedNode.node)
-                            }
-                          />,
+                          <Trash className="icon" onClick={(event) => handleDeleteScreen(event, extendedNode.node)} />,
                         ]
                       : [
-                          <Copy
-                            className="icon"
-                            onClick={() =>
-                              handleCloneBlock(extendedNode.node.subtitle)
-                            }
-                          />,
-                          <Trash
-                            className="icon"
-                            onClick={() =>
-                              handleDeleteBlock(extendedNode.node.subtitle)
-                            }
-                          />,
+                          <Copy className="icon" onClick={() => handleCloneBlock(extendedNode.node.subtitle)} />,
+                          <Trash className="icon" onClick={() => handleDeleteBlock(extendedNode.node.subtitle)} />,
                         ],
                 };
               }}

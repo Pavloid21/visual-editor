@@ -9,41 +9,33 @@ import {arrayMoveImmutable} from 'array-move';
 import {useSelector} from 'react-redux';
 import {useDispatch} from 'react-redux';
 import actionTypes from '../../constants/actionTypes';
-import vstack from '../../assets/vstack.svg';
+import bottomsheet from '../../assets/bottomsheet.svg';
 import Wrapper from '../../utils/wrapper';
 
-const VStack = styled.div`
-  flex: ${(props) => (props.wrapContent === 'WRAPCONTENTHEIGHT' ? '0 1 auto' : '1 1 auto')};
+const BottomSheet = styled.div`
+  margin-top: auto;
+  overflow: hidden;
   background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
   display: flex;
-  justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.alignment)};
-  align-items: ${(props) => props.alignment};
+  height: ${(props) =>
+    props.bottomSheetState === 'EXPANDED' ? props.size?.heightInPercent : props.bottomSheetCollapsePercent}%;
+  align-items: center;
   flex-direction: column;
-  padding-top: ${(props) => props.padding?.top}px;
-  padding-bottom: ${(props) => props.padding?.bottom}px;
-  padding-left: ${(props) => props.padding?.left}px;
-  padding-right: ${(props) => props.padding?.right}px;
   box-sizing: border-box;
-  gap: ${(props) => props.spacing}px;
   border-radius: ${(props) => `
-    ${props.corners?.topLeftRadius || 0}px 
-    ${props.corners?.topRightRadius || 0}px 
-    ${props.corners?.bottomRightRadius || 0}px
-    ${props.corners?.bottomLeftRadius || 0}px 
+    ${props.shape?.radius || 0}px 
+    ${props.shape?.radius || 0}px 
+    ${props.shape?.radius || 0}px
+    ${props.shape?.radius || 0}px 
   `};
 `;
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, settingsUI, ...props}) => {
   return (
-    <Wrapper
-      id={props.id}
-      {...settingsUI}
-      scroll={props.scroll}
-      style={{flex: props.wrapContent === 'WRAPCONTENTHEIGHT' ? '0 1 auto' : '1 1 auto'}}
-    >
-      <VStack {...settingsUI} {...props} ref={drop} backgroundColor={backgroundColor} className="draggable">
+    <Wrapper id={props.id} {...settingsUI} style={{height: '100%', position: 'absolute', zIndex: '100'}}>
+      <BottomSheet {...settingsUI} {...props} ref={drop} backgroundColor={backgroundColor} className="draggable">
         {listItems && renderHandlebars(listItems, 'document2').components}
-      </VStack>
+      </BottomSheet>
     </Wrapper>
   );
 });
@@ -104,73 +96,43 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
 
 const block = {
   Component,
-  name: 'VSTACK',
-  title: 'VStack',
-  description: 'A view that arranges its children in a vertical line.',
-  previewImageUrl: vstack,
+  name: 'BOTTOMSHEET',
+  title: 'BottomSheet',
+  description:
+    'A view that display content that complements the screen’s primary content. View remain visible while users interact with the primary content.',
+  previewImageUrl: bottomsheet,
   category: 'Layouts',
   defaultData: {
-    alignment: 'CENTER',
-    backgroundColor: '#C6C6C6',
-    distribution: '',
-    wrapContent: '',
-    spacing: 0,
-    scroll: false,
-    padding: {
-      top: '100',
-      bottom: '100',
-      left: '10',
-      right: '10',
+    backgroundColor: '#EFEFEF',
+    bottomSheetState: 'EXPANDED',
+    bottomSheetCollapsePercent: 7.5,
+    shape: {
+      type: 'ALLCORNERSROUND',
+      radius: 24,
     },
-    corners: {
-      topLeftRadius: 0,
-      topRightRadius: 0,
-      bottomLeftRadius: 0,
-      bottomRightRadius: 0,
+    size: {
+      heightInPercent: 85,
     },
   },
   listItems: [],
   config: {
-    alignment: {type: 'string', name: 'Alignment'},
     backgroundColor: {type: 'color', name: 'Background color'},
-    distribution: {type: 'string', name: 'Distribution'},
-    wrapContent: {type: 'string', name: 'Wrap content'},
-    spacing: {type: 'number', name: 'Spacing'},
-    scroll: {type: 'boolean', name: 'Scroll'},
-    padding: {
-      top: {
-        type: 'number',
-        name: 'Top',
+    bottomSheetState: {type: 'string', name: 'Bottom sheet state'},
+    bottomSheetCollapsePercent: {type: 'number', name: 'Bottom sheet collapse percent'},
+    shape: {
+      type: {
+        type: 'string',
+        name: 'Shape type',
       },
-      bottom: {
+      radius: {
         type: 'number',
-        name: 'Bottom',
-      },
-      left: {
-        type: 'number',
-        name: 'Left',
-      },
-      right: {
-        type: 'number',
-        name: 'Right',
+        name: 'Radius',
       },
     },
-    corners: {
-      topLeftRadius: {
+    size: {
+      heightInPercent: {
         type: 'number',
-        name: 'Top left radius',
-      },
-      topRightRadius: {
-        type: 'number',
-        name: 'Top right radius',
-      },
-      bottomLeftRadius: {
-        type: 'number',
-        name: 'Bottom left radius',
-      },
-      bottomRightRadius: {
-        type: 'number',
-        name: 'Bottom right radius',
+        name: 'Height in percent',
       },
     },
   },

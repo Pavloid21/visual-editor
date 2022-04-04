@@ -26,7 +26,6 @@ export const Select = (props: ISelect) => {
         })
       }}
       components={{DropdownIndicator}}
-      defaultInputValue={props.options.find((e:IOption) => e.value === props.value).label}
     />
   );
 };

@@ -2,19 +2,30 @@
   "name": "visual-editor",
   "version": "0.1.0",
   "private": true,
+  "resolutions": {
+    "es5-ext": "0.10.53",
+    "react-error-overlay": "6.0.9"
+  },
+  "overrides": {
+    "es5-ext": "0.10.53",
+    "react-error-overlay": "6.0.9"
+  },
   "dependencies": {
     "@nosferatu500/react-sortable-tree": "^4.0.6",
     "@nosferatu500/theme-file-explorer": "^3.0.15",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "@types/axios": "^0.14.0",
     "@types/jest": "^27.4.1",
     "@types/node": "^17.0.23",
     "@types/react": "^17.0.43",
     "@types/react-dom": "^17.0.14",
     "array-move": "^4.0.0",
+    "axios": "^0.26.1",
     "bloomer": "^0.6.5",
     "clsx": "^1.1.1",
+    "esprima-next": "^5.8.1",
     "handlebars": "^4.7.6",
     "lodash": "^4.17.21",
     "prismjs": "1.20.0",
@@ -69,9 +80,6 @@
   "devDependencies": {
     "@types/styled-components": "^5.1.24",
     "@types/uuid": "^8.3.4",
-    "react-error-overlay": "6.0.9"
-  },
-  "resolutions": {
     "react-error-overlay": "6.0.9"
   }
 }
