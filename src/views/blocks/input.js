@@ -1,4 +1,4 @@
-import text from "../../assets/text.svg";
+import passwordtextfield from "../../assets/passwordtextfield.svg";
 import styled from "styled-components";
 import Wrapper from "../../utils/wrapper";
 
@@ -37,10 +37,10 @@ const Component = ({ settingsUI, ...props }) => {
 const block = {
   Component,
   name: "BASICTEXTFIELD",
-  title: "Text",
+  title: "Input",
   description:
-    "Filled text fields have more visual emphasis than outlined text fields, making them stand out when surrounded by other content and components.",
-  previewImageUrl: text,
+    "A control into which the user enters necessary value.",
+  previewImageUrl: passwordtextfield,
   category: "Controls",
   defaultInteractiveOptions: {
     field: "field_name",
