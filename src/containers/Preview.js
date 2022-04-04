@@ -13,6 +13,7 @@ import {ReactComponent as Json} from '../assets/json.svg';
 import {ReactComponent as Reference} from '../assets/preview.svg';
 import {ReactComponent as Save} from '../assets/save.svg';
 import MobileSelect from './MobileSelect';
+import clsx from 'clsx';
 
 const Bar = styled.div`
   height: 60px;
@@ -70,10 +71,10 @@ const Container = styled.div`
 `;
 
 const SortableContainer = sortableContainer(({children, drop, backgroundColor}) => {
-  const bottomBar = useSelector((state) => state.layout.bottomBar)
+  const bottomBar = useSelector((state) => state.layout.bottomBar);
   return (
     <Container backgroundColor={backgroundColor} ref={drop}>
-      <div style={{flex: bottomBar ? 1 : "none"}}>
+      <div style={{flex: bottomBar ? 1 : 'none'}}>
         {children.map((child, index) => {
           if (index !== children.length - 1) {
             return child;
@@ -163,12 +164,21 @@ const Preview = (props) => {
         {editorMode === 'editor' && <MobileSelect />}
         <div className="mode_selector">
           <Screen
-            className={`icon ${editorMode === 'editor' ? 'active' : ''}`}
+            className={clsx('icon', {
+              active: editorMode === 'editor',
+            })}
             onClick={() => handleModeClick('editor')}
           />
-          <Json className={`icon ${editorMode === 'json' ? 'active' : ''}`} onClick={() => handleModeClick('json')} />
+          <Json
+            className={clsx('icon', {
+              active: editorMode === 'json',
+            })}
+            onClick={() => handleModeClick('json')}
+          />
           <Reference
-            className={`icon ${editorMode === 'preview' ? 'active' : ''}`}
+            className={clsx('icon', {
+              active: editorMode === 'preview',
+            })}
             onClick={() => handleModeClick('preview')}
           />
         </div>

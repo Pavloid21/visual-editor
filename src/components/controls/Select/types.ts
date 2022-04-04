@@ -1,7 +1,6 @@
 export interface IOption {
   label: string;
   value: string;
-  _uuid: string;
 }
 
 export interface ISelect {
