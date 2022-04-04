@@ -37,12 +37,58 @@ export const callApi = async (
   }
 };
 
+const backHost = 'http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/';
+
 export const getScreenesList = async () => {
-  const url = 'http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/admin/screens/';
+  const url = backHost + 'admin/screens/';
   return await callApi(url, null, 'GET');
 };
 
 export const getScreenByName = async (screenName: string) => {
-  const url = `http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/admin/screens/${screenName}`;
+  const url = backHost + `admin/screens/${screenName}`;
   return await callApi(url, null, 'GET');
+};
+
+export const saveScreen = async (endpoint: string, payload: string) => {
+  const url = backHost + `admin/screens/${endpoint}`;
+  return await callApi(url, payload, 'PUT', undefined, undefined, {
+    'Content-Type': 'application/javascript',
+  });
+};
+
+export const deleteScreen = async (endpoint: string) => {
+  const url = backHost + `admin/screens/${endpoint}`;
+  return await callApi(url, null, 'DELETE');
+};
+
+export const getActionsList = async () => {
+  const url = backHost + 'admin/actions/';
+  return await callApi(url, null, 'GET');
+}
+
+export const getDataActionsList = async () => {
+  const url = backHost + 'admin/data/';
+  return await callApi(url, null, 'GET');
+}
+
+export const getActionByName = async (actionName: string) => {
+  const url = backHost + `admin/actions/${actionName}`;
+  return await callApi(url, null, 'GET');
+};
+
+export const getDataActionByName = async (actionName: string) => {
+  const url = backHost + `admin/data/${actionName}`;
+  return await callApi(url, null, 'GET');
+};
+
+export const saveAction = async (actionType: string, endpoint: string, payload: string) => {
+  const url = backHost + `admin/${actionType}/${endpoint}`;
+  return await callApi(url, payload, 'PUT', undefined, undefined, {
+    'Content-Type': 'application/javascript',
+  });
+};
+
+export const deleteAction = async (actionType: string, endpoint: string) => {
+  const url = backHost + `admin/${actionType}/${endpoint}`;
+  return await callApi(url, null, 'DELETE');
 };

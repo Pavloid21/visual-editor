@@ -1,12 +1,13 @@
-import React from "react";
-import styled from "styled-components";
-import { ReactComponent as Logo } from "../assets/logo.svg";
-import { ReactComponent as HideLeft } from "../assets/hide_left.svg";
-import { ReactComponent as HideRight } from "../assets/hide_right.svg";
-import { ReactComponent as Settings } from "../assets/settings.svg";
-import {Button} from "components/controls";
-import { useDispatch, useSelector } from "react-redux";
-import actionTypes from "../constants/actionTypes";
+import React from 'react';
+import styled from 'styled-components';
+import {ReactComponent as Logo} from '../assets/logo.svg';
+import {ReactComponent as HideLeft} from '../assets/hide_left.svg';
+import {ReactComponent as HideRight} from '../assets/hide_right.svg';
+import {ReactComponent as Settings} from '../assets/settings.svg';
+import {Button} from 'components/controls';
+import {useDispatch, useSelector} from 'react-redux';
+import actionTypes from '../constants/actionTypes';
+import {deleteAction, deleteScreen, saveAction, saveScreen} from '../services/ApiService';
 
 const Bar = styled.div`
   height: 60px;
@@ -50,70 +51,42 @@ const TopBar = () => {
   const dispatch = useDispatch();
   const snippets = useSelector((state) => state.layout.snippets);
   const actions = useSelector((state) => [
-    ...state.actions.actions.map((item) => ({ ...item, type: "actions" })),
-    ...state.actions.data.map((item) => ({ ...item, type: "data" })),
+    ...state.actions.actions.map((item) => ({...item, type: 'actions'})),
+    ...state.actions.data.map((item) => ({...item, type: 'data'})),
   ]);
   const deletedActions = useSelector((state) => [
     ...state.actions.deleted.actions.map((item) => ({
       ...item,
-      type: "actions",
+      type: 'actions',
     })),
-    ...state.actions.deleted.data.map((item) => ({ ...item, type: "data" })),
+    ...state.actions.deleted.data.map((item) => ({...item, type: 'data'})),
   ]);
   const deletedScreens = useSelector((state) => state.layout.deletedScreens);
   const editedScreens = useSelector((state) => state.layout.editedScreens);
   const handleHideLeft = () => {
-    dispatch({ type: actionTypes.TOGGLE_LEFT_BAR });
+    dispatch({type: actionTypes.TOGGLE_LEFT_BAR});
   };
   const handleHideRight = () => {
-    dispatch({ type: actionTypes.TOGGLE_RIGHT_BAR });
+    dispatch({type: actionTypes.TOGGLE_RIGHT_BAR});
   };
   const handleSaveApplication = (event) => {
     event.stopPropagation();
     snippets.forEach((item) => {
       if (editedScreens.includes(item.screenID)) {
-        fetch(
-          `http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/admin/screens/${item.endpoint}`,
-          {
-            method: "PUT",
-            body: `${item.logic.replace(/return$/g, "")}${item.snippet}`,
-            headers: {
-              "Content-Type": "application/javascript",
-            },
-          }
-        );
+        saveScreen(item.endpoint, `${item.logic.replace(/return$/g, '')}${item.snippet}`);
       }
     });
     snippets.forEach((item) => {
       if (deletedScreens.includes(item.screenID)) {
-        fetch(
-          `http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/admin/screens/${item.endpoint}`,
-          {
-            method: "DELETE",
-          }
-        );
+        deleteScreen(item.endpoint);
       }
     });
 
     actions.forEach((item) => {
-      fetch(
-        `http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/admin/${item.type}/${item.action}`,
-        {
-          method: "PUT",
-          body: item.object,
-          headers: {
-            "Content-Type": "application/javascript",
-          },
-        }
-      );
+      saveAction(item.type, item.action, item.object);
     });
     deletedActions.forEach((item) => {
-      fetch(
-        `http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/admin/${item.type}/${item.action}`,
-        {
-          method: "DELETE",
-        }
-      );
+      deleteAction(item.type, item.action);
     });
   };
   return (
