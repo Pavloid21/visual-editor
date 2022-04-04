@@ -98,7 +98,8 @@ const block = {
   Component,
   name: 'BOTTOMSHEET',
   title: 'BottomSheet',
-  description: 'A view that arranges its children in a vertical line.',
+  description:
+    'A view that display content that complements the screen’s primary content. View remain visible while users interact with the primary content.',
   previewImageUrl: bottomsheet,
   category: 'Layouts',
   defaultData: {
