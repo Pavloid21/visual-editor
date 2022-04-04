@@ -17,6 +17,7 @@ import divider from './divider';
 import list from './list';
 import collection from './collection';
 import bottomsheet from './bottomsheet';
+import webview from './webview';
 
 const blocks = {
   hstack,
@@ -37,6 +38,7 @@ const blocks = {
   list,
   collection,
   bottomsheet,
+  webview,
   screen: {
     previewImageUrl: screen,
     name: 'screen',

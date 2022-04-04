@@ -1,27 +1,22 @@
-import React from "react";
-import { useDrop } from "react-dnd";
-import { ItemTypes } from "../../constants/actionTypes";
-import renderHandlebars from "../../utils/renderHandlebars";
-import styled from "styled-components";
-import { observer } from "../../utils/observer";
-import { sortableContainer } from "react-sortable-hoc";
-import { arrayMoveImmutable } from "array-move";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import actionTypes from "../../constants/actionTypes";
-import vstack from "../../assets/vstack.svg";
-import Wrapper from "../../utils/wrapper";
+import React from 'react';
+import {useDrop} from 'react-dnd';
+import {ItemTypes} from '../../constants/actionTypes';
+import renderHandlebars from '../../utils/renderHandlebars';
+import styled from 'styled-components';
+import {observer} from '../../utils/observer';
+import {sortableContainer} from 'react-sortable-hoc';
+import {arrayMoveImmutable} from 'array-move';
+import {useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
+import actionTypes from '../../constants/actionTypes';
+import vstack from '../../assets/vstack.svg';
+import Wrapper from '../../utils/wrapper';
 
 const VStack = styled.div`
-  flex: ${(props) =>
-    props.wrapContent === "WRAPCONTENTHEIGHT" ? "0 1 auto" : "1 1 auto"};
-  background-color: ${(props) =>
-    props.backgroundColor?.indexOf("#") >= 0
-      ? props.backgroundColor
-      : "transparent"};
+  flex: ${(props) => (props.wrapContent === 'WRAPCONTENTHEIGHT' ? '0 1 auto' : '1 1 auto')};
+  background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
   display: flex;
-  justify-content: ${(props) =>
-    props.distribution === "SPACEBETWEEN" ? "space-between" : props.alignment};
+  justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.alignment)};
   align-items: ${(props) => props.alignment};
   flex-direction: column;
   padding-top: ${(props) => props.padding?.top}px;
@@ -38,28 +33,25 @@ const VStack = styled.div`
   `};
 `;
 
-const SortableContainer = sortableContainer(
-  ({ drop, backgroundColor, listItems, settingsUI, ...props }) => {
-    return (
-      <Wrapper id={props.id} {...settingsUI} scroll={props.scroll}>
-        <VStack
-          {...settingsUI}
-          {...props}
-          ref={drop}
-          backgroundColor={backgroundColor}
-          className="draggable"
-        >
-          {listItems && renderHandlebars(listItems, "document2").components}
-        </VStack>
-      </Wrapper>
-    );
-  }
-);
+const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, settingsUI, ...props}) => {
+  return (
+    <Wrapper
+      id={props.id}
+      {...settingsUI}
+      scroll={props.scroll}
+      style={{flex: props.wrapContent === 'WRAPCONTENTHEIGHT' ? '0 1 auto' : '1 1 auto'}}
+    >
+      <VStack {...settingsUI} {...props} ref={drop} backgroundColor={backgroundColor} className="draggable">
+        {listItems && renderHandlebars(listItems, 'document2').components}
+      </VStack>
+    </Wrapper>
+  );
+});
 
-const Component = ({ settingsUI, uuid, listItems, ...props }) => {
+const Component = ({settingsUI, uuid, listItems, ...props}) => {
   const dispatch = useDispatch();
   const layout = useSelector((state) => state.layout);
-  const [{ canDrop, isOver, target }, drop] = useDrop(() => ({
+  const [{canDrop, isOver, target}, drop] = useDrop(() => ({
     accept: ItemTypes.BOX,
     drop: (item) => {
       if (target.isOver()) {
@@ -75,7 +67,7 @@ const Component = ({ settingsUI, uuid, listItems, ...props }) => {
       };
     },
     collect: (monitor) => ({
-      isOver: monitor.isOver({ shallow: true }),
+      isOver: monitor.isOver({shallow: true}),
       canDrop: monitor.canDrop(),
       target: monitor,
     }),
@@ -84,18 +76,16 @@ const Component = ({ settingsUI, uuid, listItems, ...props }) => {
   const isActive = canDrop && isOver;
   let backgroundColor = settingsUI.backgroundColor;
   if (isActive) {
-    backgroundColor = "#f1f8ff";
+    backgroundColor = '#f1f8ff';
   }
 
-  const onSortEnd = ({ oldIndex, newIndex, nodes }) => {
-    const newOrder = arrayMoveImmutable(nodes, oldIndex, newIndex).map((item) =>
-      item.node.getAttribute("id")
-    );
+  const onSortEnd = ({oldIndex, newIndex, nodes}) => {
+    const newOrder = arrayMoveImmutable(nodes, oldIndex, newIndex).map((item) => item.node.getAttribute('id'));
     observer.broadcast({
       layout,
       newOrder,
-      parentID: nodes[0].node.parentNode.getAttribute("id"),
-      event: "sorted",
+      parentID: nodes[0].node.parentNode.getAttribute('id'),
+      event: 'sorted',
     });
   };
 
@@ -114,23 +104,23 @@ const Component = ({ settingsUI, uuid, listItems, ...props }) => {
 
 const block = {
   Component,
-  name: "VSTACK",
-  title: "VStack",
-  description: "A view that arranges its children in a vertical line.",
+  name: 'VSTACK',
+  title: 'VStack',
+  description: 'A view that arranges its children in a vertical line.',
   previewImageUrl: vstack,
-  category: "Layouts",
+  category: 'Layouts',
   defaultData: {
-    alignment: "CENTER",
-    backgroundColor: "#C6C6C6",
-    distribution: "",
-    wrapContent: "",
+    alignment: 'CENTER',
+    backgroundColor: '#C6C6C6',
+    distribution: '',
+    wrapContent: '',
     spacing: 0,
     scroll: false,
     padding: {
-      top: "100",
-      bottom: "100",
-      left: "10",
-      right: "10",
+      top: '100',
+      bottom: '100',
+      left: '10',
+      right: '10',
     },
     corners: {
       topLeftRadius: 0,
@@ -141,46 +131,46 @@ const block = {
   },
   listItems: [],
   config: {
-    alignment: { type: "string", name: "Alignment" },
-    backgroundColor: { type: "color", name: "Background color" },
-    distribution: { type: "string", name: "Distribution" },
-    wrapContent: { type: "string", name: "Wrap content" },
-    spacing: { type: "number", name: "Spacing" },
-    scroll: { type: "boolean", name: "Scroll" },
+    alignment: {type: 'string', name: 'Alignment'},
+    backgroundColor: {type: 'color', name: 'Background color'},
+    distribution: {type: 'string', name: 'Distribution'},
+    wrapContent: {type: 'string', name: 'Wrap content'},
+    spacing: {type: 'number', name: 'Spacing'},
+    scroll: {type: 'boolean', name: 'Scroll'},
     padding: {
       top: {
-        type: "number",
-        name: "Top",
+        type: 'number',
+        name: 'Top',
       },
       bottom: {
-        type: "number",
-        name: "Bottom",
+        type: 'number',
+        name: 'Bottom',
       },
       left: {
-        type: "number",
-        name: "Left",
+        type: 'number',
+        name: 'Left',
       },
       right: {
-        type: "number",
-        name: "Right",
+        type: 'number',
+        name: 'Right',
       },
     },
     corners: {
       topLeftRadius: {
-        type: "number",
-        name: "Top left radius",
+        type: 'number',
+        name: 'Top left radius',
       },
       topRightRadius: {
-        type: "number",
-        name: "Top right radius",
+        type: 'number',
+        name: 'Top right radius',
       },
       bottomLeftRadius: {
-        type: "number",
-        name: "Bottom left radius",
+        type: 'number',
+        name: 'Bottom left radius',
       },
       bottomRightRadius: {
-        type: "number",
-        name: "Bottom right radius",
+        type: 'number',
+        name: 'Bottom right radius',
       },
     },
   },
