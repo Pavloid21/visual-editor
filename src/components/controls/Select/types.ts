@@ -5,8 +5,8 @@ export interface IOption {
 }
 
 export interface ISelect {
-  options: any;
-  onChange(value: string): void;
+  options: IOption[];
+  onChange(value: string | undefined): void;
   value: string;
   className?: string;
 }

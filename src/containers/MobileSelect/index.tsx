@@ -31,10 +31,7 @@ const MobileSelect = () => {
     });
   };
 
-  const handleChangeMobile = (e: any) => {
-    console.log(e);
-    setPhoneType(e.value);
-  };
+  const handleChangeMobile = (e: string) => setPhoneType(e);
 
   return (
     <FlexContainer>
