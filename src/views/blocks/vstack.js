@@ -105,10 +105,14 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
 const block = {
   Component,
   name: 'VSTACK',
-  title: 'VStack',
-  description: 'A view that arranges its children in a vertical line.',
+  title: 'Container',
+  description: 'A view that arranges its children.',
   previewImageUrl: vstack,
   category: 'Layouts',
+  complex: [
+    {label: 'Vertical', value: "VSTACK"},
+    {label: 'Horizontal', value: "HSTACK"}
+  ],
   defaultData: {
     alignment: 'CENTER',
     backgroundColor: '#C6C6C6',

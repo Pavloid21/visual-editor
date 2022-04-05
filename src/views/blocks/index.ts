@@ -12,14 +12,14 @@ import box from './box';
 import searchbar from './searchbar';
 import switch_block from './switch';
 import topappbar from './topappbar';
-import lazyvstack from './lazyvstack';
 import divider from './divider';
 import list from './list';
 import collection from './collection';
 import bottomsheet from './bottomsheet';
 import webview from './webview';
+import { Blocks } from './types';
 
-const blocks = {
+const blocks: Blocks = {
   hstack,
   card,
   vstack,
@@ -33,7 +33,6 @@ const blocks = {
   searchbar,
   switch: switch_block,
   topappbar,
-  lazyvstack,
   divider,
   list,
   collection,
@@ -44,5 +43,29 @@ const blocks = {
     name: 'screen',
   },
 };
+
+export const gallery = {
+  card,
+  vstack,
+  basictextfield,
+  passwordtextfield,
+  label,
+  button,
+  image,
+  bottombar,
+  box,
+  searchbar,
+  switch: switch_block,
+  topappbar,
+  divider,
+  list,
+  collection,
+  bottomsheet,
+  webview,
+  screen: {
+    previewImageUrl: screen,
+    name: 'screen',
+  },
+}
 
 export default blocks;

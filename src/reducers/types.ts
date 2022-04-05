@@ -25,3 +25,16 @@ export type APIItem = {
   varName: string;
   url: string;
 };
+
+//TODO: типизировать стор
+export type Store = {
+  config: any;
+  layout: any;
+  output: any;
+  api: API;
+  sideBar: any;
+  editorMode: any;
+  current: any;
+  code: any;
+  actions: Actions;
+}

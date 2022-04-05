@@ -4,7 +4,7 @@ import {ReactComponent as Remove} from '../../../assets/circle_cross.svg';
 import Input from 'rc-input';
 import {NeoInputProps} from './types';
 
-const Container = styledComponents.section`
+export const Container = styledComponents.section`
   position: relative;
   margin-bottom: 12px;
   & svg {

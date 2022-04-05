@@ -86,13 +86,12 @@ const App = () => {
     }
   };
 
-  const { components, schema } = renderHandlebars(
+  const { components } = renderHandlebars(
     layout.blocks,
     layout.documentId,
     bottomBar,
     topAppBar
   );
-  const innerHTML = schema;
   const { previewMode } = config;
 
   const handleAppClick = (e) => {
@@ -129,7 +128,6 @@ const App = () => {
                   <>
                     <LeftSidebar display={barState.left} />
                     <Preview
-                      html={innerHTML}
                       components={components}
                       onChangePreviewMode={handleChangePreviewMode}
                       previewMode={previewMode}
