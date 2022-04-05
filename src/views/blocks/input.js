@@ -45,6 +45,10 @@ const block = {
   defaultInteractiveOptions: {
     field: "field_name",
   },
+  complex: [
+    {label: 'Text', value: "BASICTEXTFIELD"},
+    {label: 'Password', value: "PASSWORDTEXTFIELD"}
+  ],
   defaultData: {
     placeholder: "Логин",
     placeholderColor: "#7F7F7F",
