@@ -5,7 +5,8 @@ import {sortableContainer} from 'react-sortable-hoc';
 import actionTypes, {ItemTypes} from '../constants/actionTypes';
 import {arrayMoveImmutable} from 'array-move';
 import {observer} from '../utils/observer';
-import IphoneX from '../assets/mockups/IphoneX';
+// import IphoneX from '../assets/mockups/IphoneX';
+import PhoneContainer from './PhoneContainer';
 import styled from 'styled-components';
 import Code from './Code';
 import {ReactComponent as Screen} from '../assets/screen.svg';
@@ -188,11 +189,11 @@ const Preview = (props) => {
         style={{position: 'relative', transform: 'scale(0.9)'}}
       >
         {editorMode === 'editor' && (
-          <IphoneX>
+          <PhoneContainer>
             <SortableContainer drop={drop} backgroundColor={backgroundColor} onSortEnd={onSortEnd} distance={1}>
               {props.components}
             </SortableContainer>
-          </IphoneX>
+          </PhoneContainer>
         )}
         {editorMode === 'json' && <Code show={isShowCode} />}
       </div>

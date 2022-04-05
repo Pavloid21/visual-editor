@@ -1,11 +1,11 @@
-import {Device} from 'constants/device';
 import actionTypes from '../constants/actionTypes';
 import { optionsByDevice } from 'containers/MobileSelect/consts';
+import { Device } from 'containers/MobileSelect/consts';
 
 const initialState = {
   mode: 'editor',
   device: Device.IOS,
-  model: optionsByDevice[Device.IOS][0],
+  model: optionsByDevice[Device.IOS][0].value,
 };
 
 export default function reducer(state = initialState, action) {
