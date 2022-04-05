@@ -5,7 +5,7 @@ import {ReactComponent as GridIcon} from '../assets/grid.svg';
 import {ReactComponent as ListIcon} from '../assets/list.svg';
 import {Input} from '../components/controls';
 import BlockPreview from '../components/BlockPreview';
-import blocks from '../views/blocks';
+import {gallery as blocks} from '../views/blocks';
 import {useDispatch, useSelector} from 'react-redux';
 import {snippet} from '../utils/prepareModel';
 import actionTypes from '../constants/actionTypes';

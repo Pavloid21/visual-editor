@@ -1,67 +1,17 @@
-import actionTypes from "../constants/actionTypes";
-import blocks from "../views/blocks/";
-import { v4 as uuidv4 } from "uuid";
-import { getData } from "../utils/prepareModel";
-import { v4 } from "uuid";
+import actionTypes from '../constants/actionTypes';
+import blocks from '../views/blocks/';
+import {v4 as uuidv4} from 'uuid';
+import {getData} from '../utils/prepareModel';
+import {v4} from 'uuid';
 
 const initialState = {
   blocks: [],
-  selectedBlockUuid: "",
-  documentId: "document2",
+  selectedBlockUuid: '',
+  documentId: 'document2',
   selectedScreen: null,
   editedScreens: [],
   deletedScreens: [],
   snippets: [],
-};
-
-const buildLayout = ({ screen, object }) => {
-  const tree = object.listItems;
-  let newBlock = {
-    screen: object.screen,
-    listItems: [],
-  };
-  const traverse = function (tree) {
-    return tree.map((item) => {
-      const { settingsUI, action, listItems } = item;
-      let reference = {};
-      reference.uuid = v4();
-      reference.blockId = item.type.toLowerCase();
-      reference.settingsUI = settingsUI;
-      if (listItems) {
-        reference.listItems = traverse(listItems);
-      }
-      if (action) {
-        reference.interactive = { action };
-      }
-      return reference;
-    });
-  };
-  newBlock.listItems = tree?.length ? traverse(tree) : [];
-  const action = {
-    type: actionTypes.SET_LAYOUT,
-    layout: newBlock.listItems,
-  };
-  if (object.bottomBar) {
-    action.bottomBar = {
-      blockId: "bottombar",
-      uuid: v4(),
-      settingsUI: {
-        ...object.bottomBar.settingsUI,
-        navigationItems: object.bottomBar.navigationItems,
-      },
-    };
-  }
-  if (object.topAppBar) {
-    action.topAppBar = {
-      settingsUI: "topappbar",
-      uuid: v4(),
-      settingsUI: {
-        ...object.topAppBar.settingsUI,
-        topAppBarItems: object.topAppBar.topAppBarItems,
-      },
-    };
-  }
-  return { newBlock, action, screenEndpoint: screen };
 };
 
 export const findInTree = (tree, uuid) => {
@@ -94,7 +44,7 @@ const cloneToList = (tree, uuid) => {
   const result = [...tree];
   tree.forEach((item) => {
     if (item.uuid === uuid) {
-      const newItem = { ...item, uuid: v4() };
+      const newItem = {...item, uuid: v4()};
       result.push(newItem);
     } else if (item.listItems) {
       item.listItems = cloneToList(item.listItems, uuid);
@@ -113,7 +63,7 @@ export default function reducer(state = initialState, action) {
           ...getData(blocks[action.blockId].defaultData),
         },
       };
-      return { ...state, topAppBar };
+      return {...state, topAppBar};
     case actionTypes.PUSH_BOTTOMBAR:
       const bottomBar = {
         uuid: uuidv4(),
@@ -122,37 +72,37 @@ export default function reducer(state = initialState, action) {
           ...getData(blocks[action.blockId].defaultData),
         },
       };
-      return { ...state, bottomBar };
+      return {...state, bottomBar};
     case actionTypes.ADD_BOTTOMBAR_ITEM:
       const extendedItems = [...state.bottomBar.settingsUI.navigationItems];
       extendedItems.push({
         ...blocks.bottombar.defaultData.navigationItems[0],
         uuid: uuidv4(),
       });
-      const bar = { ...state.bottomBar };
+      const bar = {...state.bottomBar};
       bar.settingsUI.navigationItems = extendedItems;
-      return { ...state, bottomBar: { ...bar } };
+      return {...state, bottomBar: {...bar}};
     case actionTypes.ADD_TOPAPPBAR_ITEM:
       const nextItems = [...state.topAppBar.settingsUI.topAppBarItems];
       nextItems.push({
         ...blocks.topappbar.defaultData.topAppBarItems[0],
         uuid: uuidv4(),
       });
-      const abar = { ...state.topAppBar };
+      const abar = {...state.topAppBar};
       abar.settingsUI.topAppBarItems = nextItems;
-      return { ...state, topAppBar: { ...abar } };
+      return {...state, topAppBar: {...abar}};
     case actionTypes.REMOVE_BOTTOMBAR_ITEM:
       const newBarItems = [...state.bottomBar.settingsUI.navigationItems];
       newBarItems.splice(action.index, 1);
-      const newBottomBar = { ...state.bottomBar };
+      const newBottomBar = {...state.bottomBar};
       newBottomBar.settingsUI.navigationItems = newBarItems;
-      return { ...state, bottomBar: { ...newBottomBar } };
+      return {...state, bottomBar: {...newBottomBar}};
     case actionTypes.REMOVE_TOPAPPBAR_ITEM:
       const newAppBarItems = [...state.topAppBar.settingsUI.topAppBarItems];
       newAppBarItems.splice(action.index, 1);
-      const newAppBar = { ...state.topAppBar };
+      const newAppBar = {...state.topAppBar};
       newAppBar.settingsUI.topAppBarItems = newAppBarItems;
-      return { ...state, topAppBar: { ...newAppBar } };
+      return {...state, topAppBar: {...newAppBar}};
     case actionTypes.PUSH_BLOCK:
       const listItems = blocks[action.blockId].listItems;
       let newBlock = {
@@ -181,7 +131,7 @@ export default function reducer(state = initialState, action) {
       };
       return nextState;
     case actionTypes.PUSH_BLOCK_INSIDE:
-      if (action.blockId === "bottombar" || action.blockId === "topappbar") {
+      if (action.blockId === 'bottombar' || action.blockId === 'topappbar') {
         return state;
       }
       const target = findInTree(state.blocks, action.uuid);
@@ -243,32 +193,30 @@ export default function reducer(state = initialState, action) {
           ? {
               ...state.bottomBar,
             }
-          : { ...state.topAppBar });
+          : {...state.topAppBar});
       if (action.parentKey && Array.isArray(action.parentKey)) {
-        element.settingsUI[action.parentKey[1]][action.parentKey[0]][
-          action.key
-        ] = action.value;
+        element.settingsUI[action.parentKey[1]][action.parentKey[0]][action.key] = action.value;
       } else if (action.parentKey) {
         const findDataBlock = (data, parentKey, key) => {
           let ref = null;
           Object.keys(data).forEach((item) => {
             if (item === parentKey) {
               ref = data[item];
-            } else if (typeof data[item] === "object" && !ref) {
+            } else if (typeof data[item] === 'object' && !ref) {
               ref = findDataBlock(data[item], parentKey, key);
             }
           });
           return ref;
         };
         const valueKeeper = findDataBlock(
-          { settingsUI: element.settingsUI, interactive: element.interactive },
+          {settingsUI: element.settingsUI, interactive: element.interactive},
           action.parentKey,
           action.key
         );
         if (valueKeeper) {
           valueKeeper[action.key] = action.value;
         } else {
-          element.settingsUI[action.parentKey] = { [action.key]: action.value };
+          element.settingsUI[action.parentKey] = {[action.key]: action.value};
         }
       } else {
         if (element.settingsUI[action.key] !== undefined) {
@@ -284,7 +232,7 @@ export default function reducer(state = initialState, action) {
     case actionTypes.DELETE_BLOCK:
       const newArr = [...state.blocks];
       const mustBeRemoved = removeFromList(newArr, action.blockUuid);
-      const stateReference = { ...state };
+      const stateReference = {...state};
       if (action.blockUuid === state.bottomBar?.uuid) {
         delete stateReference.bottomBar;
       }
@@ -294,7 +242,7 @@ export default function reducer(state = initialState, action) {
       return {
         ...stateReference,
         blocks: [...mustBeRemoved],
-        selectedBlockUuid: "",
+        selectedBlockUuid: '',
       };
     case actionTypes.CHANGE_DOCUMENT_ID:
       return {
@@ -309,7 +257,7 @@ export default function reducer(state = initialState, action) {
         topAppBar: action.topAppBar,
       };
     case actionTypes.SELECT_SCREEN:
-      let nextScreenState = { ...state };
+      let nextScreenState = {...state};
       if (action.delete) {
         nextScreenState.deletedScreens.push(action.screen);
       } else {
@@ -347,7 +295,7 @@ export default function reducer(state = initialState, action) {
     case actionTypes.CLONE_BLOCK:
       const blocksArray = [...state.blocks];
       const withClone = cloneToList(blocksArray, action.blockUuid);
-      const stateRef = { ...state };
+      const stateRef = {...state};
       if (action.blockUuid === state.bottomBar?.uuid) {
         delete stateRef.bottomBar;
       }
@@ -357,13 +305,11 @@ export default function reducer(state = initialState, action) {
       return {
         ...stateRef,
         blocks: withClone,
-        selectedBlockUuid: "",
+        selectedBlockUuid: '',
       };
     case actionTypes.SET_SNIPPET:
       const snippetsRef = [...state.snippets];
-      const snippetRef = snippetsRef.filter(
-        (item) => item.screenID === action.selectedScreen
-      )[0];
+      const snippetRef = snippetsRef.filter((item) => item.screenID === action.selectedScreen)[0];
       if (snippetRef) {
         snippetRef.snippet = action.snippet;
         return {
@@ -372,6 +318,11 @@ export default function reducer(state = initialState, action) {
         };
       }
       return state;
+    case actionTypes.SWITCH_ELEMENT_TYPE:
+      const blocksArr = [...state.blocks];
+      const currentElement = findInTree(blocksArr, state.selectedBlockUuid);
+      currentElement.blockId = action.blockId.toLowerCase();
+      return {...state, blocks: blocksArr};
     default:
       return state;
   }

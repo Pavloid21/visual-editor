@@ -123,6 +123,10 @@ const block = {
   description: "A view that arranges its children in a horizontal line.",
   previewImageUrl: hstack,
   category: "Layouts",
+  complex: [
+    {label: 'Vertical', value: "VSTACK"},
+    {label: 'Horizontal', value: "HSTACK"}
+  ],
   defaultData: {
     alignment: "CENTER",
     backgroundColor: "#C6C6C6",
