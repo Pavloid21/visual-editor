@@ -48,7 +48,6 @@ export const gallery = {
   card,
   vstack,
   basictextfield,
-  passwordtextfield,
   label,
   button,
   image,
