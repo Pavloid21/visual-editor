@@ -1,9 +1,11 @@
-import { Device } from "constants/device";
-import actionTypes from "../constants/actionTypes";
+import {Device} from 'constants/device';
+import actionTypes from '../constants/actionTypes';
+import { optionsByDevice } from 'containers/MobileSelect/consts';
 
 const initialState = {
-  mode: "editor",
+  mode: 'editor',
   device: Device.IOS,
+  model: optionsByDevice[Device.IOS][0],
 };
 
 export default function reducer(state = initialState, action) {
@@ -16,8 +18,14 @@ export default function reducer(state = initialState, action) {
     case actionTypes.SET_DEVICE: {
       return {
         ...state,
-        device: action.device
-      }
+        device: action.device,
+      };
+    }
+    case actionTypes.SET_MODEL_DEVICE: {
+      return {
+        ...state,
+        model: action.model,
+      };
     }
     default:
       return state;
