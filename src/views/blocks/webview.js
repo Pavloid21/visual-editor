@@ -1,7 +1,8 @@
-import React, {useRef} from 'react';
+import React, {useRef, useEffect} from 'react';
 import styled from 'styled-components';
 import webview from '../../assets/webview.svg';
 import Wrapper from '../../utils/wrapper';
+import {observer} from '../../utils/observer';
 
 const WebView = styled.iframe`
   flex: 1 1 auto;
@@ -9,25 +10,29 @@ const WebView = styled.iframe`
 `;
 
 const Component = ({settingsUI, uuid, ...props}) => {
+  const callback = () => {
+    setTimeout(() => {
+      if (document.activeElement.tagName === 'IFRAME') {
+        observer.broadcast({blockId: props.id, event: 'click'});
+      }
+    });
+  };
+
+  useEffect(() => {
+    window.addEventListener('blur', callback);
+    return () => {
+      window.removeEventListener('blur', callback);
+    };
+  }, []);
+
   const contentRef = useRef(null);
   if (contentRef.current && contentRef.current.contentDocument) {
     const document = contentRef.current.contentDocument;
     document.body.innerHTML = settingsUI.mainSiteHtml;
   }
+
   return (
     <Wrapper id={props.id} {...settingsUI} style={{flex: 1}}>
-      <div
-        {...props}
-        style={{
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-        }}
-      >
-        {' '}
-      </div>
       <WebView
         {...props}
         ref={contentRef}
