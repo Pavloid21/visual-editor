@@ -16,6 +16,18 @@ const Component = ({settingsUI, uuid, ...props}) => {
   }
   return (
     <Wrapper id={props.id} {...settingsUI} style={{flex: 1}}>
+      <div
+        {...props}
+        style={{
+          position: 'absolute',
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+        }}
+      >
+        {' '}
+      </div>
       <WebView
         {...props}
         ref={contentRef}

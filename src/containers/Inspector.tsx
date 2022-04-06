@@ -40,7 +40,7 @@ const Select = styled(SelectBase)`
   }
 `;
 
-const Inspector: React.FC<any> = (props) => {
+const Inspector: React.FC<any> = ({display}) => {
   const dispatch = useDispatch();
   const layout = useSelector((state: Store) => state.layout);
   const handleChangeBlockData = (blockUuid: string, key: string, value: any, parentKey: string | undefined) => {
@@ -56,8 +56,8 @@ const Inspector: React.FC<any> = (props) => {
   const handleChangeElemType = (blockId: string) => {
     dispatch({
       type: actionTypes.SWITCH_ELEMENT_TYPE,
-      blockId
-    })
+      blockId,
+    });
   };
 
   const parseConfig = (config: any, blockUuid: string, endpoint: any, parentKey?: any) => {
@@ -148,7 +148,7 @@ const Inspector: React.FC<any> = (props) => {
     });
   };
 
-  if (!props.display) return null;
+  if (!display) return null;
 
   const findInTree = (tree: any, uuid: string): any => {
     let result = null;
@@ -203,7 +203,7 @@ const Inspector: React.FC<any> = (props) => {
                   <Trash
                     className="icon"
                     onClick={(e) => {
-                      props.dispatch({
+                      dispatch({
                         type: actionTypes.REMOVE_BOTTOMBAR_ITEM,
                         index,
                       });
@@ -220,7 +220,7 @@ const Inspector: React.FC<any> = (props) => {
           })}
           <Button
             onClick={() => {
-              props.dispatch({
+              dispatch({
                 type: actionTypes.ADD_BOTTOMBAR_ITEM,
               });
             }}
@@ -243,7 +243,7 @@ const Inspector: React.FC<any> = (props) => {
                     <Trash
                       className="icon"
                       onClick={(e) => {
-                        props.dispatch({
+                        dispatch({
                           type: actionTypes.REMOVE_TOPAPPBAR_ITEM,
                           index,
                         });
@@ -260,7 +260,7 @@ const Inspector: React.FC<any> = (props) => {
           })}
           <Button
             onClick={() => {
-              props.dispatch({
+              dispatch({
                 type: actionTypes.ADD_TOPAPPBAR_ITEM,
               });
             }}
