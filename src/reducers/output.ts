@@ -1,11 +1,13 @@
+import { AnyAction } from "redux";
 import actionTypes from "../constants/actionTypes";
+import { Output } from "./types";
 
-const initialState = {
+const initialState: Output = {
   screen: "screen name",
   logic: "return",
 };
 
-export default function reducer(state = initialState, action) {
+export default function reducer(state = initialState, action: AnyAction) {
   switch (action.type) {
     case actionTypes.EDIT_SCREEN_NAME:
       const nextState = { ...state };

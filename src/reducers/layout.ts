@@ -1,10 +1,11 @@
 import actionTypes from '../constants/actionTypes';
-import blocks from '../views/blocks/';
+import blocks from '../views/blocks';
 import {v4 as uuidv4} from 'uuid';
 import {getData} from '../utils/prepareModel';
 import {v4} from 'uuid';
+import {Layout, BlockItem, LayoutAction} from './types';
 
-const initialState = {
+const initialState: Layout = {
   blocks: [],
   selectedBlockUuid: '',
   documentId: 'document2',
@@ -14,8 +15,8 @@ const initialState = {
   snippets: [],
 };
 
-export const findInTree = (tree, uuid) => {
-  let result = null;
+export const findInTree = (tree: BlockItem[], uuid: string): BlockItem | null=> {
+  let result: BlockItem | null = null;
   tree.forEach((item) => {
     if (item.uuid === uuid) {
       result = item;
@@ -28,7 +29,7 @@ export const findInTree = (tree, uuid) => {
   return result;
 };
 
-const removeFromList = (tree, uuid) => {
+const removeFromList = (tree: any[], uuid: string) => {
   const result = [...tree];
   tree.forEach((item, index) => {
     if (item.uuid === uuid) {
@@ -40,7 +41,7 @@ const removeFromList = (tree, uuid) => {
   return result;
 };
 
-const cloneToList = (tree, uuid) => {
+const cloneToList = (tree: any[], uuid: string) => {
   const result = [...tree];
   tree.forEach((item) => {
     if (item.uuid === uuid) {
@@ -53,7 +54,7 @@ const cloneToList = (tree, uuid) => {
   return result;
 };
 
-export default function reducer(state = initialState, action) {
+export default function reducer(state = initialState, action: LayoutAction) {
   switch (action.type) {
     case actionTypes.PUSH_TOPAPPBAR:
       const topAppBar = {
@@ -105,7 +106,7 @@ export default function reducer(state = initialState, action) {
       return {...state, topAppBar: {...newAppBar}};
     case actionTypes.PUSH_BLOCK:
       const listItems = blocks[action.blockId].listItems;
-      let newBlock = {
+      let newBlock: BlockItem = {
         uuid: uuidv4(),
         blockId: action.blockId,
         settingsUI: {
@@ -134,9 +135,9 @@ export default function reducer(state = initialState, action) {
       if (action.blockId === 'bottombar' || action.blockId === 'topappbar') {
         return state;
       }
-      const target = findInTree(state.blocks, action.uuid);
+      const target = findInTree(state.blocks, action.uuid!);
       const list = blocks[action.blockId].listItems;
-      const newBloc = {
+      const newBloc: BlockItem = {
         uuid: uuidv4(),
         blockId: action.blockId,
         settingsUI: {
@@ -151,8 +152,8 @@ export default function reducer(state = initialState, action) {
       if (list) {
         newBloc.listItems = list;
       }
-      target.listItems = [
-        ...(target.listItems || []),
+      target!.listItems = [
+        ...(target!.listItems || []),
         {
           ...newBloc,
         },
@@ -175,7 +176,7 @@ export default function reducer(state = initialState, action) {
     case actionTypes.REORDER_LAYOUT:
       return {
         ...state,
-        blocks: [...action.newBlocksLayout],
+        blocks: [...action.newBlocksLayout!],
       };
     case actionTypes.REPLACE_ELEMENT:
       const blocksRef = [...state.blocks];
@@ -188,17 +189,17 @@ export default function reducer(state = initialState, action) {
     case actionTypes.CHANGE_BLOCK_DATA:
       const newBlocks = JSON.parse(JSON.stringify(state.blocks));
       const element =
-        findInTree(newBlocks, action.blockUuid) ||
+        findInTree(newBlocks, action.blockUuid!) ||
         (action.blockUuid === state.bottomBar?.uuid
           ? {
               ...state.bottomBar,
             }
           : {...state.topAppBar});
       if (action.parentKey && Array.isArray(action.parentKey)) {
-        element.settingsUI[action.parentKey[1]][action.parentKey[0]][action.key] = action.value;
+        element.settingsUI[action.parentKey[1]][action.parentKey[0]][action.key!] = action.value;
       } else if (action.parentKey) {
-        const findDataBlock = (data, parentKey, key) => {
-          let ref = null;
+        const findDataBlock = (data: any, parentKey: string, key: string) => {
+          let ref: any = null;
           Object.keys(data).forEach((item) => {
             if (item === parentKey) {
               ref = data[item];
@@ -211,18 +212,18 @@ export default function reducer(state = initialState, action) {
         const valueKeeper = findDataBlock(
           {settingsUI: element.settingsUI, interactive: element.interactive},
           action.parentKey,
-          action.key
+          action.key!
         );
         if (valueKeeper) {
-          valueKeeper[action.key] = action.value;
+          valueKeeper[action.key!] = action.value;
         } else {
-          element.settingsUI[action.parentKey] = {[action.key]: action.value};
+          element.settingsUI[action.parentKey] = {[action.key!]: action.value};
         }
       } else {
-        if (element.settingsUI[action.key] !== undefined) {
-          element.settingsUI[action.key] = action.value;
+        if (element.settingsUI[action.key!] !== undefined) {
+          element.settingsUI[action.key!] = action.value;
         } else if (element.interactive) {
-          element.interactive[action.key] = action.value;
+          element.interactive[action.key!] = action.value;
         }
       }
       return {
@@ -231,7 +232,7 @@ export default function reducer(state = initialState, action) {
       };
     case actionTypes.DELETE_BLOCK:
       const newArr = [...state.blocks];
-      const mustBeRemoved = removeFromList(newArr, action.blockUuid);
+      const mustBeRemoved = removeFromList(newArr, action.blockUuid!);
       const stateReference = {...state};
       if (action.blockUuid === state.bottomBar?.uuid) {
         delete stateReference.bottomBar;
@@ -294,7 +295,7 @@ export default function reducer(state = initialState, action) {
       }
     case actionTypes.CLONE_BLOCK:
       const blocksArray = [...state.blocks];
-      const withClone = cloneToList(blocksArray, action.blockUuid);
+      const withClone = cloneToList(blocksArray, action.blockUuid!);
       const stateRef = {...state};
       if (action.blockUuid === state.bottomBar?.uuid) {
         delete stateRef.bottomBar;
@@ -309,7 +310,7 @@ export default function reducer(state = initialState, action) {
       };
     case actionTypes.SET_SNIPPET:
       const snippetsRef = [...state.snippets];
-      const snippetRef = snippetsRef.filter((item) => item.screenID === action.selectedScreen)[0];
+      const snippetRef = snippetsRef.filter((item) => item.screenID === action.selectedScreen!)[0];
       if (snippetRef) {
         snippetRef.snippet = action.snippet;
         return {
@@ -321,7 +322,7 @@ export default function reducer(state = initialState, action) {
     case actionTypes.SWITCH_ELEMENT_TYPE:
       const blocksArr = [...state.blocks];
       const currentElement = findInTree(blocksArr, state.selectedBlockUuid);
-      currentElement.blockId = action.blockId.toLowerCase();
+      currentElement!.blockId = action.blockId.toLowerCase();
       return {...state, blocks: blocksArr};
     default:
       return state;
