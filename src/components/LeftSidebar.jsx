@@ -68,6 +68,9 @@ export default function LeftSidebar({children, ...props}) {
       if (block.listItems) {
         data.children = block.listItems.map((item) => buildTreeitem(item));
       }
+      if (block.listItem) {
+        data.children = [buildTreeitem(block.listItem)];
+      }
       return data;
     }
     return null;
@@ -81,9 +84,13 @@ export default function LeftSidebar({children, ...props}) {
     root.endpoint = treeData.screenEndpoint;
     root.logic = treeData.logic;
     root.expanded = treeData.uuid === selectedScreen;
-    root.children = treeData.value.listItems.map((block) => {
-      return buildTreeitem(block);
-    });
+    if (treeData.value.listItems) {
+      root.children = treeData.value.listItems.map((block) => {
+        return buildTreeitem(block);
+      });
+    } else if (treeData.value.listItem) {
+      root.children = [buildTreeitem(treeData.value.listItem)];
+    }
     if (topAppBar) {
       root.children.unshift({
         title: 'TOPAPPBAR',
@@ -107,7 +114,7 @@ export default function LeftSidebar({children, ...props}) {
     };
     const traverse = function (tree) {
       return tree.map((item) => {
-        const {settingsUI, action, listItems, ...interactive} = item;
+        const {settingsUI, action, listItems, listItem, ...interactive} = item;
         let reference = {};
         reference.uuid = v4();
         reference.blockId = item.type.toLowerCase();
@@ -115,6 +122,9 @@ export default function LeftSidebar({children, ...props}) {
         reference.interactive = interactive;
         if (listItems) {
           reference.listItems = traverse(listItems);
+        }
+        if (listItem) {
+          reference.listItem = traverse([listItem])[0];
         }
         if (action) {
           reference.interactive = {action};

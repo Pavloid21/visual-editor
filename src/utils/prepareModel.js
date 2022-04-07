@@ -57,6 +57,9 @@ export const buildJSONitem = (block, mode) => {
   if (block.listItems) {
     data.listItems = block.listItems.map((item) => buildJSONitem(item, mode));
   }
+  if (block.listItem) {
+    data.listItem = buildJSONitem(block.listItem, mode);
+  }
   return data;
 };
 
