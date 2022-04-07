@@ -15,7 +15,7 @@ const initialState: Layout = {
   snippets: [],
 };
 
-export const findInTree = (tree: BlockItem[], uuid: string): BlockItem | null=> {
+export const findInTree = (tree: BlockItem[], uuid: string): BlockItem | null => {
   let result: BlockItem | null = null;
   tree.forEach((item) => {
     if (item.uuid === uuid) {
@@ -23,6 +23,9 @@ export const findInTree = (tree: BlockItem[], uuid: string): BlockItem | null=> 
     }
     if (!result && item.listItems) {
       result = findInTree(item.listItems, uuid);
+    }
+    if (!result && item.listItem) {
+      result = findInTree([item.listItem], uuid);
     }
   });
 
@@ -36,6 +39,8 @@ const removeFromList = (tree: any[], uuid: string) => {
       result.splice(index, 1);
     } else if (item.listItems) {
       item.listItems = removeFromList(item.listItems, uuid);
+    } else if (item.listItem) {
+      item.listItem = removeFromList([item.listItem], uuid)[0];
     }
   });
   return result;
@@ -106,6 +111,7 @@ export default function reducer(state = initialState, action: LayoutAction) {
       return {...state, topAppBar: {...newAppBar}};
     case actionTypes.PUSH_BLOCK:
       const listItems = blocks[action.blockId].listItems;
+      const listItem = blocks[action.blockId].listItem;
       let newBlock: BlockItem = {
         uuid: uuidv4(),
         blockId: action.blockId,
@@ -120,6 +126,9 @@ export default function reducer(state = initialState, action: LayoutAction) {
       }
       if (listItems) {
         newBlock.listItems = listItems;
+      }
+      if (listItem) {
+        newBlock.listItem = listItem;
       }
       const nextState = {
         ...state,
@@ -137,6 +146,7 @@ export default function reducer(state = initialState, action: LayoutAction) {
       }
       const target = findInTree(state.blocks, action.uuid!);
       const list = blocks[action.blockId].listItems;
+      const obj = blocks[action.blockId].listItem;
       const newBloc: BlockItem = {
         uuid: uuidv4(),
         blockId: action.blockId,
@@ -152,12 +162,21 @@ export default function reducer(state = initialState, action: LayoutAction) {
       if (list) {
         newBloc.listItems = list;
       }
-      target!.listItems = [
-        ...(target!.listItems || []),
-        {
+      if (obj !== undefined) {
+        newBloc.listItem = obj;
+      }
+      if (blocks[target!.blockId].listItems) {
+        target!.listItems = [
+          ...(target!.listItems || []),
+          {
+            ...newBloc,
+          },
+        ];
+      } else if (blocks[target!.blockId].listItem !== undefined) {
+        target!.listItem = {
           ...newBloc,
-        },
-      ];
+        };
+      }
       const nextBlocks = state.blocks.map((block, index) => {
         if (block.uuid === action.uuid) {
           return target;

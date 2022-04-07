@@ -26,7 +26,7 @@ const List = styled.div`
 `;
 
 const SortableContainer = sortableContainer(
-  ({ drop, backgroundColor, listItems, settingsUI, ...props }) => {
+  ({ drop, backgroundColor, listItem, settingsUI, ...props }) => {
     return (
       <Wrapper id={props.id}>
         <List
@@ -36,7 +36,7 @@ const SortableContainer = sortableContainer(
           backgroundColor={backgroundColor}
           className="draggable"
         >
-          {listItems && renderHandlebars(listItems, "document2").components}
+          {listItem && renderHandlebars([listItem], "document2").components}
         </List>
       </Wrapper>
     );
@@ -114,7 +114,7 @@ const block = {
     alignment: "CENTER",
     backgroundColor: "#C6C6C6",
   },
-  listItems: [],
+  listItem: null,
   interactive: {
     dataSource: {
       type: "string",

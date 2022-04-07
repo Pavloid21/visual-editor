@@ -39,7 +39,7 @@ const Collection = styled.div`
 `;
 
 const SortableContainer = sortableContainer(
-  ({ drop, backgroundColor, listItems, settingsUI, ...props }) => {
+  ({ drop, backgroundColor, listItem, settingsUI, ...props }) => {
     return (
       <Wrapper
         id={props.id}
@@ -56,7 +56,7 @@ const SortableContainer = sortableContainer(
           className="draggable"
         >
           <div>
-            {listItems && renderHandlebars(listItems, "document2").components}
+            {listItem && renderHandlebars([listItem], "document2").components}
           </div>
         </Collection>
       </Wrapper>
@@ -151,7 +151,7 @@ const block = {
       itemsInHorisontal: 2,
     },
   },
-  listItems: [],
+  listItem: null,
   interactive: {
     dataSource: {
       type: "string",

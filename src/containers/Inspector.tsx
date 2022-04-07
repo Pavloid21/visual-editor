@@ -159,6 +159,9 @@ const Inspector: React.FC<any> = ({display}) => {
       if (!result && item && item.listItems) {
         result = findInTree(item.listItems, uuid);
       }
+      if (!result && item && item.listItem) {
+        result = findInTree([item.listItem], uuid);
+      }
     }
     return result;
   };

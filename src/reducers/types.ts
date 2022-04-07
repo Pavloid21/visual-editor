@@ -70,6 +70,7 @@ export type BlockItem = {
   settingsUI: any;
   interactive?: any;
   listItems?: any[];
+  listItem?: any;
 };
 
 export type Config = {
