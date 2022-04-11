@@ -8,4 +8,5 @@ export interface ISelect {
   onChange(value: string | undefined): void;
   value: string;
   className?: string;
+  label?: string;
 }

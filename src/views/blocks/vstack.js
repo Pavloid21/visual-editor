@@ -13,6 +13,7 @@ import vstack from '../../assets/vstack.svg';
 import Wrapper from '../../utils/wrapper';
 
 const VStack = styled.div`
+  width: ${(props) => (props.sizeModifier === 'FULLWIDTH' ? '100%' : 'auto')};
   flex: ${(props) => (props.wrapContent === 'WRAPCONTENTHEIGHT' ? '0 1 auto' : '1 1 auto')};
   background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
   display: flex;
@@ -110,8 +111,8 @@ const block = {
   previewImageUrl: vstack,
   category: 'Layouts',
   complex: [
-    {label: 'Vertical', value: "VSTACK"},
-    {label: 'Horizontal', value: "HSTACK"}
+    {label: 'Vertical', value: 'VSTACK'},
+    {label: 'Horizontal', value: 'HSTACK'},
   ],
   defaultData: {
     alignment: 'CENTER',
@@ -120,6 +121,7 @@ const block = {
     wrapContent: '',
     spacing: 0,
     scroll: false,
+    sizeModifier: 'FULLSIZE',
     padding: {
       top: '100',
       bottom: '100',
@@ -135,12 +137,42 @@ const block = {
   },
   listItems: [],
   config: {
-    alignment: {type: 'string', name: 'Alignment'},
+    alignment: {
+      type: 'select',
+      name: 'Alignment',
+      options: [
+        {label: 'Center', value: 'CENTER'},
+        {label: 'Left', value: 'LEFT'},
+        {label: 'Right', value: 'RIGHT'},
+        {label: 'Justify', value: 'JUSTIFY'},
+        {label: 'Fill', value: 'FILL'},
+      ],
+    },
     backgroundColor: {type: 'color', name: 'Background color'},
-    distribution: {type: 'string', name: 'Distribution'},
+    distribution: {
+      type: 'select',
+      name: 'Distribution',
+      options: [{label: 'Space between', value: 'SPACEBETWEEN'}],
+    },
     wrapContent: {type: 'string', name: 'Wrap content'},
     spacing: {type: 'number', name: 'Spacing'},
-    scroll: {type: 'boolean', name: 'Scroll'},
+    sizeModifier: {
+      type: 'select',
+      name: 'Size modifier',
+      options: [
+        {label: 'Full width', value: 'FULLWIDTH'},
+        {label: 'Full height', value: 'FULLHEIGHT'},
+        {label: 'Full size', value: 'FULLSIZE'},
+      ],
+    },
+    scroll: {
+      type: 'select',
+      name: 'Scroll',
+      options: [
+        {label: 'Enable scroll', value: true},
+        {label: 'Disable scroll', value: false},
+      ],
+    },
     padding: {
       top: {
         type: 'number',

@@ -104,6 +104,17 @@ const Inspector: React.FC<any> = ({display}) => {
             />
           </div>
         );
+      } else if (config[el].type === 'select') {
+        return (
+          <div className="form-group" key={`${parentKey}_${index}`}>
+            <Select
+              label={config[el].name}
+              onChange={(value) => handleChangeBlockData(blockUuid, el, value, parentKey)}
+              options={config[el].options}
+              value={endpoint ? endpoint[el] : null}
+            />
+          </div>
+        );
       } else if (config[el].type === 'boolean') {
         return (
           <div className="form-check" key={`${parentKey}_${index}`}>
@@ -186,12 +197,7 @@ const Inspector: React.FC<any> = ({display}) => {
       }}
     >
       {interactive && parseConfig(interactive, blockUuid, block.interactive)}
-      {complex && (
-        <Container>
-          <Label>Element type</Label>
-          <Select options={complex} onChange={handleChangeElemType} value={name} />
-        </Container>
-      )}
+      {complex && <Select label="Element type" options={complex} onChange={handleChangeElemType} value={name} />}
       {parseConfig(config, blockUuid, block.settingsUI)}
       {block.settingsUI.navigationItems && (
         <div>
