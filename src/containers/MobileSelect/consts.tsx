@@ -11,7 +11,7 @@ import {ReactComponent as Iphone11or10} from 'assets/mockups/iPhone_X.svg';
 import {ReactComponent as IphoneSE} from 'assets/mockups/iPhoneSE.svg';
 import {ReactComponent as Iphone8Plus} from 'assets/mockups/iPhone8_Plus.svg';
 import {ReactComponent as Iphone8} from 'assets/mockups/iPhone8.svg';
-import { CSSProperties } from 'styled-components';
+import {CSSProperties} from 'styled-components';
 
 export enum Device {
   IOS = 'IOS',
@@ -37,34 +37,48 @@ export enum DeviceKeys {
 }
 
 export const mockByDeviceKey = {
-  [DeviceKeys.ANDROID_SMALL]: <AndroidSmall/>,
-  [DeviceKeys.ANDROID_LARGE]: <AndroidLarge/>,
-  [DeviceKeys.IPHONE_13_PRO_MAX]: <Iphone13ProMax/>,
-  [DeviceKeys.IPHONE_13]: <Iphone13/>,
-  [DeviceKeys.IPHONE_13_MINI]: <Iphone13Mini/>,
-  [DeviceKeys.IPHONE_11_PRO_MAX]: <Iphone11ProMax/>,
-  [DeviceKeys.IPHONE_11_PRO_10]: <Iphone11or10/>,
-  [DeviceKeys.IPHONE_SE]: <IphoneSE/>,
-  [DeviceKeys.IPHONE_8_PLUS]: <Iphone8Plus/>,
-  [DeviceKeys.IPHONE_8]: <Iphone8/>,
+  [DeviceKeys.ANDROID_SMALL]: <AndroidSmall />,
+  [DeviceKeys.ANDROID_LARGE]: <AndroidLarge />,
+  [DeviceKeys.IPHONE_13_PRO_MAX]: <Iphone13ProMax />,
+  [DeviceKeys.IPHONE_13]: <Iphone13 />,
+  [DeviceKeys.IPHONE_13_MINI]: <Iphone13Mini />,
+  [DeviceKeys.IPHONE_11_PRO_MAX]: <Iphone11ProMax />,
+  [DeviceKeys.IPHONE_11_PRO_10]: <Iphone11or10 />,
+  [DeviceKeys.IPHONE_SE]: <IphoneSE />,
+  [DeviceKeys.IPHONE_8_PLUS]: <Iphone8Plus />,
+  [DeviceKeys.IPHONE_8]: <Iphone8 />,
 };
 
 export const stylesByDeviceKey: Record<DeviceKeys, CSSProperties> = {
   [DeviceKeys.ANDROID_SMALL]: {},
   [DeviceKeys.ANDROID_LARGE]: {
-    width: 431,
-    height: 1000,
-    marginTop: 33,
+    width: '431px',
+    height: '1000px',
+    marginTop: '33px',
   },
-  [DeviceKeys.IPHONE_13_PRO_MAX]: {},
-  [DeviceKeys.IPHONE_13]: {},
+  [DeviceKeys.IPHONE_13_PRO_MAX]: {
+    width: '475px',
+    height: '972px',
+    padding: '22px',
+    clipPath: 'url(#clipPath)',
+    borderRadius: '50px',
+    paddingTop: '55px',
+    backgroundColor: '#fff',
+  },
+  [DeviceKeys.IPHONE_13]: {
+    
+  },
   [DeviceKeys.IPHONE_13_MINI]: {},
   [DeviceKeys.IPHONE_11_PRO_MAX]: {},
-  [DeviceKeys.IPHONE_11_PRO_10]: {},
+  [DeviceKeys.IPHONE_11_PRO_10]: {
+    width: '428px',
+    height: '836px',
+    clipPath: 'url(#maskRect1)',
+  },
   [DeviceKeys.IPHONE_SE]: {},
   [DeviceKeys.IPHONE_8_PLUS]: {},
   [DeviceKeys.IPHONE_8]: {},
-}
+};
 
 export const optionsByDevice: Record<Device, IOption[]> = {
   [Device.IOS]: [
