@@ -104,6 +104,19 @@ const Inspector: React.FC<any> = ({display}) => {
             />
           </div>
         );
+      } else if (config[el].type === 'select') {
+        return (
+          <div className="form-group" key={`${parentKey}_${index}`}>
+            <Container>
+              <Label>{config[el].name}</Label>
+              <Select
+                onChange={(value) => handleChangeBlockData(blockUuid, el, value, parentKey)}
+                options={config[el].options}
+                value={endpoint ? endpoint[el] : null}
+              />
+            </Container>
+          </div>
+        );
       } else if (config[el].type === 'boolean') {
         return (
           <div className="form-check" key={`${parentKey}_${index}`}>

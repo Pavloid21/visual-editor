@@ -107,7 +107,7 @@ const block = {
     bottomSheetState: 'EXPANDED',
     bottomSheetCollapsePercent: 7.5,
     shape: {
-      type: 'ALLCORNERSROUND',
+      type: 'TOPCORNERSROUND',
       radius: 24,
     },
     size: {
@@ -117,12 +117,23 @@ const block = {
   listItems: [],
   config: {
     backgroundColor: {type: 'color', name: 'Background color'},
-    bottomSheetState: {type: 'string', name: 'Bottom sheet state'},
+    bottomSheetState: {
+      type: 'select',
+      name: 'Bottom sheet state',
+      options: [
+        {label: 'Expanded', value: 'EXPANDED'},
+        {label: 'Collapsed', value: 'COLLAPSED'},
+      ],
+    },
     bottomSheetCollapsePercent: {type: 'number', name: 'Bottom sheet collapse percent'},
     shape: {
       type: {
-        type: 'string',
+        type: 'select',
         name: 'Shape type',
+        options: [
+          {label: 'All corners round', value: 'ALLCORNERSROUND'},
+          {label: 'Top corners round', value: 'TOPCORNERSROUND'},
+        ],
       },
       radius: {
         type: 'number',
