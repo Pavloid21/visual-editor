@@ -35,7 +35,9 @@
 </g>
 </g>
 <mask id="mask1_201_4917" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="23" y="21" width="375" height="812">
+<clipPath id="clipPath">
 <path fill-rule="evenodd" clip-rule="evenodd" d="M65 21C41.804 21 23 39.804 23 63V791C23 814.196 41.804 833 65 833H356C379.196 833 398 814.196 398 791V63C398 39.804 379.196 21 356 21H292.916C289 21 288 23.4966 288 27.3572C288 39.5864 285 51.5 266.857 51.5H154.143C136 51.5 133 39.5864 133 27.3572C133 23.4966 132 21 128.084 21H65Z" fill="#C4C4C4"/>
+</clipPath>
 </mask>
 <g mask="url(#mask1_201_4917)">
 <rect x="23" y="21" width="375" height="812" rx="4" fill="white"/>

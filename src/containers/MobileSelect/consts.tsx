@@ -66,10 +66,24 @@ export const stylesByDeviceKey: Record<DeviceKeys, CSSProperties> = {
     backgroundColor: '#fff',
   },
   [DeviceKeys.IPHONE_13]: {
-    
+    width: '439px',
+    height: '886px',
+    borderRadius: '50px',
+    clipPath: 'url(#clipPath)',
+    padding: '52px 26px 19px'
   },
-  [DeviceKeys.IPHONE_13_MINI]: {},
-  [DeviceKeys.IPHONE_11_PRO_MAX]: {},
+  [DeviceKeys.IPHONE_13_MINI]: {
+    width: '422px',
+    height: '853px',
+    borderRadius: '63px',
+    padding: '52px 25px 20px',
+    clipPath: 'url(#clipPath)',
+  },
+  [DeviceKeys.IPHONE_11_PRO_MAX]: {
+    width: '474px',
+    height: '953px',
+    clipPath: 'url(#clipPath)',
+  },
   [DeviceKeys.IPHONE_11_PRO_10]: {
     width: '428px',
     height: '836px',
@@ -85,7 +99,7 @@ export const optionsByDevice: Record<Device, IOption[]> = {
     {label: 'iPhone 13 Pro Max', value: DeviceKeys.IPHONE_13_PRO_MAX},
     {label: 'iPhone 13 / 13 Pro', value: DeviceKeys.IPHONE_13},
     {label: 'iPhone 13 Mini', value: DeviceKeys.IPHONE_13_MINI},
-    {label: 'iPhona 11 Pro Max', value: DeviceKeys.IPHONE_11_PRO_MAX},
+    {label: 'iPhone 11 Pro Max', value: DeviceKeys.IPHONE_11_PRO_MAX},
     {label: 'iPhone 11 Pro / X', value: DeviceKeys.IPHONE_11_PRO_10},
     {label: 'iPhone SE', value: DeviceKeys.IPHONE_SE},
     {label: 'iPhone 8 Plus', value: DeviceKeys.IPHONE_8_PLUS},
