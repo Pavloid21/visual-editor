@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import {createGlobalStyle} from 'styled-components';
 export default createGlobalStyle`
   body {
     background: #FAFAFA;
@@ -11,6 +11,7 @@ export default createGlobalStyle`
     --light-orange: #FFEBEE;
     --neo-black: #333333;
     --neo-gray: #E6E6E6;
+    --neo-secondary-gray: #8C8C8C;
     font-family: Roboto, sans-serif !important;
     font-size: 16px;
   }

@@ -1,16 +1,18 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
-
-import reportWebVitals from "./utils/reportWebVitals";
-import store from "./utils/store";
-import App from "./containers/App";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {Provider} from 'react-redux';
+import {BrowserRouter as Router} from 'react-router-dom';
+import reportWebVitals from './utils/reportWebVitals';
+import store from './utils/store';
+import App from './containers/App';
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <Router>
+      <App />
+    </Router>
   </Provider>,
-  document.getElementById("root")
+  document.getElementById('root')
 );
 
 reportWebVitals();

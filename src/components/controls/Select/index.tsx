@@ -27,7 +27,7 @@ export const Select = (props: ISelect) => {
         indicatorSeparator: () => ({display: 'none'}),
         control: (props) => ({
           ...props,
-          borderColor: '#8c8c8c',
+          borderColor: 'var(--neo-secondary-gray)',
           minHeight: 42,
         }),
       }}

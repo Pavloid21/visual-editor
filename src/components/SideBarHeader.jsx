@@ -25,7 +25,7 @@ const Subheader = styled.div`
     gap: 8px;
   }
   & span {
-    color: #8C8C8C;
+    color: var(--neo-secondary-gray);
     &:hover {
       cursor: pointer;
     }

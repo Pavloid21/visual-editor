@@ -1,17 +1,22 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import renderHandlebars from "../utils/renderHandlebars";
-import LeftSidebar from "../components/LeftSidebar";
-import Preview from "./Preview";
-import actionTypes from "../constants/actionTypes";
-import { DndWrapper } from "./DnDWrapper";
-import { observer } from "../utils/observer";
-import { findInTree } from "../reducers/layout";
-import TopBar from "../components/TopBar";
-import GlobalStyles from "../constants/theme";
-import RightSidebar from "../components/RightSideBar";
-import HighlightedElement from "../components/HighlightedElement";
+import React, {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {Routes, Route, useNavigate, Navigate} from 'react-router-dom';
+import renderHandlebars from '../utils/renderHandlebars';
+import LeftSidebar from '../components/LeftSidebar';
+import Preview from './Preview';
+import actionTypes from '../constants/actionTypes';
+import {DndWrapper} from './DnDWrapper';
+import {observer} from '../utils/observer';
+import {findInTree} from '../reducers/layout';
+import TopBar from '../components/TopBar';
+import GlobalStyles from '../constants/theme';
+import RightSidebar from '../components/RightSideBar';
+import HighlightedElement from '../components/HighlightedElement';
+import {AuthProvider, AuthContext} from 'auth';
+import {ReactKeycloakProvider} from "@react-keycloak/web"
+import Login from './Login';
+import RequireAuth from 'auth/RequireAuth';
+import keycloack from '../constants/keykloak';
 
 const App = () => {
   const layout = useSelector((state) => state.layout);
@@ -20,24 +25,21 @@ const App = () => {
   const config = useSelector((state) => state.config);
   const barState = useSelector((state) => state.sideBar);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
     const handleMessage = (event) => {
       if (event.data.event) {
-        if (event.data.blockId && event.data.event === "click") {
+        if (event.data.blockId && event.data.event === 'click') {
           handleChangeActiveTab(0);
           handleSetSelectedBlock(event.data.blockId);
-        } else if (event.data.newOrder && event.data.event === "sorted") {
-          handleReorderLayout(
-            event.data.newOrder,
-            event.data.parentID,
-            layout.blocks
-          );
+        } else if (event.data.newOrder && event.data.event === 'sorted') {
+          handleReorderLayout(event.data.newOrder, event.data.parentID, layout.blocks);
         }
       }
     };
 
     observer.subscribe((data) => {
-      handleMessage({ data, event: data.event });
+      handleMessage({data, event: data.event});
     });
   }, [layout, bottomBar]);
 
@@ -86,46 +88,48 @@ const App = () => {
     }
   };
 
-  const { components } = renderHandlebars(
-    layout.blocks,
-    layout.documentId,
-    bottomBar,
-    topAppBar
-  );
-  const { previewMode } = config;
+  const {components} = renderHandlebars(layout.blocks, layout.documentId, bottomBar, topAppBar);
+  const {previewMode} = config;
 
   const handleAppClick = (e) => {
-    if (
-      !e.target.onclick &&
-      e.target.localName !== "input" &&
-      e.target.className !== "saturation-black"
-    ) {
-      console.log("e.target", e.target);
+    if (!e.target.onclick && e.target.localName !== 'input' && e.target.className !== 'saturation-black') {
+      console.log('e.target', e.target);
       dispatch({
         type: actionTypes.SET_SELECTED_BLOCK,
-        blockUuid: "",
+        blockUuid: '',
       });
     }
   };
 
   return (
-    <div id="APP" onClick={handleAppClick}>
-      <DndWrapper id="APP">
-        <TopBar />
-        <Router>
+    // <AuthProvider onLogin={() => navigate('/editor')} onLogout={() => navigate('/login')} defaultAuthenticated={false}>
+    <ReactKeycloakProvider authClient={keycloack}>
+      <div id="APP" onClick={handleAppClick}>
+        <DndWrapper id="APP">
           <div
             className="wrapper d-flex"
             style={{
-              paddingTop: "60px",
-              justifyContent: "center",
-              height: "100vh",
+              paddingTop: '60px',
+              justifyContent: 'center',
+              height: '100vh',
             }}
           >
+            <TopBar />
             <Routes>
+              <Route exact path="/" element={<Navigate to="/editor" />} />
               <Route
-                path="/"
+                exact
+                path="/login"
                 element={
                   <>
+                    <Login />
+                  </>
+                }
+              />
+              <Route
+                path="/editor"
+                element={
+                  <RequireAuth>
                     <LeftSidebar display={barState.left} />
                     <Preview
                       components={components}
@@ -133,16 +137,17 @@ const App = () => {
                       previewMode={previewMode}
                     />
                     <RightSidebar display={barState.right} />
-                  </>
+                  </RequireAuth>
                 }
               />
             </Routes>
           </div>
-        </Router>
-      </DndWrapper>
-      <GlobalStyles />
-      <HighlightedElement />
-    </div>
+        </DndWrapper>
+        <GlobalStyles />
+        <HighlightedElement />
+      </div>
+    </ReactKeycloakProvider>
+    // </AuthProvider>
   );
 };
 

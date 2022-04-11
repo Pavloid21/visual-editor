@@ -11,7 +11,7 @@ const ButtonGroup = styled.div`
     border-left: none !important;
   }
   & button.secondary {
-    border: 1px solid #8c8c8c;
+    border: 1px solid var(--neo-secondary-gray);
     color: #333333;
   }
 `;

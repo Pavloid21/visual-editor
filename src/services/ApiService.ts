@@ -38,6 +38,17 @@ export const callApi = async (
 };
 
 const backHost = 'http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/';
+const authEndpoint = 'http://id-test.neoflex.ru/auth/realms/mobile-platform/protocol/openid-connect/auth';
+
+export const getAuthorizeHref = (): string => {
+  const clientId = 'admin';
+  const redirectUri = '/';
+  return `${authEndpoint}?client_id=${clientId}&redirect=${redirectUri}&response_type=token`;
+};
+
+export const authenticate = async () => {
+  return await axios({url: getAuthorizeHref()});
+};
 
 export const getScreenesList = async () => {
   const url = backHost + 'admin/screens/';
@@ -64,12 +75,12 @@ export const deleteScreen = async (endpoint: string) => {
 export const getActionsList = async () => {
   const url = backHost + 'admin/actions/';
   return await callApi(url, null, 'GET');
-}
+};
 
 export const getDataActionsList = async () => {
   const url = backHost + 'admin/data/';
   return await callApi(url, null, 'GET');
-}
+};
 
 export const getActionByName = async (actionName: string) => {
   const url = backHost + `admin/actions/${actionName}`;
