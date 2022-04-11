@@ -13,7 +13,9 @@ export type Block = {
   complex?: {label: string; value: string}[];
 };
 
-export interface Blocks {
+type SimpleObject = {[key: string]: any};
+
+export interface Blocks extends SimpleObject {
   hstack: Block;
   card: Block;
   vstack: Block;

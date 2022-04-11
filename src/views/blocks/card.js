@@ -1,17 +1,17 @@
-import React from "react";
-import { useDrop } from "react-dnd";
-import { ItemTypes } from "../../constants/actionTypes";
-import renderHandlebars from "../../utils/renderHandlebars";
-import styled from "styled-components";
-import { sortableContainer } from "react-sortable-hoc";
-import { arrayMoveImmutable } from "array-move";
-import { observer } from "../../utils/observer";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import actionTypes from "../../constants/actionTypes";
-import card from "../../assets/card.svg";
-import Wrapper from "../../utils/wrapper";
-import { hexToRgb } from "../../constants/utils";
+import React from 'react';
+import {useDrop} from 'react-dnd';
+import {ItemTypes} from '../../constants/actionTypes';
+import renderHandlebars from '../../utils/renderHandlebars';
+import styled from 'styled-components';
+import {sortableContainer} from 'react-sortable-hoc';
+import {arrayMoveImmutable} from 'array-move';
+import {observer} from '../../utils/observer';
+import {useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
+import actionTypes from '../../constants/actionTypes';
+import card from '../../assets/card.svg';
+import Wrapper from '../../utils/wrapper';
+import {hexToRgb} from '../../constants/utils';
 
 const Card = styled.div`
   box-sizing: border-box;
@@ -24,8 +24,7 @@ const Card = styled.div`
   padding-right: ${(props) => props.padding?.right}px;
   padding-bottom: ${(props) => props.padding?.bottom}px;
   padding-left: ${(props) => props.padding?.left}px;
-  height: ${(props) =>
-    props.size?.height ? props.size?.height + "px" : "auto"};
+  height: ${(props) => (props.size?.height ? props.size?.height + 'px' : 'auto')};
   box-shadow: ${(props) => {
     const RGB = hexToRgb(props.shadow?.color);
     return `${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px 8px rgba(${RGB.r}, ${RGB.g}, ${RGB.b}, ${props.shadow?.opacity})`;
@@ -39,29 +38,21 @@ const Card = styled.div`
   `};
 `;
 
-const SortableContainer = sortableContainer(
-  ({ drop, backgroundColor, listItems, settingsUI, ...props }) => {
-    console.log("backgroundColor", backgroundColor);
-    return (
-      <Wrapper id={props.id}>
-        <Card
-          {...settingsUI}
-          {...props}
-          backgroundColor={backgroundColor}
-          ref={drop}
-          className="draggable"
-        >
-          {listItems && renderHandlebars(listItems, "document2").components}
-        </Card>
-      </Wrapper>
-    );
-  }
-);
+const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, settingsUI, ...props}) => {
+  console.log('backgroundColor', backgroundColor);
+  return (
+    <Wrapper id={props.id}>
+      <Card {...settingsUI} {...props} backgroundColor={backgroundColor} ref={drop} className="draggable">
+        {listItems && renderHandlebars(listItems, 'document2').components}
+      </Card>
+    </Wrapper>
+  );
+});
 
-const Component = ({ settingsUI, uuid, listItems, ...props }) => {
+const Component = ({settingsUI, uuid, listItems, ...props}) => {
   const dispatch = useDispatch();
   const layout = useSelector((state) => state.layout);
-  const [{ canDrop, isOver, target }, drop] = useDrop(() => ({
+  const [{canDrop, isOver, target}, drop] = useDrop(() => ({
     accept: ItemTypes.BOX,
     drop: (item) => {
       if (target.isOver()) {
@@ -77,7 +68,7 @@ const Component = ({ settingsUI, uuid, listItems, ...props }) => {
       };
     },
     collect: (monitor) => ({
-      isOver: monitor.isOver({ shallow: true }),
+      isOver: monitor.isOver({shallow: true}),
       canDrop: monitor.canDrop(),
       target: monitor,
     }),
@@ -86,19 +77,17 @@ const Component = ({ settingsUI, uuid, listItems, ...props }) => {
   const isActive = canDrop && isOver;
   let backgroundColor = settingsUI.backgroundColor;
   if (isActive) {
-    console.log("isActive", isActive);
-    backgroundColor = "#f1f8ff";
+    console.log('isActive', isActive);
+    backgroundColor = '#f1f8ff';
   }
 
-  const onSortEnd = ({ oldIndex, newIndex, nodes }) => {
-    const newOrder = arrayMoveImmutable(nodes, oldIndex, newIndex).map((item) =>
-      item.node.getAttribute("id")
-    );
+  const onSortEnd = ({oldIndex, newIndex, nodes}) => {
+    const newOrder = arrayMoveImmutable(nodes, oldIndex, newIndex).map((item) => item.node.getAttribute('id'));
     observer.broadcast({
       layout,
       newOrder,
-      parentID: nodes[0].node.parentNode.getAttribute("id"),
-      event: "sorted",
+      parentID: nodes[0].node.parentNode.getAttribute('id'),
+      event: 'sorted',
     });
   };
 
@@ -117,18 +106,18 @@ const Component = ({ settingsUI, uuid, listItems, ...props }) => {
 
 const block = {
   Component,
-  name: "CARD",
-  title: "Card",
-  description: "Cards contain content and actions about a single subject.",
+  name: 'CARD',
+  title: 'Card',
+  description: 'Cards contain content and actions about a single subject.',
   previewImageUrl: card,
-  category: "Layouts",
+  category: 'Layouts',
   defaultInteractiveOptions: {
-    action: { url: "nextScreenName", fields: ["field1", "field2"], target: "" },
+    action: {url: 'nextScreenName', fields: ['field1', 'field2'], target: ''},
   },
   defaultData: {
     elevation: 3,
-    alignment: "CENTER",
-    backgroundColor: "#C6C6C6",
+    alignment: 'CENTER',
+    backgroundColor: '#C6C6C6',
     spacing: 16,
     padding: {
       top: 100,
@@ -140,7 +129,7 @@ const block = {
       height: 0,
     },
     shape: {
-      type: "ROUND",
+      type: 'ROUND',
       radius: 20,
     },
     corners: {
@@ -150,7 +139,7 @@ const block = {
       bottomRightRadius: 0,
     },
     shadow: {
-      color: "#000000",
+      color: '#000000',
       opacity: 0.5,
       offsetSize: {
         width: 0,
@@ -160,58 +149,72 @@ const block = {
   },
   listItems: [],
   config: {
-    elevation: { type: "number", name: "Elevation" },
-    alignment: { type: "string", name: "Alignment" },
-    backgroundColor: { type: "color", name: "Background color" },
-    spacing: { type: "number", name: "Spacing" },
+    elevation: {type: 'number', name: 'Elevation'},
+    alignment: {
+      type: 'select',
+      name: 'Alignment',
+      options: [
+        {label: 'Center', value: 'CENTER'},
+        {label: 'Left', value: 'LEFT'},
+        {label: 'Right', value: 'RIGHT'},
+        {label: 'Justify', value: 'JUSTIFY'},
+        {label: 'Fill', value: 'FILL'},
+      ],
+    },
+    backgroundColor: {type: 'color', name: 'Background color'},
+    spacing: {type: 'number', name: 'Spacing'},
     shape: {
-      type: { type: "string", name: "Type" },
-      radius: { type: "number", name: "Radius" },
+      type: {
+        type: 'select',
+        name: 'Shape type',
+        options: [{label: 'All corners round', value: 'ALLCORNERSROUND'}],
+      },
+      radius: {type: 'number', name: 'Radius'},
     },
     corners: {
-      topLeftRadius: { type: "number", name: "Top left radius" },
-      topRightRadius: { type: "number", name: "Top right radius" },
-      bottomLeftRadius: { type: "number", name: "Bottom left radius" },
-      bottomRightRadius: { type: "number", name: "Bottom right radius" },
+      topLeftRadius: {type: 'number', name: 'Top left radius'},
+      topRightRadius: {type: 'number', name: 'Top right radius'},
+      bottomLeftRadius: {type: 'number', name: 'Bottom left radius'},
+      bottomRightRadius: {type: 'number', name: 'Bottom right radius'},
     },
     shadow: {
-      color: { type: "color", name: "Shadow color" },
-      opacity: { type: "number", name: "Opacity" },
+      color: {type: 'color', name: 'Shadow color'},
+      opacity: {type: 'number', name: 'Opacity'},
       offsetSize: {
-        width: { type: "number", name: "Width" },
-        height: { type: "number", name: "Height" },
+        width: {type: 'number', name: 'Width'},
+        height: {type: 'number', name: 'Height'},
       },
     },
     padding: {
       top: {
-        type: "number",
-        name: "Top",
+        type: 'number',
+        name: 'Top',
       },
       bottom: {
-        type: "number",
-        name: "Bottom",
+        type: 'number',
+        name: 'Bottom',
       },
       left: {
-        type: "number",
-        name: "Left",
+        type: 'number',
+        name: 'Left',
       },
       right: {
-        type: "number",
-        name: "Right",
+        type: 'number',
+        name: 'Right',
       },
     },
     size: {
-      height: { type: "number", name: "Height" },
+      height: {type: 'number', name: 'Height'},
     },
   },
   interactive: {
     action: {
       url: {
-        type: "string",
-        name: "Action URL",
+        type: 'string',
+        name: 'Action URL',
       },
-      target: { type: "string", name: "Target" },
-      fields: { type: "array", name: "Fields set" },
+      target: {type: 'string', name: 'Target'},
+      fields: {type: 'array', name: 'Fields set'},
     },
   },
 };

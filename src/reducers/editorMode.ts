@@ -1,14 +1,16 @@
 import actionTypes from '../constants/actionTypes';
 import { optionsByDevice } from 'containers/MobileSelect/consts';
 import { Device } from 'containers/MobileSelect/consts';
+import {AnyAction} from 'redux';
+import { EditorMode } from './types';
 
-const initialState = {
+const initialState: EditorMode = {
   mode: 'editor',
   device: Device.IOS,
-  model: optionsByDevice[Device.IOS][4].value,
+  model: optionsByDevice[Device.IOS][4],
 };
 
-export default function reducer(state = initialState, action) {
+export default function reducer(state = initialState, action: AnyAction) {
   switch (action.type) {
     case actionTypes.SET_EDITOR_MODE:
       return {

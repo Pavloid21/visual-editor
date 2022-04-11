@@ -40,7 +40,7 @@ const Select = styled(SelectBase)`
   }
 `;
 
-const Inspector: React.FC<any> = (props) => {
+const Inspector: React.FC<any> = ({display}) => {
   const dispatch = useDispatch();
   const layout = useSelector((state: Store) => state.layout);
   const handleChangeBlockData = (blockUuid: string, key: string, value: any, parentKey: string | undefined) => {
@@ -56,8 +56,8 @@ const Inspector: React.FC<any> = (props) => {
   const handleChangeElemType = (blockId: string) => {
     dispatch({
       type: actionTypes.SWITCH_ELEMENT_TYPE,
-      blockId
-    })
+      blockId,
+    });
   };
 
   const parseConfig = (config: any, blockUuid: string, endpoint: any, parentKey?: any) => {
@@ -101,6 +101,17 @@ const Inspector: React.FC<any> = (props) => {
               placeholder={config[el].name}
               value={endpoint ? endpoint[el] : null}
               onChange={(e) => handleChangeBlockData(blockUuid, el, e.target.value, parentKey)}
+            />
+          </div>
+        );
+      } else if (config[el].type === 'select') {
+        return (
+          <div className="form-group" key={`${parentKey}_${index}`}>
+            <Select
+              label={config[el].name}
+              onChange={(value) => handleChangeBlockData(blockUuid, el, value, parentKey)}
+              options={config[el].options}
+              value={endpoint ? endpoint[el] : null}
             />
           </div>
         );
@@ -148,7 +159,7 @@ const Inspector: React.FC<any> = (props) => {
     });
   };
 
-  if (!props.display) return null;
+  if (!display) return null;
 
   const findInTree = (tree: any, uuid: string): any => {
     let result = null;
@@ -158,6 +169,9 @@ const Inspector: React.FC<any> = (props) => {
       }
       if (!result && item && item.listItems) {
         result = findInTree(item.listItems, uuid);
+      }
+      if (!result && item && item.listItem) {
+        result = findInTree([item.listItem], uuid);
       }
     }
     return result;
@@ -183,12 +197,7 @@ const Inspector: React.FC<any> = (props) => {
       }}
     >
       {interactive && parseConfig(interactive, blockUuid, block.interactive)}
-      {complex && (
-        <Container>
-          <Label>Element type</Label>
-          <Select options={complex} onChange={handleChangeElemType} value={name} />
-        </Container>
-      )}
+      {complex && <Select label="Element type" options={complex} onChange={handleChangeElemType} value={name} />}
       {parseConfig(config, blockUuid, block.settingsUI)}
       {block.settingsUI.navigationItems && (
         <div>
@@ -203,7 +212,7 @@ const Inspector: React.FC<any> = (props) => {
                   <Trash
                     className="icon"
                     onClick={(e) => {
-                      props.dispatch({
+                      dispatch({
                         type: actionTypes.REMOVE_BOTTOMBAR_ITEM,
                         index,
                       });
@@ -220,7 +229,7 @@ const Inspector: React.FC<any> = (props) => {
           })}
           <Button
             onClick={() => {
-              props.dispatch({
+              dispatch({
                 type: actionTypes.ADD_BOTTOMBAR_ITEM,
               });
             }}
@@ -243,7 +252,7 @@ const Inspector: React.FC<any> = (props) => {
                     <Trash
                       className="icon"
                       onClick={(e) => {
-                        props.dispatch({
+                        dispatch({
                           type: actionTypes.REMOVE_TOPAPPBAR_ITEM,
                           index,
                         });
@@ -260,7 +269,7 @@ const Inspector: React.FC<any> = (props) => {
           })}
           <Button
             onClick={() => {
-              props.dispatch({
+              dispatch({
                 type: actionTypes.ADD_TOPAPPBAR_ITEM,
               });
             }}
