@@ -1,13 +1,13 @@
-import {Device} from 'constants/device';
 import actionTypes from '../constants/actionTypes';
-import {optionsByDevice} from 'containers/MobileSelect/consts';
+import { optionsByDevice } from 'containers/MobileSelect/consts';
+import { Device } from 'containers/MobileSelect/consts';
 import {AnyAction} from 'redux';
 import { EditorMode } from './types';
 
 const initialState: EditorMode = {
   mode: 'editor',
-  device: Device.IOS,
-  model: optionsByDevice[Device.IOS][0],
+  device: Device.ANDROID,
+  model: optionsByDevice[Device.ANDROID][1].value,
 };
 
 export default function reducer(state = initialState, action: AnyAction) {

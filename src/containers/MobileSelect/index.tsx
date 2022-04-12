@@ -2,9 +2,8 @@ import {Container, FlexContainer} from 'components/layouts';
 import React from 'react';
 import styled from 'styled-components';
 import {ButtonSelector as ButtonSelectorBase} from 'components';
-import {buttons, optionsByDevice} from './consts';
+import {buttons, optionsByDevice, Device} from './consts';
 import {useDispatch, useSelector} from 'react-redux';
-import {Device} from 'constants/device';
 import actionTypes from 'constants/actionTypes';
 import {Select as SelectBase} from 'components/controls';
 
@@ -32,7 +31,7 @@ const MobileSelect = () => {
     });
   };
 
-  const handleChangeMobile = (e: string) => {
+  const handleChangeMobile = (e: any) => {
     dispatch({
       type: actionTypes.SET_MODEL_DEVICE,
       model: e
@@ -42,7 +41,7 @@ const MobileSelect = () => {
   return (
     <FlexContainer>
       <ButtonSelector buttons={buttons} value={device} onChange={handleChangePlatform} />
-      <Select options={optionsByDevice[device as Device]} onChange={handleChangeMobile} value={phoneType.value} />
+      <Select options={optionsByDevice[device as Device]} onChange={handleChangeMobile} value={phoneType} />
     </FlexContainer>
   );
 };

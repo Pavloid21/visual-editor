@@ -49,7 +49,7 @@ export const NeoInput: React.FC<NeoInputProps> = (props) => {
   return (
     <Container>
       {props.label && <Label>{props.label}</Label>}
-      <StyledNeoInput allowClear={props.clearable && {clearIcon: <Remove />}} bordered={false} {...props} />
+      <StyledNeoInput allowClear={props.clearable && {clearIcon: <Remove />}} {...props} />
     </Container>
   );
 };

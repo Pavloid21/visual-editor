@@ -1,5 +1,4 @@
-import {IOption} from 'components/controls/Select/types';
-import {Device} from 'constants/device';
+
 import {Action} from 'redux';
 
 export type Actions = {
@@ -91,7 +90,7 @@ export type SideBar = {
 export type EditorMode = {
   mode: string;
   device: string;
-  model: {label: string; value: string};
+  model: string;
 };
 
 export type Store = {
