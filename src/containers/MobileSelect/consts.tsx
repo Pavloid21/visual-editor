@@ -50,12 +50,16 @@ export const mockByDeviceKey = {
 };
 
 export const stylesByDeviceKey: Record<DeviceKeys, CSSProperties> = {
-  [DeviceKeys.ANDROID_SMALL]: {},
+  [DeviceKeys.ANDROID_SMALL]: {
+    width: '396px',
+    height: '802px',
+    clipPath: 'url(#clipPath)',
+    borderRadius: '55px',
+    padding: '76px 20px 80px',
+  },
   [DeviceKeys.ANDROID_LARGE]: {
-    width: '420px',
+    width: '424px',
     height: '997px',
-    marginTop: '33px',
-    marginLeft: '35px',
     clipPath: 'url(#clipPath)',
     padding: '86px 26px 100px'
   },
