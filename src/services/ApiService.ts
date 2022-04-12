@@ -10,6 +10,10 @@ type OptionsType = {
   params: any;
 };
 
+export const API = axios.create({
+  baseURL: 'http://mobile-platform.apps.msa31.do.neoflex.ru/api/v2/',
+});
+
 export const callApi = async (
   url: string,
   data: any,
@@ -21,7 +25,7 @@ export const callApi = async (
   const options: OptionsType = {
     url,
     method: method,
-    headers,
+    headers: {...API.defaults.headers, ...headers},
     credentials: 'include',
     data: data || null,
     responseType: responseType ? 'blob' : 'json',
@@ -37,22 +41,23 @@ export const callApi = async (
   }
 };
 
-export const API = axios.create({
-  baseURL: 'http://mobile-platform.apps.msa31.do.neoflex.ru/api/v2/',
-});
-
 export const getProjectsList = async () => {
-  const url = API.defaults.baseURL + '/projects';
+  const url = API.defaults.baseURL + `projects`;
   return await callApi(url, null, 'GET');
 };
 
-export const getScreenesList = async () => {
-  const url = API.defaults.baseURL + 'admin/screens/';
+export const getProjectData = async (projectId: string) => {
+  const url = API.defaults.baseURL + `projects/${projectId}`;
   return await callApi(url, null, 'GET');
 };
 
-export const getScreenByName = async (screenName: string) => {
-  const url = API.defaults.baseURL + `admin/screens/${screenName}`;
+export const getScreenesList = async (projectId: string) => {
+  const url = API.defaults.baseURL + `projects/${projectId}/admin/screens`;
+  return await callApi(url, null, 'GET');
+};
+
+export const getScreenByName = async (projectId: string, screenName: string) => {
+  const url = API.defaults.baseURL + `projects/${projectId}/admin/screens/${screenName}?view=parsed`;
   return await callApi(url, null, 'GET');
 };
 

@@ -1,4 +1,3 @@
-
 import {Action} from 'redux';
 
 export type Actions = {
@@ -20,6 +19,11 @@ export type ActionItem = {
 
 export type API = {
   list: APIItem[];
+};
+
+export type Project = {
+  id: string;
+  name: string;
 };
 
 export type APIItem = {
@@ -103,4 +107,5 @@ export type Store = {
   current: string;
   code: string;
   actions: Actions;
+  project: Project;
 };

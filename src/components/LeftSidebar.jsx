@@ -51,6 +51,8 @@ export default function LeftSidebar({children, ...props}) {
   const bottomBar = useSelector((state) => state.layout.bottomBar);
   const selectedBlock = useSelector((state) => state.layout.selectedBlockUuid);
   const selectedScreen = useSelector((state) => state.layout.selectedScreen);
+  const project = useSelector((state) => state.project.id);
+  const projectName = useSelector((state) => state.project.name);
   const [activeTab, setActiveTab] = useState(0);
   const [availableScreenes, setScreenes] = useState([]);
   const [treeData, setTree] = useState([]);
@@ -161,35 +163,32 @@ export default function LeftSidebar({children, ...props}) {
   };
 
   useEffect(() => {
-    getScreenesList()
-      .then((response) => response.data)
+    getScreenesList(project)
       .then((screenes) => {
-        const screenesArr = screenes.map((screen) => {
-          return getScreenByName(screen)
-            .then((response) => response.data)
-            .then((data) => {
-              const template = {};
-              require(['esprima'], (parser) => {
-                try {
-                  const syntax = parser.parse(`async function a() {${data}}`);
-                  const snippetBody = syntax.body[0].body.body;
-                  snippetBody.forEach((statement) => {
-                    if (statement.type === 'ReturnStatement') {
-                      const result = walker(statement.argument.properties, template);
-                      return {
-                        screen,
-                        object: result,
-                      };
-                    }
-                  });
-                } catch (e) {
-                  // console.log("parse error :>> ", e);
-                }
-              });
+        const screenesArr = screenes.data.map((screen) => {
+          return getScreenByName(project, screen)
+            .then((response) => {
+              // require(['esprima'], (parser) => {
+              //   try {
+              //     const syntax = parser.parse(`async function a() {${response.data}}`);
+              //     const snippetBody = syntax.body[0].body.body;
+              //     snippetBody.forEach((statement) => {
+              //       if (statement.type === 'ReturnStatement') {
+              //         const result = walker(statement.argument.properties, template);
+              //         return {
+              //           screen,
+              //           object: result,
+              //         };
+              //       }
+              //     });
+              //   } catch (e) {
+              //     // console.log("parse error :>> ", e);
+              //   }
+              // });
               return {
                 screen,
-                object: template,
-                logic: data.match(/.*return/gs),
+                object: response.data,
+                logic: response.data,
               };
             })
             .catch((e) => {
@@ -414,7 +413,7 @@ export default function LeftSidebar({children, ...props}) {
   return (
     <Container show={show}>
       <div>
-        <SideBarHeader title="Project name" />
+        <SideBarHeader title={projectName} />
         <SideBarSubheader>
           <div>
             <span className={activeTab === 0 ? 'tab_active' : ''} onClick={() => setActiveTab(0)}>

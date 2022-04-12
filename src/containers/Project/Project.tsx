@@ -1,10 +1,15 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import {useKeycloak} from '@react-keycloak/web';
 import {ButtonSelector} from 'components';
 import {v4} from 'uuid';
 import {Button} from 'components/controls';
 import {ReactComponent as Plus} from '../../assets/button_plus.svg';
+import {getProjectData, getProjectsList} from 'services/ApiService';
+import {Card} from './Card';
+import {useNavigate} from 'react-router-dom';
+import {useDispatch} from 'react-redux';
+import actionTypes from 'constants/actionTypes';
 
 const Container = styled.div`
   display: flex;
@@ -43,11 +48,36 @@ const Content = styled.div`
   overflow-y: auto;
   background: #fafafa;
   box-shadow: inset 0px -1px 4px rgba(0, 0, 0, 0.3);
+  flex-wrap: wrap;
+  gap: 32px;
+  padding: 32px;
+  height: calc(100vh - 300px);
 `;
 
 export const Project: React.FC<any> = () => {
   const {keycloak} = useKeycloak();
   const {name, preferred_username} = keycloak.idTokenParsed!;
+  const [projects, setProjects] = useState<any[]>([]);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    getProjectsList().then((projects: any) => {
+      const promises: Promise<any>[] = projects.data.map((project: string) => getProjectData(project));
+      Promise.allSettled(promises).then((data: any[]) => {
+        setProjects(data.map((item: any) => item.value.data));
+      });
+    });
+  }, []);
+
+  const handleProjectSelect = (project: any) => {
+    dispatch({
+      type: actionTypes.SELECT_PROJECT,
+      ...project,
+    });
+    navigate('/editor');
+  };
+
   return (
     <Container>
       <H1>Welcome, {name || preferred_username}!</H1>
@@ -69,7 +99,11 @@ export const Project: React.FC<any> = () => {
             Create New Project
           </Button>
         </Header>
-        <Content></Content>
+        <Content>
+          {projects.map((project) => (
+            <Card {...project} key={v4()} onClick={() => handleProjectSelect(project)} />
+          ))}
+        </Content>
       </div>
     </Container>
   );

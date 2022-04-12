@@ -9,6 +9,7 @@ import editorMode from "./editorMode";
 import current from "./current";
 import code from "./code";
 import actions from "./actions";
+import project from "./project";
 
 export default combineReducers({
   config,
@@ -20,4 +21,5 @@ export default combineReducers({
   current,
   code,
   actions,
+  project,
 });
