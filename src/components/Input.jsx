@@ -50,7 +50,7 @@ const NeoInput = (props) => {
       {props.label && <Label>{props.label}</Label>}
       <StyledNeoInput
         allowClear={props.clearable && { clearIcon: <Remove /> }}
-        bordered={false}
+        // bordered={false}
         {...props}
       />
     </Container>
