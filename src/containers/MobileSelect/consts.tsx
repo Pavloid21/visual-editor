@@ -52,9 +52,12 @@ export const mockByDeviceKey = {
 export const stylesByDeviceKey: Record<DeviceKeys, CSSProperties> = {
   [DeviceKeys.ANDROID_SMALL]: {},
   [DeviceKeys.ANDROID_LARGE]: {
-    width: '431px',
-    height: '1000px',
+    width: '420px',
+    height: '997px',
     marginTop: '33px',
+    marginLeft: '35px',
+    clipPath: 'url(#clipPath)',
+    padding: '86px 26px 100px'
   },
   [DeviceKeys.IPHONE_13_PRO_MAX]: {
     width: '475px',
@@ -89,9 +92,25 @@ export const stylesByDeviceKey: Record<DeviceKeys, CSSProperties> = {
     height: '836px',
     clipPath: 'url(#maskRect1)',
   },
-  [DeviceKeys.IPHONE_SE]: {},
-  [DeviceKeys.IPHONE_8_PLUS]: {},
-  [DeviceKeys.IPHONE_8]: {},
+  [DeviceKeys.IPHONE_SE]: {
+    width: '361px',
+    height: '753px',
+    padding: '86px 20px 90px',
+    clipPath: 'url(#clipPath)'
+  },
+  [DeviceKeys.IPHONE_8_PLUS]: {
+    width: '467px',
+    height: '975px',
+    padding: '115px 26px 119px',
+    borderRadius: '65px',
+    clipPath: 'url(#clipPath)'
+  },
+  [DeviceKeys.IPHONE_8]: {
+    clipPath: 'url(#clipPath)',
+    width: '425px',
+    height: '883px',
+    padding: '105px 26px 105px'
+  },
 };
 
 export const optionsByDevice: Record<Device, IOption[]> = {

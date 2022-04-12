@@ -11,8 +11,10 @@
 <rect x="167.601" y="981.89" width="156.535" height="15.2505" rx="7.62527" fill="#666666"/>
 </g>
 <g filter="url(#filter1_i_196_4527)">
+<clipPath id="clipPath">
 <rect x="64" y="127" width="360" height="800" fill="white"/>
 <rect x="63.5" y="126.5" width="361" height="801" stroke="#333333"/>
+</clipPath>
 </g>
 <defs>
 <filter id="filter0_d_196_4527" x="0.754761" y="0" width="494" height="1064" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">

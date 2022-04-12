@@ -39,8 +39,10 @@
 <g style="mix-blend-mode:overlay">
 <path fill-rule="evenodd" clip-rule="evenodd" d="M123.274 54.7152C126.573 54.7152 129.248 52.0447 129.248 48.7504C129.248 45.4562 126.573 42.7856 123.274 42.7856C119.975 42.7856 117.3 45.4562 117.3 48.7504C117.3 52.0447 119.975 54.7152 123.274 54.7152ZM123.274 55.6356C127.082 55.6356 130.17 52.553 130.17 48.7504C130.17 44.9478 127.082 41.8652 123.274 41.8652C119.466 41.8652 116.378 44.9478 116.378 48.7504C116.378 52.553 119.466 55.6356 123.274 55.6356Z" fill="url(#paint15_linear_201_4884)"/>
 </g>
+<clipPath id="clipPath">
 <rect x="20" y="92" width="322" height="570" rx="5" fill="white"/>
 <rect x="20" y="92" width="322" height="570" rx="5" stroke="#181818" stroke-width="2" style="mix-blend-mode:overlay"/>
+</clipPath>
 <defs>
 <linearGradient id="paint0_linear_201_4884" x1="185.648" y1="164.039" x2="353.205" y2="135.826" gradientUnits="userSpaceOnUse">
 <stop stop-color="#636363" stop-opacity="0"/>
