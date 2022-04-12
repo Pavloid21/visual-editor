@@ -32,6 +32,9 @@ export const Button = styled.button<React.HTMLProps<HTMLButtonElement>>`
   &.sm {
     padding: 10px 26px;
   }
+  & > svg {
+    margin-right: 11px;
+  }
   ${(props) => {
     if (props.disabled) {
       return `

@@ -8,7 +8,8 @@ import {Button} from 'components/controls';
 import {useDispatch, useSelector} from 'react-redux';
 import actionTypes from '../constants/actionTypes';
 import {deleteAction, deleteScreen, saveAction, saveScreen} from '../services/ApiService';
-import {AuthContext} from 'auth';
+import {useKeycloak} from '@react-keycloak/web';
+import {useLocation} from 'react-router-dom';
 
 const Bar = styled.div`
   height: 60px;
@@ -51,6 +52,8 @@ const VerticalDivider = styled.div`
 
 const TopBar = () => {
   const dispatch = useDispatch();
+  const {keycloak} = useKeycloak();
+  const location = useLocation();
   const snippets = useSelector((state) => state.layout.snippets);
   const actions = useSelector((state) => [
     ...state.actions.actions.map((item) => ({...item, type: 'actions'})),
@@ -92,28 +95,28 @@ const TopBar = () => {
     });
   };
   return (
-    <AuthContext.Consumer>
-      {(context) => (
-        <Bar isHidden={context.authenticated}>
-          <div>
-            <Logo className="icon" />
-            <VerticalDivider />
-            <HideLeft className="icon" onClick={handleHideLeft} />
-          </div>
-          <div>
-            <div>
+    <Bar isHidden={keycloak.authenticated}>
+      <div>
+        <Logo className="icon" />
+        <VerticalDivider />
+        {location.pathname.indexOf('editor') >= 0 && <HideLeft className="icon" onClick={handleHideLeft} />}
+      </div>
+      <div>
+        <div>
+          {location.pathname.indexOf('editor') >= 0 && (
+            <>
               <Button onClick={handleSaveApplication} disabled>
                 Save application
               </Button>
               <HideRight className="icon" onClick={handleHideRight} />
               <Settings className="icon" />
-            </div>
-            <VerticalDivider />
-            <div className="user">FN</div>
-          </div>
-        </Bar>
-      )}
-    </AuthContext.Consumer>
+            </>
+          )}
+        </div>
+        <VerticalDivider />
+        <div className="user">FN</div>
+      </div>
+    </Bar>
   );
 };
 

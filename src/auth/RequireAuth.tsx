@@ -1,11 +1,12 @@
 import React from 'react';
 import {Navigate} from 'react-router-dom';
 import {AuthContext} from './AuthContext';
+import {useKeycloak} from '@react-keycloak/web';
 
 const RequireAuth = (props: any) => {
-  const {authenticated} = React.useContext(AuthContext);
+  const {keycloak} = useKeycloak();
 
-  if (!authenticated) {
+  if (!keycloak.authenticated || keycloak.isTokenExpired()) {
     return <Navigate to="/login" />;
   }
 

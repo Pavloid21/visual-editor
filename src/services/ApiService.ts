@@ -37,69 +37,65 @@ export const callApi = async (
   }
 };
 
-const backHost = 'http://mobile-backend-resource-manager.apps.msa31.do.neoflex.ru/api/v1/';
-const authEndpoint = 'http://id-test.neoflex.ru/auth/realms/mobile-platform/protocol/openid-connect/auth';
+export const API = axios.create({
+  baseURL: 'http://mobile-platform.apps.msa31.do.neoflex.ru/api/v2/',
+});
 
-export const getAuthorizeHref = (): string => {
-  const clientId = 'admin';
-  const redirectUri = '/';
-  return `${authEndpoint}?client_id=${clientId}&redirect=${redirectUri}&response_type=token`;
-};
-
-export const authenticate = async () => {
-  return await axios({url: getAuthorizeHref()});
+export const getProjectsList = async () => {
+  const url = API.defaults.baseURL + '/projects';
+  return await callApi(url, null, 'GET');
 };
 
 export const getScreenesList = async () => {
-  const url = backHost + 'admin/screens/';
+  const url = API.defaults.baseURL + 'admin/screens/';
   return await callApi(url, null, 'GET');
 };
 
 export const getScreenByName = async (screenName: string) => {
-  const url = backHost + `admin/screens/${screenName}`;
+  const url = API.defaults.baseURL + `admin/screens/${screenName}`;
   return await callApi(url, null, 'GET');
 };
 
 export const saveScreen = async (endpoint: string, payload: string) => {
-  const url = backHost + `admin/screens/${endpoint}`;
+  const url = API.defaults.baseURL + `admin/screens/${endpoint}`;
   return await callApi(url, payload, 'PUT', undefined, undefined, {
     'Content-Type': 'application/javascript',
   });
 };
 
 export const deleteScreen = async (endpoint: string) => {
-  const url = backHost + `admin/screens/${endpoint}`;
+  const url = API.defaults.baseURL + `admin/screens/${endpoint}`;
   return await callApi(url, null, 'DELETE');
 };
 
 export const getActionsList = async () => {
-  const url = backHost + 'admin/actions/';
+  const url = API.defaults.baseURL + 'admin/actions/';
   return await callApi(url, null, 'GET');
 };
 
 export const getDataActionsList = async () => {
-  const url = backHost + 'admin/data/';
+  const url = API.defaults.baseURL + 'admin/data/';
   return await callApi(url, null, 'GET');
 };
 
 export const getActionByName = async (actionName: string) => {
-  const url = backHost + `admin/actions/${actionName}`;
+  const url = API.defaults.baseURL + `admin/actions/${actionName}`;
   return await callApi(url, null, 'GET');
 };
 
 export const getDataActionByName = async (actionName: string) => {
-  const url = backHost + `admin/data/${actionName}`;
+  const url = API.defaults.baseURL + `admin/data/${actionName}`;
   return await callApi(url, null, 'GET');
 };
 
 export const saveAction = async (actionType: string, endpoint: string, payload: string) => {
-  const url = backHost + `admin/${actionType}/${endpoint}`;
+  const url = API.defaults.baseURL + `admin/${actionType}/${endpoint}`;
   return await callApi(url, payload, 'PUT', undefined, undefined, {
     'Content-Type': 'application/javascript',
   });
 };
 
 export const deleteAction = async (actionType: string, endpoint: string) => {
-  const url = backHost + `admin/${actionType}/${endpoint}`;
+  const url = API.defaults.baseURL + `admin/${actionType}/${endpoint}`;
   return await callApi(url, null, 'DELETE');
 };

@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {Routes, Route, useNavigate, Navigate} from 'react-router-dom';
+import {Routes, Route, Navigate} from 'react-router-dom';
 import renderHandlebars from '../utils/renderHandlebars';
 import LeftSidebar from '../components/LeftSidebar';
 import Preview from './Preview';
@@ -12,11 +12,11 @@ import TopBar from '../components/TopBar';
 import GlobalStyles from '../constants/theme';
 import RightSidebar from '../components/RightSideBar';
 import HighlightedElement from '../components/HighlightedElement';
-import {AuthProvider, AuthContext} from 'auth';
-import {ReactKeycloakProvider} from "@react-keycloak/web"
 import Login from './Login';
 import RequireAuth from 'auth/RequireAuth';
-import keycloack from '../constants/keykloak';
+import {useKeycloak} from '@react-keycloak/web';
+import {Project} from './Project';
+import {API} from 'services/ApiService';
 
 const App = () => {
   const layout = useSelector((state) => state.layout);
@@ -25,7 +25,21 @@ const App = () => {
   const config = useSelector((state) => state.config);
   const barState = useSelector((state) => state.sideBar);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const {initialized, keycloak} = useKeycloak();
+  const setHeaderAuthorizationToken = () => {
+    if (keycloak.token) {
+      API.defaults.headers.common.Authorization = `Bearer ${keycloak.token}`;
+    }
+  };
+
+  useEffect(() => {
+    keycloak.onTokenExpired = () => {
+      keycloak.updateToken(50);
+    };
+    keycloak.onAuthSuccess = setHeaderAuthorizationToken;
+    keycloak.onAuthRefreshSuccess = setHeaderAuthorizationToken;
+  }, [!keycloak.authenticated]);
+
   useEffect(() => {
     const handleMessage = (event) => {
       if (event.data.event) {
@@ -101,53 +115,54 @@ const App = () => {
     }
   };
 
+  if (!initialized) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    // <AuthProvider onLogin={() => navigate('/editor')} onLogout={() => navigate('/login')} defaultAuthenticated={false}>
-    <ReactKeycloakProvider authClient={keycloack}>
-      <div id="APP" onClick={handleAppClick}>
-        <DndWrapper id="APP">
-          <div
-            className="wrapper d-flex"
-            style={{
-              paddingTop: '60px',
-              justifyContent: 'center',
-              height: '100vh',
-            }}
-          >
-            <TopBar />
-            <Routes>
-              <Route exact path="/" element={<Navigate to="/editor" />} />
-              <Route
-                exact
-                path="/login"
-                element={
-                  <>
-                    <Login />
-                  </>
-                }
-              />
-              <Route
-                path="/editor"
-                element={
-                  <RequireAuth>
-                    <LeftSidebar display={barState.left} />
-                    <Preview
-                      components={components}
-                      onChangePreviewMode={handleChangePreviewMode}
-                      previewMode={previewMode}
-                    />
-                    <RightSidebar display={barState.right} />
-                  </RequireAuth>
-                }
-              />
-            </Routes>
-          </div>
-        </DndWrapper>
-        <GlobalStyles />
-        <HighlightedElement />
-      </div>
-    </ReactKeycloakProvider>
-    // </AuthProvider>
+    <div id="APP" onClick={handleAppClick}>
+      <DndWrapper id="APP">
+        <div
+          className="wrapper d-flex"
+          style={{
+            paddingTop: '60px',
+            justifyContent: 'center',
+            height: '100vh',
+          }}
+        >
+          <TopBar />
+          <Routes>
+            <Route exact path="/" element={<Navigate to="/editor" />} />
+            <Route exact path="/login" element={<Login />} />
+            <Route
+              exact
+              path="/project"
+              element={
+                <RequireAuth>
+                  <Project />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/editor"
+              element={
+                <RequireAuth>
+                  <LeftSidebar display={barState.left} />
+                  <Preview
+                    components={components}
+                    onChangePreviewMode={handleChangePreviewMode}
+                    previewMode={previewMode}
+                  />
+                  <RightSidebar display={barState.right} />
+                </RequireAuth>
+              }
+            />
+          </Routes>
+        </div>
+      </DndWrapper>
+      <GlobalStyles />
+      <HighlightedElement />
+    </div>
   );
 };
 
