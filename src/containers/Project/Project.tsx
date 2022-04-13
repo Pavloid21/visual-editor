@@ -10,6 +10,8 @@ import {Card} from './Card';
 import {useNavigate} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import actionTypes from 'constants/actionTypes';
+import {Project as TProject} from 'reducers/types';
+import {AxiosResponse} from 'axios';
 
 const Container = styled.div`
   display: flex;
@@ -57,20 +59,22 @@ const Content = styled.div`
 export const Project: React.FC<any> = () => {
   const {keycloak} = useKeycloak();
   const {name, preferred_username} = keycloak.idTokenParsed!;
-  const [projects, setProjects] = useState<any[]>([]);
+  const [projects, setProjects] = useState<TProject[]>([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getProjectsList().then((projects: any) => {
-      const promises: Promise<any>[] = projects.data.map((project: string) => getProjectData(project));
-      Promise.allSettled(promises).then((data: any[]) => {
-        setProjects(data.map((item: any) => item.value.data));
-      });
+    getProjectsList().then((projects: AxiosResponse) => {
+      if (projects.data) {
+        const promises: Promise<AxiosResponse>[] = projects.data.map((project: string) => getProjectData(project));
+        Promise.allSettled(promises).then((data: PromiseSettledResult<any>[]) => {
+          setProjects(data.map((item: any) => item.value.data));
+        });
+      }
     });
   }, []);
 
-  const handleProjectSelect = (project: any) => {
+  const handleProjectSelect = (project: TProject) => {
     dispatch({
       type: actionTypes.SELECT_PROJECT,
       ...project,

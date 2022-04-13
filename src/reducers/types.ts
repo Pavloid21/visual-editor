@@ -24,6 +24,8 @@ export type API = {
 export type Project = {
   id: string;
   name: string;
+  description: string;
+  icon: string;
 };
 
 export type APIItem = {

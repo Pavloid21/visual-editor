@@ -1,6 +1,5 @@
 import React from 'react';
 import {Navigate} from 'react-router-dom';
-import {AuthContext} from './AuthContext';
 import {useKeycloak} from '@react-keycloak/web';
 
 const RequireAuth = (props: any) => {

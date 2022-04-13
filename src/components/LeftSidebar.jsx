@@ -13,7 +13,7 @@ import {ReactComponent as Trash} from '../assets/trash.svg';
 import {ReactComponent as Plus} from '../assets/plus.svg';
 import models from '../views/blocks/index';
 import v4 from 'uuid/dist/v4';
-import {snippet, walker} from '../utils/prepareModel';
+import {snippet} from '../utils/prepareModel';
 import {getScreenesList, getScreenByName} from '../services/ApiService';
 
 const Container = styled.div`
@@ -163,58 +163,42 @@ export default function LeftSidebar({children, ...props}) {
   };
 
   useEffect(() => {
-    getScreenesList(project)
-      .then((screenes) => {
-        const screenesArr = screenes.data.map((screen) => {
-          return getScreenByName(project, screen)
-            .then((response) => {
-              // require(['esprima'], (parser) => {
-              //   try {
-              //     const syntax = parser.parse(`async function a() {${response.data}}`);
-              //     const snippetBody = syntax.body[0].body.body;
-              //     snippetBody.forEach((statement) => {
-              //       if (statement.type === 'ReturnStatement') {
-              //         const result = walker(statement.argument.properties, template);
-              //         return {
-              //           screen,
-              //           object: result,
-              //         };
-              //       }
-              //     });
-              //   } catch (e) {
-              //     // console.log("parse error :>> ", e);
-              //   }
-              // });
-              return {
-                screen,
-                object: response.data,
-                logic: response.data,
-              };
-            })
-            .catch((e) => {
-              console.log('e :>> ', e);
-            });
-        });
-        Promise.allSettled(screenesArr)
-          .then((resolves) => {
-            const layouts = [];
-            resolves.forEach((result) => {
-              if (result.status === 'fulfilled' && result.value?.object.screen) {
-                const {newBlock, action, screenEndpoint} = buildLayout(result.value);
-                layouts.push({
-                  uuid: v4(),
-                  value: newBlock,
-                  action,
-                  screenEndpoint,
-                  logic: result.value.logic[0],
-                });
-              }
-            });
-            setScreenes(layouts);
-            setTree(layouts.map((layout) => prepareTree(layout)));
+    getScreenesList(project).then((screenes) => {
+      const screenesArr = screenes.data.map((screen) => {
+        return getScreenByName(project, screen, true)
+          .then((response) => {
+            return {
+              screen,
+              object: response.data,
+              logic: response.data,
+              project,
+            };
           })
-          .catch(console.log);
+          .catch((e) => {
+            console.log('e :>> ', e);
+          });
       });
+      Promise.allSettled(screenesArr)
+        .then((resolves) => {
+          const layouts = [];
+          resolves.forEach((result, index) => {
+            if (result.status === 'fulfilled' && result.value?.object.screen) {
+              const {newBlock, action, screenEndpoint} = buildLayout(result.value);
+              layouts.push({
+                uuid: v4(),
+                value: newBlock,
+                action,
+                screenEndpoint,
+                logic: result.value.logic[0],
+                project,
+              });
+            }
+          });
+          setScreenes(layouts);
+          setTree(layouts.map((layout) => prepareTree(layout)));
+        })
+        .catch(console.log);
+    });
     const screenLayouts = availableScreenes.map((screen) => {
       if (screen.uuid === selectedScreen) {
         return {
@@ -283,10 +267,11 @@ export default function LeftSidebar({children, ...props}) {
     }
   }, [output]);
 
-  const handleItemClick = (event, item) => {
+  const handleItemClick = async (event, item) => {
     event.stopPropagation();
     const uuid = item.node.subtitle;
     if (uuid === 'screen') {
+      const script = await getScreenByName(project, item.node.endpoint, false);
       const screenLayout = availableScreenes.filter((screen) => screen.uuid === item.node.uuid)[0];
       dispatch({
         type: actionTypes.CHANGE_ACTIVE_TAB,
@@ -306,7 +291,7 @@ export default function LeftSidebar({children, ...props}) {
         snippet: {
           screenID: item.node.uuid,
           endpoint: item.node.endpoint,
-          logic: item.node.logic,
+          logic: script.data.match(/.*return/gs)[0],
           snippet: snippet(
             {
               screen: item.node.screen,
@@ -446,7 +431,7 @@ export default function LeftSidebar({children, ...props}) {
                           ? 'node_selected'
                           : ''
                       }`}
-                      onClick={(event) => handleItemClick(event, extendedNode)}
+                      onClick={async (event) => await handleItemClick(event, extendedNode)}
                     >
                       <span>
                         <Icon src={models[extendedNode.node?.title?.toLowerCase()]?.previewImageUrl} />

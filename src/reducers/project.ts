@@ -5,6 +5,8 @@ import {Project} from './types';
 const initialState: Project = {
   id: '',
   name: '',
+  description: '',
+  icon: '',
 };
 
 export default function reducer(state = initialState, action: AnyAction) {
