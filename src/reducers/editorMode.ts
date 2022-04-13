@@ -6,8 +6,8 @@ import { EditorMode } from './types';
 
 const initialState: EditorMode = {
   mode: 'editor',
-  device: Device.ANDROID,
-  model: optionsByDevice[Device.ANDROID][1].value,
+  device: Device.IOS,
+  model: optionsByDevice[Device.IOS][0].value,
 };
 
 export default function reducer(state = initialState, action: AnyAction) {
@@ -21,6 +21,7 @@ export default function reducer(state = initialState, action: AnyAction) {
       return {
         ...state,
         device: action.device,
+        model: optionsByDevice[action.device as Device][0].value
       };
     }
     case actionTypes.SET_MODEL_DEVICE: {
