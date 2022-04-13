@@ -45,6 +45,8 @@ const Container = styled.div`
       height: 100px;
       border-radius: 4px;
       background: #c4c4c4;
+      object-fit: contain;
+      object-position: center;
     }
   }
   & > .card_footer {
@@ -70,7 +72,7 @@ export const Card: React.FC<TCardProps> = ({name, description, icon, onClick}) =
     <Container>
       <div className="card_header">
         <div>{name}</div>
-        <Dots onClick={onClick}/>
+        <Dots onClick={onClick} />
       </div>
       <div className="card_body">
         <img src={icon} alt="proj_icon" />

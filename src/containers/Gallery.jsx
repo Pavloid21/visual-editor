@@ -41,6 +41,15 @@ const Container = styled.div`
     ${(props) => (props.mode === 'list' ? `flex-direction: column;` : '')}
     padding-top: 10px;
     padding-bottom: 10px;
+    @media (max-width: 1500px) {
+      ${(props) =>
+        props.mode === 'grid'
+          ? `grid-template-columns: 118px 118px;
+    grid-template-rows: 118px 118px;
+    column-gap: 18px;
+    row-gap: 18px;`
+          : ''}
+    }
   }
 `;
 

@@ -15,6 +15,9 @@ import models from '../views/blocks/index';
 import v4 from 'uuid/dist/v4';
 import {snippet} from '../utils/prepareModel';
 import {getScreenesList, getScreenByName} from '../services/ApiService';
+import {BounceLoader} from 'react-spinners';
+import {css} from '@emotion/react';
+import Loader from './Loader';
 
 const Container = styled.div`
   min-width: 422px;
@@ -35,12 +38,21 @@ const Container = styled.div`
       position: static !important;
     }
   }
+
+  @media (max-width: 1500px) {
+    min-width: 300px;
+  }
 `;
 
 const Icon = styled.img`
   width: 24px;
   height: 24px;
   margin-right: 6px;
+`;
+
+const SreenTitle = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 export default function LeftSidebar({children, ...props}) {
@@ -57,6 +69,13 @@ export default function LeftSidebar({children, ...props}) {
   const [availableScreenes, setScreenes] = useState([]);
   const [treeData, setTree] = useState([]);
   const [show, toggleComponents] = useState(true);
+  const [load, setLoadScreen] = useState();
+  const override = css`
+    display: inline-block;
+    margin: 0 auto;
+    border-color: red;
+    margin-right: 6px;
+  `;
   const dispatch = useDispatch();
 
   const buildTreeitem = (block) => {
@@ -271,7 +290,9 @@ export default function LeftSidebar({children, ...props}) {
     event.stopPropagation();
     const uuid = item.node.subtitle;
     if (uuid === 'screen') {
+      setLoadScreen({uuid: item.node.uuid, load: true});
       const script = await getScreenByName(project, item.node.endpoint, false);
+      setLoadScreen({uuid: item.node.uuid, load: false});
       const screenLayout = availableScreenes.filter((screen) => screen.uuid === item.node.uuid)[0];
       dispatch({
         type: actionTypes.CHANGE_ACTIVE_TAB,
@@ -416,47 +437,59 @@ export default function LeftSidebar({children, ...props}) {
               height: 'calc(100% - 104px)',
               overflow: 'auto',
               padding: '14px',
+              position: 'relative',
             }}
           >
-            <SortableTree
-              treeData={treeData}
-              onChange={(treeData) => setTree(treeData)}
-              theme={FileExplorerTheme}
-              generateNodeProps={(extendedNode) => {
-                return {
-                  title: (
-                    <section
-                      className={`node ${
-                        selectedBlock === extendedNode.node.subtitle || selectedScreen === extendedNode.node.uuid
-                          ? 'node_selected'
-                          : ''
-                      }`}
-                      onClick={async (event) => await handleItemClick(event, extendedNode)}
-                    >
-                      <span>
-                        <Icon src={models[extendedNode.node?.title?.toLowerCase()]?.previewImageUrl} />
-                        {extendedNode.node.endpoint || extendedNode.node.title}
-                      </span>
-                    </section>
-                  ),
-                  buttons:
-                    extendedNode.node.subtitle === 'screen'
-                      ? [
-                          <Copy
-                            className="icon"
-                            onClick={(event) => {
-                              handleCloneScreen(event, extendedNode.node.uuid);
-                            }}
-                          />,
-                          <Trash className="icon" onClick={(event) => handleDeleteScreen(event, extendedNode.node)} />,
-                        ]
-                      : [
-                          <Copy className="icon" onClick={() => handleCloneBlock(extendedNode.node.subtitle)} />,
-                          <Trash className="icon" onClick={() => handleDeleteBlock(extendedNode.node.subtitle)} />,
-                        ],
-                };
-              }}
-            />
+            {!treeData.length ? (
+              <Loader loading={true} size={40} />
+            ) : (
+              <SortableTree
+                treeData={treeData}
+                onChange={(treeData) => setTree(treeData)}
+                theme={FileExplorerTheme}
+                generateNodeProps={(extendedNode) => {
+                  return {
+                    title: (
+                      <section
+                        className={`node ${
+                          selectedBlock === extendedNode.node.subtitle || selectedScreen === extendedNode.node.uuid
+                            ? 'node_selected'
+                            : ''
+                        }`}
+                        onClick={async (event) => await handleItemClick(event, extendedNode)}
+                      >
+                        <SreenTitle>
+                          {(load?.load && load?.uuid === extendedNode.node.uuid) ? (
+                            <BounceLoader loading={true} size={24} color="#F44532" css={override} />
+                          ) : (
+                            <Icon src={models[extendedNode.node?.title?.toLowerCase()]?.previewImageUrl} />
+                          )}
+                          <span>{extendedNode.node.endpoint || extendedNode.node.title}</span>
+                        </SreenTitle>
+                      </section>
+                    ),
+                    buttons:
+                      extendedNode.node.subtitle === 'screen'
+                        ? [
+                            <Copy
+                              className="icon"
+                              onClick={(event) => {
+                                handleCloneScreen(event, extendedNode.node.uuid);
+                              }}
+                            />,
+                            <Trash
+                              className="icon"
+                              onClick={(event) => handleDeleteScreen(event, extendedNode.node)}
+                            />,
+                          ]
+                        : [
+                            <Copy className="icon" onClick={() => handleCloneBlock(extendedNode.node.subtitle)} />,
+                            <Trash className="icon" onClick={() => handleDeleteBlock(extendedNode.node.subtitle)} />,
+                          ],
+                  };
+                }}
+              />
+            )}
           </div>
         )}
         {activeTab === 1 && <Actions />}

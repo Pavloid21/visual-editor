@@ -68,6 +68,7 @@ const TopBar = () => {
   ]);
   const deletedScreens = useSelector((state) => state.layout.deletedScreens);
   const editedScreens = useSelector((state) => state.layout.editedScreens);
+  const projectID = useSelector((state) => state.project.id);
   const handleHideLeft = () => {
     dispatch({type: actionTypes.TOGGLE_LEFT_BAR});
   };
@@ -78,17 +79,17 @@ const TopBar = () => {
     event.stopPropagation();
     snippets.forEach((item) => {
       if (editedScreens.includes(item.screenID)) {
-        saveScreen(item.endpoint, `${item.logic.replace(/return$/g, '')}${item.snippet}`);
+        saveScreen(projectID, item.endpoint, `${item.logic.replace(/return$/g, '')}${item.snippet}`);
       }
     });
     snippets.forEach((item) => {
       if (deletedScreens.includes(item.screenID)) {
-        deleteScreen(item.endpoint);
+        deleteScreen(projectID, item.endpoint);
       }
     });
 
     actions.forEach((item) => {
-      saveAction(item.type, item.action, item.object);
+      saveAction(projectID, item.type, item.action, item.object);
     });
     deletedActions.forEach((item) => {
       deleteAction(item.type, item.action);
@@ -114,7 +115,10 @@ const TopBar = () => {
           )}
         </div>
         <VerticalDivider />
-        <div className="user">FN</div>
+        <div className="user">
+          {keycloak?.idTokenParsed?.given_name[0]}
+          {keycloak?.idTokenParsed?.family_name[0]}
+        </div>
       </div>
     </Bar>
   );

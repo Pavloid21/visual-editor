@@ -25,6 +25,9 @@ const Container = styled.div`
   & > div {
     height: 100%;
   }
+  @media (max-width: 1500px) {
+    min-width: 300px;
+  }
 `;
 
 const APIContainer = styled.div`

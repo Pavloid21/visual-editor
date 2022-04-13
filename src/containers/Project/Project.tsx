@@ -12,6 +12,7 @@ import {useDispatch} from 'react-redux';
 import actionTypes from 'constants/actionTypes';
 import {Project as TProject} from 'reducers/types';
 import {AxiosResponse} from 'axios';
+import Loader from 'components/Loader';
 
 const Container = styled.div`
   display: flex;
@@ -45,6 +46,7 @@ const Header = styled.div`
 `;
 
 const Content = styled.div`
+  position: relative;
   display: flex;
   flex: 1 1 auto;
   overflow-y: auto;
@@ -104,6 +106,7 @@ export const Project: React.FC<any> = () => {
           </Button>
         </Header>
         <Content>
+          {!projects.length && <Loader loading={true} />}
           {projects.map((project) => (
             <Card {...project} key={v4()} onClick={() => handleProjectSelect(project)} />
           ))}

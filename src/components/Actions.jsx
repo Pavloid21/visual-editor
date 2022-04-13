@@ -55,12 +55,13 @@ const Actions = () => {
     )
   );
   const selectedAction = useSelector((state) => state.actions.selected);
+  const projectID = useSelector((state) => state.project.id);
   useEffect(() => {
-    getActionsList()
+    getActionsList(projectID)
       .then((response) => response.data)
       .then((actions) => {
-        const actionsArr = actions.map((action, index) => {
-          return getActionByName(action)
+        const actionsArr = actions?.map((action, index) => {
+          return getActionByName(projectID, action)
             .then((response) => response.data)
             .then((data) => ({action, object: data}))
             .catch((e) => {
@@ -82,11 +83,11 @@ const Actions = () => {
           })
           .catch(console.log);
       });
-    getDataActionsList()
+    getDataActionsList(projectID)
       .then((response) => response.data)
       .then((actions) => {
-        const actionsArr = actions.map((action) => {
-          return getDataActionByName(action)
+        const actionsArr = actions?.map((action) => {
+          return getDataActionByName(projectID, action)
             .then((response) => response.data)
             .then((data) => ({action, object: data}))
             .catch((e) => {

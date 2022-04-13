@@ -18,17 +18,7 @@ import {useKeycloak} from '@react-keycloak/web';
 import {Project} from './Project';
 import {API} from 'services/ApiService';
 import PacmanLoader from 'react-spinners/PacmanLoader';
-import {Container} from 'components/layouts';
-import styled from 'styled-components';
-
-const FullScreenLoader = styled(Container)`
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  width: 100%;
-`;
+import Loader from 'components/Loader';
 
 const App = () => {
   const layout = useSelector((state) => state.layout);
@@ -128,11 +118,7 @@ const App = () => {
   };
 
   if (!initialized) {
-    return (
-      <FullScreenLoader>
-        <PacmanLoader color={'#F44532'} loading={!initialized} size={60} />;
-      </FullScreenLoader>
-    );
+    return <Loader loading={!initialized} />;
   }
 
   return (

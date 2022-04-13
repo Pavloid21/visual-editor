@@ -33,6 +33,10 @@ const Bar = styled.div`
     gap: 16px;
     display: flex;
   }
+  @media (max-width: 1500px) {
+    padding-left: ${(props) => (props.barState.left ? '315px' : '16px')};
+    padding-right: ${(props) => (props.barState.right ? '315px' : '16px')};
+  }
 `;
 
 const ServiceBar = styled.div`
@@ -89,10 +93,14 @@ const SortableContainer = sortableContainer(({children, drop, backgroundColor}) 
 });
 
 const Preview = (props) => {
+  const selectedScreen = useSelector((state) => state.layout.selectedScreen);
   const [{canDrop, isOver}, drop] = useDrop(() => ({
     accept: ItemTypes.BOX,
     drop: (item) => {
       return;
+    },
+    canDrop: () => {
+      return !!selectedScreen;
     },
     collect: (monitor) => ({
       isOver: monitor.isOver({shallow: true}),
