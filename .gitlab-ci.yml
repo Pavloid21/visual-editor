@@ -16,4 +16,4 @@ deploy:
   stage: deploy
   image: $DOCKER_REGISTRY_PROXY/alpine/helm
   script:
-    - helm upgrade --install mobile-web helm --namespace=mobile-portal --set image.tag=sha$CI_COMMIT_SHORT_SHA
+    - helm upgrade --install mobile-web helm --namespace=mobile-platform --set image.tag=sha$CI_COMMIT_SHORT_SHA
