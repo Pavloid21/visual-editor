@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import SelectBase, {components, DropdownIndicatorProps} from 'react-select';
 import {IOption, ISelect} from './types';
 import {ReactComponent as Arrow} from 'assets/arrow.svg';
@@ -39,19 +39,23 @@ const WithLabel: StyledComponent<'section', any, {}, any> = styled(Container)`
 `;
 
 export const Select = (props: ISelect) => {
+  const {onChange, options, value, className, label} = props;
+
+  const currentOption = options.find((e) => value === e.value);
+
   return (
-    <WithLabel label={!!props.label}>
-      {props.label && <Label>{props.label}</Label>}
+    <WithLabel label={!!label}>
+      {label && <Label>{label}</Label>}
       <SelectBase
         onChange={(e) => {
-          props.onChange(e?.value);
+          onChange(e?.value);
         }}
-        options={props.options}
-        //   value={props.value}
+        options={options}
+        value={currentOption}
         isMulti={false}
-        defaultValue={props.options.find((e) => props.value === e.value)}
+        // defaultValue={value}
         isClearable={false}
-        className={props.className}
+        className={className}
         styles={{
           indicatorSeparator: () => ({display: 'none'}),
           control: (props) => ({
