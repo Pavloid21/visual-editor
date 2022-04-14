@@ -285,7 +285,7 @@ export default function LeftSidebar({children, ...props}) {
         selectedScreen,
       });
     }
-  }, [output, selectedScreen]);
+  }, [output]);
 
   const handleItemClick = async (event, item) => {
     event.stopPropagation();
@@ -313,7 +313,7 @@ export default function LeftSidebar({children, ...props}) {
         snippet: {
           screenID: item.node.uuid,
           endpoint: item.node.endpoint,
-          logic: script.data?.match(/.*return/gs)[0],
+          logic: script.data?.match(/.*return/gs)[0] || ' ',
           snippet: snippet(
             {
               screen: item.node.screen,
@@ -362,10 +362,6 @@ export default function LeftSidebar({children, ...props}) {
     layouts.push({uuid: v4(), value: newBlock, action, screenEndpoint});
     setScreenes(layouts);
     setTree(layouts.map((layout) => prepareTree(layout)));
-    dispatch({
-      type: actionTypes.EDIT_LOGIC,
-      logic: '',
-    });
   };
 
   const handleAddAction = () => {
@@ -427,7 +423,13 @@ export default function LeftSidebar({children, ...props}) {
         <SideBarHeader title={projectName} />
         <SideBarSubheader>
           <div>
-            <span className={activeTab === 0 ? 'tab_active' : ''} onClick={() => setActiveTab(0)}>
+            <span
+              className={activeTab === 0 ? 'tab_active' : ''}
+              onClick={() => {
+                setActiveTab(0);
+                dispatch({type: actionTypes.SELECT_ACTION, selected: null});
+              }}
+            >
               Screens
             </span>
             <span className={activeTab === 1 ? 'tab_active' : ''} onClick={() => setActiveTab(1)}>

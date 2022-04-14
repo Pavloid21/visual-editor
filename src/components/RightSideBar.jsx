@@ -160,7 +160,7 @@ export default function RightSidebar({children, ...props}) {
       <div>
         <SideBarHeader title="Properties" />
         <Inspector display />
-        {selectedAction && <ActionForm action={selectedAction} />}
+        {selectedAction && !selectedBlock && <ActionForm action={selectedAction} />}
         {activeTab === 5 && (
           <Screen category="screen" display={activeTab === 5} onPushBlock={() => {}} onPushBlockInside={() => {}} />
         )}

@@ -1,16 +1,16 @@
-import { AnyAction } from "redux";
-import actionTypes from "../constants/actionTypes";
-import { Output } from "./types";
+import {AnyAction} from 'redux';
+import actionTypes from '../constants/actionTypes';
+import {Output} from './types';
 
 const initialState: Output = {
-  screen: "screen name",
-  logic: "",
+  screen: 'screen name',
+  logic: '',
 };
 
 export default function reducer(state = initialState, action: AnyAction) {
   switch (action.type) {
     case actionTypes.EDIT_SCREEN_NAME:
-      const nextState = { ...state };
+      const nextState = {...state};
       nextState.screen = action.screen;
       if (action.snippet.logic) {
         nextState.logic = action.snippet.logic.replace(/return$/gs, `\n`);

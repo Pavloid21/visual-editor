@@ -106,10 +106,9 @@ const Preview = (props) => {
       isOver: monitor.isOver({shallow: true}),
       canDrop: monitor.canDrop(),
     }),
-  }));
+  }), [selectedScreen]);
 
   const dispatch = useDispatch();
-  const [isShowCode, showCode] = useState(false);
   const editorMode = useSelector((state) => state.editorMode.mode);
   const layout = useSelector((state) => state.layout);
   const barState = useSelector((state) => state.sideBar);
@@ -203,7 +202,7 @@ const Preview = (props) => {
             </SortableContainer>
           </PhoneContainer>
         )}
-        {editorMode === 'json' && <Code show={isShowCode} />}
+        {editorMode === 'json' && <Code />}
       </div>
       <ServiceBar barState={barState}>
         {editorMode === 'json' && <Save className="icon" onClick={handleSaveSnippet} />}
