@@ -3,11 +3,13 @@ import { optionsByDevice } from 'containers/MobileSelect/consts';
 import { Device } from 'containers/MobileSelect/consts';
 import {AnyAction} from 'redux';
 import { EditorMode } from './types';
+import { Zoom } from 'containers/ZoomSelect/types';
 
 const initialState: EditorMode = {
   mode: 'editor',
   device: Device.IOS,
   model: optionsByDevice[Device.IOS][0].value,
+  zoom: Zoom['100%']
 };
 
 export default function reducer(state = initialState, action: AnyAction) {
@@ -29,6 +31,12 @@ export default function reducer(state = initialState, action: AnyAction) {
         ...state,
         model: action.model,
       };
+    }
+    case actionTypes.SET_ZOOM: {
+      return {
+        ...state,
+        zoom: action.zoom
+      }
     }
     default:
       return state;
