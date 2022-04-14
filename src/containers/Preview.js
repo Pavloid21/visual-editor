@@ -128,7 +128,7 @@ const Preview = (props) => {
     window.addEventListener('scroll', () => {
       localStorage.setItem('scrollY', window.scrollY);
     });
-  });
+  }, [selectedScreen]);
 
   const onSortEnd = ({oldIndex, newIndex, nodes}) => {
     const newOrder = arrayMoveImmutable(nodes, oldIndex, newIndex).map((item) => item.node.getAttribute('id'));

@@ -4,7 +4,7 @@ import { Output } from "./types";
 
 const initialState: Output = {
   screen: "screen name",
-  logic: "return",
+  logic: "",
 };
 
 export default function reducer(state = initialState, action: AnyAction) {

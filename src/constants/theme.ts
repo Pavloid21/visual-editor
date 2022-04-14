@@ -2,6 +2,10 @@ import {createGlobalStyle} from 'styled-components';
 export default createGlobalStyle`
   body {
     background: #FAFAFA;
+    text-align: left;
+    font-weight: 400;
+    line-height: 1.5;
+    font-family: Roboto, sans-serif;
   }
   * {
     --background: #f3f3f3;
@@ -12,7 +16,6 @@ export default createGlobalStyle`
     --neo-black: #333333;
     --neo-gray: #E6E6E6;
     --neo-secondary-gray: #8C8C8C;
-    font-family: Roboto, sans-serif !important;
     font-size: 16px;
   }
 
@@ -27,6 +30,15 @@ export default createGlobalStyle`
   *::-webkit-scrollbar-thumb {
     background: #E6E6E6;
     border-radius: 2px;
+  }
+
+  *, ::before, ::after {
+    box-sizing: border-box;
+  }
+
+  .d-flex {
+    display: -ms-flexbox !important;
+    display: flex !important;
   }
 
   .icon {

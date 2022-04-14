@@ -81,7 +81,7 @@ export const Project: React.FC<any> = () => {
       type: actionTypes.SELECT_PROJECT,
       ...project,
     });
-    navigate('/editor');
+    navigate(`/editor/${project.id}`);
   };
 
   return (

@@ -17,7 +17,6 @@ import RequireAuth from 'auth/RequireAuth';
 import {useKeycloak} from '@react-keycloak/web';
 import {Project} from './Project';
 import {API} from 'services/ApiService';
-import PacmanLoader from 'react-spinners/PacmanLoader';
 import Loader from 'components/Loader';
 
 const App = () => {
@@ -123,6 +122,7 @@ const App = () => {
 
   return (
     <div id="APP" onClick={handleAppClick}>
+      <GlobalStyles />
       <DndWrapper id="APP">
         <div
           className="wrapper d-flex"
@@ -130,11 +130,12 @@ const App = () => {
             paddingTop: '60px',
             justifyContent: 'center',
             height: '100vh',
+            display: 'flex',
           }}
         >
           <TopBar />
           <Routes>
-            <Route exact path="/" element={<Navigate to="/editor" />} />
+            <Route exact path="/" element={<Navigate to="/project" />} />
             <Route exact path="/login" element={<Login />} />
             <Route
               exact
@@ -146,7 +147,7 @@ const App = () => {
               }
             />
             <Route
-              path="/editor"
+              path="/editor/:project"
               element={
                 <RequireAuth>
                   <LeftSidebar display={barState.left} />
@@ -162,7 +163,6 @@ const App = () => {
           </Routes>
         </div>
       </DndWrapper>
-      <GlobalStyles />
       <HighlightedElement />
     </div>
   );

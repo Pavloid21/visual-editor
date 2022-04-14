@@ -18,6 +18,7 @@ import {getScreenesList, getScreenByName} from '../services/ApiService';
 import {BounceLoader} from 'react-spinners';
 import {css} from '@emotion/react';
 import Loader from './Loader';
+import {useParams} from 'react-router-dom';
 
 const Container = styled.div`
   min-width: 422px;
@@ -63,7 +64,7 @@ export default function LeftSidebar({children, ...props}) {
   const bottomBar = useSelector((state) => state.layout.bottomBar);
   const selectedBlock = useSelector((state) => state.layout.selectedBlockUuid);
   const selectedScreen = useSelector((state) => state.layout.selectedScreen);
-  const project = useSelector((state) => state.project.id);
+  const {project} = useParams();
   const projectName = useSelector((state) => state.project.name);
   const [activeTab, setActiveTab] = useState(0);
   const [availableScreenes, setScreenes] = useState([]);
@@ -284,7 +285,7 @@ export default function LeftSidebar({children, ...props}) {
         selectedScreen,
       });
     }
-  }, [output]);
+  }, [output, selectedScreen]);
 
   const handleItemClick = async (event, item) => {
     event.stopPropagation();
@@ -312,7 +313,7 @@ export default function LeftSidebar({children, ...props}) {
         snippet: {
           screenID: item.node.uuid,
           endpoint: item.node.endpoint,
-          logic: script.data.match(/.*return/gs)[0],
+          logic: script.data?.match(/.*return/gs)[0],
           snippet: snippet(
             {
               screen: item.node.screen,
@@ -361,6 +362,10 @@ export default function LeftSidebar({children, ...props}) {
     layouts.push({uuid: v4(), value: newBlock, action, screenEndpoint});
     setScreenes(layouts);
     setTree(layouts.map((layout) => prepareTree(layout)));
+    dispatch({
+      type: actionTypes.EDIT_LOGIC,
+      logic: '',
+    });
   };
 
   const handleAddAction = () => {
@@ -459,7 +464,7 @@ export default function LeftSidebar({children, ...props}) {
                         onClick={async (event) => await handleItemClick(event, extendedNode)}
                       >
                         <SreenTitle>
-                          {(load?.load && load?.uuid === extendedNode.node.uuid) ? (
+                          {load?.load && load?.uuid === extendedNode.node.uuid ? (
                             <BounceLoader loading={true} size={24} color="#F44532" css={override} />
                           ) : (
                             <Icon src={models[extendedNode.node?.title?.toLowerCase()]?.previewImageUrl} />
