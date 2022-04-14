@@ -15,6 +15,7 @@ import {ReactComponent as Reference} from '../assets/preview.svg';
 import {ReactComponent as Save} from '../assets/save.svg';
 import MobileSelect from './MobileSelect';
 import clsx from 'clsx';
+import ZoomSelect from './ZoomSelect';
 
 const Bar = styled.div`
   height: 60px;
@@ -31,12 +32,13 @@ const Bar = styled.div`
   align-items: center;
   & .mode_selector {
     gap: 16px;
+    margin-left: auto;
     display: flex;
   }
 `;
 
 const ServiceBar = styled.div`
-  height: 36px;
+  height: 42px;
   background: var(--background);
   width: 100%;
   position: absolute;
@@ -186,7 +188,7 @@ const Preview = (props) => {
       </Bar>
       <div
         className="page-content-wrapper overflow-hidden d-flex justify-content-center"
-        style={{position: 'relative', transform: 'scale(0.9)'}}
+        style={{position: 'relative', marginTop: '60px'}}
       >
         {editorMode === 'editor' && (
           <PhoneContainer>
@@ -199,6 +201,7 @@ const Preview = (props) => {
       </div>
       <ServiceBar barState={barState}>
         {editorMode === 'json' && <Save className="icon" onClick={handleSaveSnippet} />}
+        <ZoomSelect/>
       </ServiceBar>
     </>
   );

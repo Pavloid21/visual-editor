@@ -1,4 +1,5 @@
 
+import { Zoom } from 'containers/ZoomSelect/types';
 import {Action} from 'redux';
 
 export type Actions = {
@@ -91,6 +92,7 @@ export type EditorMode = {
   mode: string;
   device: string;
   model: string;
+  zoom: Zoom;
 };
 
 export type Store = {
