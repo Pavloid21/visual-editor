@@ -89,7 +89,7 @@ export const getActionByName = async (projectId: string, actionName: string) => 
 };
 
 export const getDataActionByName = async (projectId: string, actionName: string) => {
-  const url = API.defaults.baseURL + `projects/${projectId}/admin/data/admin/data/${actionName}`;
+  const url = API.defaults.baseURL + `projects/${projectId}/admin/data/${actionName}`;
   return await callApi(url, null, 'GET');
 };
 
