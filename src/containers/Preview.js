@@ -188,7 +188,7 @@ const Preview = (props) => {
       </Bar>
       <div
         className="page-content-wrapper overflow-hidden d-flex justify-content-center"
-        style={{position: 'relative', marginTop: '60px'}}
+        style={{position: 'relative', marginTop: '60px', marginBottom: '32px'}}
       >
         {editorMode === 'editor' && (
           <PhoneContainer>
