@@ -39,7 +39,7 @@ const WithLabel: StyledComponent<'section', any, {}, any> = styled(Container)`
 `;
 
 export const Select = (props: ISelect) => {
-  const {onChange, options, value, className, label} = props;
+  const {onChange, options, value, className, label, menuPlacement, styles} = props;
 
   const currentOption = options.find((e) => value === e.value);
 
@@ -56,6 +56,7 @@ export const Select = (props: ISelect) => {
         // defaultValue={value}
         isClearable={false}
         className={className}
+        menuPlacement={menuPlacement}
         styles={{
           indicatorSeparator: () => ({display: 'none'}),
           control: (props) => ({
@@ -63,6 +64,10 @@ export const Select = (props: ISelect) => {
             borderColor: '#8c8c8c',
             minHeight: 42,
           }),
+          option: (props) => ({
+            ...props
+          }),
+          ...styles
         }}
         components={{DropdownIndicator}}
       />
