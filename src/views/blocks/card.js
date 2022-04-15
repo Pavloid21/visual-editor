@@ -27,7 +27,7 @@ const Card = styled.div`
   height: ${(props) => (props.size?.height ? props.size?.height + 'px' : 'auto')};
   box-shadow: ${(props) => {
     const RGB = hexToRgb(props.shadow?.color);
-    return `${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px 8px rgba(${RGB.r}, ${RGB.g}, ${RGB.b}, ${props.shadow?.opacity})`;
+    return `${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px 8px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b}, ${props.shadow?.opacity})`;
   }};
   gap: ${(props) => props.spacing}px;
   border-radius: ${(props) => `

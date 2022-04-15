@@ -207,7 +207,7 @@ export default function reducer(state = initialState, action: LayoutAction) {
       };
     case actionTypes.CHANGE_BLOCK_DATA:
       const newBlocks = JSON.parse(JSON.stringify(state.blocks));
-      const element =
+      const element: BlockItem =
         findInTree(newBlocks, action.blockUuid!) ||
         (action.blockUuid === state.bottomBar?.uuid
           ? {
@@ -239,7 +239,7 @@ export default function reducer(state = initialState, action: LayoutAction) {
           element.settingsUI[action.parentKey] = {[action.key!]: action.value};
         }
       } else {
-        if (element.settingsUI[action.key!] !== undefined) {
+        if (element.settingsUI[action.key!] !== undefined || blocks[element.blockId].config[action.key!]) {
           element.settingsUI[action.key!] = action.value;
         } else if (element.interactive) {
           element.interactive[action.key!] = action.value;

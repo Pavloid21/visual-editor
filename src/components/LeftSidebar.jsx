@@ -175,8 +175,10 @@ export default function LeftSidebar({children, ...props}) {
         uuid: v4(),
         settingsUI: {
           ...object.topAppBar.settingsUI,
-          topAppBarItems: object.topAppBar.topAppBarItems,
         },
+        interactive: {
+          appBarItems: {...object.topAppBar.appBarItems},
+        }
       };
     }
     return {newBlock, action, screenEndpoint: screen};
