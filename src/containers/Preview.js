@@ -1,11 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useDrop} from 'react-dnd';
 import {useDispatch, useSelector} from 'react-redux';
 import {sortableContainer} from 'react-sortable-hoc';
 import actionTypes, {ItemTypes} from '../constants/actionTypes';
 import {arrayMoveImmutable} from 'array-move';
 import {observer} from '../utils/observer';
-// import IphoneX from '../assets/mockups/IphoneX';
 import PhoneContainer from './PhoneContainer';
 import styled from 'styled-components';
 import Code from './Code';
@@ -57,12 +56,15 @@ const ServiceBar = styled.div`
     gap: 16px;
     display: flex;
   }
+  @media (max-width: 1500px) {
+    padding-left: ${(props) => (props.barState.left ? '315px' : '16px')};
+    padding-right: ${(props) => (props.barState.right ? '315px' : '16px')};
+  }
 `;
 
 const Container = styled.div`
   height: 100%;
   background-color: ${(props) => props.backgroundColor};
-  /* overflow: auto; */
   position: relative;
   display: flex;
   flex-direction: column;
