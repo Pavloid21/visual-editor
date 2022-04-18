@@ -5,10 +5,10 @@ import topappbar from '../../assets/topappbar.svg';
 import Wrapper from '../../utils/wrapper';
 
 const TopAppBar = styled.div`
-  padding-top: ${(props) => props.padding?.top}px;
-  padding-bottom: ${(props) => props.padding?.bottom}px;
-  padding-left: ${(props) => props.padding?.left}px;
-  padding-right: ${(props) => props.padding?.right}px;
+  padding-top: ${(props) => props.padding?.top || 16}px;
+  padding-bottom: ${(props) => props.padding?.bottom || 16}px;
+  padding-left: ${(props) => props.padding?.left || 16}px;
+  padding-right: ${(props) => props.padding?.right || 16}px;
   color: ${(props) => props.textColor || invertColor(props.backgroundColor, true)};
   background-color: ${(props) => props.backgroundColor};
   z-index: 2;

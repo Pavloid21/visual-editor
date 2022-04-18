@@ -70,7 +70,6 @@ export const stylesByDeviceKey: Record<DeviceKeys, CSSProperties> = {
     clipPath: 'url(#clipPath)',
     borderRadius: '50px',
     paddingTop: '55px',
-    backgroundColor: '#fff',
   },
   [DeviceKeys.IPHONE_13]: {
     width: '439px',

@@ -80,7 +80,7 @@ export default function reducer(state = initialState, action: LayoutAction) {
       };
       return {...state, bottomBar};
     case actionTypes.ADD_BOTTOMBAR_ITEM:
-      const extendedItems = [...state.bottomBar.settingsUI.navigationItems];
+      const extendedItems = [...state.bottomBar?.settingsUI.navigationItems];
       extendedItems.push({
         ...blocks.bottombar.defaultData.navigationItems[0],
         uuid: uuidv4(),
@@ -89,7 +89,7 @@ export default function reducer(state = initialState, action: LayoutAction) {
       bar.settingsUI.navigationItems = extendedItems;
       return {...state, bottomBar: {...bar}};
     case actionTypes.ADD_TOPAPPBAR_ITEM:
-      const nextItems = [...state.topAppBar.settingsUI.topAppBarItems];
+      const nextItems = [...state.topAppBar?.settingsUI.topAppBarItems];
       nextItems.push({
         ...blocks.topappbar.defaultData.topAppBarItems[0],
         uuid: uuidv4(),
