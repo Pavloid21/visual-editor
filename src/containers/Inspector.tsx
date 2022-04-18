@@ -97,7 +97,6 @@ const Inspector: React.FC<any> = ({display}) => {
               clearable={false}
               label={config[el].name}
               type="number"
-              className="form-control"
               placeholder={config[el].name}
               value={endpoint ? endpoint[el] : null}
               onChange={(e: any) => handleChangeBlockData(blockUuid, el, e.target.value, parentKey)}

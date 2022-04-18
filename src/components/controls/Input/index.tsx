@@ -24,17 +24,15 @@ export const Container = styledComponents.section<TextAreaProps & NeoInputProps>
 `;
 
 const StyledNeoInput = styledComponents(Input)<NeoInputProps>`
+font-size: 14px;
 & > input  {
     background: #FFFFFF;
     width: ${(props) => (props.isWide ? '100%' : 'auto')};
     border: 1px solid ${(props) => (props.status === 'error' ? `var(--error-text)` : 'var(--neo-gray)')};
     height: 30px;
-    box-sizing: border-box;
-    border-radius: 4px;
-    font-size: 14px;
     line-height: 20px;
+    border-radius: 4px;
     padding: 8px ${(props) => (props.clearable ? '36px' : '12px')} 8px 12px ;
-    display: block;
     margin-top: 4px;
     &::placeholder {
       color: #B3B3B3;
@@ -42,7 +40,33 @@ const StyledNeoInput = styledComponents(Input)<NeoInputProps>`
     &:hover {
       border: 1px solid #2A356C;
     }
+    &:focus {
+      border: 1px solid #2A356C;
+      outline: none;
+    } 
   }
+  ${(props) =>
+    props.type === 'number' &&
+    `
+  width: ${props.isWide ? '100%' : 'auto'};
+  border: 1px solid ${props.status === 'error' ? `var(--error-text)` : 'var(--neo-gray)'};
+  height: 30px;
+  line-height: 20px;
+  border-radius: 4px;
+  padding: 8px ${props.clearable ? '36px' : '12px'} 8px 12px ;
+  margin-top: 4px;
+  &::placeholder {
+    color: #B3B3B3;
+  }
+  &:hover {
+    border: 1px solid #2A356C;
+  }
+  &:focus {
+    border: 1px solid #2A356C;
+    outline: none;
+  } 
+  `}
+  
 `;
 
 const StyledNeoTextArea = styledComponents(Textarea)<TextAreaProps & NeoInputProps>`

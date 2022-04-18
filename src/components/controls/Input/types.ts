@@ -7,4 +7,5 @@ export interface NeoInputProps extends InputProps {
   textarea?: boolean;
   extraText?: string;
   status?: 'error' | 'success';
+  type?: string;
 }
