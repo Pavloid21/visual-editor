@@ -231,7 +231,18 @@ export const Project: React.FC<any> = () => {
           <Content>
             {!projects.length && <Loader loading={true} />}
             {projects.map((project) => (
-              <Card {...project} key={v4()} onClick={() => handleProjectSelect(project)} />
+              <Card
+                {...project}
+                key={v4()}
+                onDelete={(id: string) => {
+                  const nextProject = projects.filter((item) => item.id !== id);
+                  setProjects(nextProject);
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleProjectSelect(project);
+                }}
+              />
             ))}
           </Content>
         </div>

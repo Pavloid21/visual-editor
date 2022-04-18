@@ -111,3 +111,8 @@ export const createProject = async (payload: string) => {
     'Content-Type': 'application/json',
   });
 }
+
+export const deleteProject = async (projectId: string, ) => {
+  const url = API.defaults.baseURL + `projects/${projectId}`;
+  return await callApi(url, null, 'DELETE');
+};
