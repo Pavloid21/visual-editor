@@ -1,11 +1,13 @@
 import React, {useEffect} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 import {DeviceKeys, mockByDeviceKey, stylesByDeviceKey} from 'containers/MobileSelect/consts';
 import {PanZoom} from 'react-easy-panzoom';
 import {Zoom} from 'containers/ZoomSelect/types';
 import {useRef} from 'react';
 import {Store} from 'reducers/types';
+import {ReactComponent as AlignCenterIcon} from 'assets/align-center.svg';
+import actionTypes from 'constants/actionTypes';
 
 const Wrapper = styled.div<any>`
   position: absolute;
@@ -21,6 +23,17 @@ const Wrapper = styled.div<any>`
   }}
 `;
 
+const AlignCenterButton = styled.div`
+  position: absolute;
+  right: 16px;
+  bottom: 25px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 50px;
+  border: 1px solid var(--neo-gray);
+  cursor: pointer;
+`;
+
 interface IPhoneContainer {
   children?: React.ReactChildren;
 }
@@ -29,6 +42,8 @@ const PhoneContainer = (props: IPhoneContainer) => {
   const topAppBar = useSelector((state: Store) => state.layout.topAppBar);
   const model: string = useSelector((state: Store) => state.editorMode.model);
   const zoom: Zoom = useSelector((state: Store) => state.editorMode.zoom);
+
+  const dispatch = useDispatch();
 
   const zoomRef = useRef(null);
 
@@ -43,16 +58,31 @@ const PhoneContainer = (props: IPhoneContainer) => {
     );
   }, [zoom]);
 
+  const handleCenter = () => {
+    // @ts-ignore
+    zoomRef.current.autoCenter();
+    dispatch({
+      type: actionTypes.SET_ZOOM,
+      zoom: Zoom['100%']
+    })
+  }
+
   return (
-    <PanZoom ref={zoomRef} autoCenter disableDoubleClickZoom disableKeyInteraction disableScrollZoom>
-      <Wrapper
-        styled={{...stylesByDeviceKey[model as DeviceKeys]}}
-        backgroundColor={topAppBar?.settingsUI.backgroundColor}
-      >
-        {props.children}
-      </Wrapper>
-      {mockByDeviceKey[model as DeviceKeys]}
-    </PanZoom>
+    <>
+      <PanZoom ref={zoomRef} autoCenter disableDoubleClickZoom disableKeyInteraction disableScrollZoom>
+        <Wrapper
+          styled={{...stylesByDeviceKey[model as DeviceKeys]}}
+          backgroundColor={topAppBar?.settingsUI.backgroundColor}
+        >
+          {props.children}
+        </Wrapper>
+        {mockByDeviceKey[model as DeviceKeys]}
+      </PanZoom>
+
+      <AlignCenterButton onClick={handleCenter}>
+        <AlignCenterIcon />
+      </AlignCenterButton>
+    </>
   );
 };
 

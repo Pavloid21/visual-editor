@@ -12,6 +12,7 @@ import {ReactComponent as PlusIcon} from 'assets/zoom_plus.svg';
 const FlexContainer = styled(FlexContainerBase)`
   margin-left: auto;
   align-items: center;
+  position: relative;
   .icon:first-child {
     margin-right: 15px;
   }
