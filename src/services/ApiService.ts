@@ -104,3 +104,10 @@ export const deleteAction = async (projectId: string, actionType: string, endpoi
   const url = API.defaults.baseURL + `projects/${projectId}/admin/${actionType}/${endpoint}`;
   return await callApi(url, null, 'DELETE');
 };
+
+export const createProject = async (payload: string) => {
+  const url = API.defaults.baseURL + `projects/`;
+  return await callApi(url, payload, 'POST', undefined, undefined, {
+    'Content-Type': 'application/json',
+  });
+}

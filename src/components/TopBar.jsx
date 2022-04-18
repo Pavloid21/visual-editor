@@ -44,7 +44,7 @@ const Bar = styled.div`
   }
 `;
 
-const VerticalDivider = styled.div`
+export const VerticalDivider = styled.div`
   width: 1px;
   background: #b3b3b3;
   margin: 0 16px;

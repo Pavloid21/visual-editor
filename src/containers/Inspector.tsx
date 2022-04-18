@@ -72,7 +72,7 @@ const Inspector: React.FC<any> = ({display}) => {
               type="text"
               placeholder={config[el].name}
               value={endpoint ? endpoint[el] : null}
-              onChange={(e) => handleChangeBlockData(blockUuid, el, e.target.value, parentKey)}
+              onChange={(e: any) => handleChangeBlockData(blockUuid, el, e.target.value, parentKey)}
             />
           </div>
         );
@@ -100,7 +100,7 @@ const Inspector: React.FC<any> = ({display}) => {
               className="form-control"
               placeholder={config[el].name}
               value={endpoint ? endpoint[el] : null}
-              onChange={(e) => handleChangeBlockData(blockUuid, el, e.target.value, parentKey)}
+              onChange={(e: any) => handleChangeBlockData(blockUuid, el, e.target.value, parentKey)}
             />
           </div>
         );
@@ -123,7 +123,7 @@ const Inspector: React.FC<any> = ({display}) => {
                 type={'checkbox'}
                 className="form-check-input"
                 checked={endpoint[el]}
-                onChange={(e) => handleChangeBlockData(blockUuid, el, e.target.checked, parentKey)}
+                onChange={(e: any) => handleChangeBlockData(blockUuid, el, e.target.checked, parentKey)}
               />
               {config[el].name}
             </label>
@@ -139,7 +139,7 @@ const Inspector: React.FC<any> = ({display}) => {
               type="text"
               placeholder={config[el].name}
               value={endpoint ? endpoint[el]?.join(',') : null}
-              onChange={(e) => {
+              onChange={(e: any) => {
                 const toArray = e.target.value.replace(/s/g, '').split(',');
                 return handleChangeBlockData(blockUuid, el, toArray, parentKey);
               }}
