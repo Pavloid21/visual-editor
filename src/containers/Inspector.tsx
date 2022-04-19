@@ -98,8 +98,8 @@ const Inspector: React.FC<any> = ({display}) => {
               label={config[el].name}
               type="number"
               placeholder={config[el].name}
-              value={endpoint ? endpoint[el] : null}
-              onChange={(e: any) => handleChangeBlockData(blockUuid, el, e.target.value, parentKey)}
+              value={endpoint ? +endpoint[el] : undefined}
+              onChange={(e: any) => handleChangeBlockData(blockUuid, el, +e.target.value, parentKey)}
             />
           </div>
         );

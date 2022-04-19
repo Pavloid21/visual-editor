@@ -14,6 +14,7 @@ const Button = styled.div`
   display: flex;
   justify-content: space-between;
   border-width: ${(props) => props.borderWidth}px;
+  border-style: solid;
   border-color: ${(props) => props.borderColor};
   ${(props) => {
     if (props.shadow) {
@@ -39,6 +40,8 @@ const Button = styled.div`
   & > span {
     width: 100%;
     font-size: inherit;
+    overflow: hidden;
+    text-overflow: ellipsis;
     text-align: ${(props) => props.textAlignment};
     padding-top: ${(props) => props.buttonTextPadding?.top || 0}px;
     padding-left: ${(props) => props.buttonTextPadding?.left || 0}px;
@@ -55,8 +58,21 @@ const Button = styled.div`
 
 const Component = (props) => {
   const {text, imageUrl, alignment} = props.settingsUI;
+  const calculateAlignment = (alignment) => {
+    console.log('alignmrnt', alignment);
+    switch (alignment) {
+      case 'LEFT':
+        return 'start';
+      case 'RIGHT':
+        return 'end';
+      case 'FILL':
+        return 'stretch';
+      default:
+        return 'center';
+    }
+  };
   return (
-    <Wrapper id={props.id} style={{alignItems: alignment}}>
+    <Wrapper id={props.id} style={{alignItems: calculateAlignment(alignment)}}>
       <Button className="draggable" {...props.settingsUI} {...props}>
         <span>{text}</span>
         {imageUrl && <img src={imageUrl} />}

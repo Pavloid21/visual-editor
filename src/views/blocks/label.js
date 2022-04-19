@@ -14,6 +14,7 @@ const Label = styledComponents.div`
     text-align: ${(props) => props.textAlignment};
     color: ${(props) => props.textColor};
     font-size: ${(props) => props.fontSize}px;
+    background-color: ${(props) => props.backgroundColor || 'transparent'};
     font-weight: ${(props) => {
       switch (props.fontWeight) {
         case 'THIN':
@@ -67,6 +68,7 @@ const block = {
     alignment: 'CENTER',
     text: 'Вход',
     textAlignment: 'CENTER',
+    backgroundColor: '#FFFFFF',
     textColor: '#000000',
     fontSize: 24,
     size: {
@@ -103,6 +105,7 @@ const block = {
         {label: 'Right', value: 'RIGHT'},
       ],
     },
+    backgroundColor: {type: 'color', name: 'Background color'},
     textColor: {type: 'color', name: 'Text color'},
     fontSize: {type: 'number', name: 'Font size'},
     fontWeight: {
