@@ -62,90 +62,92 @@ const Inspector: React.FC<any> = ({display}) => {
 
   const parseConfig = (config: any, blockUuid: string, endpoint: any, parentKey?: any) => {
     return Object.keys(config).map((el: string, index: number) => {
-      if (config[el].type === 'string') {
-        return (
-          <div key={`${parentKey}_${index}`}>
-            <Input
-              isWide
-              clearable
-              label={config[el].name}
-              type="text"
-              placeholder={config[el].name}
-              value={endpoint ? endpoint[el] : null}
-              onChange={(e: any) => handleChangeBlockData(blockUuid, el, e.target.value, parentKey)}
-            />
-          </div>
-        );
-      } else if (config[el].type === 'color') {
-        return (
-          <div className="form-group" key={`${parentKey}_${index}`}>
-            <ColorPicker
-              debounceTimeout={500}
-              label={config[el].name}
-              isWide
-              placeholder={config[el].name}
-              value={endpoint ? endpoint[el] : null}
-              onChange={(e: any) => handleChangeBlockData(blockUuid, el, e.target.value, parentKey)}
-            />
-          </div>
-        );
-      } else if (config[el].type === 'number') {
-        return (
-          <div className="form-group" key={`${parentKey}_${index}`}>
-            <Input
-              isWide
-              clearable={false}
-              label={config[el].name}
-              type="number"
-              placeholder={config[el].name}
-              value={endpoint ? endpoint[el] : null}
-              onChange={(e: any) => handleChangeBlockData(blockUuid, el, e.target.value, parentKey)}
-            />
-          </div>
-        );
-      } else if (config[el].type === 'select') {
-        return (
-          <div className="form-group" key={`${parentKey}_${index}`}>
-            <Select
-              label={config[el].name}
-              onChange={(value) => handleChangeBlockData(blockUuid, el, value, parentKey)}
-              options={config[el].options}
-              value={endpoint ? endpoint[el] : null}
-            />
-          </div>
-        );
-      } else if (config[el].type === 'boolean') {
-        return (
-          <div className="form-check" key={`${parentKey}_${index}`}>
-            <label>
-              <input
-                type={'checkbox'}
-                className="form-check-input"
-                checked={endpoint[el]}
-                onChange={(e: any) => handleChangeBlockData(blockUuid, el, e.target.checked, parentKey)}
+      switch (config[el].type) {
+        case 'string':
+          return (
+            <div key={`${parentKey}_${index}`}>
+              <Input
+                isWide
+                clearable
+                label={config[el].name}
+                type="text"
+                placeholder={config[el].name}
+                value={endpoint ? endpoint[el] : null}
+                onChange={(e: any) => handleChangeBlockData(blockUuid, el, e.target.value, parentKey)}
               />
-              {config[el].name}
-            </label>
-          </div>
-        );
-      } else if (config[el].type === 'array') {
-        return (
-          <div className="form-group" key={`${parentKey}_${index}`}>
-            <Input
-              isWide
-              clearable
-              label={config[el].name}
-              type="text"
-              placeholder={config[el].name}
-              value={endpoint ? endpoint[el]?.join(',') : null}
-              onChange={(e: any) => {
-                const toArray = e.target.value.replace(/s/g, '').split(',');
-                return handleChangeBlockData(blockUuid, el, toArray, parentKey);
-              }}
-            />
-          </div>
-        );
-      } else if (endpoint && !Array.isArray(endpoint[el])) {
+            </div>
+          );
+        case 'color':
+          return (
+            <div className="form-group" key={`${parentKey}_${index}`}>
+              <ColorPicker
+                debounceTimeout={500}
+                label={config[el].name}
+                isWide
+                placeholder={config[el].name}
+                value={endpoint ? endpoint[el] : null}
+                onChange={(e: any) => handleChangeBlockData(blockUuid, el, e.target.value, parentKey)}
+              />
+            </div>
+          );
+        case 'number':
+          return (
+            <div className="form-group" key={`${parentKey}_${index}`}>
+              <Input
+                isWide
+                clearable={false}
+                label={config[el].name}
+                type="number"
+                placeholder={config[el].name}
+                value={endpoint ? endpoint[el] : null}
+                onChange={(e: any) => handleChangeBlockData(blockUuid, el, e.target.value, parentKey)}
+              />
+            </div>
+          );
+        case 'select':
+          return (
+            <div className="form-group" key={`${parentKey}_${index}`}>
+              <Select
+                label={config[el].name}
+                onChange={(value) => handleChangeBlockData(blockUuid, el, value, parentKey)}
+                options={config[el].options}
+                value={endpoint ? endpoint[el] : null}
+              />
+            </div>
+          );
+        case 'boolean':
+          return (
+            <div className="form-check" key={`${parentKey}_${index}`}>
+              <label>
+                <input
+                  type={'checkbox'}
+                  className="form-check-input"
+                  checked={endpoint[el]}
+                  onChange={(e: any) => handleChangeBlockData(blockUuid, el, e.target.checked, parentKey)}
+                />
+                {config[el].name}
+              </label>
+            </div>
+          );
+        case 'array':
+          return (
+            <div className="form-group" key={`${parentKey}_${index}`}>
+              <Input
+                isWide
+                clearable
+                label={config[el].name}
+                type="text"
+                placeholder={config[el].name}
+                value={endpoint ? endpoint[el]?.join(',') : null}
+                onChange={(e: any) => {
+                  const toArray = e.target.value.replace(/s/g, '').split(',');
+                  return handleChangeBlockData(blockUuid, el, toArray, parentKey);
+                }}
+              />
+            </div>
+          );
+      }
+      if (endpoint && !Array.isArray(endpoint[el])) {
         return (
           <section>
             <Division style={{marginTop: '16px'}}>
