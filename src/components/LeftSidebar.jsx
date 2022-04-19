@@ -422,7 +422,7 @@ export default function LeftSidebar({children, ...props}) {
   return (
     <Container show={show}>
       <div>
-        <SideBarHeader title={projectName} />
+        <SideBarHeader title={projectName} left/>
         <SideBarSubheader>
           <div>
             <span

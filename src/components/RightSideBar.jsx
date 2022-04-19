@@ -21,7 +21,7 @@ const Container = styled.div`
   flex-direction: column;
   border-left: 1px solid var(--neo-gray);
   height: calc(100vh - 60px);
-  z-index: 2;
+  z-index: 1;
   & > div {
     height: 100%;
   }

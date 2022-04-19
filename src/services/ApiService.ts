@@ -110,9 +110,16 @@ export const createProject = async (payload: string) => {
   return await callApi(url, payload, 'POST', undefined, undefined, {
     'Content-Type': 'application/json',
   });
-}
+};
 
-export const deleteProject = async (projectId: string, ) => {
+export const editProject = async (projectId: string, payload: string) => {
+  const url = API.defaults.baseURL + `projects/` + projectId;
+  return await callApi(url, payload, 'PUT', undefined, undefined, {
+    'Content-Type': 'application/json',
+  });
+};
+
+export const deleteProject = async (projectId: string) => {
   const url = API.defaults.baseURL + `projects/${projectId}`;
   return await callApi(url, null, 'DELETE');
 };

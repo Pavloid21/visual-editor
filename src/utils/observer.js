@@ -16,7 +16,6 @@ class EventObserver {
   }
 
   broadcast(data) {
-    console.log('data', data)
     this.observers.forEach((subscriber) => subscriber.callback(data));
   }
 }
