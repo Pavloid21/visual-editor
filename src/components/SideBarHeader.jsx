@@ -1,5 +1,7 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import {useNavigate} from 'react-router-dom';
+import styled from 'styled-components';
+import {ReactComponent as ArrowBack} from '../assets/arrow_back.svg';
 
 const Header = styled.div`
   min-height: 60px;
@@ -9,11 +11,14 @@ const Header = styled.div`
   line-height: 24px;
   color: var(--neo-black);
   padding: 18px 16px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
 `;
 
 const Subheader = styled.div`
   height: 44px;
-  border-bottom: 1px solid #E6E6E6;
+  border-bottom: 1px solid #e6e6e6;
   padding: 0px 16px;
   display: flex;
   align-items: center;
@@ -33,7 +38,13 @@ const Subheader = styled.div`
 `;
 
 const SideBarHeader = (props) => {
-  return <Header>{props.title}</Header>;
+  const navigate = useNavigate();
+  return (
+    <Header>
+      <ArrowBack className="icon" onClick={() => navigate('/project')} />
+      {props.title}
+    </Header>
+  );
 };
 
 export const SideBarSubheader = (props) => {
