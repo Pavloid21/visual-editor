@@ -9,6 +9,7 @@ const Modal = styled.div`
   right: 0;
   display: ${(props) => (props.isActive ? 'flex' : 'none')};
   align-items: center;
+  z-index: 1;
 `;
 
 const ModalBackground = styled.div`
@@ -28,6 +29,7 @@ const ModalContent = styled.div`
   position: relative;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
+  z-index: 2;
 `;
 
 const Title = styled.div``;
