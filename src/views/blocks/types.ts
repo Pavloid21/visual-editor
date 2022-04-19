@@ -34,8 +34,5 @@ export interface Blocks extends SimpleObject {
   collection: Block;
   bottomsheet: Block;
   webview: Block;
-  screen: {
-    previewImageUrl: string;
-    name: string;
-  };
+  screen: Block;
 }

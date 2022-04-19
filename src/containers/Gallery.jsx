@@ -110,21 +110,19 @@ const Gallery = (props) => {
 
   const allBlocks = (filteredBlocks, viewMode = 'grid') => {
     return Object.keys(filteredBlocks || blocks).map((blockId) => {
-      if (blockId !== 'screen') {
-        const block = blocks[blockId];
-        return (
-          <BlockPreview
-            mode={viewMode}
-            key={blockId}
-            title={block.title}
-            description={block.description}
-            blockId={blockId}
-            image={block.previewImageUrl}
-            onPushBlock={handlePushBlock}
-            onPushBlockInside={handlePushBlockInside}
-          />
-        );
-      }
+      const block = blocks[blockId];
+      return (
+        <BlockPreview
+          mode={viewMode}
+          key={blockId}
+          title={block.title}
+          description={block.description}
+          blockId={blockId}
+          image={block.previewImageUrl}
+          onPushBlock={handlePushBlock}
+          onPushBlockInside={handlePushBlockInside}
+        />
+      );
     });
   };
 

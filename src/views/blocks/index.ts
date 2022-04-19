@@ -1,4 +1,4 @@
-import screen from '../../assets/screen.svg';
+import screen from './screen';
 import vstack from './vstack';
 import hstack from './hstack';
 import basictextfield from './input';
@@ -17,7 +17,7 @@ import list from './list';
 import collection from './collection';
 import bottomsheet from './bottomsheet';
 import webview from './webview';
-import { Blocks } from './types';
+import {Blocks} from './types';
 
 const blocks: Blocks = {
   hstack,
@@ -38,10 +38,7 @@ const blocks: Blocks = {
   collection,
   bottomsheet,
   webview,
-  screen: {
-    previewImageUrl: screen,
-    name: 'screen',
-  },
+  screen,
 };
 
 export const gallery = {
@@ -61,10 +58,7 @@ export const gallery = {
   collection,
   bottomsheet,
   webview,
-  screen: {
-    previewImageUrl: screen,
-    name: 'screen',
-  },
-}
+  screen,
+};
 
 export default blocks;
