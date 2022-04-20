@@ -205,6 +205,26 @@ export default function reducer(state = initialState, action: LayoutAction) {
         ...state,
         blocks: blocksRef,
       };
+    case actionTypes.CHANGE_UNITS:
+      const newBlocksSet = JSON.parse(JSON.stringify(state.blocks));
+      const targetElement: BlockItem =
+        findInTree(newBlocksSet, action.blockUuid!) ||
+        (action.blockUuid === state.bottomBar?.uuid
+          ? {
+              ...state.bottomBar,
+            }
+          : {...state.topAppBar});
+      if (action.parentKey && !Array.isArray(action.parentKey)) {
+        const val = targetElement.settingsUI[action.parentKey][action.key!];
+        delete targetElement.settingsUI[action.parentKey][action.key!];
+        targetElement.settingsUI[action.parentKey][
+          action.value! === '%' ? action.key + 'InPercent' : action.key!.substring(0, action.key?.indexOf('InPercent'))
+        ] = val;
+      }
+      return {
+        ...state,
+        blocks: [...newBlocksSet],
+      };
     case actionTypes.CHANGE_BLOCK_DATA:
       const newBlocks = JSON.parse(JSON.stringify(state.blocks));
       const element: BlockItem =

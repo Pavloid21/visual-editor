@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import {ReactComponent as Trash} from '../assets/trash.svg';
 import ColorPicker from '../components/ColorPicker';
 import {leadLetter} from '../constants/utils';
-import {Button, Input} from '../components/controls';
+import {Button, Input, UnitsInput} from '../components/controls';
 import {Select as SelectBase} from '../components/controls';
 import {Container} from '../components/controls/Input';
 import {Label} from 'components/Input';
@@ -46,6 +46,16 @@ const Inspector: React.FC<any> = ({display}) => {
   const handleChangeBlockData = (blockUuid: string, key: string, value: any, parentKey: string | undefined) => {
     dispatch({
       type: actionTypes.CHANGE_BLOCK_DATA,
+      blockUuid,
+      key,
+      parentKey,
+      value,
+    });
+  };
+
+  const handleChangeUnits = (blockUuid: string, key: string, value: string | undefined, parentKey: string) => {
+    dispatch({
+      type: actionTypes.CHANGE_UNITS,
       blockUuid,
       key,
       parentKey,
@@ -100,9 +110,35 @@ const Inspector: React.FC<any> = ({display}) => {
                 type="number"
                 placeholder={config[el].name}
                 value={endpoint ? endpoint[el] : null}
-                onChange={(e: any) => handleChangeBlockData(blockUuid, el, e.target.value, parentKey)}
+                onChange={(e: any) => handleChangeBlockData(blockUuid, el, +e.target.value, parentKey)}
               />
             </div>
+          );
+        case 'units':
+          return (
+            <UnitsInput
+              key={`${parentKey}_${index}`}
+              isWide
+              clearable={false}
+              label={config[el].name}
+              type="number"
+              placeholder={config[el].name}
+              value={endpoint ? endpoint[el] || endpoint[el + 'InPercent'] : null}
+              onChange={(e: any) =>
+                handleChangeBlockData(
+                  blockUuid,
+                  endpoint && endpoint[el] !== undefined ? el : el + 'InPercent',
+                  +e.target.value,
+                  parentKey
+                )
+              }
+              select={{
+                onChange: (value) =>
+                  handleChangeUnits(blockUuid, endpoint[el] !== undefined ? el : el + 'InPercent', value, parentKey),
+                options: config[el].options,
+                value: endpoint && endpoint[el] === undefined ? '%' : 'px',
+              }}
+            />
           );
         case 'select':
           return (

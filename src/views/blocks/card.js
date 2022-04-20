@@ -24,7 +24,14 @@ const Card = styled.div`
   padding-right: ${(props) => props.padding?.right}px;
   padding-bottom: ${(props) => props.padding?.bottom}px;
   padding-left: ${(props) => props.padding?.left}px;
-  height: ${(props) => (props.size?.height ? props.size?.height + 'px' : 'auto')};
+  height: ${(props) => {
+    if (props.size?.height !== undefined) {
+      return props.size.height + 'px';
+    } else if (props.size?.heightInPercent !== undefined) {
+      return props.size.heightInPercent + '%';
+    }
+    return 'auto';
+  }};
   overflow: hidden;
   box-shadow: ${(props) => {
     const RGB = hexToRgb(props.shadow?.color);
@@ -205,7 +212,14 @@ const block = {
       },
     },
     size: {
-      height: {type: 'number', name: 'Height'},
+      height: {
+        type: 'units',
+        name: 'Height',
+        options: [
+          {label: 'px', value: 'px'},
+          {label: '%', value: '%'},
+        ],
+      },
     },
   },
   interactive: {

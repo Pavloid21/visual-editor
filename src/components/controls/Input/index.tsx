@@ -11,7 +11,7 @@ export const Container = styledComponents.section<TextAreaProps & NeoInputProps>
   & svg {
     position: absolute;
     right: 12px;
-    top: 41px;
+    top: 44px;
     &:hover {
       cursor: pointer;
     }
@@ -25,11 +25,11 @@ export const Container = styledComponents.section<TextAreaProps & NeoInputProps>
 
 const StyledNeoInput = styledComponents(Input)<NeoInputProps>`
 font-size: 14px;
-& > input  {
+& > .rc-input, &[type="text"] {
     background: #FFFFFF;
     width: ${(props) => (props.isWide ? '100%' : 'auto')};
     border: 1px solid ${(props) => (props.status === 'error' ? `var(--error-text)` : 'var(--neo-gray)')};
-    height: 30px;
+    height: 36px;
     line-height: 20px;
     border-radius: 4px;
     padding: 8px ${(props) => (props.clearable ? '36px' : '12px')} 8px 12px ;
@@ -50,7 +50,7 @@ font-size: 14px;
     `
   width: ${props.isWide ? '100%' : 'auto'};
   border: 1px solid ${props.status === 'error' ? `var(--error-text)` : 'var(--neo-gray)'};
-  height: 30px;
+  height: 36px;
   line-height: 20px;
   border-radius: 4px;
   padding: 8px ${props.clearable ? '36px' : '12px'} 8px 12px ;

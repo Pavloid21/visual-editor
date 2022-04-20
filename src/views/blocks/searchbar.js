@@ -32,8 +32,22 @@ const SearchBar = styled.div`
   &::after {
     content: '';
     display: block;
-    width: ${(props) => props.size?.height}px;
-    height: ${(props) => props.size?.height}px;
+    width: ${(props) => {
+      if (props.size?.width !== undefined) {
+        return props.size.width + 'px';
+      } else if (props.size?.widthInPercent !== undefined) {
+        return props.size.widthInPercent + '%';
+      }
+      return '100%';
+    }};
+    height: ${(props) => {
+      if (props.size?.height !== undefined) {
+        return props.size.height + 'px';
+      } else if (props.size?.heightInPercent !== undefined) {
+        return props.size.heightInPercent + '%';
+      }
+      return 'auto';
+    }};
     position: absolute;
     top: 0;
     right: 0;
@@ -149,8 +163,22 @@ const block = {
     backgroundColor: {type: 'color', name: 'Background color'},
     fontSize: {type: 'number', name: 'Font size'},
     size: {
-      height: {type: 'number', name: 'Height'},
-      width: {type: 'number', name: 'Width'},
+      height: {
+        type: 'units',
+        name: 'Height',
+        options: [
+          {label: 'px', value: 'px'},
+          {label: '%', value: '%'},
+        ],
+      },
+      width: {
+        type: 'units',
+        name: 'Width',
+        options: [
+          {label: 'px', value: 'px'},
+          {label: '%', value: '%'},
+        ],
+      },
     },
   },
 };
