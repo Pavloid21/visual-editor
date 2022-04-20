@@ -29,7 +29,7 @@ const Container = styled.div`
   justify-content: space-between;
   border-right: 1px solid var(--neo-gray);
   height: calc(100vh - 60px);
-  z-index: 2;
+  z-index: 1;
   & > div:nth-child(2n + 1) {
     ${(props) => (props.show ? 'height: 50%;' : '')}
   }

@@ -87,7 +87,7 @@ const Screen = (props) => {
           </EditorWrapper>
         </>
       </div>
-      <CustomModal isActive={itemModalOpen} handleClose={() => setItemModalOpen(false)}>
+      <CustomModal isActive={itemModalOpen} handleClose={() => setItemModalOpen(false)} padding="16px">
         <EditorWrapper icon={fullScreenIcon}>
           <Editor
             highlight={(code) => Prism.highlight(code, Prism.languages.js, 'javascript')}

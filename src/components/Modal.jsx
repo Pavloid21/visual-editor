@@ -44,6 +44,7 @@ const CustomModal = ({isActive, children, handleClose, ...props}) => {
           maxWidth: '100vw',
           width: '60%',
           maxHeight: '800px',
+          padding: props.padding,
         }}
       >
         {props.title && <Title isSize={6}>{props.title}</Title>}
