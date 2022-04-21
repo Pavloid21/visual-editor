@@ -73,6 +73,7 @@ export const Project: React.FC<any> = () => {
   const {keycloak} = useKeycloak();
   const {name, preferred_username} = keycloak.idTokenParsed!;
   const [projects, setProjects] = useState<TProject[]>([]);
+  const [loading, setLoading] = useState(false);
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal();
   const formRef = React.createRef<HTMLFormElement>();
   const {
@@ -92,6 +93,7 @@ export const Project: React.FC<any> = () => {
   const dispatch = useDispatch();
 
   const getProjects = async () => {
+    setLoading(true);
     await getProjectsList().then((projects: AxiosResponse) => {
       if (projects.data) {
         const promises: Promise<AxiosResponse>[] = projects.data.map((project: string) => getProjectData(project));
@@ -99,6 +101,7 @@ export const Project: React.FC<any> = () => {
           setProjects(data.map((item: any) => item.value.data));
         });
       }
+      setLoading(false);
     });
   };
 
@@ -160,7 +163,7 @@ export const Project: React.FC<any> = () => {
             </Button>
           </Header>
           <Content>
-            {!projects.length && <Loader loading={true} />}
+            {loading && <Loader loading={true} />}
             {projects.map((project) => (
               <Card
                 {...project}

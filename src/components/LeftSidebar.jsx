@@ -58,6 +58,7 @@ const SreenTitle = styled.div`
 
 export default function LeftSidebar({children, ...props}) {
   const layout = useSelector((state) => state.layout.blocks);
+  const [loading, setLoading] = useState(false);
   const topAppBar = useSelector((state) => state.layout.topAppBar);
   const api = useSelector((state) => state.api);
   const output = useSelector((state) => state.output.screen);
@@ -185,6 +186,7 @@ export default function LeftSidebar({children, ...props}) {
   };
 
   useEffect(() => {
+    setLoading(true);
     getScreenesList(project).then((screenes) => {
       const screenesArr = screenes.data.map((screen) => {
         return getScreenByName(project, screen, true)
@@ -218,6 +220,7 @@ export default function LeftSidebar({children, ...props}) {
           });
           setScreenes(layouts);
           setTree(layouts.map((layout) => prepareTree(layout)));
+          setLoading(false);
         })
         .catch(console.log);
     });
@@ -449,7 +452,7 @@ export default function LeftSidebar({children, ...props}) {
               position: 'relative',
             }}
           >
-            {!treeData.length ? (
+            {loading ? (
               <Loader loading={true} size={40} />
             ) : (
               <SortableTree
