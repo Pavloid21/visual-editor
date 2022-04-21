@@ -27,12 +27,12 @@ const StyledNeoInput = styledComponents(Input)<NeoInputProps>`
 font-size: 14px;
 & > .rc-input, &[type="text"] {
     background: #FFFFFF;
-    width: ${(props) => (props.isWide ? '100%' : 'auto')};
+    width: ${(props) => (props.$isWide ? '100%' : 'auto')};
     border: 1px solid ${(props) => (props.status === 'error' ? `var(--error-text)` : 'var(--neo-gray)')};
     height: 36px;
     line-height: 20px;
     border-radius: 4px;
-    padding: 8px ${(props) => (props.clearable ? '36px' : '12px')} 8px 12px ;
+    padding: 8px ${(props) => (props.$clearable ? '36px' : '12px')} 8px 12px ;
     margin-top: 4px;
     &::placeholder {
       color: #B3B3B3;
@@ -48,12 +48,12 @@ font-size: 14px;
   ${(props) =>
     props.type === 'number' &&
     `
-  width: ${props.isWide ? '100%' : 'auto'};
+  width: ${props.$isWide ? '100%' : 'auto'};
   border: 1px solid ${props.status === 'error' ? `var(--error-text)` : 'var(--neo-gray)'};
   height: 36px;
   line-height: 20px;
   border-radius: 4px;
-  padding: 8px ${props.clearable ? '36px' : '12px'} 8px 12px ;
+  padding: 8px ${props.$clearable ? '36px' : '12px'} 8px 12px ;
   margin-top: 4px;
   &::placeholder {
     color: #B3B3B3;
@@ -71,14 +71,14 @@ font-size: 14px;
 
 const StyledNeoTextArea = styledComponents(Textarea)<TextAreaProps & NeoInputProps>`
   background: #FFFFFF;
-  width: ${(props) => (props.isWide ? '100%' : 'auto')};
+  width: ${(props) => (props.$isWide ? '100%' : 'auto')};
   border: 1px solid var(--neo-gray);
   height: 30px;
   box-sizing: border-box;
   border-radius: 4px;
   font-size: 14px;
   line-height: 20px;
-  padding: 8px ${(props) => (props.clearable ? '36px' : '12px')} 8px 12px ;
+  padding: 8px ${(props) => (props.$clearable ? '36px' : '12px')} 8px 12px ;
   display: block;
   margin-top: 4px;
   &::placeholder {
@@ -99,12 +99,12 @@ export const NeoInput: React.FC<TextAreaProps & NeoInputProps> = (props) => {
   return (
     <Container {...props}>
       {props.label && <Label>{props.label}</Label>}
-      {props.textarea ? (
+      {props.$textarea ? (
         <StyledNeoTextArea autoSize={{minRows: 2, maxRows: 8}} {...props} />
       ) : (
-        <StyledNeoInput allowClear={props.clearable && {clearIcon: <Remove />}} {...props} />
+        <StyledNeoInput allowClear={props.$clearable && {clearIcon: <Remove />}} {...props} />
       )}
-      {props.extraText && <span className="extra">{props.extraText}</span>}
+      {props.$extraText && <span className="extra">{props.$extraText}</span>}
     </Container>
   );
 };

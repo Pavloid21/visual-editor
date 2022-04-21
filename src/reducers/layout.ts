@@ -61,6 +61,8 @@ const cloneToList = (tree: any[], uuid: string) => {
 
 export default function reducer(state = initialState, action: LayoutAction) {
   switch (action.type) {
+    case actionTypes.ERASE:
+      return initialState;
     case actionTypes.PUSH_TOPAPPBAR:
       const topAppBar = {
         uuid: uuidv4(),

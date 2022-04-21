@@ -77,8 +77,8 @@ const Inspector: React.FC<any> = ({display}) => {
           return (
             <div key={`${parentKey}_${index}`}>
               <Input
-                isWide
-                clearable
+                $isWide
+                $clearable
                 label={config[el].name}
                 type="text"
                 placeholder={config[el].name}
@@ -93,7 +93,7 @@ const Inspector: React.FC<any> = ({display}) => {
               <ColorPicker
                 debounceTimeout={500}
                 label={config[el].name}
-                isWide
+                $isWide
                 placeholder={config[el].name}
                 value={endpoint ? endpoint[el] : null}
                 onChange={(e: any) => handleChangeBlockData(blockUuid, el, e.target.value, parentKey)}
@@ -104,8 +104,8 @@ const Inspector: React.FC<any> = ({display}) => {
           return (
             <div className="form-group" key={`${parentKey}_${index}`}>
               <Input
-                isWide
-                clearable={false}
+                $isWide
+                $clearable={false}
                 label={config[el].name}
                 type="number"
                 placeholder={config[el].name}
@@ -118,8 +118,8 @@ const Inspector: React.FC<any> = ({display}) => {
           return (
             <UnitsInput
               key={`${parentKey}_${index}`}
-              isWide
-              clearable={false}
+              $isWide
+              $clearable={false}
               label={config[el].name}
               type="number"
               placeholder={config[el].name}
@@ -169,8 +169,8 @@ const Inspector: React.FC<any> = ({display}) => {
           return (
             <div className="form-group" key={`${parentKey}_${index}`}>
               <Input
-                isWide
-                clearable
+                $isWide
+                $clearable
                 label={config[el].name}
                 type="text"
                 placeholder={config[el].name}

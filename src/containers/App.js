@@ -61,8 +61,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch({
-      type: actionTypes.SET_LAYOUT,
-      layout: [],
+      type: actionTypes.ERASE,
     });
   }, [location, dispatch]);
 

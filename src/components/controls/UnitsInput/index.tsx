@@ -61,11 +61,11 @@ export const UnitsInput = (props: UnitsInputProps) => {
       <Label>{label}</Label>
       <div>
         <StyledInput
-          isWide
+          $isWide
           type="number"
           min={0}
           max={select.value === '%' ? 100 : undefined}
-          clearable={false}
+          $clearable={false}
           value={value}
           onChange={(e: any) => onChange!(e)}
         />

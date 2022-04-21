@@ -9,6 +9,8 @@ const initialState: Output = {
 
 export default function reducer(state = initialState, action: AnyAction) {
   switch (action.type) {
+    case actionTypes.ERASE:
+      return initialState;
     case actionTypes.EDIT_SCREEN_NAME:
       const nextState = {...state};
       nextState.screen = action.screen;

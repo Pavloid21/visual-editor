@@ -43,8 +43,8 @@ const Screen = (props) => {
     <Container>
       <div className="form-group">
         <Input
-          isWide
-          clearable
+          $isWide
+          $clearable
           label="Screen name"
           type="text"
           placeholder="Screen name"

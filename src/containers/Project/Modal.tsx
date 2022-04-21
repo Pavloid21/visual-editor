@@ -122,11 +122,11 @@ const Modal: React.FC<ModalProps> = (props) => {
                 return (
                   <div>
                     <Input
-                      clearable
-                      isWide
+                      $clearable
+                      $isWide
                       label="Project name"
                       placeholder="Project name"
-                      extraText={form?.name?.message}
+                      $extraText={form?.name?.message}
                       status={form?.name ? 'error' : undefined}
                       {...field}
                     />
@@ -140,7 +140,7 @@ const Modal: React.FC<ModalProps> = (props) => {
               render={({field}) => {
                 return (
                   <div>
-                    <Input clearable isWide label="Project icon" placeholder="Icon URL" {...field} />
+                    <Input $clearable $isWide label="Project icon" placeholder="Icon URL" {...field} />
                   </div>
                 );
               }}
@@ -152,9 +152,9 @@ const Modal: React.FC<ModalProps> = (props) => {
                 return (
                   <div>
                     <Input
-                      clearable
-                      isWide
-                      textarea
+                      $clearable
+                      $isWide
+                      $textarea
                       label="Description"
                       placeholder="Your project description"
                       {...field}
