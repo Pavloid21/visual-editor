@@ -7,13 +7,18 @@ import store from './utils/store';
 import App from './containers/App';
 import {ReactKeycloakProvider} from '@react-keycloak/web';
 import keycloack from 'constants/keykloak';
+import {DndWrapper} from 'containers/DnDWrapper';
 
 ReactDOM.render(
   <Provider store={store}>
     <ReactKeycloakProvider authClient={keycloack}>
-      <Router>
-        <App />
-      </Router>
+      <div id="APP">
+        <DndWrapper id="APP">
+          <Router>
+            <App />
+          </Router>
+        </DndWrapper>
+      </div>
     </ReactKeycloakProvider>
   </Provider>,
   document.getElementById('root')

@@ -5,7 +5,7 @@ import renderHandlebars from '../utils/renderHandlebars';
 import LeftSidebar from '../components/LeftSidebar';
 import Preview from './Preview';
 import actionTypes from '../constants/actionTypes';
-import {DndWrapper} from './DnDWrapper';
+import {useLocation} from 'react-router-dom';
 import {observer} from '../utils/observer';
 import {findInTree} from '../reducers/layout';
 import TopBar from '../components/TopBar';
@@ -21,6 +21,7 @@ import Loader from 'components/Loader';
 
 const App = () => {
   const layout = useSelector((state) => state.layout);
+  const location = useLocation();
   const bottomBar = useSelector((state) => state.layout.bottomBar);
   const topAppBar = useSelector((state) => state.layout.topAppBar);
   const config = useSelector((state) => state.config);
@@ -57,6 +58,13 @@ const App = () => {
       handleMessage({data, event: data.event});
     });
   }, [layout, bottomBar]);
+
+  useEffect(() => {
+    dispatch({
+      type: actionTypes.SET_LAYOUT,
+      layout: [],
+    });
+  }, [location, dispatch]);
 
   const handleChangeActiveTab = (index) => {
     dispatch({
@@ -121,48 +129,46 @@ const App = () => {
   }
 
   return (
-    <div id="APP" onClick={handleAppClick}>
+    <div onClick={handleAppClick}>
       <GlobalStyles />
-      <DndWrapper id="APP">
-        <div
-          className="wrapper d-flex"
-          style={{
-            paddingTop: '60px',
-            justifyContent: 'center',
-            height: '100vh',
-            display: 'flex',
-          }}
-        >
-          <TopBar />
-          <Routes>
-            <Route exact path="/" element={<Navigate to="/project" />} />
-            <Route exact path="/login" element={<Login />} />
-            <Route
-              exact
-              path="/project"
-              element={
-                <RequireAuth>
-                  <Project />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/editor/:project"
-              element={
-                <RequireAuth>
-                  <LeftSidebar display={barState.left} />
-                  <Preview
-                    components={components}
-                    onChangePreviewMode={handleChangePreviewMode}
-                    previewMode={previewMode}
-                  />
-                  <RightSidebar display={barState.right} />
-                </RequireAuth>
-              }
-            />
-          </Routes>
-        </div>
-      </DndWrapper>
+      <div
+        className="wrapper d-flex"
+        style={{
+          paddingTop: '60px',
+          justifyContent: 'center',
+          height: '100vh',
+          display: 'flex',
+        }}
+      >
+        <TopBar />
+        <Routes>
+          <Route exact path="/" element={<Navigate to="/project" />} />
+          <Route exact path="/login" element={<Login />} />
+          <Route
+            exact
+            path="/project"
+            element={
+              <RequireAuth>
+                <Project />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/editor/:project"
+            element={
+              <RequireAuth>
+                <LeftSidebar display={barState.left} />
+                <Preview
+                  components={components}
+                  onChangePreviewMode={handleChangePreviewMode}
+                  previewMode={previewMode}
+                />
+                <RightSidebar display={barState.right} />
+              </RequireAuth>
+            }
+          />
+        </Routes>
+      </div>
       <HighlightedElement />
     </div>
   );

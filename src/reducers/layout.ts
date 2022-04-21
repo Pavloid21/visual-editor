@@ -68,6 +68,9 @@ export default function reducer(state = initialState, action: LayoutAction) {
         settingsUI: {
           ...getData(blocks[action.blockId].defaultData),
         },
+        interactive: {
+          ...getData(blocks[action.blockId].defaultInteractiveOptions),
+        },
       };
       return {...state, topAppBar};
     case actionTypes.PUSH_BOTTOMBAR:

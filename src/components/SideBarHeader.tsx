@@ -7,8 +7,9 @@ import {useModal} from 'utils/hooks';
 import {ReactComponent as ArrowBack} from '../assets/arrow_back.svg';
 import {ReactComponent as Settings} from '../assets/settings.svg';
 import {editProject, getProjectData} from 'services/ApiService';
-import {v4} from 'uuid';
 import Modal from 'containers/Project/Modal';
+import actionTypes from 'constants/actionTypes';
+import {useDispatch} from 'react-redux';
 
 const Header = styled.div`
   min-height: 60px;
@@ -51,6 +52,7 @@ type SideBarHeaderProps = {
 
 const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal();
   const {
     setValue,
@@ -106,7 +108,18 @@ const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
 
   return (
     <Header>
-      {left && <ArrowBack className="icon" onClick={() => navigate('/project')} />}
+      {left && (
+        <ArrowBack
+          className="icon"
+          onClick={() => {
+            dispatch({
+              type: actionTypes.SET_LAYOUT,
+              layout: [],
+            });
+            navigate('/project');
+          }}
+        />
+      )}
       {left ? project?.name : title}
       {left && (
         <Settings

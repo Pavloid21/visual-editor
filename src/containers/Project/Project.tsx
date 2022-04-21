@@ -99,9 +99,9 @@ export const Project: React.FC<any> = () => {
         const promises: Promise<AxiosResponse>[] = projects.data.map((project: string) => getProjectData(project));
         Promise.allSettled(promises).then((data: PromiseSettledResult<any>[]) => {
           setProjects(data.map((item: any) => item.value.data));
+          setLoading(false);
         });
       }
-      setLoading(false);
     });
   };
 
