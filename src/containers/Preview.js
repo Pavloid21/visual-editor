@@ -103,8 +103,8 @@ const Preview = (props) => {
     drop: (item) => {
       return;
     },
-    canDrop: () => {
-      return !!selectedScreen;
+    canDrop: (item) => {
+      return item.type === 'Container' && !!selectedScreen;
     },
     collect: (monitor) => ({
       isOver: monitor.isOver({shallow: true}),

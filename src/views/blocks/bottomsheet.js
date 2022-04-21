@@ -101,7 +101,7 @@ const block = {
   description:
     'A view that display content that complements the screen’s primary content. View remain visible while users interact with the primary content.',
   previewImageUrl: bottomsheet,
-  category: 'Layouts',
+  category: 'Container',
   defaultData: {
     backgroundColor: '#EFEFEF',
     bottomSheetState: 'EXPANDED',

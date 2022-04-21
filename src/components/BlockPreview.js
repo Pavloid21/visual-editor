@@ -43,7 +43,7 @@ const BlockPreview = (props) => {
   const dispatch = useDispatch();
   const [{isDragging}, drag] = useDrag(() => ({
     type: ItemTypes.BOX,
-    item: {id: props.blockId},
+    item: {id: props.blockId, type: props.type},
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult();
       if (item && dropResult) {

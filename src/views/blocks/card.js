@@ -118,7 +118,7 @@ const block = {
   title: 'Card',
   description: 'Cards contain content and actions about a single subject.',
   previewImageUrl: card,
-  category: 'Layouts',
+  category: 'Element',
   defaultInteractiveOptions: {
     action: {url: 'nextScreenName', fields: ['field1', 'field2'], target: ''},
   },

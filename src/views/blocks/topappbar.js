@@ -62,7 +62,7 @@ const block = {
   title: 'App bars: top',
   description: 'The top app bar displays information and actions relating to the current screen.',
   previewImageUrl: topappbar,
-  category: 'Controls',
+  category: 'Container',
   defaultInteractiveOptions: {
     action: {url: 'nextScreenName', fields: ['field1', 'field2'], target: ''},
     appBarItems: {
