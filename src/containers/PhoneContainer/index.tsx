@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
-import {DeviceKeys, mockByDeviceKey, stylesByDeviceKey} from 'containers/MobileSelect/consts';
+import {DeviceKeys, mockByDeviceKey, statusBarByDevice, stylesByDeviceKey} from 'containers/MobileSelect/consts';
 import {PanZoom} from 'react-easy-panzoom';
 import {Zoom} from 'containers/ZoomSelect/types';
 import {useRef} from 'react';
@@ -63,9 +63,9 @@ const PhoneContainer = (props: IPhoneContainer) => {
     zoomRef.current.autoCenter();
     dispatch({
       type: actionTypes.SET_ZOOM,
-      zoom: Zoom['100%']
-    })
-  }
+      zoom: Zoom['100%'],
+    });
+  };
 
   return (
     <>
@@ -74,6 +74,7 @@ const PhoneContainer = (props: IPhoneContainer) => {
           styled={{...stylesByDeviceKey[model as DeviceKeys]}}
           backgroundColor={topAppBar?.settingsUI.backgroundColor}
         >
+          {statusBarByDevice(topAppBar?.settingsUI.backgroundColor, model)}
           {props.children}
         </Wrapper>
         {mockByDeviceKey[model as DeviceKeys]}
