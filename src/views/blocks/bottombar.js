@@ -74,7 +74,7 @@ const block = {
   description:
     "Bottom navigation bars allow movement between primary destinations in an app.",
   previewImageUrl: bottombar,
-  category: "Controls",
+  category: 'Container',
   defaultInteractiveOptions: {
     action: { url: "nextScreenName", fields: ["field1", "field2"], target: "" },
   },

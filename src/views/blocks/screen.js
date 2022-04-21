@@ -78,6 +78,9 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
         target: target.targetId,
       };
     },
+    canDrop: (item) => {
+      return item.type === 'Container';
+    },
     collect: (monitor) => ({
       isOver: monitor.isOver({shallow: true}),
       canDrop: monitor.canDrop(),
@@ -120,7 +123,7 @@ const block = {
   title: 'Screen',
   description: 'A view that arranges its children.',
   previewImageUrl: screen,
-  category: 'Layouts',
+  category: 'Container',
   defaultData: {
     alignment: 'CENTER',
     backgroundColor: '#C6C6C6',

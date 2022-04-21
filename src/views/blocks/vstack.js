@@ -120,7 +120,7 @@ const block = {
   title: 'Container',
   description: 'A view that arranges its children.',
   previewImageUrl: vstack,
-  category: 'Layouts',
+  category: 'Container',
   complex: [
     {label: 'Vertical', value: 'VSTACK'},
     {label: 'Horizontal', value: 'HSTACK'},

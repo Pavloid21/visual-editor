@@ -118,6 +118,7 @@ const Gallery = (props) => {
           title={block.title}
           description={block.description}
           blockId={blockId}
+          type={block.category}
           image={block.previewImageUrl}
           onPushBlock={handlePushBlock}
           onPushBlockInside={handlePushBlockInside}

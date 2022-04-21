@@ -77,7 +77,7 @@ const block = {
   title: 'Label',
   description: 'A standard label for user interface items, consisting of an icon with a title.',
   previewImageUrl: label,
-  category: 'Controls',
+  category: 'Element',
   defaultData: {
     alignment: 'CENTER',
     text: 'Вход',
