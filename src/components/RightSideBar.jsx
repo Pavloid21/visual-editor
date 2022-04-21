@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import SideBarHeader from './SideBarHeader';
 import Inspector from '../containers/Inspector';
@@ -21,9 +21,12 @@ const Container = styled.div`
   flex-direction: column;
   border-left: 1px solid var(--neo-gray);
   height: calc(100vh - 60px);
-  z-index: 2;
+  z-index: 1;
   & > div {
     height: 100%;
+  }
+  @media (max-width: 1500px) {
+    min-width: 300px;
   }
 `;
 
@@ -157,7 +160,7 @@ export default function RightSidebar({children, ...props}) {
       <div>
         <SideBarHeader title="Properties" />
         <Inspector display />
-        {selectedAction && <ActionForm action={selectedAction} />}
+        {selectedAction && !selectedBlock && <ActionForm action={selectedAction} />}
         {activeTab === 5 && (
           <Screen category="screen" display={activeTab === 5} onPushBlock={() => {}} onPushBlockInside={() => {}} />
         )}

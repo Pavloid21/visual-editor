@@ -43,8 +43,8 @@ const Screen = (props) => {
     <Container>
       <div className="form-group">
         <Input
-          isWide
-          clearable
+          $isWide
+          $clearable
           label="Screen name"
           type="text"
           placeholder="Screen name"
@@ -87,7 +87,7 @@ const Screen = (props) => {
           </EditorWrapper>
         </>
       </div>
-      <CustomModal isActive={itemModalOpen} handleClose={() => setItemModalOpen(false)}>
+      <CustomModal isActive={itemModalOpen} handleClose={() => setItemModalOpen(false)} padding="16px">
         <EditorWrapper icon={fullScreenIcon}>
           <Editor
             highlight={(code) => Prism.highlight(code, Prism.languages.js, 'javascript')}

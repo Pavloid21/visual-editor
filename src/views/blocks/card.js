@@ -24,10 +24,18 @@ const Card = styled.div`
   padding-right: ${(props) => props.padding?.right}px;
   padding-bottom: ${(props) => props.padding?.bottom}px;
   padding-left: ${(props) => props.padding?.left}px;
-  height: ${(props) => (props.size?.height ? props.size?.height + 'px' : 'auto')};
+  height: ${(props) => {
+    if (props.size?.height !== undefined) {
+      return props.size.height + 'px';
+    } else if (props.size?.heightInPercent !== undefined) {
+      return props.size.heightInPercent + '%';
+    }
+    return 'auto';
+  }};
+  overflow: hidden;
   box-shadow: ${(props) => {
     const RGB = hexToRgb(props.shadow?.color);
-    return `${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px 8px rgba(${RGB.r}, ${RGB.g}, ${RGB.b}, ${props.shadow?.opacity})`;
+    return `${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px 8px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b}, ${props.shadow?.opacity})`;
   }};
   gap: ${(props) => props.spacing}px;
   border-radius: ${(props) => `
@@ -110,7 +118,7 @@ const block = {
   title: 'Card',
   description: 'Cards contain content and actions about a single subject.',
   previewImageUrl: card,
-  category: 'Layouts',
+  category: 'Element',
   defaultInteractiveOptions: {
     action: {url: 'nextScreenName', fields: ['field1', 'field2'], target: ''},
   },
@@ -204,7 +212,14 @@ const block = {
       },
     },
     size: {
-      height: {type: 'number', name: 'Height'},
+      height: {
+        type: 'units',
+        name: 'Height',
+        options: [
+          {label: 'px', value: 'px'},
+          {label: '%', value: '%'},
+        ],
+      },
     },
   },
   interactive: {

@@ -14,7 +14,24 @@ const Button = styled.div`
   display: flex;
   justify-content: space-between;
   border-width: ${(props) => props.borderWidth}px;
+  border-style: solid;
   border-color: ${(props) => props.borderColor};
+  width: ${(props) => {
+    if (props.size?.width !== undefined) {
+      return props.size.width + 'px';
+    } else if (props.size?.widthInPercent !== undefined) {
+      return props.size.widthInPercent + '%';
+    }
+    return '100%';
+  }};
+  height: ${(props) => {
+    if (props.size?.height !== undefined) {
+      return props.size.height + 'px';
+    } else if (props.size?.heightInPercent !== undefined) {
+      return props.size.heightInPercent + '%';
+    }
+    return 'auto';
+  }};
   ${(props) => {
     if (props.shadow) {
       return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${
@@ -30,15 +47,11 @@ const Button = styled.div`
       return `border-radius: ${props.shape.radius}px;`;
     }
   }}
-  ${(props) => {
-    if (props.size) {
-      return `height: ${props.size.height}px;
-              width: ${props.alignment === 'FILL' ? '100%' : props.size.width + 'px'};`;
-    }
-  }}
   & > span {
     width: 100%;
     font-size: inherit;
+    overflow: hidden;
+    text-overflow: ellipsis;
     text-align: ${(props) => props.textAlignment};
     padding-top: ${(props) => props.buttonTextPadding?.top || 0}px;
     padding-left: ${(props) => props.buttonTextPadding?.left || 0}px;
@@ -55,8 +68,21 @@ const Button = styled.div`
 
 const Component = (props) => {
   const {text, imageUrl, alignment} = props.settingsUI;
+  const calculateAlignment = (alignment) => {
+    console.log('alignmrnt', alignment);
+    switch (alignment) {
+      case 'LEFT':
+        return 'start';
+      case 'RIGHT':
+        return 'end';
+      case 'FILL':
+        return 'stretch';
+      default:
+        return 'center';
+    }
+  };
   return (
-    <Wrapper id={props.id} style={{alignItems: alignment}}>
+    <Wrapper id={props.id} style={{alignItems: calculateAlignment(alignment)}}>
       <Button className="draggable" {...props.settingsUI} {...props}>
         <span>{text}</span>
         {imageUrl && <img src={imageUrl} />}
@@ -174,8 +200,22 @@ const block = {
       radius: {type: 'number', name: 'Shape radius'},
     },
     size: {
-      height: {type: 'number', name: 'Height'},
-      width: {type: 'number', name: 'Width'},
+      height: {
+        type: 'units',
+        name: 'Height',
+        options: [
+          {label: 'px', value: 'px'},
+          {label: '%', value: '%'},
+        ],
+      },
+      width: {
+        type: 'units',
+        name: 'Width',
+        options: [
+          {label: 'px', value: 'px'},
+          {label: '%', value: '%'},
+        ],
+      },
     },
     shadow: {
       color: {type: 'color', name: 'Color'},

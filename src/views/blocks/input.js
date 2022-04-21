@@ -10,8 +10,22 @@ const Input = styled.div`
   border: 1px solid var(--neo-gray);
   padding: 4px 12px;
   text-align: ${(props) => props.textAlignment};
-  width: ${(props) => (props.size?.width ? props.size?.width + 'px' : '100%')};
-  height: ${(props) => (props.size?.height ? props.size?.height + 'px' : 'auto')};
+  width: ${(props) => {
+    if (props.size?.width !== undefined) {
+      return props.size.width + 'px';
+    } else if (props.size?.widthInPercent !== undefined) {
+      return props.size.widthInPercent + '%';
+    }
+    return '100%';
+  }};
+  height: ${(props) => {
+    if (props.size?.height !== undefined) {
+      return props.size.height + 'px';
+    } else if (props.size?.heightInPercent !== undefined) {
+      return props.size.heightInPercent + '%';
+    }
+    return 'auto';
+  }};
   & > span {
     font-size: ${(props) => props.fontSize}px;
   }
@@ -75,8 +89,22 @@ const block = {
     backgroundColor: {type: 'color', name: 'Background color'},
     fontSize: {type: 'number', name: 'Font size'},
     size: {
-      width: {type: 'number', name: 'Width'},
-      height: {type: 'number', name: 'Height'},
+      height: {
+        type: 'units',
+        name: 'Height',
+        options: [
+          {label: 'px', value: 'px'},
+          {label: '%', value: '%'},
+        ],
+      },
+      width: {
+        type: 'units',
+        name: 'Width',
+        options: [
+          {label: 'px', value: 'px'},
+          {label: '%', value: '%'},
+        ],
+      },
     },
   },
   interactive: {

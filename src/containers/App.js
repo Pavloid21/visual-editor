@@ -1,45 +1,69 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import renderHandlebars from "../utils/renderHandlebars";
-import LeftSidebar from "../components/LeftSidebar";
-import Preview from "./Preview";
-import actionTypes from "../constants/actionTypes";
-import { DndWrapper } from "./DnDWrapper";
-import { observer } from "../utils/observer";
-import { findInTree } from "../reducers/layout";
-import TopBar from "../components/TopBar";
-import GlobalStyles from "../constants/theme";
-import RightSidebar from "../components/RightSideBar";
-import HighlightedElement from "../components/HighlightedElement";
+import React, {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {Routes, Route, Navigate} from 'react-router-dom';
+import renderHandlebars from '../utils/renderHandlebars';
+import LeftSidebar from '../components/LeftSidebar';
+import Preview from './Preview';
+import actionTypes from '../constants/actionTypes';
+import {useLocation} from 'react-router-dom';
+import {observer} from '../utils/observer';
+import {findInTree} from '../reducers/layout';
+import TopBar from '../components/TopBar';
+import GlobalStyles from '../constants/theme';
+import RightSidebar from '../components/RightSideBar';
+import HighlightedElement from '../components/HighlightedElement';
+import Login from './Login';
+import RequireAuth from 'auth/RequireAuth';
+import {useKeycloak} from '@react-keycloak/web';
+import {Project} from './Project';
+import {API} from 'services/ApiService';
+import Loader from 'components/Loader';
 
 const App = () => {
   const layout = useSelector((state) => state.layout);
+  const location = useLocation();
   const bottomBar = useSelector((state) => state.layout.bottomBar);
   const topAppBar = useSelector((state) => state.layout.topAppBar);
   const config = useSelector((state) => state.config);
   const barState = useSelector((state) => state.sideBar);
   const dispatch = useDispatch();
+  const {initialized, keycloak} = useKeycloak();
+  const setHeaderAuthorizationToken = () => {
+    if (keycloak.token) {
+      API.defaults.headers.common.Authorization = `Bearer ${keycloak.token}`;
+    }
+  };
+
+  useEffect(() => {
+    keycloak.onTokenExpired = () => {
+      keycloak.updateToken(50);
+    };
+    keycloak.onAuthSuccess = setHeaderAuthorizationToken;
+    keycloak.onAuthRefreshSuccess = setHeaderAuthorizationToken;
+  }, [!keycloak.authenticated]);
+
   useEffect(() => {
     const handleMessage = (event) => {
       if (event.data.event) {
-        if (event.data.blockId && event.data.event === "click") {
+        if (event.data.blockId && event.data.event === 'click') {
           handleChangeActiveTab(0);
           handleSetSelectedBlock(event.data.blockId);
-        } else if (event.data.newOrder && event.data.event === "sorted") {
-          handleReorderLayout(
-            event.data.newOrder,
-            event.data.parentID,
-            layout.blocks
-          );
+        } else if (event.data.newOrder && event.data.event === 'sorted') {
+          handleReorderLayout(event.data.newOrder, event.data.parentID, layout.blocks);
         }
       }
     };
 
     observer.subscribe((data) => {
-      handleMessage({ data, event: data.event });
+      handleMessage({data, event: data.event});
     });
   }, [layout, bottomBar]);
+
+  useEffect(() => {
+    dispatch({
+      type: actionTypes.ERASE,
+    });
+  }, [location, dispatch]);
 
   const handleChangeActiveTab = (index) => {
     dispatch({
@@ -86,61 +110,64 @@ const App = () => {
     }
   };
 
-  const { components } = renderHandlebars(
-    layout.blocks,
-    layout.documentId,
-    bottomBar,
-    topAppBar
-  );
-  const { previewMode } = config;
+  const {components} = renderHandlebars(layout.blocks, layout.documentId, bottomBar, topAppBar);
+  const {previewMode} = config;
 
   const handleAppClick = (e) => {
-    if (
-      !e.target.onclick &&
-      e.target.localName !== "input" &&
-      e.target.className !== "saturation-black"
-    ) {
-      console.log("e.target", e.target);
+    if (!e.target.onclick && e.target.localName !== 'input' && e.target.className !== 'saturation-black') {
+      console.log('e.target', e.target);
       dispatch({
         type: actionTypes.SET_SELECTED_BLOCK,
-        blockUuid: "",
+        blockUuid: '',
       });
     }
   };
 
+  if (!initialized) {
+    return <Loader loading={!initialized} />;
+  }
+
   return (
-    <div id="APP" onClick={handleAppClick}>
-      <DndWrapper id="APP">
-        <TopBar />
-        <Router>
-          <div
-            className="wrapper d-flex"
-            style={{
-              paddingTop: "60px",
-              justifyContent: "center",
-              height: "100vh",
-            }}
-          >
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <>
-                    <LeftSidebar display={barState.left} />
-                    <Preview
-                      components={components}
-                      onChangePreviewMode={handleChangePreviewMode}
-                      previewMode={previewMode}
-                    />
-                    <RightSidebar display={barState.right} />
-                  </>
-                }
-              />
-            </Routes>
-          </div>
-        </Router>
-      </DndWrapper>
+    <div onClick={handleAppClick}>
       <GlobalStyles />
+      <div
+        className="wrapper d-flex"
+        style={{
+          paddingTop: '60px',
+          justifyContent: 'center',
+          height: '100vh',
+          display: 'flex',
+        }}
+      >
+        <TopBar />
+        <Routes>
+          <Route exact path="/" element={<Navigate to="/project" />} />
+          <Route exact path="/login" element={<Login />} />
+          <Route
+            exact
+            path="/project"
+            element={
+              <RequireAuth>
+                <Project />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/editor/:project"
+            element={
+              <RequireAuth>
+                <LeftSidebar display={barState.left} />
+                <Preview
+                  components={components}
+                  onChangePreviewMode={handleChangePreviewMode}
+                  previewMode={previewMode}
+                />
+                <RightSidebar display={barState.right} />
+              </RequireAuth>
+            }
+          />
+        </Routes>
+      </div>
       <HighlightedElement />
     </div>
   );

@@ -5,10 +5,10 @@ import topappbar from '../../assets/topappbar.svg';
 import Wrapper from '../../utils/wrapper';
 
 const TopAppBar = styled.div`
-  padding-top: ${(props) => props.padding?.top}px;
-  padding-bottom: ${(props) => props.padding?.bottom}px;
-  padding-left: ${(props) => props.padding?.left}px;
-  padding-right: ${(props) => props.padding?.right}px;
+  padding-top: ${(props) => props.padding?.top || 16}px;
+  padding-bottom: ${(props) => props.padding?.bottom || 16}px;
+  padding-left: ${(props) => props.padding?.left || 16}px;
+  padding-right: ${(props) => props.padding?.right || 16}px;
   color: ${(props) => props.textColor || invertColor(props.backgroundColor, true)};
   background-color: ${(props) => props.backgroundColor};
   z-index: 2;
@@ -23,6 +23,7 @@ const TopAppBar = styled.div`
     text-align: ${(props) => props.textAlignment};
     margin: 0;
     width: 100%;
+    font-size: ${(props) => props.fontSize}px;
   }
   & div {
     position: relative;
@@ -45,24 +46,11 @@ const Icon = styled.div`
 `;
 
 const Component = ({settingsUI, ...props}) => {
-  const {topAppBarItems} = settingsUI;
-  const buttons = [];
-  for (let index in topAppBarItems) {
-    buttons.push(topAppBarItems[index]);
-  }
+  const {appBarItems} = props.interactive;
   return (
     <Wrapper id={props.id} style={{padding: 0}}>
       <TopAppBar {...settingsUI} {...props}>
-        <label>{settingsUI.text}</label>
-        <div style={{display: 'flex', flexDirection: 'row', gap: '16px'}}>
-          {buttons.map((item) => {
-            return (
-              <div>
-                <Icon className="item_icon" iconUrl={item.iconUrl}></Icon>
-              </div>
-            );
-          })}
-        </div>
+        <label>{appBarItems?.title}</label>
       </TopAppBar>
     </Wrapper>
   );
@@ -74,13 +62,17 @@ const block = {
   title: 'App bars: top',
   description: 'The top app bar displays information and actions relating to the current screen.',
   previewImageUrl: topappbar,
-  category: 'Controls',
+  category: 'Container',
   defaultInteractiveOptions: {
     action: {url: 'nextScreenName', fields: ['field1', 'field2'], target: ''},
+    appBarItems: {
+      title: 'Title',
+    },
   },
   defaultData: {
     fontSize: 16,
     textColor: '#E9E8EA',
+    sizeModifier: 'FULLSIZE',
     backgroundColor: '#423649',
     textAlignment: 'LEFT',
     padding: {
@@ -89,22 +81,21 @@ const block = {
       left: 16,
       right: 16,
     },
-    text: 'App Bar',
     action: {
       url: 'backScreen',
     },
-    topAppBarItems: [
-      {
-        iconUrl: 'https://icons.getbootstrap.com/assets/icons/search.svg',
-      },
-      {
-        iconUrl: 'https://icons.getbootstrap.com/assets/icons/bell.svg',
-      },
-    ],
   },
   config: {
-    text: {type: 'string', name: 'Text'},
     fontSize: {type: 'number', name: 'Font size'},
+    sizeModifier: {
+      type: 'select',
+      name: 'Size modifier',
+      options: [
+        {label: 'Full width', value: 'FULLWIDTH'},
+        {label: 'Full height', value: 'FULLHEIGHT'},
+        {label: 'Full size', value: 'FULLSIZE'},
+      ],
+    },
     textColor: {type: 'color', name: 'Text color'},
     textAlignment: {
       type: 'select',
@@ -125,13 +116,12 @@ const block = {
     action: {
       url: {type: 'string', name: 'URL'},
     },
-    topAppBarItems: [
-      {
-        iconUrl: {type: 'string', name: 'Icon URL'},
-      },
-    ],
   },
   interactive: {
+    appBarItems: {
+      title: {type: 'string', name: 'Title'},
+      iconUrl: {type: 'string', name: 'Icon URL'},
+    },
     action: {
       url: {
         type: 'string',

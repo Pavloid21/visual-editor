@@ -1,16 +1,27 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
-
-import reportWebVitals from "./utils/reportWebVitals";
-import store from "./utils/store";
-import App from "./containers/App";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {Provider} from 'react-redux';
+import {BrowserRouter as Router} from 'react-router-dom';
+import reportWebVitals from './utils/reportWebVitals';
+import store from './utils/store';
+import App from './containers/App';
+import {ReactKeycloakProvider} from '@react-keycloak/web';
+import keycloack from 'constants/keykloak';
+import {DndWrapper} from 'containers/DnDWrapper';
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <ReactKeycloakProvider authClient={keycloack}>
+      <div id="APP">
+        <DndWrapper id="APP">
+          <Router>
+            <App />
+          </Router>
+        </DndWrapper>
+      </div>
+    </ReactKeycloakProvider>
   </Provider>,
-  document.getElementById("root")
+  document.getElementById('root')
 );
 
 reportWebVitals();

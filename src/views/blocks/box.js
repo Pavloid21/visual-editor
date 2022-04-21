@@ -106,7 +106,7 @@ const block = {
   description:
     "A stylized view, with an optional label, that visually collects a logical grouping of content.",
   previewImageUrl: box,
-  category: "Layouts",
+  category: 'Container',
   defaultData: {
     borderColor: "#EFEFEF",
     borderWidth: 1,

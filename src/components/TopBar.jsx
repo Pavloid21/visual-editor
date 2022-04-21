@@ -3,23 +3,25 @@ import styled from 'styled-components';
 import {ReactComponent as Logo} from '../assets/logo.svg';
 import {ReactComponent as HideLeft} from '../assets/hide_left.svg';
 import {ReactComponent as HideRight} from '../assets/hide_right.svg';
-import {ReactComponent as Settings} from '../assets/settings.svg';
 import {Button} from 'components/controls';
 import {useDispatch, useSelector} from 'react-redux';
 import actionTypes from '../constants/actionTypes';
 import {deleteAction, deleteScreen, saveAction, saveScreen} from '../services/ApiService';
+import {useKeycloak} from '@react-keycloak/web';
+import {useLocation} from 'react-router-dom';
 
 const Bar = styled.div`
   height: 60px;
   width: 100%;
   background: var(--background);
-  display: flex;
+  display: ${(props) => (props.isHidden ? 'flex' : 'none')};
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   padding: 6px 16px;
   box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.05), 0px 4px 4px rgba(0, 0, 0, 0.05);
   position: fixed;
+  top: 0;
   z-index: 3;
   & div {
     display: flex;
@@ -41,7 +43,7 @@ const Bar = styled.div`
   }
 `;
 
-const VerticalDivider = styled.div`
+export const VerticalDivider = styled.div`
   width: 1px;
   background: #b3b3b3;
   margin: 0 16px;
@@ -49,6 +51,8 @@ const VerticalDivider = styled.div`
 
 const TopBar = () => {
   const dispatch = useDispatch();
+  const {keycloak} = useKeycloak();
+  const location = useLocation();
   const snippets = useSelector((state) => state.layout.snippets);
   const actions = useSelector((state) => [
     ...state.actions.actions.map((item) => ({...item, type: 'actions'})),
@@ -63,6 +67,7 @@ const TopBar = () => {
   ]);
   const deletedScreens = useSelector((state) => state.layout.deletedScreens);
   const editedScreens = useSelector((state) => state.layout.editedScreens);
+  const projectID = useSelector((state) => state.project.id);
   const handleHideLeft = () => {
     dispatch({type: actionTypes.TOGGLE_LEFT_BAR});
   };
@@ -73,39 +78,45 @@ const TopBar = () => {
     event.stopPropagation();
     snippets.forEach((item) => {
       if (editedScreens.includes(item.screenID)) {
-        saveScreen(item.endpoint, `${item.logic.replace(/return$/g, '')}${item.snippet}`);
+        saveScreen(projectID, item.endpoint, `${item.logic.replace(/return$/g, '')}${item.snippet}`);
       }
     });
     snippets.forEach((item) => {
       if (deletedScreens.includes(item.screenID)) {
-        deleteScreen(item.endpoint);
+        deleteScreen(projectID, item.endpoint);
       }
     });
 
     actions.forEach((item) => {
-      saveAction(item.type, item.action, item.object);
+      saveAction(projectID, item.type, item.action, item.object);
     });
     deletedActions.forEach((item) => {
       deleteAction(item.type, item.action);
     });
   };
   return (
-    <Bar>
+    <Bar isHidden={keycloak.authenticated}>
       <div>
         <Logo className="icon" />
         <VerticalDivider />
-        <HideLeft className="icon" onClick={handleHideLeft} />
+        {location.pathname.indexOf('editor') >= 0 && <HideLeft className="icon" onClick={handleHideLeft} />}
       </div>
       <div>
         <div>
-          <Button onClick={handleSaveApplication} disabled>
-            Save application
-          </Button>
-          <HideRight className="icon" onClick={handleHideRight} />
-          <Settings className="icon" />
+          {location.pathname.indexOf('editor') >= 0 && (
+            <>
+              <Button onClick={handleSaveApplication} disabled>
+                Save application
+              </Button>
+              <HideRight className="icon" onClick={handleHideRight} />
+            </>
+          )}
         </div>
         <VerticalDivider />
-        <div className="user">FN</div>
+        <div className="user">
+          {keycloak?.idTokenParsed?.given_name[0]}
+          {keycloak?.idTokenParsed?.family_name[0]}
+        </div>
       </div>
     </Bar>
   );

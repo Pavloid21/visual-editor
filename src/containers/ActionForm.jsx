@@ -117,65 +117,59 @@ const ActionForm = ({action}) => {
   return (
     <>
       <Container>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
+        <Controller
+          name="actionName"
+          control={control}
+          render={({field}) => <Input type="text" label="Action name" clearable isWide {...field} />}
+        />
+        <Controller
+          name="type"
+          control={control}
+          render={({field}) => (
+            <ButtonSelector
+              label="Action type"
+              buttons={[
+                {title: 'Data usage', key: 'data', uuid: v4()},
+                {title: 'Custom action', key: 'action', uuid: v4()},
+              ]}
+              {...field}
+            />
+          )}
+        />
+        <Controller
+          name="code"
+          control={control}
+          render={({field}) => {
+            return (
+              <>
+                <Label>Code for the Action</Label>
+                <EditorWrapper icon={fullScreenIcon}>
+                  <button
+                    className="fullScreen"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleModal();
+                    }}
+                  ></button>
+                  <Editor
+                    textareaClassName="code"
+                    highlight={(code) => Prism.highlight(code, Prism.languages.js, 'javascript')}
+                    onValueChange={field.onChange}
+                    style={{
+                      ...stackoverflowLight,
+                      fontSize: '16px',
+                      lineHeight: '20px',
+                    }}
+                    tabSize={4}
+                    insertSpaces
+                    {...field}
+                    value={field.value || ''}
+                  />
+                </EditorWrapper>
+              </>
+            );
           }}
-        >
-          <Controller
-            name="actionName"
-            control={control}
-            render={({field}) => <Input type="text" label="Action name" clearable isWide {...field} />}
-          />
-          <Controller
-            name="type"
-            control={control}
-            render={({field}) => (
-              <ButtonSelector
-                label="Action type"
-                buttons={[
-                  {title: 'Data usage', key: 'data', uuid: v4()},
-                  {title: 'Custom action', key: 'action', uuid: v4()},
-                ]}
-                {...field}
-              />
-            )}
-          />
-          <Controller
-            name="code"
-            control={control}
-            render={({field}) => {
-              return (
-                <>
-                  <Label>Code for the Action</Label>
-                  <EditorWrapper icon={fullScreenIcon}>
-                    <button
-                      className="fullScreen"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleModal();
-                      }}
-                    ></button>
-                    <Editor
-                      textareaClassName="code"
-                      highlight={(code) => Prism.highlight(code, Prism.languages.js, 'javascript')}
-                      onValueChange={field.onChange}
-                      style={{
-                        ...stackoverflowLight,
-                        fontSize: '16px',
-                        lineHeight: '20px',
-                      }}
-                      tabSize={4}
-                      insertSpaces
-                      {...field}
-                      value={field.value || ''}
-                    />
-                  </EditorWrapper>
-                </>
-              );
-            }}
-          />
-        </form>
+        />
         <div className="buttons">
           {/* <Button className="secondary">Back</Button> */}
           <Button onClick={handleSave}>Save</Button>

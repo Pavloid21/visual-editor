@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const Modal = styled.div`
   position: absolute;
@@ -7,8 +7,9 @@ const Modal = styled.div`
   left: 0;
   bottom: 0;
   right: 0;
-  display: ${(props) => (props.isActive ? "flex" : "none")};
+  display: ${(props) => (props.isActive ? 'flex' : 'none')};
   align-items: center;
+  z-index: 1;
 `;
 
 const ModalBackground = styled.div`
@@ -28,24 +29,25 @@ const ModalContent = styled.div`
   position: relative;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
+  z-index: 2;
 `;
 
 const Title = styled.div``;
 
-const CustomModal = ({ isActive, children, title, handleClose }) => {
+const CustomModal = ({isActive, children, handleClose, ...props}) => {
   return (
     <Modal isActive={isActive}>
       <ModalBackground onClick={handleClose} />
       <ModalContent
         style={{
-          backgroundColor: "white",
-          padding: "2rem",
-          maxWidth: "100vw",
-          width: "60%",
-          maxHeight: "800px",
+          backgroundColor: 'white',
+          maxWidth: '100vw',
+          width: '60%',
+          maxHeight: '800px',
+          padding: props.padding,
         }}
       >
-        <Title isSize={6}>{title}</Title>
+        {props.title && <Title isSize={6}>{props.title}</Title>}
         {children}
       </ModalContent>
     </Modal>

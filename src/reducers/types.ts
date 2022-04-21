@@ -23,6 +23,13 @@ export type API = {
   list: APIItem[];
 };
 
+export type Project = {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+};
+
 export type APIItem = {
   headers: {key: string; value: string}[];
   params: {key: string; value: string}[];
@@ -105,4 +112,5 @@ export type Store = {
   current: string;
   code: string;
   actions: Actions;
+  project: Project;
 };

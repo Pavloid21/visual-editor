@@ -61,12 +61,17 @@ const cloneToList = (tree: any[], uuid: string) => {
 
 export default function reducer(state = initialState, action: LayoutAction) {
   switch (action.type) {
+    case actionTypes.ERASE:
+      return initialState;
     case actionTypes.PUSH_TOPAPPBAR:
       const topAppBar = {
         uuid: uuidv4(),
         blockId: action.blockId,
         settingsUI: {
           ...getData(blocks[action.blockId].defaultData),
+        },
+        interactive: {
+          ...getData(blocks[action.blockId].defaultInteractiveOptions),
         },
       };
       return {...state, topAppBar};
@@ -80,7 +85,7 @@ export default function reducer(state = initialState, action: LayoutAction) {
       };
       return {...state, bottomBar};
     case actionTypes.ADD_BOTTOMBAR_ITEM:
-      const extendedItems = [...state.bottomBar.settingsUI.navigationItems];
+      const extendedItems = [...state.bottomBar?.settingsUI.navigationItems];
       extendedItems.push({
         ...blocks.bottombar.defaultData.navigationItems[0],
         uuid: uuidv4(),
@@ -89,7 +94,7 @@ export default function reducer(state = initialState, action: LayoutAction) {
       bar.settingsUI.navigationItems = extendedItems;
       return {...state, bottomBar: {...bar}};
     case actionTypes.ADD_TOPAPPBAR_ITEM:
-      const nextItems = [...state.topAppBar.settingsUI.topAppBarItems];
+      const nextItems = [...state.topAppBar?.settingsUI.topAppBarItems];
       nextItems.push({
         ...blocks.topappbar.defaultData.topAppBarItems[0],
         uuid: uuidv4(),
@@ -205,9 +210,29 @@ export default function reducer(state = initialState, action: LayoutAction) {
         ...state,
         blocks: blocksRef,
       };
+    case actionTypes.CHANGE_UNITS:
+      const newBlocksSet = JSON.parse(JSON.stringify(state.blocks));
+      const targetElement: BlockItem =
+        findInTree(newBlocksSet, action.blockUuid!) ||
+        (action.blockUuid === state.bottomBar?.uuid
+          ? {
+              ...state.bottomBar,
+            }
+          : {...state.topAppBar});
+      if (action.parentKey && !Array.isArray(action.parentKey)) {
+        const val = targetElement.settingsUI[action.parentKey][action.key!];
+        delete targetElement.settingsUI[action.parentKey][action.key!];
+        targetElement.settingsUI[action.parentKey][
+          action.value! === '%' ? action.key + 'InPercent' : action.key!.substring(0, action.key?.indexOf('InPercent'))
+        ] = val;
+      }
+      return {
+        ...state,
+        blocks: [...newBlocksSet],
+      };
     case actionTypes.CHANGE_BLOCK_DATA:
       const newBlocks = JSON.parse(JSON.stringify(state.blocks));
-      const element =
+      const element: BlockItem =
         findInTree(newBlocks, action.blockUuid!) ||
         (action.blockUuid === state.bottomBar?.uuid
           ? {
@@ -239,7 +264,7 @@ export default function reducer(state = initialState, action: LayoutAction) {
           element.settingsUI[action.parentKey] = {[action.key!]: action.value};
         }
       } else {
-        if (element.settingsUI[action.key!] !== undefined) {
+        if (element.settingsUI[action.key!] !== undefined || blocks[element.blockId].config[action.key!]) {
           element.settingsUI[action.key!] = action.value;
         } else if (element.interactive) {
           element.interactive[action.key!] = action.value;

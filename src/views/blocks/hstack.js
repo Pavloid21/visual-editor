@@ -109,7 +109,7 @@ const block = {
   title: 'HStack',
   description: 'A view that arranges its children in a horizontal line.',
   previewImageUrl: hstack,
-  category: 'Layouts',
+  category: 'Container',
   complex: [
     {label: 'Vertical', value: 'VSTACK'},
     {label: 'Horizontal', value: 'HSTACK'},

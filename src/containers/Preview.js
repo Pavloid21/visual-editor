@@ -1,11 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useDrop} from 'react-dnd';
 import {useDispatch, useSelector} from 'react-redux';
 import {sortableContainer} from 'react-sortable-hoc';
 import actionTypes, {ItemTypes} from '../constants/actionTypes';
 import {arrayMoveImmutable} from 'array-move';
 import {observer} from '../utils/observer';
-// import IphoneX from '../assets/mockups/IphoneX';
 import PhoneContainer from './PhoneContainer';
 import styled from 'styled-components';
 import Code from './Code';
@@ -35,6 +34,10 @@ const Bar = styled.div`
     margin-left: auto;
     display: flex;
   }
+  @media (max-width: 1500px) {
+    padding-left: ${(props) => (props.barState.left ? '315px' : '16px')};
+    padding-right: ${(props) => (props.barState.right ? '315px' : '16px')};
+  }
 `;
 
 const ServiceBar = styled.div`
@@ -53,12 +56,15 @@ const ServiceBar = styled.div`
     gap: 16px;
     display: flex;
   }
+  @media (max-width: 1500px) {
+    padding-left: ${(props) => (props.barState.left ? '315px' : '16px')};
+    padding-right: ${(props) => (props.barState.right ? '315px' : '16px')};
+  }
 `;
 
 const Container = styled.div`
   height: 100%;
   background-color: ${(props) => props.backgroundColor};
-  /* overflow: auto; */
   position: relative;
   display: flex;
   flex-direction: column;
@@ -91,19 +97,22 @@ const SortableContainer = sortableContainer(({children, drop, backgroundColor}) 
 });
 
 const Preview = (props) => {
+  const selectedScreen = useSelector((state) => state.layout.selectedScreen);
   const [{canDrop, isOver}, drop] = useDrop(() => ({
     accept: ItemTypes.BOX,
     drop: (item) => {
       return;
     },
+    canDrop: (item) => {
+      return item.type === 'Container' && !!selectedScreen;
+    },
     collect: (monitor) => ({
       isOver: monitor.isOver({shallow: true}),
       canDrop: monitor.canDrop(),
     }),
-  }));
+  }), [selectedScreen]);
 
   const dispatch = useDispatch();
-  const [isShowCode, showCode] = useState(false);
   const editorMode = useSelector((state) => state.editorMode.mode);
   const layout = useSelector((state) => state.layout);
   const barState = useSelector((state) => state.sideBar);
@@ -122,7 +131,7 @@ const Preview = (props) => {
     window.addEventListener('scroll', () => {
       localStorage.setItem('scrollY', window.scrollY);
     });
-  });
+  }, [selectedScreen]);
 
   const onSortEnd = ({oldIndex, newIndex, nodes}) => {
     const newOrder = arrayMoveImmutable(nodes, oldIndex, newIndex).map((item) => item.node.getAttribute('id'));
@@ -197,7 +206,7 @@ const Preview = (props) => {
             </SortableContainer>
           </PhoneContainer>
         )}
-        {editorMode === 'json' && <Code show={isShowCode} />}
+        {editorMode === 'json' && <Code />}
       </div>
       <ServiceBar barState={barState}>
         {editorMode === 'json' && <Save className="icon" onClick={handleSaveSnippet} />}

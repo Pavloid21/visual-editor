@@ -41,6 +41,15 @@ const Container = styled.div`
     ${(props) => (props.mode === 'list' ? `flex-direction: column;` : '')}
     padding-top: 10px;
     padding-bottom: 10px;
+    @media (max-width: 1500px) {
+      ${(props) =>
+        props.mode === 'grid'
+          ? `grid-template-columns: 118px 118px;
+    grid-template-rows: 118px 118px;
+    column-gap: 18px;
+    row-gap: 18px;`
+          : ''}
+    }
   }
 `;
 
@@ -101,21 +110,20 @@ const Gallery = (props) => {
 
   const allBlocks = (filteredBlocks, viewMode = 'grid') => {
     return Object.keys(filteredBlocks || blocks).map((blockId) => {
-      if (blockId !== 'screen') {
-        const block = blocks[blockId];
-        return (
-          <BlockPreview
-            mode={viewMode}
-            key={blockId}
-            title={block.title}
-            description={block.description}
-            blockId={blockId}
-            image={block.previewImageUrl}
-            onPushBlock={handlePushBlock}
-            onPushBlockInside={handlePushBlockInside}
-          />
-        );
-      }
+      const block = blocks[blockId];
+      return (
+        <BlockPreview
+          mode={viewMode}
+          key={blockId}
+          title={block.title}
+          description={block.description}
+          blockId={blockId}
+          type={block.category}
+          image={block.previewImageUrl}
+          onPushBlock={handlePushBlock}
+          onPushBlockInside={handlePushBlockInside}
+        />
+      );
     });
   };
 

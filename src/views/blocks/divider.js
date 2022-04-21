@@ -24,7 +24,7 @@ const block = {
   title: "Divider",
   description: "A visual element that can be used to separate other content.",
   previewImageUrl: divider,
-  category: "Controls",
+  category: 'Element',
   defaultData: {
     backgroundColor: "#000000",
   },

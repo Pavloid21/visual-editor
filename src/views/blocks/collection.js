@@ -13,8 +13,22 @@ import collection from '../../assets/collection.svg';
 import Wrapper from '../../utils/wrapper';
 
 const Collection = styled.div`
-  ${(props) => (props.size?.height ? `height: ${props.size?.height}px` : 'flex: 1 1 auto')};
-  width: ${(props) => (props.size?.width ? props.size?.width + 'px' : '100%')};
+  width: ${(props) => {
+    if (props.size?.width !== undefined) {
+      return props.size.width + 'px';
+    } else if (props.size?.widthInPercent !== undefined) {
+      return props.size.widthInPercent + '%';
+    }
+    return '100%';
+  }};
+  height: ${(props) => {
+    if (props.size?.height !== undefined) {
+      return props.size.height + 'px';
+    } else if (props.size?.heightInPercent !== undefined) {
+      return props.size.heightInPercent + '%';
+    }
+    return 'auto';
+  }};
   background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
   display: flex;
   padding-top: ${(props) => props.padding?.top}px;
@@ -108,7 +122,7 @@ const block = {
   description:
     'A container that presents rows of data arranged in a single column, optionally providing the ability to select one or more members.',
   previewImageUrl: collection,
-  category: 'Layouts',
+  category: 'Container',
   defaultInteractiveOptions: {
     dataSource: '',
   },
@@ -154,8 +168,22 @@ const block = {
     backgroundColor: {type: 'color', name: 'Background color'},
     spacing: {type: 'number', name: 'Spacing'},
     size: {
-      height: {type: 'number', name: 'Height'},
-      width: {type: 'number', name: 'Width'},
+      height: {
+        type: 'units',
+        name: 'Height',
+        options: [
+          {label: 'px', value: 'px'},
+          {label: '%', value: '%'},
+        ],
+      },
+      width: {
+        type: 'units',
+        name: 'Width',
+        options: [
+          {label: 'px', value: 'px'},
+          {label: '%', value: '%'},
+        ],
+      },
     },
     padding: {
       left: {type: 'number', name: 'Left'},

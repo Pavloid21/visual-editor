@@ -1,14 +1,16 @@
-import { AnyAction } from "redux";
-import actionTypes from "../constants/actionTypes";
-import { Config } from "./types";
+import {AnyAction} from 'redux';
+import actionTypes from '../constants/actionTypes';
+import {Config} from './types';
 
 const initialState: Config = {
   activeTab: 0,
-  previewMode: 3
+  previewMode: 3,
 };
 
 export default function reducer(state = initialState, action: AnyAction) {
   switch (action.type) {
+    case actionTypes.ERASE:
+      return initialState;
     case actionTypes.CHANGE_ACTIVE_TAB:
       return {
         ...state,

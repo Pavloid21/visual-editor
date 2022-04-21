@@ -50,7 +50,7 @@ const block = {
   title: 'WebView',
   description: 'A View that displays web pages.',
   previewImageUrl: webview,
-  category: 'Layouts',
+  category: 'Element',
   defaultData: {
     mainSiteHtml: '',
     mainSiteUrl: 'https://ya.ru',

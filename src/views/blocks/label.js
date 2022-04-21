@@ -9,11 +9,26 @@ const Label = styledComponents.div`
   box-sizing: border-box;
   & > span {
     display: block;
-    width: ${(props) => (props.alignment === 'FILL' ? '100%' : props.size?.width || 'auto')};
-    height: ${(props) => props.size?.height || 'auto'};
+    width: ${(props) => {
+      if (props.size?.width !== undefined) {
+        return props.size.width + 'px';
+      } else if (props.size?.widthInPercent !== undefined) {
+        return props.size.widthInPercent + '%';
+      }
+      return '100%';
+    }};
+    height: ${(props) => {
+      if (props.size?.height !== undefined) {
+        return props.size.height + 'px';
+      } else if (props.size?.heightInPercent !== undefined) {
+        return props.size.heightInPercent + '%';
+      }
+      return 'auto';
+    }};
     text-align: ${(props) => props.textAlignment};
     color: ${(props) => props.textColor};
     font-size: ${(props) => props.fontSize}px;
+    background-color: ${(props) => props.backgroundColor || 'transparent'};
     font-weight: ${(props) => {
       switch (props.fontWeight) {
         case 'THIN':
@@ -62,11 +77,12 @@ const block = {
   title: 'Label',
   description: 'A standard label for user interface items, consisting of an icon with a title.',
   previewImageUrl: label,
-  category: 'Controls',
+  category: 'Element',
   defaultData: {
     alignment: 'CENTER',
     text: 'Вход',
     textAlignment: 'CENTER',
+    backgroundColor: '#FFFFFF',
     textColor: '#000000',
     fontSize: 24,
     size: {
@@ -103,6 +119,7 @@ const block = {
         {label: 'Right', value: 'RIGHT'},
       ],
     },
+    backgroundColor: {type: 'color', name: 'Background color'},
     textColor: {type: 'color', name: 'Text color'},
     fontSize: {type: 'number', name: 'Font size'},
     fontWeight: {
@@ -121,8 +138,22 @@ const block = {
       ],
     },
     size: {
-      width: {type: 'number', name: 'Width'},
-      height: {type: 'number', name: 'Height'},
+      width: {
+        type: 'units',
+        name: 'Width',
+        options: [
+          {label: 'px', value: 'px'},
+          {label: '%', value: '%'},
+        ],
+      },
+      height: {
+        type: 'units',
+        name: 'Height',
+        options: [
+          {label: 'px', value: 'px'},
+          {label: '%', value: '%'},
+        ],
+      },
     },
     padding: {
       top: {

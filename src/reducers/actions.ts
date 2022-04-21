@@ -14,6 +14,8 @@ const initialState: Actions = {
 
 export default function reducer(state = initialState, action: AnyAction) {
   switch (action.type) {
+    case actionTypes.ERASE:
+      return initialState;
     case actionTypes.SET_ACTIONS:
       const newSet: {[x: string]: any} = {};
       if (action.actions) {

@@ -17,8 +17,19 @@ const VStack = styled.div`
   flex: ${(props) => (props.wrapContent === 'WRAPCONTENTHEIGHT' ? '0 1 auto' : '1 1 auto')};
   background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
   display: flex;
-  justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.alignment)};
-  align-items: ${(props) => props.alignment};
+  justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
+  align-items: ${(props) => {
+    switch (props.alignment) {
+      case 'LEFT':
+        return 'flex-start';
+      case 'RIGHT':
+        return 'flex-start';
+      case 'JUSTIFY':
+        return 'stretch';
+      default:
+        return 'center';
+    }
+  }};
   flex-direction: column;
   padding-top: ${(props) => props.padding?.top}px;
   padding-bottom: ${(props) => props.padding?.bottom}px;
@@ -109,7 +120,7 @@ const block = {
   title: 'Container',
   description: 'A view that arranges its children.',
   previewImageUrl: vstack,
-  category: 'Layouts',
+  category: 'Container',
   complex: [
     {label: 'Vertical', value: 'VSTACK'},
     {label: 'Horizontal', value: 'HSTACK'},
