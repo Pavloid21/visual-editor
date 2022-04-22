@@ -35,7 +35,7 @@ const AlignCenterButton = styled.div`
 `;
 
 interface IPhoneContainer {
-  children?: React.ReactChildren;
+  children?: JSX.Element;
 }
 
 const PhoneContainer = (props: IPhoneContainer) => {
