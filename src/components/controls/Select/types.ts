@@ -1,4 +1,4 @@
-import { GroupBase, MenuPlacement, StylesConfig } from "react-select";
+import {GroupBase, MenuPlacement, StylesConfig} from 'react-select';
 
 export interface IOption {
   label: string;
@@ -12,5 +12,6 @@ export interface ISelect {
   className?: string;
   label?: string;
   menuPlacement?: MenuPlacement | undefined;
-  styles?: StylesConfig<IOption, false, GroupBase<IOption>>
+  styles?: StylesConfig<IOption, false, GroupBase<IOption>>;
+  clearable?: boolean;
 }

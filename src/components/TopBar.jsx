@@ -67,7 +67,7 @@ const TopBar = () => {
   ]);
   const deletedScreens = useSelector((state) => state.layout.deletedScreens);
   const editedScreens = useSelector((state) => state.layout.editedScreens);
-  const projectID = useSelector((state) => state.project.id);
+  const projectID = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
   const handleHideLeft = () => {
     dispatch({type: actionTypes.TOGGLE_LEFT_BAR});
   };
@@ -77,7 +77,7 @@ const TopBar = () => {
   const handleSaveApplication = (event) => {
     event.stopPropagation();
     snippets.forEach((item) => {
-      if (editedScreens.includes(item.screenID)) {
+      if (editedScreens.includes(item.screenID) && !deletedScreens.includes(item.screenID)) {
         saveScreen(projectID, item.endpoint, `${item.logic.replace(/return$/g, '')}${item.snippet}`);
       }
     });
@@ -93,6 +93,9 @@ const TopBar = () => {
     deletedActions.forEach((item) => {
       deleteAction(item.type, item.action);
     });
+    dispatch({
+      type: actionTypes.CHANGES_SAVED,
+    });
   };
   return (
     <Bar isHidden={keycloak.authenticated}>
@@ -105,9 +108,7 @@ const TopBar = () => {
         <div>
           {location.pathname.indexOf('editor') >= 0 && (
             <>
-              <Button onClick={handleSaveApplication} disabled>
-                Save application
-              </Button>
+              <Button onClick={handleSaveApplication}>Save application</Button>
               <HideRight className="icon" onClick={handleHideRight} />
             </>
           )}

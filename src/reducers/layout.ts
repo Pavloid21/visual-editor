@@ -63,6 +63,12 @@ export default function reducer(state = initialState, action: LayoutAction) {
   switch (action.type) {
     case actionTypes.ERASE:
       return initialState;
+    case actionTypes.CHANGES_SAVED:
+      return {
+        ...state,
+        editedScreens: [],
+        deletedScreens: [],
+      };
     case actionTypes.PUSH_TOPAPPBAR:
       const topAppBar = {
         uuid: uuidv4(),
@@ -304,12 +310,12 @@ export default function reducer(state = initialState, action: LayoutAction) {
     case actionTypes.SELECT_SCREEN:
       let nextScreenState = {...state};
       if (action.delete) {
-        nextScreenState.deletedScreens.push(action.screen);
+        nextScreenState.deletedScreens = Array.from(new Set([...state.deletedScreens, action.screen]));
       } else {
         nextScreenState = {
           ...state,
           selectedScreen: action.screen,
-          editedScreens: [...state.editedScreens, action.screen],
+          editedScreens: Array.from(new Set([...state.editedScreens, action.screen])),
         };
       }
       return nextScreenState;

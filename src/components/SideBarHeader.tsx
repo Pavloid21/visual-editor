@@ -209,7 +209,7 @@ const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
                 redirect();
               }}
             >
-              Confirm
+              Don't save
             </Button>
             <Button className="secondary" onClick={() => toggleWarning()}>
               Cancel

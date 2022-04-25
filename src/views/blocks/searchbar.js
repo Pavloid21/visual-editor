@@ -11,6 +11,7 @@ import {useSelector} from 'react-redux';
 import {useDispatch} from 'react-redux';
 import actionTypes from '../../constants/actionTypes';
 import renderHandlebars from '../../utils/renderHandlebars';
+import { onSortMove } from 'utils/hooks';
 
 const SearchBar = styled.div`
   display: flex;
@@ -121,6 +122,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
       {...props}
       backgroundColor={backgroundColor}
       distance={1}
+      shouldCancelStart={onSortMove}
     />
   );
 };

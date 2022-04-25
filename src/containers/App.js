@@ -105,7 +105,7 @@ const App = () => {
       const next = order.filter((item) => uuids.includes(item.uuid));
       dispatch({
         type: actionTypes.REORDER_LAYOUT,
-        newBlocksLayout: next,
+        newBlocksLayout: [...new Set(next.map(JSON.stringify))].map(JSON.parse),
       });
     }
   };

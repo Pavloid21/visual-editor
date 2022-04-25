@@ -69,7 +69,14 @@ const PhoneContainer = (props: IPhoneContainer) => {
 
   return (
     <>
-      <PanZoom ref={zoomRef} autoCenter disableDoubleClickZoom disableKeyInteraction disableScrollZoom>
+      <PanZoom
+        ref={zoomRef}
+        autoCenter
+        disableDoubleClickZoom
+        disableKeyInteraction
+        disableScrollZoom
+        preventPan={(e: any) => !e.altKey}
+      >
         <Wrapper
           styled={{...stylesByDeviceKey[model as DeviceKeys]}}
           backgroundColor={topAppBar?.settingsUI.backgroundColor}

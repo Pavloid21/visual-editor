@@ -11,6 +11,7 @@ import {useDispatch} from 'react-redux';
 import actionTypes from '../../constants/actionTypes';
 import screen from '../../assets/screen.svg';
 import Wrapper from '../../utils/wrapper';
+import { onSortMove } from 'utils/hooks';
 
 const VStack = styled.div`
   width: ${(props) => (props.sizeModifier === 'FULLWIDTH' ? '100%' : 'auto')};
@@ -113,6 +114,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
       {...props}
       backgroundColor={backgroundColor}
       distance={1}
+      shouldCancelStart={onSortMove}
     />
   );
 };

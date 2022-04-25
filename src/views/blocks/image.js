@@ -6,6 +6,7 @@ import Wrapper from '../../utils/wrapper';
 const Image = styled.img`
   display: flex;
   box-sizing: border-box;
+  background-color: ${(props) => (!props.imageUrl ? '#FFFFFF' : 'transparent')};
   align-self: ${(props) => {
     switch (props.alignment) {
       case 'LEFT':
@@ -45,7 +46,7 @@ const Image = styled.img`
 const Component = ({settingsUI, ...props}) => {
   return (
     <Wrapper id={props.id} style={{alignItems: 'center'}}>
-      <Image {...settingsUI} {...props} className="draggable" src={settingsUI.imageUrl} />
+      <Image {...settingsUI} {...props} className="draggable" src={settingsUI.imageUrl || image} />
     </Wrapper>
   );
 };

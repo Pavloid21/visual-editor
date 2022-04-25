@@ -11,6 +11,7 @@ import {useDispatch} from 'react-redux';
 import actionTypes from '../../constants/actionTypes';
 import hstack from '../../assets/hstack.svg';
 import Wrapper from '../../utils/wrapper';
+import { onSortMove } from 'utils/hooks';
 
 const HStack = styled.div`
   background-color: ${(props) => props.backgroundColor};
@@ -99,6 +100,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
       {...props}
       settingsUI={settingsUI}
       distance={1}
+      shouldCancelStart={onSortMove}
     />
   );
 };

@@ -12,6 +12,7 @@ import actionTypes from '../../constants/actionTypes';
 import card from '../../assets/card.svg';
 import Wrapper from '../../utils/wrapper';
 import {hexToRgb} from '../../constants/utils';
+import { onSortMove } from 'utils/hooks';
 
 const Card = styled.div`
   box-sizing: border-box;
@@ -108,6 +109,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
       {...props}
       backgroundColor={backgroundColor}
       distance={1}
+      shouldCancelStart={onSortMove}
     />
   );
 };

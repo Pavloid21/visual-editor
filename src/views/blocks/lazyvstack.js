@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import actionTypes from "../../constants/actionTypes";
 import lazyvstack from "../../assets/lazyvstack.svg";
 import Wrapper from "../../utils/wrapper";
+import { onSortMove } from "utils/hooks";
 
 const LazyVStack = styled.div`
   flex: 1 1 auto;
@@ -120,6 +121,7 @@ const Component = ({ settingsUI, uuid, listItems, ...props }) => {
       {...props}
       backgroundColor={backgroundColor}
       distance={1}
+      shouldCancelStart={onSortMove}
     />
   );
 };

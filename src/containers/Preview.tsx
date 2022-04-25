@@ -17,6 +17,7 @@ import clsx from 'clsx';
 import ZoomSelect from './ZoomSelect';
 import {Beforeunload} from 'react-beforeunload';
 import {Store} from 'reducers/types';
+import {onSortMove} from 'utils/hooks';
 
 const Bar = styled.div<any>`
   height: 60px;
@@ -44,12 +45,13 @@ const Bar = styled.div<any>`
 const ServiceBar = styled.div<any>`
   height: 42px;
   background: var(--background);
-  width: 100%;
   position: absolute;
   left: 0;
   bottom: 0;
-  padding-left: ${(props) => (props.barState?.left ? '437px' : '16px')};
-  padding-right: ${(props) => (props.barState?.right ? '437px' : '16px')};
+  right: 0;
+  padding: 0 25px;
+  margin-left: ${(props) => (props.barState?.left ? '421px' : '0px')};
+  margin-right: ${(props) => (props.barState?.right ? '422px' : '0px')};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -58,8 +60,8 @@ const ServiceBar = styled.div<any>`
     display: flex;
   }
   @media (max-width: 1500px) {
-    padding-left: ${(props) => (props.barState.left ? '315px' : '16px')};
-    padding-right: ${(props) => (props.barState.right ? '315px' : '16px')};
+    margin-left: ${(props) => (props.barState.left ? '299px' : '0px')};
+    margin-right: ${(props) => (props.barState.right ? '300px' : '0px')};
   }
 `;
 
@@ -226,6 +228,7 @@ const Preview = (props: any) => {
                 drop={drop}
                 backgroundColor={backgroundColor}
                 onSortEnd={onSortEnd}
+                shouldCancelStart={onSortMove}
                 distance={1}
                 list={props.components}
               />

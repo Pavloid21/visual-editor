@@ -1,4 +1,5 @@
 import React, {Dispatch, useState, useRef, useEffect} from 'react';
+import { SortEvent, SortEventWithTag } from 'react-sortable-hoc';
 
 export const useModal = (
   initialMode: boolean = false
@@ -29,4 +30,8 @@ export const useOutside = (initialIsVisible: boolean) => {
   });
 
   return {ref, isShow, setIsShow};
+};
+
+export const onSortMove = (event: SortEvent | SortEventWithTag): boolean => {
+  return event.altKey;
 };

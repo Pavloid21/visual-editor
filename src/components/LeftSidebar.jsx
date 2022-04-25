@@ -382,6 +382,8 @@ export default function LeftSidebar({children, ...props}) {
 
   const handleDeleteScreen = (event, node) => {
     event.stopPropagation();
+    const layouts = [...availableScreenes];
+    setScreenes(layouts.filter((layout) => layout.uuid !== node.uuid));
     const newTree = treeData.filter((item) => item.uuid !== node.uuid);
     setTree(newTree);
     dispatch({

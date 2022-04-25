@@ -11,6 +11,7 @@ import {useDispatch} from 'react-redux';
 import actionTypes from '../../constants/actionTypes';
 import lists from '../../assets/lists.svg';
 import Wrapper from '../../utils/wrapper';
+import { onSortMove } from 'utils/hooks';
 
 const List = styled.div`
   height: 100%;
@@ -82,6 +83,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
       {...props}
       backgroundColor={backgroundColor}
       distance={1}
+      shouldCancelStart={onSortMove}
     />
   );
 };

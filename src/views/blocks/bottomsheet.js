@@ -11,6 +11,7 @@ import {useDispatch} from 'react-redux';
 import actionTypes from '../../constants/actionTypes';
 import bottomsheet from '../../assets/bottomsheet.svg';
 import Wrapper from '../../utils/wrapper';
+import { onSortMove } from 'utils/hooks';
 
 const BottomSheet = styled.div`
   margin-top: auto;
@@ -90,6 +91,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
       {...props}
       backgroundColor={backgroundColor}
       distance={1}
+      shouldCancelStart={onSortMove}
     />
   );
 };

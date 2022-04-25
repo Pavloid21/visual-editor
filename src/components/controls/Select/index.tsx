@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React from 'react';
 import SelectBase, {components, DropdownIndicatorProps} from 'react-select';
 import {IOption, ISelect} from './types';
 import {ReactComponent as Arrow} from 'assets/arrow.svg';
@@ -39,7 +39,7 @@ const WithLabel: StyledComponent<'section', any, {}, any> = styled(Container)`
 `;
 
 export const Select = (props: ISelect) => {
-  const {onChange, options, value, className, label, menuPlacement, styles} = props;
+  const {onChange, options, value, className, label, menuPlacement, styles, clearable} = props;
 
   const currentOption = options.find((e) => value === e.value);
 
@@ -54,7 +54,7 @@ export const Select = (props: ISelect) => {
         value={currentOption}
         isMulti={false}
         // defaultValue={value}
-        isClearable={false}
+        isClearable={clearable}
         className={className}
         menuPlacement={menuPlacement}
         styles={{
@@ -64,10 +64,19 @@ export const Select = (props: ISelect) => {
             borderColor: '#8c8c8c',
             minHeight: 42,
           }),
-          option: (props) => ({
-            ...props
+          option: (props, state) => ({
+            ...props,
+            backgroundColor: (() => {
+              if (state.isSelected) return 'var(--main-color)';
+              if (state.isFocused) return 'var(--hover-color)';
+              return '#FFFFFF';
+            })(),
+            color: (() => {
+              if (state.isSelected || state.isFocused) return '#FFFFFF';
+              return 'var(--neo-black)';
+            })(),
           }),
-          ...styles
+          ...styles,
         }}
         components={{DropdownIndicator}}
       />

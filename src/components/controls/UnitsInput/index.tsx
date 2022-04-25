@@ -25,6 +25,7 @@ const StyledInput = styled(Input)<NeoInputProps>`
   &[type='text'] {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+    width: 100%;
   }
 `;
 

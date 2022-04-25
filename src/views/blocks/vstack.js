@@ -11,10 +11,12 @@ import {useDispatch} from 'react-redux';
 import actionTypes from '../../constants/actionTypes';
 import vstack from '../../assets/vstack.svg';
 import Wrapper from '../../utils/wrapper';
+import { onSortMove } from 'utils/hooks';
 
 const VStack = styled.div`
-  width: ${(props) => (props.sizeModifier === 'FULLWIDTH' ? '100%' : 'auto')};
-  flex: ${(props) => (props.wrapContent === 'WRAPCONTENTHEIGHT' ? '0 1 auto' : '1 1 auto')};
+  width: ${(props) =>
+    ['FULLWIDTH', 'FULLSIZE'].includes(props.sizeModifier) || props.alignment === 'FILL' ? '100%' : 'fit-content'};
+  height: ${(props) => (['FULLHEIGHT', 'FULLSIZE'].includes(props.sizeModifier) ? '100%' : 'fit-content')};
   background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
   display: flex;
   justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
@@ -51,7 +53,21 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, 
       id={props.id}
       {...settingsUI}
       scroll={props.scroll}
-      style={{flex: props.wrapContent === 'WRAPCONTENTHEIGHT' ? '0 1 auto' : '1 1 auto'}}
+      style={{
+        alignItems: (() => {
+          switch (props.alignment) {
+            case 'LEFT':
+              return 'self-start';
+            case 'RIGHT':
+              return 'self-end';
+            case 'FILL':
+              return 'stretch';
+            default:
+              return 'center';
+          }
+        })(),
+        height: ['FULLHEIGHT', 'FULLSIZE'].includes(props.sizeModifier) ? '100%' : 'fit-content',
+      }}
     >
       <VStack {...settingsUI} {...props} ref={drop} backgroundColor={backgroundColor} className="draggable">
         {listItems && renderHandlebars(listItems, 'document2').components}
@@ -110,6 +126,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
       {...props}
       backgroundColor={backgroundColor}
       distance={1}
+      shouldCancelStart={onSortMove}
     />
   );
 };
@@ -129,7 +146,6 @@ const block = {
     alignment: 'CENTER',
     backgroundColor: '#C6C6C6',
     distribution: '',
-    wrapContent: '',
     spacing: 0,
     scroll: false,
     sizeModifier: 'FULLSIZE',
@@ -165,7 +181,6 @@ const block = {
       name: 'Distribution',
       options: [{label: 'Space between', value: 'SPACEBETWEEN'}],
     },
-    wrapContent: {type: 'string', name: 'Wrap content'},
     spacing: {type: 'number', name: 'Spacing'},
     sizeModifier: {
       type: 'select',

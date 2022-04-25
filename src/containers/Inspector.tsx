@@ -148,6 +148,7 @@ const Inspector: React.FC<any> = ({display}) => {
                 onChange={(value) => handleChangeBlockData(blockUuid, el, value, parentKey)}
                 options={config[el].options}
                 value={endpoint ? endpoint[el] : null}
+                clearable
               />
             </div>
           );
