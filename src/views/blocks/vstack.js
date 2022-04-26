@@ -11,11 +11,37 @@ import {useDispatch} from 'react-redux';
 import actionTypes from '../../constants/actionTypes';
 import vstack from '../../assets/vstack.svg';
 import Wrapper from '../../utils/wrapper';
-import { onSortMove } from 'utils/hooks';
+import {onSortMove} from 'utils/hooks';
 
 const VStack = styled.div`
+  align-self: ${(props) => {
+    switch (props.alignment) {
+      case 'LEFT':
+        return 'flex-start';
+      case 'RIGHT':
+        return 'flex-end';
+      default:
+        return 'center';
+    }
+  }};
+  margin: ${(props) => {
+    switch (props.alignment) {
+      case 'CENTER':
+        return 'auto';
+      case 'TOP':
+        return '0 auto auto auto';
+      case 'BOTTOM':
+        return 'auto auto 0 auto';
+      case 'LEFT':
+        return 'auto auto auto 0';
+      case 'RIGHT':
+        return 'auto 0 auto auto';
+      default:
+        return '0 0';
+    }
+  }};
   width: ${(props) =>
-    ['FULLWIDTH', 'FULLSIZE'].includes(props.sizeModifier) || props.alignment === 'FILL' ? '100%' : 'fit-content'};
+    ['FULLWIDTH', 'FULLSIZE'].includes(props.sizeModifier) ? '100%' : 'fit-content'};
   height: ${(props) => (['FULLHEIGHT', 'FULLSIZE'].includes(props.sizeModifier) ? '100%' : 'fit-content')};
   background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
   display: flex;
@@ -26,8 +52,6 @@ const VStack = styled.div`
         return 'flex-start';
       case 'RIGHT':
         return 'flex-start';
-      case 'JUSTIFY':
-        return 'stretch';
       default:
         return 'center';
     }
@@ -52,7 +76,8 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, 
     <Wrapper
       id={props.id}
       {...settingsUI}
-      scroll={props.scroll}
+      {...props}
+      sizeModifier='FULLSIZE'
       style={{
         alignItems: (() => {
           switch (props.alignment) {
@@ -66,7 +91,6 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, 
               return 'center';
           }
         })(),
-        height: ['FULLHEIGHT', 'FULLSIZE'].includes(props.sizeModifier) ? '100%' : 'fit-content',
       }}
     >
       <VStack {...settingsUI} {...props} ref={drop} backgroundColor={backgroundColor} className="draggable">
@@ -143,12 +167,12 @@ const block = {
     {label: 'Horizontal', value: 'HSTACK'},
   ],
   defaultData: {
+    sizeModifier: 'FULLSIZE',
     alignment: 'CENTER',
     backgroundColor: '#C6C6C6',
     distribution: '',
     spacing: 0,
     scroll: false,
-    sizeModifier: 'FULLSIZE',
     padding: {
       top: '100',
       bottom: '100',
@@ -164,24 +188,6 @@ const block = {
   },
   listItems: [],
   config: {
-    alignment: {
-      type: 'select',
-      name: 'Alignment',
-      options: [
-        {label: 'Center', value: 'CENTER'},
-        {label: 'Left', value: 'LEFT'},
-        {label: 'Right', value: 'RIGHT'},
-        {label: 'Justify', value: 'JUSTIFY'},
-        {label: 'Fill', value: 'FILL'},
-      ],
-    },
-    backgroundColor: {type: 'color', name: 'Background color'},
-    distribution: {
-      type: 'select',
-      name: 'Distribution',
-      options: [{label: 'Space between', value: 'SPACEBETWEEN'}],
-    },
-    spacing: {type: 'number', name: 'Spacing'},
     sizeModifier: {
       type: 'select',
       name: 'Size modifier',
@@ -191,6 +197,24 @@ const block = {
         {label: 'Full size', value: 'FULLSIZE'},
       ],
     },
+    alignment: {
+      type: 'select',
+      name: 'Alignment',
+      options: [
+        {label: 'Center', value: 'CENTER'},
+        {label: 'Left', value: 'LEFT'},
+        {label: 'Right', value: 'RIGHT'},
+        {label: 'Top', value: 'TOP'},
+        {label: 'Bottom', value: 'BOTTOM'},
+      ],
+    },
+    backgroundColor: {type: 'color', name: 'Background color'},
+    distribution: {
+      type: 'select',
+      name: 'Distribution',
+      options: [{label: 'Space between', value: 'SPACEBETWEEN'}],
+    },
+    spacing: {type: 'number', name: 'Spacing'},
     scroll: {
       type: 'select',
       name: 'Scroll',

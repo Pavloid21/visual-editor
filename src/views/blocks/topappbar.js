@@ -48,7 +48,7 @@ const Icon = styled.div`
 const Component = ({settingsUI, ...props}) => {
   const {appBarItems} = props.interactive;
   return (
-    <Wrapper id={props.id} style={{padding: 0}}>
+    <Wrapper id={props.id} style={{padding: 0}} sizeModifier='FULLWIDTH'>
       <TopAppBar {...settingsUI} {...props}>
         <label>{appBarItems?.title}</label>
       </TopAppBar>

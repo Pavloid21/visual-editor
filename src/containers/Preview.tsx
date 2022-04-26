@@ -113,7 +113,7 @@ const Preview = (props: any) => {
     () => ({
       accept: ItemTypes.BOX,
       drop: (item) => {
-        return;
+        return item;
       },
       canDrop: (item: {type: string}) => {
         return item.type === 'Container' && !!selectedScreen;
@@ -183,6 +183,8 @@ const Preview = (props: any) => {
   if (isActive) {
     backgroundColor = '#f1f8ff';
   }
+
+  console.log('canDrop', canDrop, isOver)
 
   return (
     <>

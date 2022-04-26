@@ -6,6 +6,34 @@ import Wrapper from '../../utils/wrapper';
 
 const Button = styled.div`
   position: relative;
+  align-self: ${(props) => {
+    switch (props.alignment) {
+      case 'LEFT':
+        return 'start';
+      case 'RIGHT':
+        return 'end';
+      case 'CENTER':
+        return 'center';
+      default:
+        return 'auto';
+    }
+  }};
+  margin: ${(props) => {
+    switch (props.alignment) {
+      case 'CENTER':
+        return 'auto';
+      case 'TOP':
+        return '0 auto auto auto';
+      case 'BOTTOM':
+        return 'auto auto 0 auto';
+      case 'LEFT':
+        return 'auto auto auto 0';
+      case 'RIGHT':
+        return 'auto 0 auto auto';
+      default:
+        return '0 0';
+    }
+  }};
   box-sizing: border-box;
   font-size: ${(props) => props.fontSize}px;
   color: ${(props) => props.textColor};
@@ -17,12 +45,14 @@ const Button = styled.div`
   border-style: solid;
   border-color: ${(props) => props.borderColor};
   width: ${(props) => {
-    if (props.size?.width !== undefined) {
+    if (props.alignment === 'FILL') {
+      return '100%';
+    } else if (props.size?.width) {
       return props.size.width + 'px';
     } else if (props.size?.widthInPercent !== undefined) {
       return props.size.widthInPercent + '%';
     }
-    return '100%';
+    return 'fit-content';
   }};
   height: ${(props) => {
     if (props.size?.height !== undefined) {
@@ -50,6 +80,30 @@ const Button = styled.div`
   & > span {
     width: 100%;
     font-size: inherit;
+    font-weight: ${(props) => {
+      switch (props.fontWeight) {
+        case 'THIN':
+          return 100;
+        case 'ULTALIGHT':
+          return 200;
+        case 'LIGHT':
+          return 300;
+        case 'REGULAR':
+          return 400;
+        case 'MEDIUM':
+          return 500;
+        case 'SEMIBOLD':
+          return 600;
+        case 'BOLD':
+          return 700;
+        case 'BLACK':
+          return 800;
+        case 'HEAVY':
+          return 900;
+        default:
+          return 400;
+      }
+    }};
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: ${(props) => props.textAlignment};
@@ -67,22 +121,9 @@ const Button = styled.div`
 `;
 
 const Component = (props) => {
-  const {text, imageUrl, alignment} = props.settingsUI;
-  const calculateAlignment = (alignment) => {
-    console.log('alignmrnt', alignment);
-    switch (alignment) {
-      case 'LEFT':
-        return 'start';
-      case 'RIGHT':
-        return 'end';
-      case 'FILL':
-        return 'stretch';
-      default:
-        return 'center';
-    }
-  };
+  const {text, imageUrl, sizeModifier} = props.settingsUI;
   return (
-    <Wrapper id={props.id} style={{alignItems: calculateAlignment(alignment)}}>
+    <Wrapper id={props.id} sizeModifier={sizeModifier}>
       <Button className="draggable" {...props.settingsUI} {...props}>
         <span>{text}</span>
         {imageUrl && <img src={imageUrl} />}
@@ -127,6 +168,7 @@ const block = {
       type: 'ALLCORNERSROUND',
       radius: '4',
     },
+    sizeModifier: 'FULLWIDTH',
     size: {
       height: 48,
       width: 230,
@@ -154,10 +196,34 @@ const block = {
   config: {
     text: {type: 'string', name: 'Text'},
     fontSize: {type: 'number', name: 'Font size'},
+    fontWeight: {
+      type: 'select',
+      name: 'Font weight',
+      options: [
+        {label: 'Ultralight', value: 'ULTRALIGHT'},
+        {label: 'Thin', value: 'THIN'},
+        {label: 'Light', value: 'LIGHT'},
+        {label: 'Regular', value: 'REGULAR'},
+        {label: 'Medium', value: 'MEDIUM'},
+        {label: 'Semibold', value: 'SEMIBOLD'},
+        {label: 'Bold', value: 'BOLD'},
+        {label: 'Heavy', value: 'HEAVY'},
+        {label: 'Black', value: 'BLACK'},
+      ],
+    },
     textColor: {type: 'color', name: 'Text color'},
     backgroundColor: {type: 'color', name: 'Background color'},
     borderColor: {type: 'color', name: 'Border color'},
     borderWidth: {type: 'number', name: 'Border width'},
+    sizeModifier: {
+      type: 'select',
+      name: 'Size modifier',
+      options: [
+        {label: 'Full width', value: 'FULLWIDTH'},
+        {label: 'Full height', value: 'FULLHEIGHT'},
+        {label: 'Full size', value: 'FULLSIZE'},
+      ],
+    },
     alignment: {
       type: 'select',
       name: 'Alignment',
@@ -165,8 +231,8 @@ const block = {
         {label: 'Center', value: 'CENTER'},
         {label: 'Left', value: 'LEFT'},
         {label: 'Right', value: 'RIGHT'},
-        {label: 'Justify', value: 'JUSTIFY'},
-        {label: 'Fill', value: 'FILL'},
+        {label: 'Top', value: 'TOP'},
+        {label: 'Bottom', value: 'BOTTOM'},
       ],
     },
     textAlignment: {
@@ -221,8 +287,22 @@ const block = {
       color: {type: 'color', name: 'Color'},
       opacity: {type: 'number', name: 'Opacity'},
       offsetSize: {
-        width: {type: 'number', name: 'Width'},
-        height: {type: 'number', name: 'Height'},
+        height: {
+          type: 'units',
+          name: 'Height',
+          options: [
+            {label: 'px', value: 'px'},
+            {label: '%', value: '%'},
+          ],
+        },
+        width: {
+          type: 'units',
+          name: 'Width',
+          options: [
+            {label: 'px', value: 'px'},
+            {label: '%', value: '%'},
+          ],
+        },
       },
       radius: {type: 'number', name: 'Radius'},
     },

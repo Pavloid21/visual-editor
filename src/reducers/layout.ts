@@ -226,9 +226,13 @@ export default function reducer(state = initialState, action: LayoutAction) {
             }
           : {...state.topAppBar});
       if (action.parentKey && !Array.isArray(action.parentKey)) {
-        const val = targetElement.settingsUI[action.parentKey][action.key!];
-        delete targetElement.settingsUI[action.parentKey][action.key!];
-        targetElement.settingsUI[action.parentKey][
+        let test = targetElement.settingsUI[action.parentKey]
+        if (!test) {
+          test = targetElement.settingsUI.shadow[action.parentKey]
+        }
+        const val = test[action.key!];
+        delete test[action.key!];
+        test[
           action.value! === '%' ? action.key + 'InPercent' : action.key!.substring(0, action.key?.indexOf('InPercent'))
         ] = val;
       }

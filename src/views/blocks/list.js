@@ -14,7 +14,48 @@ import Wrapper from '../../utils/wrapper';
 import { onSortMove } from 'utils/hooks';
 
 const List = styled.div`
-  height: 100%;
+  align-self: ${(props) => {
+    switch (props.alignment) {
+      case 'LEFT':
+        return 'flex-start';
+      case 'RIGHT':
+        return 'flex-end';
+      default:
+        return 'center';
+    }
+  }};
+  margin: ${(props) => {
+    switch (props.alignment) {
+      case 'CENTER':
+        return 'auto';
+      case 'TOP':
+        return '0 auto auto auto';
+      case 'BOTTOM':
+        return 'auto auto 0 auto';
+      case 'LEFT':
+        return 'auto auto auto 0';
+      case 'RIGHT':
+        return 'auto 0 auto auto';
+      default:
+        return '0 0';
+    }
+  }};
+  width: ${(props) => {
+      if (props.size?.width !== undefined) {
+        return props.size.width + 'px';
+      } else if (props.size?.widthInPercent !== undefined) {
+        return props.size.widthInPercent + '%';
+      }
+      return '100%';
+    }};
+    height: ${(props) => {
+      if (props.size?.height !== undefined) {
+        return props.size.height + 'px';
+      } else if (props.size?.heightInPercent !== undefined) {
+        return props.size.heightInPercent + '%';
+      }
+      return 'auto';
+    }};
   background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
   display: flex;
   padding: 4px 0px;
@@ -25,7 +66,7 @@ const List = styled.div`
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItem, settingsUI, ...props}) => {
   return (
-    <Wrapper id={props.id}>
+    <Wrapper id={props.id} {...settingsUI} {...props}>
       <List {...settingsUI} {...props} ref={drop} backgroundColor={backgroundColor} className="draggable">
         {listItem && renderHandlebars([listItem], 'document2').components}
       </List>
@@ -100,6 +141,7 @@ const block = {
     dataSource: '',
   },
   defaultData: {
+    sizeModifier: 'FULLWIDTH',
     alignment: 'CENTER',
     backgroundColor: '#C6C6C6',
   },
@@ -111,6 +153,15 @@ const block = {
     },
   },
   config: {
+    sizeModifier: {
+      type: 'select',
+      name: 'Size modifier',
+      options: [
+        {label: 'Full width', value: 'FULLWIDTH'},
+        {label: 'Full height', value: 'FULLHEIGHT'},
+        {label: 'Full size', value: 'FULLSIZE'},
+      ],
+    },
     alignment: {
       type: 'select',
       name: 'Alignment',
@@ -118,11 +169,29 @@ const block = {
         {label: 'Center', value: 'CENTER'},
         {label: 'Left', value: 'LEFT'},
         {label: 'Right', value: 'RIGHT'},
-        {label: 'Justify', value: 'JUSTIFY'},
-        {label: 'Fill', value: 'FILL'},
+        {label: 'Top', value: 'TOP'},
+        {label: 'Bottom', value: 'BOTTOM'},
       ],
     },
     backgroundColor: {type: 'color', name: 'Background color'},
+    size: {
+      width: {
+        type: 'units',
+        name: 'Width',
+        options: [
+          {label: 'px', value: 'px'},
+          {label: '%', value: '%'},
+        ],
+      },
+      height: {
+        type: 'units',
+        name: 'Height',
+        options: [
+          {label: 'px', value: 'px'},
+          {label: '%', value: '%'},
+        ],
+      },
+    },
   },
 };
 

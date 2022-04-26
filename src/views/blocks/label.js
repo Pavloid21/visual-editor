@@ -4,9 +4,35 @@ import label from '../../assets/label.svg';
 import Wrapper from '../../utils/wrapper';
 
 const Label = styledComponents.div`
-  text-align: ${(props) => props.alignment};
-  width: 100%;
   box-sizing: border-box;
+  display: flex;
+  width: fit-content;
+  align-self: ${(props) => {
+    switch (props.alignment) {
+      case 'LEFT':
+        return 'flex-start';
+      case 'RIGHT':
+        return 'flex-end';
+      default:
+        return 'center';
+    }
+  }};
+  margin: ${(props) => {
+    switch (props.alignment) {
+      case 'CENTER':
+        return 'auto';
+      case 'TOP':
+        return '0 auto auto auto';
+      case 'BOTTOM':
+        return 'auto auto 0 auto';
+      case 'LEFT':
+        return 'auto auto auto 0';
+      case 'RIGHT':
+        return 'auto 0 auto auto';
+      default:
+        return '0 0';
+    }
+  }};
   & > span {
     display: block;
     width: ${(props) => {
@@ -63,7 +89,7 @@ const Label = styledComponents.div`
 const Component = ({settingsUI, ...props}) => {
   const {text} = settingsUI;
   return (
-    <Wrapper id={props.id}>
+    <Wrapper id={props.id} {...settingsUI} {...props}>
       <Label {...props} {...settingsUI} className="draggable">
         <span>{text}</span>
       </Label>
@@ -79,6 +105,7 @@ const block = {
   previewImageUrl: label,
   category: 'Element',
   defaultData: {
+    sizeModifier: 'FULLWIDTH',
     alignment: 'CENTER',
     text: 'Вход',
     textAlignment: 'CENTER',
@@ -98,6 +125,15 @@ const block = {
     fontWeight: 'REGULAR',
   },
   config: {
+    sizeModifier: {
+      type: 'select',
+      name: 'Size modifier',
+      options: [
+        {label: 'Full width', value: 'FULLWIDTH'},
+        {label: 'Full height', value: 'FULLHEIGHT'},
+        {label: 'Full size', value: 'FULLSIZE'},
+      ],
+    },
     alignment: {
       type: 'select',
       name: 'Alignment',
@@ -105,8 +141,8 @@ const block = {
         {label: 'Center', value: 'CENTER'},
         {label: 'Left', value: 'LEFT'},
         {label: 'Right', value: 'RIGHT'},
-        {label: 'Justify', value: 'JUSTIFY'},
-        {label: 'Fill', value: 'FILL'},
+        {label: 'Top', value: 'TOP'},
+        {label: 'Bottom', value: 'BOTTOM'},
       ],
     },
     text: {type: 'string', name: 'Text'},
