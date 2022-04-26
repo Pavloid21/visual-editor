@@ -3,6 +3,32 @@ import styled from 'styled-components';
 import Wrapper from '../../utils/wrapper';
 
 const Input = styled.div`
+  align-self: ${(props) => {
+    switch (props.alignment) {
+      case 'LEFT':
+        return 'flex-start';
+      case 'RIGHT':
+        return 'flex-end';
+      default:
+        return 'center';
+    }
+  }};
+  margin: ${(props) => {
+    switch (props.alignment) {
+      case 'CENTER':
+        return 'auto';
+      case 'TOP':
+        return '0 auto auto auto';
+      case 'BOTTOM':
+        return 'auto auto 0 auto';
+      case 'LEFT':
+        return 'auto auto auto 0';
+      case 'RIGHT':
+        return 'auto 0 auto auto';
+      default:
+        return '0 0';
+    }
+  }};
   color: ${(props) => props.textColor};
   background-color: ${(props) => props.backgroundColor};
   display: flex;
@@ -36,8 +62,8 @@ const Input = styled.div`
 
 const Component = ({settingsUI, ...props}) => {
   return (
-    <Wrapper id={props.id}>
-      <Input {...props} {...settingsUI}>
+    <Wrapper id={props.id} {...settingsUI} {...props}>
+      <Input {...props} {...settingsUI} className="draggable">
         {!settingsUI.text && settingsUI.placeholder && <span className="placeholder">{settingsUI.placeholder}</span>}
         {settingsUI.text && <span>{settingsUI.text}</span>}
       </Input>
@@ -73,6 +99,26 @@ const block = {
     },
   },
   config: {
+    sizeModifier: {
+      type: 'select',
+      name: 'Size modifier',
+      options: [
+        {label: 'Full width', value: 'FULLWIDTH'},
+        {label: 'Full height', value: 'FULLHEIGHT'},
+        {label: 'Full size', value: 'FULLSIZE'},
+      ],
+    },
+    alignment: {
+      type: 'select',
+      name: 'Alignment',
+      options: [
+        {label: 'Center', value: 'CENTER'},
+        {label: 'Left', value: 'LEFT'},
+        {label: 'Right', value: 'RIGHT'},
+        {label: 'Top', value: 'TOP'},
+        {label: 'Bottom', value: 'BOTTOM'},
+      ],
+    },
     placeholder: {type: 'string', name: 'Placeholder'},
     placeholderColor: {type: 'color', name: 'Placeholder color'},
     text: {type: 'string', name: 'Text'},

@@ -11,12 +11,38 @@ import {useSelector} from 'react-redux';
 import {useDispatch} from 'react-redux';
 import actionTypes from '../../constants/actionTypes';
 import renderHandlebars from '../../utils/renderHandlebars';
-import { onSortMove } from 'utils/hooks';
+import {onSortMove} from 'utils/hooks';
 
 const SearchBar = styled.div`
   display: flex;
   flex-direction: column;
   max-height: 100%;
+  align-self: ${(props) => {
+    switch (props.alignment) {
+      case 'LEFT':
+        return 'flex-start';
+      case 'RIGHT':
+        return 'flex-end';
+      default:
+        return 'center';
+    }
+  }};
+  margin: ${(props) => {
+    switch (props.alignment) {
+      case 'CENTER':
+        return 'auto';
+      case 'TOP':
+        return '0 auto auto auto';
+      case 'BOTTOM':
+        return 'auto auto 0 auto';
+      case 'LEFT':
+        return 'auto auto auto 0';
+      case 'RIGHT':
+        return 'auto 0 auto auto';
+      default:
+        return '0 0';
+    }
+  }};
   & > input {
     pointer-events: none;
     &::placeholder {
@@ -62,7 +88,7 @@ const SearchBar = styled.div`
 const SortableContainer = sortableContainer(
   ({drop, backgroundColor, listItems, text, placeholder, settingsUI, ...props}) => {
     return (
-      <Wrapper id={props.id} style={{maxHeight: '100%'}}>
+      <Wrapper id={props.id} {...settingsUI} {...props} style={{maxHeight: '100%'}}>
         <SearchBar {...props.settingsUI} {...props} ref={drop} backgroundColor={backgroundColor}>
           <input type="text" className="form-control draggable" placeholder={placeholder} value={text} />
           {listItems && renderHandlebars(listItems, 'document2').components}
@@ -136,6 +162,8 @@ const block = {
   imgUrl: 'https://icons.getbootstrap.com/assets/icons/search.svg',
   category: 'Controls',
   defaultData: {
+    sizeModifier: 'FULLWIDTH',
+    alignment: 'CENTER',
     placeholder: 'Введите имя',
     placeholderColor: '#7F7F7F',
     imageUrl: 'https://icons.getbootstrap.com/assets/icons/search.svg',
@@ -148,6 +176,26 @@ const block = {
     },
   },
   config: {
+    sizeModifier: {
+      type: 'select',
+      name: 'Size modifier',
+      options: [
+        {label: 'Full width', value: 'FULLWIDTH'},
+        {label: 'Full height', value: 'FULLHEIGHT'},
+        {label: 'Full size', value: 'FULLSIZE'},
+      ],
+    },
+    alignment: {
+      type: 'select',
+      name: 'Alignment',
+      options: [
+        {label: 'Center', value: 'CENTER'},
+        {label: 'Left', value: 'LEFT'},
+        {label: 'Right', value: 'RIGHT'},
+        {label: 'Top', value: 'TOP'},
+        {label: 'Bottom', value: 'BOTTOM'},
+      ],
+    },
     placeholder: {type: 'string', name: 'Placeholder'},
     imageUrl: {type: 'string', name: 'Image URL'},
     placeholderColor: {type: 'color', name: 'Placeholder color'},

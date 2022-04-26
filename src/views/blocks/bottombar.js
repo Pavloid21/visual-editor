@@ -1,7 +1,7 @@
-import React from "react";
-import styled from "styled-components";
-import bottombar from "../../assets/bottombar.svg";
-import Wrapper from "../../utils/wrapper";
+import React from 'react';
+import styled from 'styled-components';
+import bottombar from '../../assets/bottombar.svg';
+import Wrapper from '../../utils/wrapper';
 
 const BottomBar = styled.div`
   background-color: ${(props) => props.backgroundColor};
@@ -42,21 +42,22 @@ const Icon = styled.div`
   mask: url(${(props) => props.iconUrl}) no-repeat center;
 `;
 
-const Component = ({ settingsUI, ...props }) => {
-  const { navigationItems } = settingsUI;
+const Component = ({settingsUI, ...props}) => {
+  const {navigationItems} = settingsUI;
   const buttons = [];
   for (let index in navigationItems) {
     buttons.push(navigationItems[index]);
   }
   return (
-    <Wrapper id={props.id} style={{ position: "sticky", bottom: 0, marginTop: "auto", zIndex: 200 }}>
+    <Wrapper
+      id={props.id}
+      style={{position: 'sticky', bottom: 0, marginTop: 'auto', zIndex: 200}}
+      sizeModifier="FULLWIDTH"
+    >
       <BottomBar {...settingsUI} {...props}>
         {buttons.map((item, index) => {
           return (
-            <div
-              className={item.isNestedScreen && "active"}
-              key={`bottomBarItem_${index}`}
-            >
+            <div key={`bottomBarItem_${index}`}>
               <Icon className="item_icon" iconUrl={item.iconUrl}></Icon>
               <label>{item.screenName}</label>
             </div>
@@ -69,65 +70,62 @@ const Component = ({ settingsUI, ...props }) => {
 
 const block = {
   Component,
-  name: "BOTTOMBAR",
-  title: "Bottom navigation",
-  description:
-    "Bottom navigation bars allow movement between primary destinations in an app.",
+  name: 'BOTTOMBAR',
+  title: 'Bottom navigation',
+  description: 'Bottom navigation bars allow movement between primary destinations in an app.',
   previewImageUrl: bottombar,
   category: 'Container',
   defaultInteractiveOptions: {
-    action: { url: "nextScreenName", fields: ["field1", "field2"], target: "" },
+    action: {url: 'nextScreenName', fields: ['field1', 'field2']},
   },
   defaultData: {
-    backgroundColor: "#423649",
-    bottomIconSelectedColor: "#E9E8EA",
-    bottomIconUnselectedColor: "#A29CA6",
+    backgroundColor: '#423649',
+    bottomIconSelectedColor: '#E9E8EA',
+    bottomIconUnselectedColor: '#A29CA6',
     navigationItems: [
       {
-        screenName: "Auth",
-        isNestedScreen: true,
-        iconUrl:
-          "https://icons.getbootstrap.com/assets/icons/box-arrow-in-right.svg",
+        screenName: 'Auth',
+        iconUrl: 'https://icons.getbootstrap.com/assets/icons/box-arrow-in-right.svg',
         action: {
-          url: "screenAuth",
+          url: 'screenAuth',
+          target: '',
         },
       },
       {
-        screenName: "Contacts",
-        isNestedScreen: false,
-        iconUrl:
-          "https://icons.getbootstrap.com/assets/icons/person-lines-fill.svg",
+        screenName: 'Contacts',
+        iconUrl: 'https://icons.getbootstrap.com/assets/icons/person-lines-fill.svg',
         action: {
-          url: "screenContacts",
+          url: 'screenContacts',
+          target: '',
         },
       },
       {
-        screenName: "Settings",
-        isNestedScreen: false,
-        iconUrl: "https://icons.getbootstrap.com/assets/icons/gear.svg",
+        screenName: 'Settings',
+        iconUrl: 'https://icons.getbootstrap.com/assets/icons/gear.svg',
         action: {
-          url: "screenSettings",
+          url: 'screenSettings',
+          target: '',
         },
       },
     ],
   },
   config: {
-    backgroundColor: { type: "color", name: "Background color" },
+    backgroundColor: {type: 'color', name: 'Background color'},
     bottomIconSelectedColor: {
-      type: "color",
-      name: "Bottom icon selected color",
+      type: 'color',
+      name: 'Bottom icon selected color',
     },
     bottomIconUnselectedColor: {
-      type: "color",
-      name: "Bottom icon unselected color",
+      type: 'color',
+      name: 'Bottom icon unselected color',
     },
     navigationItems: [
       {
-        screenName: { type: "string", name: "Screen name" },
-        isNestedScreen: { type: "boolean", name: "Is nested screen" },
-        iconUrl: { type: "string", name: "Icon URL" },
+        screenName: {type: 'string', name: 'Screen name'},
+        iconUrl: {type: 'string', name: 'Icon URL'},
         action: {
-          url: { type: "string", name: "URL" },
+          url: {type: 'string', name: 'URL'},
+          target: {type: 'string', name: 'Target'},
         },
       },
     ],
@@ -135,11 +133,10 @@ const block = {
   interactive: {
     action: {
       url: {
-        type: "string",
-        name: "Action URL",
+        type: 'string',
+        name: 'Action URL',
       },
-      target: { type: "string", name: "Target" },
-      fields: { type: "array", name: "Fields set" },
+      fields: {type: 'array', name: 'Fields set'},
     },
   },
 };

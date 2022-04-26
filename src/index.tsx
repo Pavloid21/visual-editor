@@ -8,9 +8,11 @@ import App from './containers/App';
 import {ReactKeycloakProvider} from '@react-keycloak/web';
 import keycloack from 'constants/keykloak';
 import {DndWrapper} from 'containers/DnDWrapper';
+import {ReactNotifications} from 'react-notifications-component';
 
 ReactDOM.render(
   <Provider store={store}>
+    <ReactNotifications />
     <ReactKeycloakProvider authClient={keycloack}>
       <div id="APP">
         <DndWrapper id="APP">

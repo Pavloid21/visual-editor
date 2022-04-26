@@ -9,8 +9,11 @@ import actionTypes from '../constants/actionTypes';
 import {deleteAction, deleteScreen, saveAction, saveScreen} from '../services/ApiService';
 import {useKeycloak} from '@react-keycloak/web';
 import {useLocation} from 'react-router-dom';
+import {Store} from 'react-notifications-component';
+import {Store as RuduxStore} from 'reducers/types';
+import { successNotification } from 'constants/notifications';
 
-const Bar = styled.div`
+const Bar = styled.div<any>`
   height: 60px;
   width: 100%;
   background: var(--background);
@@ -53,20 +56,20 @@ const TopBar = () => {
   const dispatch = useDispatch();
   const {keycloak} = useKeycloak();
   const location = useLocation();
-  const snippets = useSelector((state) => state.layout.snippets);
-  const actions = useSelector((state) => [
+  const snippets = useSelector((state: RuduxStore) => state.layout.snippets);
+  const actions = useSelector((state: RuduxStore) => [
     ...state.actions.actions.map((item) => ({...item, type: 'actions'})),
     ...state.actions.data.map((item) => ({...item, type: 'data'})),
   ]);
-  const deletedActions = useSelector((state) => [
+  const deletedActions = useSelector((state: RuduxStore) => [
     ...state.actions.deleted.actions.map((item) => ({
       ...item,
       type: 'actions',
     })),
     ...state.actions.deleted.data.map((item) => ({...item, type: 'data'})),
   ]);
-  const deletedScreens = useSelector((state) => state.layout.deletedScreens);
-  const editedScreens = useSelector((state) => state.layout.editedScreens);
+  const deletedScreens = useSelector((state: RuduxStore) => state.layout.deletedScreens);
+  const editedScreens = useSelector((state: RuduxStore) => state.layout.editedScreens);
   const projectID = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
   const handleHideLeft = () => {
     dispatch({type: actionTypes.TOGGLE_LEFT_BAR});
@@ -74,24 +77,36 @@ const TopBar = () => {
   const handleHideRight = () => {
     dispatch({type: actionTypes.TOGGLE_RIGHT_BAR});
   };
-  const handleSaveApplication = (event) => {
+  const handleSaveApplication: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     event.stopPropagation();
-    snippets.forEach((item) => {
+    const snippetsPromises: Promise<any>[] = snippets.filter((item) => {
       if (editedScreens.includes(item.screenID) && !deletedScreens.includes(item.screenID)) {
-        saveScreen(projectID, item.endpoint, `${item.logic.replace(/return$/g, '')}${item.snippet}`);
+        return saveScreen(projectID, item.endpoint, `${item.logic.replace(/return$/g, '')}${item.snippet}`);
       }
     });
-    snippets.forEach((item) => {
+    const deletedSnippetsPromises: Promise<any>[] = snippets.filter((item) => {
       if (deletedScreens.includes(item.screenID)) {
-        deleteScreen(projectID, item.endpoint);
+        return deleteScreen(projectID, item.endpoint);
       }
     });
 
-    actions.forEach((item) => {
-      saveAction(projectID, item.type, item.action, item.object);
+    const actionsPromises: Promise<any>[] = actions.map((item) => {
+      return saveAction(projectID, item.type, item.action, item.object);
     });
-    deletedActions.forEach((item) => {
-      deleteAction(item.type, item.action);
+    const deletedActionsPromises: Promise<any>[] = deletedActions.map((item) => {
+      return deleteAction(projectID, item.type, item.action);
+    });
+    Promise.all([
+      ...snippetsPromises,
+      ...deletedSnippetsPromises,
+      ...actionsPromises,
+      ...deletedActionsPromises,
+    ]).then((result) => {
+      Store.addNotification({
+        ...successNotification,
+        title: 'Success',
+        message: 'All your changes is saved.',
+      });
     });
     dispatch({
       type: actionTypes.CHANGES_SAVED,

@@ -11,9 +11,35 @@ import {useDispatch} from 'react-redux';
 import actionTypes from '../../constants/actionTypes';
 import collection from '../../assets/collection.svg';
 import Wrapper from '../../utils/wrapper';
-import { onSortMove } from 'utils/hooks';
+import {onSortMove} from 'utils/hooks';
 
 const Collection = styled.div`
+  align-self: ${(props) => {
+    switch (props.alignment) {
+      case 'LEFT':
+        return 'flex-start';
+      case 'RIGHT':
+        return 'flex-end';
+      default:
+        return 'center';
+    }
+  }};
+  margin: ${(props) => {
+    switch (props.alignment) {
+      case 'CENTER':
+        return 'auto';
+      case 'TOP':
+        return '0 auto auto auto';
+      case 'BOTTOM':
+        return 'auto auto 0 auto';
+      case 'LEFT':
+        return 'auto auto auto 0';
+      case 'RIGHT':
+        return 'auto 0 auto auto';
+      default:
+        return '0 0';
+    }
+  }};
   width: ${(props) => {
     if (props.size?.width !== undefined) {
       return props.size.width + 'px';
@@ -50,10 +76,8 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItem, s
   return (
     <Wrapper
       id={props.id}
-      style={{
-        alignItems: props.alignment,
-        flex: props.size?.height ? '' : '1 1 auto',
-      }}
+      {...settingsUI}
+      {...props}
     >
       <Collection {...settingsUI} {...props} ref={drop} backgroundColor={backgroundColor} className="draggable">
         <div>{listItem && renderHandlebars([listItem], 'document2').components}</div>
@@ -156,6 +180,15 @@ const block = {
     },
   },
   config: {
+    sizeModifier: {
+      type: 'select',
+      name: 'Size modifier',
+      options: [
+        {label: 'Full width', value: 'FULLWIDTH'},
+        {label: 'Full height', value: 'FULLHEIGHT'},
+        {label: 'Full size', value: 'FULLSIZE'},
+      ],
+    },
     alignment: {
       type: 'select',
       name: 'Alignment',
@@ -163,8 +196,8 @@ const block = {
         {label: 'Center', value: 'CENTER'},
         {label: 'Left', value: 'LEFT'},
         {label: 'Right', value: 'RIGHT'},
-        {label: 'Justify', value: 'JUSTIFY'},
-        {label: 'Fill', value: 'FILL'},
+        {label: 'Top', value: 'TOP'},
+        {label: 'Bottom', value: 'BOTTOM'},
       ],
     },
     backgroundColor: {type: 'color', name: 'Background color'},

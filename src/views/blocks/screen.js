@@ -11,11 +11,37 @@ import {useDispatch} from 'react-redux';
 import actionTypes from '../../constants/actionTypes';
 import screen from '../../assets/screen.svg';
 import Wrapper from '../../utils/wrapper';
-import { onSortMove } from 'utils/hooks';
+import {onSortMove} from 'utils/hooks';
 
 const VStack = styled.div`
-  width: ${(props) => (props.sizeModifier === 'FULLWIDTH' ? '100%' : 'auto')};
-  flex: ${(props) => (props.wrapContent === 'WRAPCONTENTHEIGHT' ? '0 1 auto' : '1 1 auto')};
+  align-self: ${(props) => {
+    switch (props.alignment) {
+      case 'LEFT':
+        return 'flex-start';
+      case 'RIGHT':
+        return 'flex-end';
+      default:
+        return 'center';
+    }
+  }};
+  margin: ${(props) => {
+    switch (props.alignment) {
+      case 'CENTER':
+        return 'auto';
+      case 'TOP':
+        return '0 auto auto auto';
+      case 'BOTTOM':
+        return 'auto auto 0 auto';
+      case 'LEFT':
+        return 'auto auto auto 0';
+      case 'RIGHT':
+        return 'auto 0 auto auto';
+      default:
+        return '0 0';
+    }
+  }};
+  width: ${(props) => (['FULLWIDTH', 'FULLSIZE'].includes(props.sizeModifier) ? '100%' : 'fit-content')};
+  height: ${(props) => (['FULLHEIGHT', 'FULLSIZE'].includes(props.sizeModifier) ? '100%' : 'fit-content')};
   background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
   display: flex;
   justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
@@ -25,17 +51,15 @@ const VStack = styled.div`
         return 'flex-start';
       case 'RIGHT':
         return 'flex-start';
-      case 'JUSTIFY':
-        return 'stretch';
       default:
         return 'center';
     }
   }};
   flex-direction: column;
-  padding-top: ${(props) => props.padding?.top}px;
-  padding-bottom: ${(props) => props.padding?.bottom}px;
-  padding-left: ${(props) => props.padding?.left}px;
-  padding-right: ${(props) => props.padding?.right}px;
+  padding-top: ${(props) => props.padding?.top || 5}px;
+  padding-bottom: ${(props) => props.padding?.bottom || 5}px;
+  padding-left: ${(props) => props.padding?.left || 5}px;
+  padding-right: ${(props) => props.padding?.right || 5}px;
   box-sizing: border-box;
   gap: ${(props) => props.spacing}px;
   border-radius: ${(props) => `
@@ -51,8 +75,22 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, 
     <Wrapper
       id={props.id}
       {...settingsUI}
-      scroll={props.scroll}
-      style={{flex: props.wrapContent === 'WRAPCONTENTHEIGHT' ? '0 1 auto' : '1 1 auto'}}
+      {...props}
+      sizeModifier="FULLSIZE"
+      style={{
+        alignItems: (() => {
+          switch (props.alignment) {
+            case 'LEFT':
+              return 'self-start';
+            case 'RIGHT':
+              return 'self-end';
+            case 'FILL':
+              return 'stretch';
+            default:
+              return 'center';
+          }
+        })(),
+      }}
     >
       <VStack {...settingsUI} {...props} ref={drop} backgroundColor={backgroundColor} className="draggable">
         {listItems && renderHandlebars(listItems, 'document2').components}
@@ -78,9 +116,6 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
         uuid,
         target: target.targetId,
       };
-    },
-    canDrop: (item) => {
-      return item.type === 'Container';
     },
     collect: (monitor) => ({
       isOver: monitor.isOver({shallow: true}),
@@ -134,6 +169,15 @@ const block = {
   },
   listItems: [],
   config: {
+    sizeModifier: {
+      type: 'select',
+      name: 'Size modifier',
+      options: [
+        {label: 'Full width', value: 'FULLWIDTH'},
+        {label: 'Full height', value: 'FULLHEIGHT'},
+        {label: 'Full size', value: 'FULLSIZE'},
+      ],
+    },
     alignment: {
       type: 'select',
       name: 'Alignment',
@@ -141,12 +185,11 @@ const block = {
         {label: 'Center', value: 'CENTER'},
         {label: 'Left', value: 'LEFT'},
         {label: 'Right', value: 'RIGHT'},
-        {label: 'Justify', value: 'JUSTIFY'},
-        {label: 'Fill', value: 'FILL'},
+        {label: 'Top', value: 'TOP'},
+        {label: 'Bottom', value: 'BOTTOM'},
       ],
     },
     backgroundColor: {type: 'color', name: 'Background color'},
-    wrapContent: {type: 'string', name: 'Wrap content'},
     spacing: {type: 'number', name: 'Spacing'},
   },
 };

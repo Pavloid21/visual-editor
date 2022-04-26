@@ -12,9 +12,35 @@ import actionTypes from '../../constants/actionTypes';
 import card from '../../assets/card.svg';
 import Wrapper from '../../utils/wrapper';
 import {hexToRgb} from '../../constants/utils';
-import { onSortMove } from 'utils/hooks';
+import {onSortMove} from 'utils/hooks';
 
 const Card = styled.div`
+  align-self: ${(props) => {
+    switch (props.alignment) {
+      case 'LEFT':
+        return 'flex-start';
+      case 'RIGHT':
+        return 'flex-end';
+      default:
+        return 'center';
+    }
+  }};
+  margin: ${(props) => {
+    switch (props.alignment) {
+      case 'CENTER':
+        return 'auto';
+      case 'TOP':
+        return '0 auto auto auto';
+      case 'BOTTOM':
+        return 'auto auto 0 auto';
+      case 'LEFT':
+        return 'auto auto auto 0';
+      case 'RIGHT':
+        return 'auto 0 auto auto';
+      default:
+        return '0 0';
+    }
+  }};
   box-sizing: border-box;
   border: ${(props) => props.border};
   background-color: ${(props) => props.backgroundColor};
@@ -31,14 +57,13 @@ const Card = styled.div`
     } else if (props.size?.heightInPercent !== undefined) {
       return props.size.heightInPercent + '%';
     }
-    return 'auto';
+    return 'fit-content';
   }};
   overflow: hidden;
   box-shadow: ${(props) => {
     const RGB = hexToRgb(props.shadow?.color);
     return `${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px 8px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b}, ${props.shadow?.opacity})`;
   }};
-  gap: ${(props) => props.spacing}px;
   border-radius: ${(props) => `
     ${props.corners?.topLeftRadius}px 
     ${props.corners?.topRightRadius}px 
@@ -48,9 +73,8 @@ const Card = styled.div`
 `;
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, settingsUI, ...props}) => {
-  console.log('backgroundColor', backgroundColor);
   return (
-    <Wrapper id={props.id}>
+    <Wrapper id={props.id} {...settingsUI} {...props}>
       <Card {...settingsUI} {...props} backgroundColor={backgroundColor} ref={drop} className="draggable">
         {listItems && renderHandlebars(listItems, 'document2').components}
       </Card>
@@ -126,6 +150,7 @@ const block = {
   },
   defaultData: {
     elevation: 3,
+    sizeModifier: 'FULLWIDTH',
     alignment: 'CENTER',
     backgroundColor: '#C6C6C6',
     spacing: 16,
@@ -160,6 +185,15 @@ const block = {
   listItems: [],
   config: {
     elevation: {type: 'number', name: 'Elevation'},
+    sizeModifier: {
+      type: 'select',
+      name: 'Size modifier',
+      options: [
+        {label: 'Full width', value: 'FULLWIDTH'},
+        {label: 'Full height', value: 'FULLHEIGHT'},
+        {label: 'Full size', value: 'FULLSIZE'},
+      ],
+    },
     alignment: {
       type: 'select',
       name: 'Alignment',
@@ -167,12 +201,11 @@ const block = {
         {label: 'Center', value: 'CENTER'},
         {label: 'Left', value: 'LEFT'},
         {label: 'Right', value: 'RIGHT'},
-        {label: 'Justify', value: 'JUSTIFY'},
-        {label: 'Fill', value: 'FILL'},
+        {label: 'Top', value: 'TOP'},
+        {label: 'Bottom', value: 'BOTTOM'},
       ],
     },
     backgroundColor: {type: 'color', name: 'Background color'},
-    spacing: {type: 'number', name: 'Spacing'},
     shape: {
       type: {
         type: 'select',
@@ -191,8 +224,22 @@ const block = {
       color: {type: 'color', name: 'Shadow color'},
       opacity: {type: 'number', name: 'Opacity'},
       offsetSize: {
-        width: {type: 'number', name: 'Width'},
-        height: {type: 'number', name: 'Height'},
+        height: {
+          type: 'units',
+          name: 'Height',
+          options: [
+            {label: 'px', value: 'px'},
+            {label: '%', value: '%'},
+          ],
+        },
+        width: {
+          type: 'units',
+          name: 'Width',
+          options: [
+            {label: 'px', value: 'px'},
+            {label: '%', value: '%'},
+          ],
+        },
       },
     },
     padding: {

@@ -18,6 +18,8 @@ import {useKeycloak} from '@react-keycloak/web';
 import {Project} from './Project';
 import {API} from 'services/ApiService';
 import Loader from 'components/Loader';
+import {ReactNotifications} from 'react-notifications-component';
+import 'react-notifications-component/dist/theme.css';
 
 const App = () => {
   const layout = useSelector((state) => state.layout);
