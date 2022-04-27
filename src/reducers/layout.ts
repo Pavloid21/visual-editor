@@ -226,9 +226,9 @@ export default function reducer(state = initialState, action: LayoutAction) {
             }
           : {...state.topAppBar});
       if (action.parentKey && !Array.isArray(action.parentKey)) {
-        let test = targetElement.settingsUI[action.parentKey]
+        let test = targetElement.settingsUI[action.parentKey];
         if (!test) {
-          test = targetElement.settingsUI.shadow[action.parentKey]
+          test = targetElement.settingsUI.shadow[action.parentKey];
         }
         const val = test[action.key!];
         delete test[action.key!];
@@ -315,6 +315,7 @@ export default function reducer(state = initialState, action: LayoutAction) {
       let nextScreenState = {...state};
       if (action.delete) {
         nextScreenState.deletedScreens = Array.from(new Set([...state.deletedScreens, action.screen]));
+        nextScreenState.editedScreens = nextScreenState.editedScreens.filter((screen) => screen !== action.screen);
       } else {
         nextScreenState = {
           ...state,
