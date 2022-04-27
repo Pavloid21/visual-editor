@@ -65,6 +65,7 @@ export default function LeftSidebar({children, ...props}) {
   const bottomBar = useSelector((state) => state.layout.bottomBar);
   const selectedBlock = useSelector((state) => state.layout.selectedBlockUuid);
   const selectedScreen = useSelector((state) => state.layout.selectedScreen);
+  const snippets = useSelector((state) => state.layout.snippets);
   const {project} = useParams();
   const projectName = useSelector((state) => state.project.name);
   const [activeTab, setActiveTab] = useState(0);
@@ -258,7 +259,7 @@ export default function LeftSidebar({children, ...props}) {
 
     setScreenes(layouts);
     setTree(layouts.map((layout) => prepareTree(layout)));
-  }, [layout, topAppBar, bottomBar, output]);
+  }, [layout, topAppBar, bottomBar, output, snippets]);
 
   useEffect(() => {
     const screenLayout = availableScreenes.filter((screen) => screen.uuid === selectedScreen)[0];
