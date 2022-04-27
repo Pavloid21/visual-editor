@@ -95,7 +95,7 @@ export const Card: React.FC<TCardProps> = ({name, description, icon, onClick, on
     deleteProject(id);
     onDelete(id);
   };
-  const {ref, isShow, setIsShow} = useOutside(false);
+  const {ref, isShow, setIsShow} = useOutside(false, true);
 
   return (
     <Container

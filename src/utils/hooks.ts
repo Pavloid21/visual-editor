@@ -9,7 +9,7 @@ export const useModal = (
   return [modalOpen, setModalOpen, toggle];
 };
 
-export const useOutside = (initialIsVisible: boolean) => {
+export const useOutside = (initialIsVisible: boolean, canSelfOpen?: boolean) => {
   const [isShow, setIsShow] = useState(initialIsVisible);
   const ref = useRef(null);
 
@@ -17,7 +17,7 @@ export const useOutside = (initialIsVisible: boolean) => {
     //@ts-ignore
     if (ref.current && !ref.current.contains(evt.target)) {
       setIsShow(false);
-    } else {
+    } else if (canSelfOpen) {
       setIsShow(true);
     }
   };
