@@ -102,7 +102,7 @@ const SortableList = SortableContainer<ISortableList>(({drop, backgroundColor, l
           return null;
         })}
       </div>
-      <SortableItem index={list.length - 1}>{list[list.length - 1]}</SortableItem>
+      {list.length > 0 && <SortableItem index={list.length - 1}>{list[list.length - 1]}</SortableItem>}
     </Container>
   );
 });
@@ -184,8 +184,6 @@ const Preview = (props: any) => {
     backgroundColor = '#f1f8ff';
   }
 
-  console.log('canDrop', canDrop, isOver)
-
   return (
     <>
       {layout.editedScreens.length && (
@@ -225,16 +223,14 @@ const Preview = (props: any) => {
       >
         {editorMode === 'editor' && (
           <PhoneContainer>
-            {props.components.length ? (
-              <SortableList
-                drop={drop}
-                backgroundColor={backgroundColor}
-                onSortEnd={onSortEnd}
-                shouldCancelStart={onSortMove}
-                distance={1}
-                list={props.components}
-              />
-            ) : undefined}
+            <SortableList
+              drop={drop}
+              backgroundColor={backgroundColor}
+              onSortEnd={onSortEnd}
+              shouldCancelStart={onSortMove}
+              distance={1}
+              list={props.components}
+            />
           </PhoneContainer>
         )}
         {editorMode === 'json' && <Code />}
