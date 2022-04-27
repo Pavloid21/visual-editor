@@ -11,7 +11,8 @@ import {useKeycloak} from '@react-keycloak/web';
 import {useLocation} from 'react-router-dom';
 import {Store} from 'react-notifications-component';
 import {Store as RuduxStore} from 'reducers/types';
-import { successNotification } from 'constants/notifications';
+import {successNotification} from 'constants/notifications';
+import {useOutside} from 'utils/hooks';
 
 const Bar = styled.div<any>`
   height: 60px;
@@ -42,6 +43,22 @@ const Bar = styled.div<any>`
       justify-content: center;
       align-items: center;
       margin-top: 4px;
+      &:hover {
+        cursor: pointer;
+      }
+      & > .account_menu {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0px 2px 10px rgba(51, 51, 51, 0.1), 0px 3px 8px rgba(244, 69, 50, 0.15);
+        background-color: #ffffff;
+        color: var(--neo-black);
+        top: 30px;
+        right: 0;
+        border-radius: 4px;
+        min-width: 230px;
+        padding: 16px;
+      }
     }
   }
 `;
@@ -57,6 +74,7 @@ const TopBar = () => {
   const {keycloak} = useKeycloak();
   const location = useLocation();
   const snippets = useSelector((state: RuduxStore) => state.layout.snippets);
+  const {ref, isShow, setIsShow} = useOutside(false);
   const actions = useSelector((state: RuduxStore) => [
     ...state.actions.actions.map((item) => ({...item, type: 'actions'})),
     ...state.actions.data.map((item) => ({...item, type: 'data'})),
@@ -96,21 +114,24 @@ const TopBar = () => {
     const deletedActionsPromises: Promise<any>[] = deletedActions.map((item) => {
       return deleteAction(projectID, item.type, item.action);
     });
-    Promise.all([
-      ...snippetsPromises,
-      ...deletedSnippetsPromises,
-      ...actionsPromises,
-      ...deletedActionsPromises,
-    ]).then((result) => {
-      Store.addNotification({
-        ...successNotification,
-        title: 'Success',
-        message: 'All your changes is saved.',
-      });
-    });
+    Promise.all([...snippetsPromises, ...deletedSnippetsPromises, ...actionsPromises, ...deletedActionsPromises]).then(
+      (result) => {
+        Store.addNotification({
+          ...successNotification,
+          title: 'Success',
+          message: 'All your changes is saved.',
+        });
+      }
+    );
     dispatch({
       type: actionTypes.CHANGES_SAVED,
     });
+  };
+  const openMenu = () => {
+    setIsShow(true);
+  };
+  const handleLogOut = () => {
+    keycloak.logout();
   };
   return (
     <Bar isHidden={keycloak.authenticated}>
@@ -129,9 +150,15 @@ const TopBar = () => {
           )}
         </div>
         <VerticalDivider />
-        <div className="user">
+        <div className="user" onClick={openMenu}>
           {keycloak?.idTokenParsed?.given_name[0]}
           {keycloak?.idTokenParsed?.family_name[0]}
+          {isShow && (
+            <div className="account_menu" ref={ref}>
+              <span>{keycloak?.idTokenParsed?.given_name + ' ' + keycloak?.idTokenParsed?.family_name}</span>
+              <Button onClick={handleLogOut}>Logout</Button>
+            </div>
+          )}
         </div>
       </div>
     </Bar>
