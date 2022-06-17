@@ -5,7 +5,7 @@ import Wrapper from '../../utils/wrapper';
 
 const BottomBar = styled.div`
   background-color: ${(props) => props.backgroundColor};
-  padding: 16px 0px 16px 0px;
+  padding: 16px 0 16px 0;
   bottom: 0;
   margin-top: auto;
   width: 100%;
