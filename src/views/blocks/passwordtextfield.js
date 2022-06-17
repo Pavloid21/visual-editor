@@ -1,6 +1,14 @@
-import passwordtextfield from '../../assets/passwordtextfield.svg';
 import styled from 'styled-components';
-import Wrapper from '../../utils/wrapper';
+import Wrapper from 'utils/wrapper';
+import passwordtextfield from 'assets/passwordtextfield.svg';
+import {
+  alignmentConfig, backgroundColor, fontSize,
+  placeholder,
+  placeholderColor, size,
+  sizeModifier,
+  text,
+  textAlignment, textColor,
+} from 'views/configs';
 
 const Container = styled.div`
   display: flex;
@@ -91,7 +99,6 @@ const block = {
     text: 'neo',
     textColor: '#000000',
     backgroundColor: '#FFFFFF',
-    textAlignment: 'LEFT',
     fontSize: 16,
     alignment: 'LEFT',
     size: {
@@ -100,59 +107,16 @@ const block = {
     },
   },
   config: {
-    sizeModifier: {
-      type: 'select',
-      name: 'Size modifier',
-      options: [
-        {label: 'Full width', value: 'FULLWIDTH'},
-        {label: 'Full height', value: 'FULLHEIGHT'},
-        {label: 'Full size', value: 'FULLSIZE'},
-      ],
-    },
-    alignment: {
-      type: 'select',
-      name: 'Alignment',
-      options: [
-        {label: 'Center', value: 'CENTER'},
-        {label: 'Left', value: 'LEFT'},
-        {label: 'Right', value: 'RIGHT'},
-        {label: 'Top', value: 'TOP'},
-        {label: 'Bottom', value: 'BOTTOM'},
-      ],
-    },
-    placeholder: {type: 'string', name: 'Placeholder'},
-    placeholderColor: {type: 'color', name: 'Placeholder color'},
-    text: {type: 'string', name: 'Text'},
-    textAlignment: {
-      type: 'select',
-      name: 'Text alignment',
-      options: [
-        {label: 'Center', value: 'CENTER'},
-        {label: 'Left', value: 'LEFT'},
-        {label: 'Right', value: 'RIGHT'},
-      ],
-    },
-    textColor: {type: 'color', name: 'Text color'},
-    backgroundColor: {type: 'color', name: 'Background color'},
-    fontSize: {type: 'number', name: 'Font size'},
-    size: {
-      height: {
-        type: 'units',
-        name: 'Height',
-        options: [
-          {label: 'px', value: 'px'},
-          {label: '%', value: '%'},
-        ],
-      },
-      width: {
-        type: 'units',
-        name: 'Width',
-        options: [
-          {label: 'px', value: 'px'},
-          {label: '%', value: '%'},
-        ],
-      },
-    },
+    sizeModifier,
+    alignment: alignmentConfig.both,
+    placeholder,
+    placeholderColor,
+    text,
+    textAlignment,
+    textColor,
+    backgroundColor,
+    fontSize,
+    size,
   },
   interactive: {
     field: {type: 'string', name: 'Field name'},

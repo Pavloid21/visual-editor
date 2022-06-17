@@ -16,7 +16,7 @@ export default function reducer(state = initialState, action: AnyAction) {
   switch (action.type) {
     case actionTypes.ERASE:
       return initialState;
-    case actionTypes.SET_ACTIONS:
+    case actionTypes.SET_ACTIONS: {
       const newSet: {[x: string]: any} = {};
       if (action.actions) {
         newSet.actions = action.actions;
@@ -28,6 +28,7 @@ export default function reducer(state = initialState, action: AnyAction) {
         ...state,
         ...newSet,
       };
+    }
     case actionTypes.SELECT_ACTION:
       return {
         ...state,
@@ -38,7 +39,7 @@ export default function reducer(state = initialState, action: AnyAction) {
         ...state,
         actions: [...state.actions, action.action],
       };
-    case actionTypes.DELETE_ACTION:
+    case actionTypes.DELETE_ACTION: {
       let removed: ActionItem[] = [];
       if (action.selected.type === 'action') {
         const actions = [...state.actions];
@@ -66,6 +67,7 @@ export default function reducer(state = initialState, action: AnyAction) {
         };
       }
       return state;
+    }
     default:
       return state;
   }

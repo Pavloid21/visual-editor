@@ -13,7 +13,7 @@ const DropdownIndicator = (props: DropdownIndicatorProps<IOption, false>) => {
   );
 };
 
-const WithLabel: StyledComponent<'section', any, {}, any> = styled(Container)`
+const WithLabel: StyledComponent<'section', any, Record<string, unknown>, any> = styled(Container)`
   margin-bottom: 0;
   svg {
     position: static;

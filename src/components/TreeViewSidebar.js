@@ -1,17 +1,17 @@
-import React from "react";
-import TreeMenu from "react-simple-tree-menu";
-import { useSelector, useDispatch } from "react-redux";
-import { observer } from "../utils/observer";
-import actionTypes from "../constants/actionTypes";
-import "../../node_modules/react-simple-tree-menu/dist/main.css";
+import React from 'react';
+import TreeMenu from 'react-simple-tree-menu';
+import {useSelector, useDispatch} from 'react-redux';
+import {observer} from 'utils/observer';
+import actionTypes from 'constants/actionTypes';
+import '../../node_modules/react-simple-tree-menu/dist/main.css';
 
 export default function TreeViewSidebar() {
   const layout = useSelector((state) => state.layout.blocks);
   const dispatch = useDispatch();
   const treeData = [
     {
-      key: "screen",
-      label: "screen",
+      key: 'screen',
+      label: 'screen',
       nodes: [],
     },
   ];
@@ -40,14 +40,14 @@ export default function TreeViewSidebar() {
   prepareJSON();
 
   const handleItemClick = (item) => {
-    const uuid = item.key.split("/").slice(-1)[0];
-    if (uuid === "screen") {
+    const uuid = item.key.split('/').slice(-1)[0];
+    if (uuid === 'screen') {
       dispatch({
         type: actionTypes.CHANGE_ACTIVE_TAB,
         index: 5,
       });
     } else {
-      observer.broadcast({ blockId: uuid, event: "click" });
+      observer.broadcast({blockId: uuid, event: 'click'});
     }
   };
 

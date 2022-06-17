@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {connect} from "react-redux";
-import documents from "../views/documents";
-import actionTypes from "../constants/actionTypes";
+import {connect} from 'react-redux';
+import documents from 'views/documents';
+import actionTypes from 'constants/actionTypes';
 
 class Settings extends Component {
   constructor(props) {
@@ -12,7 +12,7 @@ class Settings extends Component {
   }
 
   handleDocumentChange(documentId) {
-    console.log(documentId)
+    console.log(documentId);
     this.props.dispatch({
       type: actionTypes.CHANGE_DOCUMENT_ID,
       documentId
@@ -52,6 +52,6 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({ dispatch });
+const mapDispatchToProps = dispatch => ({dispatch});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Settings);

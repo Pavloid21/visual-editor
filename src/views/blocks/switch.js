@@ -1,7 +1,8 @@
-import React from "react";
-import styled from "styled-components";
-import switch_ic from "../../assets/switch.svg";
-import Wrapper from "../../utils/wrapper";
+import React from 'react';
+import styled from 'styled-components';
+import switch_ic from 'assets/switch.svg';
+import Wrapper from 'utils/wrapper';
+import {backgroundColor, checked, thumbOnColor} from 'views/configs';
 
 const Switch = styled.div`
   font-size: 16px;
@@ -34,7 +35,6 @@ const Switch = styled.div`
     outline: none;
     opacity: 0;
     transform: scale(1);
-    pointer-events: none;
     transition: opacity 0.3s 0.1s, transform 0.2s 0.1s;
     &:checked {
       right: -10px;
@@ -75,7 +75,7 @@ const Switch = styled.div`
   }
 `;
 
-const Component = ({ settingsUI, ...props }) => {
+const Component = ({settingsUI, ...props}) => {
   return (
     <Wrapper id={props.id}>
       <Switch {...props} {...settingsUI} className="draggable">
@@ -88,19 +88,19 @@ const Component = ({ settingsUI, ...props }) => {
 
 const block = {
   Component,
-  name: "SWITCH",
-  title: "Switches",
-  description: "A control that toggles between on and off states.",
+  name: 'SWITCH',
+  title: 'Switches',
+  description: 'A control that toggles between on and off states.',
   previewImageUrl: switch_ic,
-  category: "Controls",
+  category: 'Controls',
   defaultData: {
-    backgroundColor: "#FDB291",
-    thumbOnColor: "#FA6621",
+    backgroundColor: '#FDB291',
+    thumbOnColor: '#FA6621',
   },
   config: {
-    backgroundColor: { type: "color", name: "Background color" },
-    thumbOnColor: { type: "color", name: "Thumb on color" },
-    checked: { type: "boolean", name: "Checked" },
+    backgroundColor,
+    thumbOnColor,
+    checked,
   },
 };
 

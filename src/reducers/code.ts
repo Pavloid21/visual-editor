@@ -1,7 +1,7 @@
-import { AnyAction } from "redux";
-import actionTypes from "../constants/actionTypes";
+import {AnyAction} from 'redux';
+import actionTypes from '../constants/actionTypes';
 
-const initialState = "";
+const initialState = '';
 
 export default function reducer(state = initialState, action: AnyAction) {
   switch (action.type) {

@@ -1,18 +1,22 @@
 import React from 'react';
 import {useDrop} from 'react-dnd';
-import {ItemTypes} from '../../constants/actionTypes';
-import renderHandlebars from '../../utils/renderHandlebars';
 import styled from 'styled-components';
-import {sortableContainer} from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
-import {observer} from '../../utils/observer';
-import {useSelector} from 'react-redux';
-import {useDispatch} from 'react-redux';
-import actionTypes from '../../constants/actionTypes';
-import card from '../../assets/card.svg';
-import Wrapper from '../../utils/wrapper';
-import {hexToRgb} from '../../constants/utils';
+import {sortableContainer} from 'react-sortable-hoc';
+import {useSelector, useDispatch} from 'react-redux';
+import Wrapper from 'utils/wrapper';
+import {observer} from 'utils/observer';
 import {onSortMove} from 'utils/hooks';
+import renderHandlebars from 'utils/renderHandlebars';
+import {hexToRgb} from 'constants/utils';
+import actionTypes, {ItemTypes} from 'constants/actionTypes';
+import card from 'assets/card.svg';
+import {
+  alignmentConfig, backgroundColor, corners, elevation, interactive,
+  padding, shadowConfigBuilder,
+  shapeConfigBuilder,
+  sizeModifier,
+} from 'views/configs';
 
 const Card = styled.div`
   align-self: ${(props) => {
@@ -22,17 +26,13 @@ const Card = styled.div`
       case 'RIGHT':
         return 'flex-end';
       default:
-        return 'center';
+        return 'stretch';
     }
   }};
   margin: ${(props) => {
     switch (props.alignment) {
       case 'CENTER':
         return 'auto';
-      case 'TOP':
-        return '0 auto auto auto';
-      case 'BOTTOM':
-        return 'auto auto 0 auto';
       case 'LEFT':
         return 'auto auto auto 0';
       case 'RIGHT':
@@ -151,7 +151,6 @@ const block = {
   defaultData: {
     elevation: 3,
     sizeModifier: 'FULLWIDTH',
-    alignment: 'CENTER',
     backgroundColor: '#C6C6C6',
     spacing: 16,
     padding: {
@@ -184,82 +183,17 @@ const block = {
   },
   listItems: [],
   config: {
-    elevation: {type: 'number', name: 'Elevation'},
-    sizeModifier: {
-      type: 'select',
-      name: 'Size modifier',
-      options: [
-        {label: 'Full width', value: 'FULLWIDTH'},
-        {label: 'Full height', value: 'FULLHEIGHT'},
-        {label: 'Full size', value: 'FULLSIZE'},
-      ],
-    },
-    alignment: {
-      type: 'select',
-      name: 'Alignment',
-      options: [
-        {label: 'Center', value: 'CENTER'},
-        {label: 'Left', value: 'LEFT'},
-        {label: 'Right', value: 'RIGHT'},
-        {label: 'Top', value: 'TOP'},
-        {label: 'Bottom', value: 'BOTTOM'},
-      ],
-    },
-    backgroundColor: {type: 'color', name: 'Background color'},
-    shape: {
-      type: {
-        type: 'select',
-        name: 'Shape type',
-        options: [{label: 'All corners round', value: 'ALLCORNERSROUND'}],
-      },
-      radius: {type: 'number', name: 'Radius'},
-    },
-    corners: {
-      topLeftRadius: {type: 'number', name: 'Top left radius'},
-      topRightRadius: {type: 'number', name: 'Top right radius'},
-      bottomLeftRadius: {type: 'number', name: 'Bottom left radius'},
-      bottomRightRadius: {type: 'number', name: 'Bottom right radius'},
-    },
-    shadow: {
-      color: {type: 'color', name: 'Shadow color'},
-      opacity: {type: 'number', name: 'Opacity'},
-      offsetSize: {
-        height: {
-          type: 'units',
-          name: 'Height',
-          options: [
-            {label: 'px', value: 'px'},
-            {label: '%', value: '%'},
-          ],
-        },
-        width: {
-          type: 'units',
-          name: 'Width',
-          options: [
-            {label: 'px', value: 'px'},
-            {label: '%', value: '%'},
-          ],
-        },
-      },
-    },
-    padding: {
-      top: {
-        type: 'number',
-        name: 'Top',
-      },
-      bottom: {
-        type: 'number',
-        name: 'Bottom',
-      },
-      left: {
-        type: 'number',
-        name: 'Left',
-      },
-      right: {
-        type: 'number',
-        name: 'Right',
-      },
-    },
+    elevation,
+    sizeModifier,
+    alignment: alignmentConfig.horizontally,
+    backgroundColor,
+    shape: shapeConfigBuilder()
+      .withAllCornersRound
+      .withRadius
+      .done(),
+    corners,
+    shadow: shadowConfigBuilder().done(),
+    padding,
     size: {
       height: {
         type: 'units',
@@ -271,16 +205,7 @@ const block = {
       },
     },
   },
-  interactive: {
-    action: {
-      url: {
-        type: 'string',
-        name: 'Action URL',
-      },
-      target: {type: 'string', name: 'Target'},
-      fields: {type: 'array', name: 'Fields set'},
-    },
-  },
+  interactive,
 };
 
 export default block;

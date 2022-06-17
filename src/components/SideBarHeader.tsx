@@ -32,7 +32,7 @@ const Header = styled.div`
 const Subheader = styled.div`
   height: 44px;
   border-bottom: 1px solid #e6e6e6;
-  padding: 0px 16px;
+  padding: 0 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -209,7 +209,7 @@ const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
                 redirect();
               }}
             >
-              Don't save
+              Don&#39;t save
             </Button>
             <Button className="secondary" onClick={() => toggleWarning()}>
               Cancel

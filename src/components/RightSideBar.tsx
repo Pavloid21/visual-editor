@@ -1,18 +1,18 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
 import SideBarHeader from './SideBarHeader';
-import Inspector from '../containers/Inspector';
-import Screen from '../containers/Screen';
-import {Button} from './controls';
-import actionTypes from '../constants/actionTypes';
-import ActionForm from '../containers/ActionForm';
+import Inspector from 'containers/Inspector';
+import Screen from 'containers/Screen';
+import {Button, Input} from './controls';
+import actionTypes from 'constants/actionTypes';
+import ActionForm from 'containers/ActionForm';
 import {useSelector, useDispatch} from 'react-redux';
-import {ReactComponent as Plus} from '../assets/plus.svg';
-import {ReactComponent as Remove} from '../assets/trash.svg';
-import {ReactComponent as Pencil} from '../assets/pencil.svg';
-import {Input} from './controls';
+import {ReactComponent as Plus} from 'assets/plus.svg';
+import {ReactComponent as Remove} from 'assets/trash.svg';
+import {ReactComponent as Pencil} from 'assets/pencil.svg';
 import {useForm, useFieldArray, Controller} from 'react-hook-form';
 import {Store} from 'reducers/types';
+import {noop} from 'external/lodash';
 
 const Container = styled.div`
   min-width: 422px;
@@ -156,7 +156,7 @@ const RightSidebar: React.FC<any> = ({children, ...props}) => {
         <Inspector display />
         {selectedAction && !selectedBlock && <ActionForm action={selectedAction} />}
         {activeTab === 5 && selectedScreen && (
-          <Screen category="screen" display={activeTab === 5} onPushBlock={() => {}} onPushBlockInside={() => {}} />
+          <Screen category="screen" display={activeTab === 5} onPushBlock={noop} onPushBlockInside={noop} />
         )}
         {!selectedBlock && !selectedAction && activeTab !== 5 && (
           <APIContainer>
@@ -202,7 +202,7 @@ const RightSidebar: React.FC<any> = ({children, ...props}) => {
                     />
                     <Remove
                       className="icon"
-                      onClick={(e) => {
+                      onClick={() => {
                         remove(index);
                       }}
                     />
@@ -230,7 +230,7 @@ const RightSidebar: React.FC<any> = ({children, ...props}) => {
                     />
                     <Remove
                       className="icon"
-                      onClick={(e) => {
+                      onClick={() => {
                         paramsFieldsArray.remove(index);
                       }}
                     />
@@ -250,7 +250,7 @@ const RightSidebar: React.FC<any> = ({children, ...props}) => {
                     <Pencil className="icon" onClick={() => handleItemClick(index)} />
                     <Remove
                       className="icon"
-                      onClick={(e) => {
+                      onClick={() => {
                         dispatch({
                           type: actionTypes.REMOVE_API_ITEM,
                           index,

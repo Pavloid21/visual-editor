@@ -8,7 +8,7 @@ const hbs = `
 
 const document = {
   hbs,
-  name: "Basic document",
+  name: 'Basic document',
 };
 
 export default document;

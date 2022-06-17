@@ -13,14 +13,16 @@ export default function reducer(state = initialState, action: AnyAction) {
         ...state,
         list: [...state.list, action.api],
       };
-    case actionTypes.REMOVE_API_ITEM:
+    case actionTypes.REMOVE_API_ITEM: {
       const newItems = [...state.list];
       newItems.splice(action.index, 1);
       return {...state, list: newItems};
-    case actionTypes.EDIT_API:
-      let items = state.list;
+    }
+    case actionTypes.EDIT_API: {
+      const items = state.list;
       items[action.index] = {...action.api};
       return {...state, list: items};
+    }
     default:
       return state;
   }

@@ -1,4 +1,4 @@
-import { iNotification } from "react-notifications-component";
+import {iNotification} from 'react-notifications-component';
 
 const successNotification: iNotification = {
   type: 'success',

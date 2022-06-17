@@ -1,8 +1,8 @@
 import React, {Dispatch, useState, useRef, useEffect} from 'react';
-import { SortEvent, SortEventWithTag } from 'react-sortable-hoc';
+import {SortEvent, SortEventWithTag} from 'react-sortable-hoc';
 
 export const useModal = (
-  initialMode: boolean = false
+  initialMode = false
 ): [modalOpen: boolean, setModalOpen: Dispatch<React.SetStateAction<boolean>>, toggle: () => void] => {
   const [modalOpen, setModalOpen] = useState(initialMode);
   const toggle = () => setModalOpen(!modalOpen);

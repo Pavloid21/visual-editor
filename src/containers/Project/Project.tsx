@@ -77,7 +77,6 @@ export const Project: React.FC<any> = () => {
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal();
   const formRef = React.createRef<HTMLFormElement>();
   const {
-    setValue,
     getValues,
     resetField,
     handleSubmit,
@@ -152,7 +151,7 @@ export const Project: React.FC<any> = () => {
                 {title: 'My Projects', key: 'own', uuid: v4()},
                 {title: 'Team Projects', key: 'team', uuid: v4()},
               ]}
-              onChange={function (button: string): void {
+              onChange={function (): void {
                 throw new Error('Function not implemented.');
               }}
               value={'own'}

@@ -1,7 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import divider from '../../assets/divider.svg';
-import Wrapper from '../../utils/wrapper';
+import Wrapper from 'utils/wrapper';
+import divider from 'assets/divider.svg';
+import {
+  alignmentConfig,
+  backgroundColor,
+  sizeModifier,
+} from 'views/configs';
 
 const HR = styled.hr`
   align-self: ${(props) => {
@@ -50,32 +55,13 @@ const block = {
   previewImageUrl: divider,
   category: 'Element',
   defaultData: {
-    alignment: 'CENTER',
     sizeModifier: 'FULLWIDTH',
     backgroundColor: '#000000',
   },
   config: {
-    sizeModifier: {
-      type: 'select',
-      name: 'Size modifier',
-      options: [
-        {label: 'Full width', value: 'FULLWIDTH'},
-        {label: 'Full height', value: 'FULLHEIGHT'},
-        {label: 'Full size', value: 'FULLSIZE'},
-      ],
-    },
-    alignment: {
-      type: 'select',
-      name: 'Alignment',
-      options: [
-        {label: 'Center', value: 'CENTER'},
-        {label: 'Left', value: 'LEFT'},
-        {label: 'Right', value: 'RIGHT'},
-        {label: 'Top', value: 'TOP'},
-        {label: 'Bottom', value: 'BOTTOM'},
-      ],
-    },
-    backgroundColor: {type: 'color', name: 'Color'},
+    sizeModifier,
+    alignment: alignmentConfig.both,
+    backgroundColor,
   },
 };
 

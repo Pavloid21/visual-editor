@@ -1,21 +1,33 @@
 import React from 'react';
 import {useDrop} from 'react-dnd';
-import {ItemTypes} from '../../constants/actionTypes';
-import renderHandlebars from '../../utils/renderHandlebars';
 import styled from 'styled-components';
-import {observer} from '../../utils/observer';
 import {sortableContainer} from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
-import {useSelector} from 'react-redux';
-import {useDispatch} from 'react-redux';
-import actionTypes from '../../constants/actionTypes';
-import vstack from '../../assets/vstack.svg';
-import Wrapper from '../../utils/wrapper';
+import {useDispatch, useSelector} from 'react-redux';
+import {isNil} from 'external/lodash';
+import Wrapper from 'utils/wrapper';
 import {onSortMove} from 'utils/hooks';
+import {observer} from 'utils/observer';
+import renderHandlebars from 'utils/renderHandlebars';
+import {hexToRgb} from 'constants/utils';
+import actionTypes, {ItemTypes} from 'constants/actionTypes';
+import vstack from 'assets/vstack.svg';
+import {
+  alignmentConfig,
+  backgroundColor,
+  corners,
+  distribution,
+  scroll,
+  sizeModifier,
+  spacing,
+  padding,
+  size,
+  shadowConfigBuilder,
+} from 'views/configs';
 
 const VStack = styled.div`
-  align-self: ${(props) => {
-    switch (props.alignment) {
+  align-self: ${({alignment}) => {
+    switch (alignment) {
       case 'LEFT':
         return 'flex-start';
       case 'RIGHT':
@@ -24,14 +36,10 @@ const VStack = styled.div`
         return 'center';
     }
   }};
-  margin: ${(props) => {
-    switch (props.alignment) {
+  margin: ${({alignment}) => {
+    switch (alignment) {
       case 'CENTER':
         return 'auto';
-      case 'TOP':
-        return '0 auto auto auto';
-      case 'BOTTOM':
-        return 'auto auto 0 auto';
       case 'LEFT':
         return 'auto auto auto 0';
       case 'RIGHT':
@@ -40,18 +48,35 @@ const VStack = styled.div`
         return '0 0';
     }
   }};
-  width: ${(props) =>
-    ['FULLWIDTH', 'FULLSIZE'].includes(props.sizeModifier) ? '100%' : 'fit-content'};
-  height: ${(props) => (['FULLHEIGHT', 'FULLSIZE'].includes(props.sizeModifier) ? '100%' : 'fit-content')};
+  width: ${(props) => {
+    if (['FULLWIDTH', 'FULLSIZE'].includes(props.sizeModifier)) {
+      return '100%';
+    } else if (!isNil(props.size?.width)) {
+      return props.size.width + 'px';
+    } else if (!isNil(props.size?.widthInPercent)) {
+      return props.size.widthInPercent + '%';
+    }
+    return 'fit-content';
+  }};
+  height: ${(props) => {
+    if (['FULLHEIGHT', 'FULLSIZE'].includes(props.sizeModifier)) {
+      return '100%';
+    } else if (!isNil(props.size?.height)) {
+      return props.size.height + 'px';
+    } else if (!isNil(props.size?.heightInPercent)) {
+      return props.size.heightInPercent + '%';
+    }
+    return 'fit-content';
+  }};
   background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
   display: flex;
-  justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
+  justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : 'normal')};
   align-items: ${(props) => {
     switch (props.alignment) {
       case 'LEFT':
         return 'flex-start';
       case 'RIGHT':
-        return 'flex-start';
+        return 'flex-end';
       default:
         return 'center';
     }
@@ -69,6 +94,15 @@ const VStack = styled.div`
     ${props.corners?.bottomRightRadius || 0}px
     ${props.corners?.bottomLeftRadius || 0}px 
   `};
+  ${(props) => {
+    if (props.shadow) {
+      return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${
+              props.shadow?.radius
+      }px rgba(${hexToRgb(props.shadow?.color).r}, ${hexToRgb(props.shadow?.color).g}, ${
+              hexToRgb(props.shadow?.color).b
+      }, ${props.shadow?.opacity});`;
+    }
+  }}
 `;
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, settingsUI, ...props}) => {
@@ -168,7 +202,6 @@ const block = {
   ],
   defaultData: {
     sizeModifier: 'FULLSIZE',
-    alignment: 'CENTER',
     backgroundColor: '#C6C6C6',
     distribution: '',
     spacing: 0,
@@ -185,80 +218,28 @@ const block = {
       bottomLeftRadius: 0,
       bottomRightRadius: 0,
     },
+    shadow: {
+      color: '#000000',
+      opacity: 0,
+      offsetSize: {
+        width: 0,
+        height: 0,
+      },
+      radius: 8,
+    },
   },
   listItems: [],
   config: {
-    sizeModifier: {
-      type: 'select',
-      name: 'Size modifier',
-      options: [
-        {label: 'Full width', value: 'FULLWIDTH'},
-        {label: 'Full height', value: 'FULLHEIGHT'},
-        {label: 'Full size', value: 'FULLSIZE'},
-      ],
-    },
-    alignment: {
-      type: 'select',
-      name: 'Alignment',
-      options: [
-        {label: 'Center', value: 'CENTER'},
-        {label: 'Left', value: 'LEFT'},
-        {label: 'Right', value: 'RIGHT'},
-        {label: 'Top', value: 'TOP'},
-        {label: 'Bottom', value: 'BOTTOM'},
-      ],
-    },
-    backgroundColor: {type: 'color', name: 'Background color'},
-    distribution: {
-      type: 'select',
-      name: 'Distribution',
-      options: [{label: 'Space between', value: 'SPACEBETWEEN'}],
-    },
-    spacing: {type: 'number', name: 'Spacing'},
-    scroll: {
-      type: 'select',
-      name: 'Scroll',
-      options: [
-        {label: 'Enable scroll', value: true},
-        {label: 'Disable scroll', value: false},
-      ],
-    },
-    padding: {
-      top: {
-        type: 'number',
-        name: 'Top',
-      },
-      bottom: {
-        type: 'number',
-        name: 'Bottom',
-      },
-      left: {
-        type: 'number',
-        name: 'Left',
-      },
-      right: {
-        type: 'number',
-        name: 'Right',
-      },
-    },
-    corners: {
-      topLeftRadius: {
-        type: 'number',
-        name: 'Top left radius',
-      },
-      topRightRadius: {
-        type: 'number',
-        name: 'Top right radius',
-      },
-      bottomLeftRadius: {
-        type: 'number',
-        name: 'Bottom left radius',
-      },
-      bottomRightRadius: {
-        type: 'number',
-        name: 'Bottom right radius',
-      },
-    },
+    sizeModifier,
+    alignment: alignmentConfig.horizontally,
+    backgroundColor,
+    distribution,
+    spacing,
+    scroll,
+    size,
+    padding,
+    shadow: shadowConfigBuilder().withRadius.done(),
+    corners,
   },
 };
 

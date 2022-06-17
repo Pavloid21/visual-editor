@@ -1,17 +1,21 @@
 import React from 'react';
 import {useDrop} from 'react-dnd';
-import {ItemTypes} from '../../constants/actionTypes';
-import renderHandlebars from '../../utils/renderHandlebars';
 import styled from 'styled-components';
-import {observer} from '../../utils/observer';
-import {sortableContainer} from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
-import {useSelector} from 'react-redux';
-import {useDispatch} from 'react-redux';
-import actionTypes from '../../constants/actionTypes';
-import screen from '../../assets/screen.svg';
-import Wrapper from '../../utils/wrapper';
+import {sortableContainer} from 'react-sortable-hoc';
+import {useDispatch, useSelector} from 'react-redux';
+import Wrapper from 'utils/wrapper';
 import {onSortMove} from 'utils/hooks';
+import {observer} from 'utils/observer';
+import renderHandlebars from 'utils/renderHandlebars';
+import actionTypes, {ItemTypes} from 'constants/actionTypes';
+import screen from 'assets/screen.svg';
+import {
+  alignmentConfig,
+  backgroundColor,
+  sizeModifier,
+  spacing
+} from 'views/configs';
 
 const VStack = styled.div`
   align-self: ${(props) => {
@@ -162,35 +166,16 @@ const block = {
   previewImageUrl: screen,
   category: 'Container',
   defaultData: {
-    alignment: 'CENTER',
     backgroundColor: '#C6C6C6',
     wrapContent: '',
     spacing: 0,
   },
   listItems: [],
   config: {
-    sizeModifier: {
-      type: 'select',
-      name: 'Size modifier',
-      options: [
-        {label: 'Full width', value: 'FULLWIDTH'},
-        {label: 'Full height', value: 'FULLHEIGHT'},
-        {label: 'Full size', value: 'FULLSIZE'},
-      ],
-    },
-    alignment: {
-      type: 'select',
-      name: 'Alignment',
-      options: [
-        {label: 'Center', value: 'CENTER'},
-        {label: 'Left', value: 'LEFT'},
-        {label: 'Right', value: 'RIGHT'},
-        {label: 'Top', value: 'TOP'},
-        {label: 'Bottom', value: 'BOTTOM'},
-      ],
-    },
-    backgroundColor: {type: 'color', name: 'Background color'},
-    spacing: {type: 'number', name: 'Spacing'},
+    sizeModifier,
+    alignment: alignmentConfig.both,
+    backgroundColor,
+    spacing,
   },
 };
 

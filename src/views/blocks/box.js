@@ -1,18 +1,24 @@
 import React from 'react';
 import {useDrop} from 'react-dnd';
-import {ItemTypes} from '../../constants/actionTypes';
-import renderHandlebars from '../../utils/renderHandlebars';
 import styled from 'styled-components';
-import {observer} from '../../utils/observer';
-import {sortableContainer} from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
-import {useSelector} from 'react-redux';
-import {useDispatch} from 'react-redux';
-import actionTypes from '../../constants/actionTypes';
-import box from '../../assets/box.svg';
-import Wrapper from '../../utils/wrapper';
+import {sortableContainer} from 'react-sortable-hoc';
+import {useSelector, useDispatch} from 'react-redux';
+import Wrapper from 'utils/wrapper';
 import {onSortMove} from 'utils/hooks';
+import {observer} from 'utils/observer';
+import renderHandlebars from 'utils/renderHandlebars';
 import {hexToRgb} from 'constants/utils';
+import actionTypes, {ItemTypes} from 'constants/actionTypes';
+import box from 'assets/box.svg';
+import {
+  backgroundColor,
+  borderColor,
+  borderWidth,
+  shadowConfigBuilder,
+  shapeConfigBuilder,
+  size
+} from 'views/configs';
 
 const Box = styled.div`
   border: ${(props) => `${props.borderWidth}px solid ${props.borderColor}`};
@@ -125,57 +131,15 @@ const block = {
   },
   listItems: [],
   config: {
-    borderColor: {type: 'color', name: 'Border color'},
-    borderWidth: {type: 'number', name: 'Border width'},
-    backgroundColor: {type: 'color', name: 'Background color'},
-    size: {
-      height: {
-        type: 'units',
-        name: 'Height',
-        options: [
-          {label: 'px', value: 'px'},
-          {label: '%', value: '%'},
-        ],
-      },
-      width: {
-        type: 'units',
-        name: 'Width',
-        options: [
-          {label: 'px', value: 'px'},
-          {label: '%', value: '%'},
-        ],
-      },
-    },
-    shape: {
-      type: {
-        type: 'select',
-        name: 'Shape type',
-        options: [{label: 'All corners round', value: 'ALLCORNERSROUND'}],
-      },
-      radius: {type: 'number', name: 'Shape radius'},
-    },
-    shadow: {
-      color: {type: 'color', name: 'Shadow color'},
-      opacity: {type: 'number', name: 'Opacity'},
-      offsetSize: {
-        height: {
-          type: 'units',
-          name: 'Height',
-          options: [
-            {label: 'px', value: 'px'},
-            {label: '%', value: '%'},
-          ],
-        },
-        width: {
-          type: 'units',
-          name: 'Width',
-          options: [
-            {label: 'px', value: 'px'},
-            {label: '%', value: '%'},
-          ],
-        },
-      },
-    },
+    borderColor,
+    borderWidth,
+    backgroundColor,
+    size,
+    shape: shapeConfigBuilder()
+      .withAllCornersRound
+      .withRadius
+      .done(),
+    shadow: shadowConfigBuilder().done(),
   },
 };
 

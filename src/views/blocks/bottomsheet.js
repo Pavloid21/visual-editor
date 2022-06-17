@@ -1,17 +1,16 @@
 import React from 'react';
 import {useDrop} from 'react-dnd';
-import {ItemTypes} from '../../constants/actionTypes';
-import renderHandlebars from '../../utils/renderHandlebars';
 import styled from 'styled-components';
-import {observer} from '../../utils/observer';
 import {sortableContainer} from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
-import {useSelector} from 'react-redux';
-import {useDispatch} from 'react-redux';
-import actionTypes from '../../constants/actionTypes';
-import bottomsheet from '../../assets/bottomsheet.svg';
-import Wrapper from '../../utils/wrapper';
-import { onSortMove } from 'utils/hooks';
+import {useDispatch, useSelector} from 'react-redux';
+import actionTypes, {ItemTypes} from 'constants/actionTypes';
+import renderHandlebars from 'utils/renderHandlebars';
+import {observer} from 'utils/observer';
+import bottomsheet from 'assets/bottomsheet.svg';
+import Wrapper from 'utils/wrapper';
+import {onSortMove} from 'utils/hooks';
+import {backgroundColor, shapeConfigBuilder} from 'views/configs';
 
 const BottomSheet = styled.div`
   margin-top: auto;
@@ -118,7 +117,7 @@ const block = {
   },
   listItems: [],
   config: {
-    backgroundColor: {type: 'color', name: 'Background color'},
+    backgroundColor,
     bottomSheetState: {
       type: 'select',
       name: 'Bottom sheet state',
@@ -128,20 +127,11 @@ const block = {
       ],
     },
     bottomSheetCollapsePercent: {type: 'number', name: 'Bottom sheet collapse percent'},
-    shape: {
-      type: {
-        type: 'select',
-        name: 'Shape type',
-        options: [
-          {label: 'All corners round', value: 'ALLCORNERSROUND'},
-          {label: 'Top corners round', value: 'TOPCORNERSROUND'},
-        ],
-      },
-      radius: {
-        type: 'number',
-        name: 'Radius',
-      },
-    },
+    shape: shapeConfigBuilder()
+      .withAllCornersRound
+      .withTopCornersRound
+      .withRadius
+      .done(),
     size: {
       heightInPercent: {
         type: 'number',

@@ -1,8 +1,15 @@
-import {hexToRgb} from 'constants/utils';
 import React from 'react';
 import styled from 'styled-components';
-import image from '../../assets/image.svg';
-import Wrapper from '../../utils/wrapper';
+import {hexToRgb} from 'constants/utils';
+import Wrapper from 'utils/wrapper';
+import image from 'assets/image.svg';
+import {
+  alignmentConfig, backgroundColor,
+  borderColor, borderWidth,
+  imageUrl, shadowConfigBuilder,
+  shapeConfigBuilder,
+  size, sizeModifier,
+} from 'views/configs';
 
 const Image = styled.img`
   display: flex;
@@ -84,7 +91,6 @@ const block = {
   category: 'Controls',
   defaultData: {
     sizeModifier: 'FULLWIDTH',
-    alignment: 'CENTER',
     backgroundColor: '#FFFFFF',
     borderWidth: 0,
     borderColor: '#000000',
@@ -109,78 +115,18 @@ const block = {
     },
   },
   config: {
-    sizeModifier: {
-      type: 'select',
-      name: 'Size modifier',
-      options: [
-        {label: 'Full width', value: 'FULLWIDTH'},
-        {label: 'Full height', value: 'FULLHEIGHT'},
-        {label: 'Full size', value: 'FULLSIZE'},
-      ],
-    },
-    alignment: {
-      type: 'select',
-      name: 'Alignment',
-      options: [
-        {label: 'Center', value: 'CENTER'},
-        {label: 'Left', value: 'LEFT'},
-        {label: 'Right', value: 'RIGHT'},
-        {label: 'Top', value: 'TOP'},
-        {label: 'Bottom', value: 'BOTTOM'},
-      ],
-    },
-    imageUrl: {type: 'string', name: 'Image URL'},
-    backgroundColor: {type: 'color', name: 'Background color'},
-    borderWidth: {type: 'number', name: 'Border width'},
-    borderColor: {type: 'color', name: 'Border color'},
-    size: {
-      height: {
-        type: 'units',
-        name: 'Height',
-        options: [
-          {label: 'px', value: 'px'},
-          {label: '%', value: '%'},
-        ],
-      },
-      width: {
-        type: 'units',
-        name: 'Width',
-        options: [
-          {label: 'px', value: 'px'},
-          {label: '%', value: '%'},
-        ],
-      },
-    },
-    shape: {
-      type: {
-        type: 'select',
-        name: 'Shape type',
-        options: [{label: 'All corners round', value: 'ALLCORNERSROUND'}],
-      },
-      radius: {type: 'number', name: 'Shape radius'},
-    },
-    shadow: {
-      color: {type: 'color', name: 'Shadow color'},
-      opacity: {type: 'number', name: 'Opacity'},
-      offsetSize: {
-        height: {
-          type: 'units',
-          name: 'Height',
-          options: [
-            {label: 'px', value: 'px'},
-            {label: '%', value: '%'},
-          ],
-        },
-        width: {
-          type: 'units',
-          name: 'Width',
-          options: [
-            {label: 'px', value: 'px'},
-            {label: '%', value: '%'},
-          ],
-        },
-      },
-    },
+    sizeModifier,
+    alignment: alignmentConfig.both,
+    imageUrl,
+    backgroundColor,
+    borderWidth,
+    borderColor,
+    size,
+    shape: shapeConfigBuilder()
+      .withRadius
+      .withAllCornersRound
+      .done(),
+    shadow: shadowConfigBuilder().done()
   },
 };
 

@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';

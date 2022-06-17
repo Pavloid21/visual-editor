@@ -42,7 +42,7 @@ export const callApi = async (
 };
 
 export const getProjectsList = async () => {
-  const url = API.defaults.baseURL + `projects`;
+  const url = API.defaults.baseURL + 'projects';
   return await callApi(url, null, 'GET');
 };
 
@@ -56,7 +56,7 @@ export const getScreenesList = async (projectId: string) => {
   return await callApi(url, null, 'GET');
 };
 
-export const getScreenByName = async (projectId: string, screenName: string, parsed: boolean = false) => {
+export const getScreenByName = async (projectId: string, screenName: string, parsed: boolean) => {
   const url = API.defaults.baseURL + `projects/${projectId}/admin/screens/${screenName}${parsed ? '?view=parsed' : ''}`;
   return await callApi(url, null, 'GET');
 };
@@ -106,14 +106,14 @@ export const deleteAction = async (projectId: string, actionType: string, endpoi
 };
 
 export const createProject = async (payload: string) => {
-  const url = API.defaults.baseURL + `projects/`;
+  const url = API.defaults.baseURL + 'projects/';
   return await callApi(url, payload, 'POST', undefined, undefined, {
     'Content-Type': 'application/json',
   });
 };
 
 export const editProject = async (projectId: string, payload: string) => {
-  const url = API.defaults.baseURL + `projects/` + projectId;
+  const url = API.defaults.baseURL + 'projects/' + projectId;
   return await callApi(url, payload, 'PUT', undefined, undefined, {
     'Content-Type': 'application/json',
   });

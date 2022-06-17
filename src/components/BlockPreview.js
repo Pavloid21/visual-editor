@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {useDrag} from 'react-dnd';
-import {ItemTypes} from '../constants/actionTypes';
+import actionTypes, {ItemTypes} from 'constants/actionTypes';
 import {useDispatch} from 'react-redux';
-import actionTypes from '../constants/actionTypes';
 import styled from 'styled-components';
 
 const Container = styled.div`

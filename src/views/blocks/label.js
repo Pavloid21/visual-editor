@@ -1,7 +1,16 @@
 import React from 'react';
 import styledComponents from 'styled-components';
-import label from '../../assets/label.svg';
-import Wrapper from '../../utils/wrapper';
+import label from 'assets/label.svg';
+import Wrapper from 'utils/wrapper';
+import {hexToRgb} from 'constants/utils';
+import {
+  alignmentConfig, backgroundColor, fontSize,
+  fontWeight,
+  padding,
+  shadowConfigBuilder,
+  shapeConfigBuilder, size, sizeModifier, text,
+  textAlignment, textColor,
+} from 'views/configs';
 
 const Label = styledComponents.div`
   box-sizing: border-box;
@@ -33,6 +42,21 @@ const Label = styledComponents.div`
         return '0 0';
     }
   }};
+  ${({shape}) => {
+    if (shape?.type === 'ALLCORNERSROUND') {
+      return `border-radius: ${shape.radius}px;`;
+    }
+  }}
+  overflow: hidden;
+  ${({shadow}) => {
+    if (shadow) {
+      return `box-shadow: ${shadow?.offsetSize?.width}px ${shadow?.offsetSize?.height}px ${
+        shadow?.radius || 0
+      }px rgba(${hexToRgb(shadow?.color).r}, ${hexToRgb(shadow?.color).g}, ${
+        hexToRgb(shadow?.color).b
+      }, ${shadow?.opacity});`;
+    }
+  }}
   & > span {
     display: block;
     width: ${(props) => {
@@ -106,12 +130,14 @@ const block = {
   category: 'Element',
   defaultData: {
     sizeModifier: 'FULLWIDTH',
-    alignment: 'CENTER',
     text: 'Вход',
-    textAlignment: 'CENTER',
     backgroundColor: '#FFFFFF',
     textColor: '#000000',
     fontSize: 24,
+    shape: {
+      type: 'ALLCORNERSROUND',
+      radius: '0',
+    },
     size: {
       width: 100,
       height: 48,
@@ -123,92 +149,34 @@ const block = {
       right: 0,
     },
     fontWeight: 'REGULAR',
+    shadow: {
+      color: '#000000',
+      opacity: 0.3,
+      offsetSize: {
+        width: 0,
+        height: 0,
+      },
+      radius: 8,
+    },
   },
   config: {
-    sizeModifier: {
-      type: 'select',
-      name: 'Size modifier',
-      options: [
-        {label: 'Full width', value: 'FULLWIDTH'},
-        {label: 'Full height', value: 'FULLHEIGHT'},
-        {label: 'Full size', value: 'FULLSIZE'},
-      ],
-    },
-    alignment: {
-      type: 'select',
-      name: 'Alignment',
-      options: [
-        {label: 'Center', value: 'CENTER'},
-        {label: 'Left', value: 'LEFT'},
-        {label: 'Right', value: 'RIGHT'},
-        {label: 'Top', value: 'TOP'},
-        {label: 'Bottom', value: 'BOTTOM'},
-      ],
-    },
-    text: {type: 'string', name: 'Text'},
-    textAlignment: {
-      type: 'select',
-      name: 'Text alignment',
-      options: [
-        {label: 'Center', value: 'CENTER'},
-        {label: 'Left', value: 'LEFT'},
-        {label: 'Right', value: 'RIGHT'},
-      ],
-    },
-    backgroundColor: {type: 'color', name: 'Background color'},
-    textColor: {type: 'color', name: 'Text color'},
-    fontSize: {type: 'number', name: 'Font size'},
-    fontWeight: {
-      type: 'select',
-      name: 'Font weight',
-      options: [
-        {label: 'Ultralight', value: 'ULTRALIGHT'},
-        {label: 'Thin', value: 'THIN'},
-        {label: 'Light', value: 'LIGHT'},
-        {label: 'Regular', value: 'REGULAR'},
-        {label: 'Medium', value: 'MEDIUM'},
-        {label: 'Semibold', value: 'SEMIBOLD'},
-        {label: 'Bold', value: 'BOLD'},
-        {label: 'Heavy', value: 'HEAVY'},
-        {label: 'Black', value: 'BLACK'},
-      ],
-    },
-    size: {
-      width: {
-        type: 'units',
-        name: 'Width',
-        options: [
-          {label: 'px', value: 'px'},
-          {label: '%', value: '%'},
-        ],
-      },
-      height: {
-        type: 'units',
-        name: 'Height',
-        options: [
-          {label: 'px', value: 'px'},
-          {label: '%', value: '%'},
-        ],
-      },
-    },
-    padding: {
-      top: {
-        type: 'number',
-        name: 'Top',
-      },
-      bottom: {
-        type: 'number',
-        name: 'Bottom',
-      },
-      left: {
-        type: 'number',
-        name: 'Left',
-      },
-      right: {
-        type: 'number',
-        name: 'Right',
-      },
-    },
+    sizeModifier,
+    alignment: alignmentConfig.both,
+    text,
+    textAlignment,
+    backgroundColor,
+    textColor,
+    fontSize,
+    fontWeight,
+    shape: shapeConfigBuilder()
+      .withAllCornersRound
+      .withRadius
+      .done(),
+    size,
+    padding,
+    shadow: shadowConfigBuilder()
+      .withRadius
+      .done()
   },
 };
 

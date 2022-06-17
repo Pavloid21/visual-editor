@@ -1,12 +1,17 @@
 import React, {useEffect} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
-import actionTypes from '../constants/actionTypes';
 import styled from 'styled-components';
-import {ReactComponent as CodeIcon} from '../assets/code.svg';
-import {ReactComponent as DataIcon} from '../assets/folder-upload.svg';
-import {ReactComponent as Trash} from '../assets/trash.svg';
-import _ from 'lodash';
-import {getActionsList, getActionByName, getDataActionsList, getDataActionByName} from '../services/ApiService';
+import {useSelector, useDispatch} from 'react-redux';
+import {orderBy} from 'external/lodash';
+import actionTypes from 'constants/actionTypes';
+import {ReactComponent as CodeIcon} from 'assets/code.svg';
+import {ReactComponent as DataIcon} from 'assets/folder-upload.svg';
+import {ReactComponent as Trash} from 'assets/trash.svg';
+import {
+  getActionsList,
+  getActionByName,
+  getDataActionsList,
+  getDataActionByName
+} from 'services/ApiService';
 
 const Container = styled.div`
   height: calc(100% - 104px);
@@ -45,7 +50,7 @@ const Container = styled.div`
 const Actions = () => {
   const dispatch = useDispatch();
   const availableActions = useSelector((state) =>
-    _.orderBy(
+    orderBy(
       [
         ...state.actions.actions.map((item) => ({...item, type: 'action'})),
         ...state.actions.data.map((item) => ({...item, type: 'data'})),
@@ -60,7 +65,7 @@ const Actions = () => {
     getActionsList(projectID)
       .then((response) => response.data)
       .then((actions) => {
-        const actionsArr = actions?.map((action, index) => {
+        const actionsArr = actions?.map((action) => {
           return getActionByName(projectID, action)
             .then((response) => response.data)
             .then((data) => ({action, object: data}))

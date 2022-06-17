@@ -1,17 +1,23 @@
 import React from 'react';
-import styled from 'styled-components';
-import searchbar from '../../assets/searchbar.svg';
-import Wrapper from '../../utils/wrapper';
 import {useDrop} from 'react-dnd';
-import {ItemTypes} from '../../constants/actionTypes';
-import {observer} from '../../utils/observer';
-import {sortableContainer} from 'react-sortable-hoc';
+import styled from 'styled-components';
 import {arrayMoveImmutable} from 'array-move';
-import {useSelector} from 'react-redux';
-import {useDispatch} from 'react-redux';
-import actionTypes from '../../constants/actionTypes';
-import renderHandlebars from '../../utils/renderHandlebars';
+import {sortableContainer} from 'react-sortable-hoc';
+import {useDispatch, useSelector} from 'react-redux';
+import searchbar from 'assets/searchbar.svg';
+import Wrapper from 'utils/wrapper';
+import actionTypes, {ItemTypes} from 'constants/actionTypes';
+import {observer} from 'utils/observer';
+import renderHandlebars from 'utils/renderHandlebars';
 import {onSortMove} from 'utils/hooks';
+import {
+  alignmentConfig, backgroundColor, fontSize,
+  imageUrl,
+  placeholder,
+  placeholderColor, size,
+  sizeModifier, text,
+  textAlignment, textColor,
+} from 'views/configs';
 
 const SearchBar = styled.div`
   display: flex;
@@ -163,7 +169,6 @@ const block = {
   category: 'Controls',
   defaultData: {
     sizeModifier: 'FULLWIDTH',
-    alignment: 'CENTER',
     placeholder: 'Введите имя',
     placeholderColor: '#7F7F7F',
     imageUrl: 'https://icons.getbootstrap.com/assets/icons/search.svg',
@@ -176,60 +181,17 @@ const block = {
     },
   },
   config: {
-    sizeModifier: {
-      type: 'select',
-      name: 'Size modifier',
-      options: [
-        {label: 'Full width', value: 'FULLWIDTH'},
-        {label: 'Full height', value: 'FULLHEIGHT'},
-        {label: 'Full size', value: 'FULLSIZE'},
-      ],
-    },
-    alignment: {
-      type: 'select',
-      name: 'Alignment',
-      options: [
-        {label: 'Center', value: 'CENTER'},
-        {label: 'Left', value: 'LEFT'},
-        {label: 'Right', value: 'RIGHT'},
-        {label: 'Top', value: 'TOP'},
-        {label: 'Bottom', value: 'BOTTOM'},
-      ],
-    },
-    placeholder: {type: 'string', name: 'Placeholder'},
-    imageUrl: {type: 'string', name: 'Image URL'},
-    placeholderColor: {type: 'color', name: 'Placeholder color'},
-    text: {type: 'string', name: 'Text'},
-    textAlignment: {
-      type: 'select',
-      name: 'Text alignment',
-      options: [
-        {label: 'Center', value: 'CENTER'},
-        {label: 'Left', value: 'LEFT'},
-        {label: 'Right', value: 'RIGHT'},
-      ],
-    },
-    textColor: {type: 'color', name: 'Text color'},
-    backgroundColor: {type: 'color', name: 'Background color'},
-    fontSize: {type: 'number', name: 'Font size'},
-    size: {
-      height: {
-        type: 'units',
-        name: 'Height',
-        options: [
-          {label: 'px', value: 'px'},
-          {label: '%', value: '%'},
-        ],
-      },
-      width: {
-        type: 'units',
-        name: 'Width',
-        options: [
-          {label: 'px', value: 'px'},
-          {label: '%', value: '%'},
-        ],
-      },
-    },
+    sizeModifier,
+    alignment: alignmentConfig.both,
+    placeholder,
+    imageUrl,
+    placeholderColor,
+    text,
+    textAlignment,
+    textColor,
+    backgroundColor,
+    fontSize,
+    size,
   },
 };
 

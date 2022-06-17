@@ -1,5 +1,5 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
 export default function NarrowSidebar(props) {
   return (
@@ -8,7 +8,7 @@ export default function NarrowSidebar(props) {
         <button
           type="button"
           className={`btn btn-sidebar btn-block m-0 ${
-            props.activeTab === 0 ? "active-button" : ""
+            props.activeTab === 0 ? 'active-button' : ''
           }`}
           onClick={() => props.onChangeActiveTab(0)}
         >
@@ -17,7 +17,7 @@ export default function NarrowSidebar(props) {
         <button
           type="button"
           className={`btn btn-sidebar btn-block m-0 ${
-            props.activeTab === 1 ? "active-button" : ""
+            props.activeTab === 1 ? 'active-button' : ''
           }`}
           onClick={() => props.onChangeActiveTab(1)}
         >
@@ -26,7 +26,7 @@ export default function NarrowSidebar(props) {
         <button
           type="button"
           className={`btn btn-sidebar btn-block m-0 ${
-            props.activeTab === 1 ? "active-button" : ""
+            props.activeTab === 1 ? 'active-button' : ''
           }`}
           onClick={() => props.onChangeActiveTab(2)}
         >
@@ -35,7 +35,7 @@ export default function NarrowSidebar(props) {
         <button
           type="button"
           className={`btn btn-sidebar btn-block m-0 ${
-            props.activeTab === 1 ? "active-button" : ""
+            props.activeTab === 1 ? 'active-button' : ''
           }`}
           onClick={() => props.onChangeActiveTab(3)}
         >
@@ -44,7 +44,7 @@ export default function NarrowSidebar(props) {
         <button
           type="button"
           className={`btn btn-sidebar btn-block m-0 ${
-            props.activeTab === 5 ? "active-button" : ""
+            props.activeTab === 5 ? 'active-button' : ''
           }`}
           onClick={() => props.onChangeActiveTab(5)}
         >
@@ -53,7 +53,7 @@ export default function NarrowSidebar(props) {
         <button
           type="button"
           className={`btn btn-sidebar btn-block m-0 ${
-            props.activeTab === 7 ? "active-button" : ""
+            props.activeTab === 7 ? 'active-button' : ''
           }`}
           onClick={() => props.onChangeActiveTab(7)}
         >
@@ -62,7 +62,7 @@ export default function NarrowSidebar(props) {
         <button
           type="button"
           className={`btn btn-sidebar btn-block m-0 ${
-            props.activeTab === 8 ? "active-button" : ""
+            props.activeTab === 8 ? 'active-button' : ''
           }`}
           onClick={() => props.onChangeActiveTab(8)}
         >
@@ -73,7 +73,7 @@ export default function NarrowSidebar(props) {
         <button
           type="button"
           className={`btn btn-sidebar btn-block m-0 ${
-            props.activeTab === 9 ? "active-button" : ""
+            props.activeTab === 9 ? 'active-button' : ''
           }`}
           onClick={() => props.onChangeActiveTab(9)}
         >
@@ -82,7 +82,7 @@ export default function NarrowSidebar(props) {
         <button
           type="button"
           className={`btn btn-sidebar btn-block m-0 ${
-            props.activeTab === 10 ? "active-button" : ""
+            props.activeTab === 10 ? 'active-button' : ''
           }`}
           onClick={() => props.onChangeActiveTab(10)}
         >
@@ -91,7 +91,7 @@ export default function NarrowSidebar(props) {
         <button
           type="button"
           className={`btn btn-sidebar btn-block m-0 ${
-            props.activeTab === 10 ? "active-button" : ""
+            props.activeTab === 10 ? 'active-button' : ''
           }`}
           onClick={() => props.onChangeActiveTab(11)}
         >

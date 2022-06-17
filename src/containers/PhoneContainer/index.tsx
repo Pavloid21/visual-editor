@@ -1,10 +1,9 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 import {DeviceKeys, mockByDeviceKey, statusBarByDevice, stylesByDeviceKey} from 'containers/MobileSelect/consts';
 import {PanZoom} from 'react-easy-panzoom';
 import {Zoom} from 'containers/ZoomSelect/types';
-import {useRef} from 'react';
 import {Store} from 'reducers/types';
 import {ReactComponent as AlignCenterIcon} from 'assets/align-center.svg';
 import actionTypes from 'constants/actionTypes';
@@ -16,7 +15,7 @@ const Wrapper = styled.div<any>`
   border-radius: 37px;
   border: 1px solid #000;
   overflow: hidden;
-  padding: 56px 26px 0px;
+  padding: 56px 26px 0;
   background-color: ${(props) => props.backgroundColor};
   ${(props) => {
     return props.styled;

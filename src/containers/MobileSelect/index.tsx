@@ -20,7 +20,7 @@ const Select = styled(SelectBase)`
 
 const MobileSelect = () => {
   const dispatch = useDispatch();
-  const phoneType = useSelector((state: any) => state.editorMode.model)
+  const phoneType = useSelector((state: any) => state.editorMode.model);
   const device = useSelector((state: any) => state.editorMode.device);
   // TODO типизировать стейт
 
@@ -35,8 +35,8 @@ const MobileSelect = () => {
     dispatch({
       type: actionTypes.SET_MODEL_DEVICE,
       model: e
-    })
-  }
+    });
+  };
 
   return (
     <FlexContainer>

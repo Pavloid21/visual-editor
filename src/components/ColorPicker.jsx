@@ -1,6 +1,6 @@
-import React, { useRef } from "react";
-import styled from "styled-components";
-import { Label } from "./controls";
+import React, {useRef} from 'react';
+import styled from 'styled-components';
+import {Label} from './controls';
 
 const Wrapper = styled.section`
   position: relative;
@@ -12,7 +12,7 @@ const Wrapper = styled.section`
 const Container = styled.span`
   display: inline-flex;
   align-items: center;
-  width: ${(props) => (props.isWide ? "100%" : "auto")};
+  width: ${(props) => (props.isWide ? '100%' : 'auto')};
   padding: 4px 12px;
   border: 1px solid var(--neo-gray);
   border-radius: 4px;
@@ -67,7 +67,7 @@ const Container = styled.span`
   }
 `;
 
-const ColorPicker = ({ value, onChange, ...rest }) => {
+const ColorPicker = ({value, onChange, ...rest}) => {
   const colorRef = useRef(null);
 
   return (

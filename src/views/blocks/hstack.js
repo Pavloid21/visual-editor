@@ -1,17 +1,24 @@
 import React from 'react';
 import {useDrop} from 'react-dnd';
-import {ItemTypes} from '../../constants/actionTypes';
-import renderHandlebars from '../../utils/renderHandlebars';
+import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 import {sortableContainer} from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
-import {observer} from '../../utils/observer';
-import {useSelector} from 'react-redux';
-import {useDispatch} from 'react-redux';
-import actionTypes from '../../constants/actionTypes';
-import hstack from '../../assets/hstack.svg';
-import Wrapper from '../../utils/wrapper';
+import Wrapper from 'utils/wrapper';
 import {onSortMove} from 'utils/hooks';
+import {observer} from 'utils/observer';
+import renderHandlebars from 'utils/renderHandlebars';
+import actionTypes, {ItemTypes} from 'constants/actionTypes';
+import {
+  alignmentConfig,
+  backgroundColor,
+  corners,
+  distribution,
+  padding,
+  sizeModifier,
+  spacing,
+} from 'views/configs';
+import hstack from 'assets/hstack.svg';
 
 const HStack = styled.div`
   align-self: ${(props) => {
@@ -142,7 +149,6 @@ const block = {
   ],
   defaultData: {
     sizeModifier: 'FULLWIDTH',
-    alignment: 'CENTER',
     backgroundColor: '#C6C6C6',
     distribution: 'SPACEBETWEEN',
     spacing: 16,
@@ -161,72 +167,13 @@ const block = {
   },
   listItems: [],
   config: {
-    sizeModifier: {
-      type: 'select',
-      name: 'Size modifier',
-      options: [
-        {label: 'Full width', value: 'FULLWIDTH'},
-        {label: 'Full height', value: 'FULLHEIGHT'},
-        {label: 'Full size', value: 'FULLSIZE'},
-      ],
-    },
-    alignment: {
-      type: 'select',
-      name: 'Alignment',
-      options: [
-        {label: 'Center', value: 'CENTER'},
-        {label: 'Left', value: 'LEFT'},
-        {label: 'Right', value: 'RIGHT'},
-        {label: 'Top', value: 'TOP'},
-        {label: 'Bottom', value: 'BOTTOM'},
-      ],
-    },
-    backgroundColor: {type: 'color', name: 'Background color'},
-    distribution: {
-      type: 'select',
-      name: 'Distribution',
-      options: [{label: 'Space between', value: 'SPACEBETWEEN'}],
-    },
-    spacing: {
-      type: 'number',
-      name: 'Spacing',
-    },
-    padding: {
-      top: {
-        type: 'number',
-        name: 'Top',
-      },
-      bottom: {
-        type: 'number',
-        name: 'Bottom',
-      },
-      left: {
-        type: 'number',
-        name: 'Left',
-      },
-      right: {
-        type: 'number',
-        name: 'Right',
-      },
-    },
-    corners: {
-      topLeftRadius: {
-        type: 'number',
-        name: 'Top left radius',
-      },
-      topRightRadius: {
-        type: 'number',
-        name: 'Top right radius',
-      },
-      bottomLeftRadius: {
-        type: 'number',
-        name: 'Bottom left radius',
-      },
-      bottomRightRadius: {
-        type: 'number',
-        name: 'Bottom right radius',
-      },
-    },
+    sizeModifier,
+    alignment: alignmentConfig.both,
+    backgroundColor,
+    distribution,
+    spacing,
+    padding,
+    corners,
   },
 };
 
