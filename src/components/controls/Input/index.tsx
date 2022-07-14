@@ -43,7 +43,7 @@ font-size: 14px;
     &:focus {
       border: 1px solid #2A356C;
       outline: none;
-    } 
+    }
   }
   ${(props) =>
     props.type === 'number' &&
@@ -64,12 +64,12 @@ font-size: 14px;
   &:focus {
     border: 1px solid #2A356C;
     outline: none;
-  } 
+  }
   `}
-  
+
 `;
 
-const StyledNeoTextArea = styledComponents(Textarea)<TextAreaProps & NeoInputProps>`
+const StyledNeoTextArea = styledComponents<any>(Textarea)<TextAreaProps & NeoInputProps>`
   background: #FFFFFF;
   width: ${(props) => (props.$isWide ? '100%' : 'auto')};
   border: 1px solid var(--neo-gray);

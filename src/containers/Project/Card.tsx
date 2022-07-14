@@ -15,7 +15,7 @@ type TCardProps = {
   onDelete: (id: string) => void;
 };
 
-const DropdownIcon = styled(Dropdown)<ReactDropdownProps>`
+const DropdownIcon = styled<any>(Dropdown)<ReactDropdownProps>`
   & > .Dropdown-control {
     padding: 0;
     background-color: transparent;

@@ -97,11 +97,13 @@ const SortableList = SortableContainer<ISortableList>(({drop, backgroundColor, l
       <div style={{flex: bottomBar ? 1 : 'none'}}>
         {list.map((child: ReactNode, index: number) => {
           if (index !== list.length - 1) {
+            // @ts-ignore
             return <SortableItem index={index}>{child}</SortableItem>;
           }
           return null;
         })}
       </div>
+      {/* @ts-ignore*/}
       {list.length > 0 && <SortableItem index={list.length - 1}>{list[list.length - 1]}</SortableItem>}
     </Container>
   );
@@ -223,6 +225,7 @@ const Preview = (props: any) => {
       >
         {editorMode === 'editor' && (
           <PhoneContainer>
+            {/* @ts-ignore*/}
             <SortableList
               drop={drop}
               backgroundColor={backgroundColor}
