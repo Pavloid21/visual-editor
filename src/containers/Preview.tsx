@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 import actionTypes, {ItemTypes} from '../constants/actionTypes';
 import {arrayMoveImmutable} from 'array-move';
-import {observer} from '../utils/observer';
+import {observer, onSortMove} from 'utils';
 import PhoneContainer from './PhoneContainer';
 import styled from 'styled-components';
 import Code from './Code';
@@ -17,7 +17,6 @@ import clsx from 'clsx';
 import ZoomSelect from './ZoomSelect';
 import {Beforeunload} from 'react-beforeunload';
 import {Store} from 'reducers/types';
-import {onSortMove} from 'utils/hooks';
 
 const Bar = styled.div<any>`
   height: 60px;

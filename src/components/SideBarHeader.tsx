@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {useLocation, useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
-import {useModal} from 'utils/hooks';
+import {useModal} from 'utils';
 import {ReactComponent as ArrowBack} from 'assets/arrow_back.svg';
 import {ReactComponent as Settings} from 'assets/settings.svg';
 import {ReactComponent as Warning} from 'assets/warning.svg';

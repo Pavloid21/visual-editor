@@ -12,7 +12,7 @@ import {useLocation} from 'react-router-dom';
 import {Store} from 'react-notifications-component';
 import {Store as RuduxStore} from 'reducers/types';
 import {successNotification} from 'constants/notifications';
-import {useOutside} from 'utils/hooks';
+import {useOutside} from 'utils';
 
 const Bar = styled.div<any>`
   height: 60px;

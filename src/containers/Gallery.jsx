@@ -7,7 +7,7 @@ import {Input} from '../components/controls';
 import BlockPreview from '../components/BlockPreview';
 import {gallery as blocks} from '../views/blocks';
 import {useDispatch, useSelector} from 'react-redux';
-import {snippet} from '../utils/prepareModel';
+import {snippet} from 'utils';
 import actionTypes from '../constants/actionTypes';
 
 const GalleryHeader = styled.div`

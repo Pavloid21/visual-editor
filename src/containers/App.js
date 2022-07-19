@@ -1,11 +1,10 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Routes, Route, Navigate, useLocation} from 'react-router-dom';
-import renderHandlebars from '../utils/renderHandlebars';
+import {renderHandlebars, observer} from 'utils';
 import LeftSidebar from '../components/LeftSidebar';
 import Preview from './Preview';
 import actionTypes from '../constants/actionTypes';
-import {observer} from '../utils/observer';
 import {findInTree} from '../reducers/layout';
 import TopBar from '../components/TopBar';
 import GlobalStyles from '../constants/theme';

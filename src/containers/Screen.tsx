@@ -5,12 +5,11 @@ import actionTypes from '../constants/actionTypes';
 import styled from 'styled-components';
 import Editor from 'react-simple-code-editor';
 import fullScreenIcon from '../assets/full-screen.svg';
-import {useModal} from '../utils/hooks';
+import {useModal, snippet} from 'utils';
 import Prism from 'prismjs';
 import {atomOneLight} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import CustomModal from '../components/Modal';
 import {Store} from 'reducers/types';
-import {snippet} from 'utils/prepareModel';
 
 const Container = styled.div`
   padding: 14px;

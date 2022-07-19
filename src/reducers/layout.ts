@@ -1,7 +1,7 @@
 import {v4 as uuidv4} from 'uuid';
 import actionTypes from 'constants/actionTypes';
 import blocks from 'views/blocks';
-import {getData} from 'utils/prepareModel';
+import {getData} from 'utils';
 import {get} from 'external/lodash';
 import {Layout, BlockItem, LayoutAction} from './types';
 

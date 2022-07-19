@@ -36,7 +36,7 @@ export const onSortMove = (event: SortEvent | SortEventWithTag): boolean => {
   return event.altKey;
 };
 
-export const useOutsideAleter = (ref: React.RefObject<any>, callback: () => void) => {
+export const useOutsideAlerter = (ref: React.RefObject<any>, callback: () => void) => {
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (ref.current && !ref.current.contains(event.target)) {

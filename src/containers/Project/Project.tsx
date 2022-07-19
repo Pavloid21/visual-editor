@@ -13,7 +13,7 @@ import actionTypes from 'constants/actionTypes';
 import {Project as TProject} from 'reducers/types';
 import {AxiosResponse} from 'axios';
 import Loader from 'components/Loader';
-import {useModal} from 'utils/hooks';
+import {useModal} from 'utils';
 import {useForm} from 'react-hook-form';
 import Modal from './Modal';
 

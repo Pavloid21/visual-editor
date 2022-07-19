@@ -1,7 +1,7 @@
 import React from 'react';
 import TreeMenu from 'react-simple-tree-menu';
 import {useSelector, useDispatch} from 'react-redux';
-import {observer} from 'utils/observer';
+import {observer} from 'utils';
 import actionTypes from 'constants/actionTypes';
 import '../../node_modules/react-simple-tree-menu/dist/main.css';
 

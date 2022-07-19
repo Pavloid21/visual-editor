@@ -4,7 +4,7 @@ import {ReactComponent as Dots} from 'assets/dots.svg';
 import Dropdown, {ReactDropdownProps} from 'react-dropdown';
 import 'react-dropdown/style.css';
 import {deleteProject} from 'services/ApiService';
-import {useOutside} from 'utils/hooks';
+import {useOutside} from 'utils';
 
 type TCardProps = {
   id: string;

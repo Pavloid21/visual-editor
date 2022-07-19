@@ -4,7 +4,7 @@ import SyntaxHighlighter from 'react-syntax-highlighter';
 import {atomOneLight} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import {useSelector, useDispatch} from 'react-redux';
 import actionTypes from '../constants/actionTypes';
-import {snippet} from '../utils/prepareModel';
+import {snippet} from 'utils';
 import {Store} from 'reducers/types';
 
 const Container = styled.div`

@@ -9,7 +9,7 @@ import 'prismjs/themes/prism.css';
 import styled from 'styled-components';
 import fullScreenIcon from '../assets/full-screen.svg';
 import CustomModal from '../components/Modal';
-import {useModal} from '../utils/hooks';
+import {useModal} from 'utils';
 import {Button, Input, Label} from '../components/controls';
 import ButtonSelector from '../components/ButtonSelector';
 import {useSelector, useDispatch} from 'react-redux';

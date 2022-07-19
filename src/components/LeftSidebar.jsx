@@ -3,7 +3,6 @@ import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
 import actionTypes from '../constants/actionTypes';
-import {observer} from '../utils/observer';
 import SideBarHeader, {SideBarSubheader} from './SideBarHeader';
 import Gallery from '../containers/Gallery';
 import Actions from './Actions';
@@ -14,12 +13,12 @@ import {ReactComponent as Trash} from '../assets/trash.svg';
 import {ReactComponent as Plus} from '../assets/plus.svg';
 import models from '../views/blocks/index';
 import v4 from 'uuid/dist/v4';
-import {snippet} from '../utils/prepareModel';
 import {getScreenesList, getScreenByName} from '../services/ApiService';
 import {BounceLoader} from 'react-spinners';
 import {css} from '@emotion/react';
 import Loader from './Loader';
 import {useParams} from 'react-router-dom';
+import {traverse, observer, snippet} from 'utils';
 
 const Container = styled.div`
   min-width: 422px;
@@ -58,16 +57,18 @@ const SreenTitle = styled.div`
 `;
 
 export default function LeftSidebar({children, ...props}) {
-  const layout = useSelector((state) => state.layout.blocks);
+  const {
+    topAppBar,
+    bottomBar,
+    selectedBlockUuid: selectedBlock,
+    selectedScreen,
+    blocks: layout,
+  } = useSelector((state) => state.layout);
   const [loading, setLoading] = useState(false);
-  const topAppBar = useSelector((state) => state.layout.topAppBar);
   const api = useSelector((state) => state.api);
   const output = useSelector((state) => state.output.screen);
-  const bottomBar = useSelector((state) => state.layout.bottomBar);
-  const selectedBlock = useSelector((state) => state.layout.selectedBlockUuid);
-  const selectedScreen = useSelector((state) => state.layout.selectedScreen);
-  const currentSnippet = useSelector((state) =>
-    state.layout.snippets.filter((snippetData) => snippetData.screenID === selectedScreen)[0]
+  const currentSnippet = useSelector(
+    (state) => state.layout.snippets.filter((snippetData) => snippetData.screenID === selectedScreen)[0]
   );
   const {project} = useParams();
   const projectName = useSelector((state) => state.project.name);
@@ -138,26 +139,6 @@ export default function LeftSidebar({children, ...props}) {
     let newBlock = {
       screen: object.screen,
       listItems: [],
-    };
-    const traverse = function (tree) {
-      return tree.map((item) => {
-        const {settingsUI, action, listItems, listItem, ...interactive} = item;
-        let reference = {};
-        reference.uuid = v4();
-        reference.blockId = item.type.toLowerCase();
-        reference.settingsUI = settingsUI;
-        reference.interactive = interactive;
-        if (listItems) {
-          reference.listItems = traverse(listItems);
-        }
-        if (listItem) {
-          reference.listItem = traverse([listItem])[0];
-        }
-        if (action) {
-          reference.interactive = {action};
-        }
-        return reference;
-      });
     };
     newBlock.listItems = tree?.length ? traverse(tree) : [];
     const action = {

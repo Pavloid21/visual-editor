@@ -112,4 +112,6 @@ export type Store = {
   code: string;
   actions: Actions;
   project: Project;
+  selectedBlockUuid: string;
+  selectedScreen: any;
 };
