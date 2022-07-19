@@ -35,3 +35,18 @@ export const useOutside = (initialIsVisible: boolean, canSelfOpen?: boolean) => 
 export const onSortMove = (event: SortEvent | SortEventWithTag): boolean => {
   return event.altKey;
 };
+
+export const useOutsideAleter = (ref: React.RefObject<any>, callback: () => void) => {
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (ref.current && !ref.current.contains(event.target)) {
+        callback();
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [ref]);
+};

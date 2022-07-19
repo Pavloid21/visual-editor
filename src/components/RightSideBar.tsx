@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import styled from 'styled-components';
 import SideBarHeader from './SideBarHeader';
 import Inspector from 'containers/Inspector';
@@ -13,6 +13,7 @@ import {ReactComponent as Pencil} from 'assets/pencil.svg';
 import {useForm, useFieldArray, Controller} from 'react-hook-form';
 import {Store} from 'reducers/types';
 import {noop} from 'external/lodash';
+import {useOutsideAleter} from 'utils/hooks';
 
 const Container = styled.div`
   min-width: 422px;
@@ -79,6 +80,12 @@ const RightSidebar: React.FC<any> = ({children, ...props}) => {
     control,
     name: 'params',
   });
+
+  const wrapperRef = useRef(null);
+  useOutsideAleter(wrapperRef, () => dispatch({
+    type: actionTypes.SET_SELECTED_BLOCK,
+    blockUuid: '',
+  }));
 
   const watchFieldArray = watch('headers');
   const watchParamsArray = watch('params');
@@ -150,7 +157,7 @@ const RightSidebar: React.FC<any> = ({children, ...props}) => {
   }
 
   return (
-    <Container onClick={(e) => e.stopPropagation()}>
+    <Container ref={wrapperRef}>
       <div>
         <SideBarHeader title="Properties" />
         <Inspector display />
