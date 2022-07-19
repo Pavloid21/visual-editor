@@ -1,20 +1,51 @@
 import React from 'react';
 import {useDrop} from 'react-dnd';
-import {ItemTypes} from '../../constants/actionTypes';
-import renderHandlebars from '../../utils/renderHandlebars';
 import styled from 'styled-components';
-import {observer} from '../../utils/observer';
-import {sortableContainer} from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
-import {useSelector} from 'react-redux';
-import {useDispatch} from 'react-redux';
-import actionTypes from '../../constants/actionTypes';
-import screen from '../../assets/screen.svg';
-import Wrapper from '../../utils/wrapper';
+import {sortableContainer} from 'react-sortable-hoc';
+import {useDispatch, useSelector} from 'react-redux';
+import Wrapper from 'utils/wrapper';
+import {onSortMove} from 'utils/hooks';
+import {observer} from 'utils/observer';
+import renderHandlebars from 'utils/renderHandlebars';
+import actionTypes, {ItemTypes} from 'constants/actionTypes';
+import screen from 'assets/screen.svg';
+import {
+  alignmentConfig,
+  backgroundColor,
+  sizeModifier,
+  spacing
+} from 'views/configs';
 
 const VStack = styled.div`
-  width: ${(props) => (props.sizeModifier === 'FULLWIDTH' ? '100%' : 'auto')};
-  flex: ${(props) => (props.wrapContent === 'WRAPCONTENTHEIGHT' ? '0 1 auto' : '1 1 auto')};
+  align-self: ${(props) => {
+    switch (props.alignment) {
+      case 'LEFT':
+        return 'flex-start';
+      case 'RIGHT':
+        return 'flex-end';
+      default:
+        return 'center';
+    }
+  }};
+  margin: ${(props) => {
+    switch (props.alignment) {
+      case 'CENTER':
+        return 'auto';
+      case 'TOP':
+        return '0 auto auto auto';
+      case 'BOTTOM':
+        return 'auto auto 0 auto';
+      case 'LEFT':
+        return 'auto auto auto 0';
+      case 'RIGHT':
+        return 'auto 0 auto auto';
+      default:
+        return '0 0';
+    }
+  }};
+  width: ${(props) => (['FULLWIDTH', 'FULLSIZE'].includes(props.sizeModifier) ? '100%' : 'fit-content')};
+  height: ${(props) => (['FULLHEIGHT', 'FULLSIZE'].includes(props.sizeModifier) ? '100%' : 'fit-content')};
   background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
   display: flex;
   justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
@@ -24,17 +55,15 @@ const VStack = styled.div`
         return 'flex-start';
       case 'RIGHT':
         return 'flex-start';
-      case 'JUSTIFY':
-        return 'stretch';
       default:
         return 'center';
     }
   }};
   flex-direction: column;
-  padding-top: ${(props) => props.padding?.top}px;
-  padding-bottom: ${(props) => props.padding?.bottom}px;
-  padding-left: ${(props) => props.padding?.left}px;
-  padding-right: ${(props) => props.padding?.right}px;
+  padding-top: ${(props) => props.padding?.top || 5}px;
+  padding-bottom: ${(props) => props.padding?.bottom || 5}px;
+  padding-left: ${(props) => props.padding?.left || 5}px;
+  padding-right: ${(props) => props.padding?.right || 5}px;
   box-sizing: border-box;
   gap: ${(props) => props.spacing}px;
   border-radius: ${(props) => `
@@ -50,8 +79,22 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, 
     <Wrapper
       id={props.id}
       {...settingsUI}
-      scroll={props.scroll}
-      style={{flex: props.wrapContent === 'WRAPCONTENTHEIGHT' ? '0 1 auto' : '1 1 auto'}}
+      {...props}
+      sizeModifier="FULLSIZE"
+      style={{
+        alignItems: (() => {
+          switch (props.alignment) {
+            case 'LEFT':
+              return 'self-start';
+            case 'RIGHT':
+              return 'self-end';
+            case 'FILL':
+              return 'stretch';
+            default:
+              return 'center';
+          }
+        })(),
+      }}
     >
       <VStack {...settingsUI} {...props} ref={drop} backgroundColor={backgroundColor} className="draggable">
         {listItems && renderHandlebars(listItems, 'document2').components}
@@ -77,9 +120,6 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
         uuid,
         target: target.targetId,
       };
-    },
-    canDrop: (item) => {
-      return item.type === 'Container';
     },
     collect: (monitor) => ({
       isOver: monitor.isOver({shallow: true}),
@@ -113,6 +153,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
       {...props}
       backgroundColor={backgroundColor}
       distance={1}
+      shouldCancelStart={onSortMove}
     />
   );
 };
@@ -125,27 +166,16 @@ const block = {
   previewImageUrl: screen,
   category: 'Container',
   defaultData: {
-    alignment: 'CENTER',
     backgroundColor: '#C6C6C6',
     wrapContent: '',
     spacing: 0,
   },
   listItems: [],
   config: {
-    alignment: {
-      type: 'select',
-      name: 'Alignment',
-      options: [
-        {label: 'Center', value: 'CENTER'},
-        {label: 'Left', value: 'LEFT'},
-        {label: 'Right', value: 'RIGHT'},
-        {label: 'Justify', value: 'JUSTIFY'},
-        {label: 'Fill', value: 'FILL'},
-      ],
-    },
-    backgroundColor: {type: 'color', name: 'Background color'},
-    wrapContent: {type: 'string', name: 'Wrap content'},
-    spacing: {type: 'number', name: 'Spacing'},
+    sizeModifier,
+    alignment: alignmentConfig.both,
+    backgroundColor,
+    spacing,
   },
 };
 

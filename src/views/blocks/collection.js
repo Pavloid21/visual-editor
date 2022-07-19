@@ -1,18 +1,50 @@
 import React from 'react';
 import {useDrop} from 'react-dnd';
-import {ItemTypes} from '../../constants/actionTypes';
-import renderHandlebars from '../../utils/renderHandlebars';
 import styled from 'styled-components';
-import {observer} from '../../utils/observer';
-import {sortableContainer} from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
-import {useSelector} from 'react-redux';
-import {useDispatch} from 'react-redux';
-import actionTypes from '../../constants/actionTypes';
-import collection from '../../assets/collection.svg';
-import Wrapper from '../../utils/wrapper';
+import {sortableContainer} from 'react-sortable-hoc';
+import {useDispatch, useSelector} from 'react-redux';
+import renderHandlebars from 'utils/renderHandlebars';
+import Wrapper from 'utils/wrapper';
+import {onSortMove} from 'utils/hooks';
+import {observer} from 'utils/observer';
+import actionTypes, {ItemTypes} from 'constants/actionTypes';
+import {
+  alignmentConfig,
+  backgroundColor,
+  padding,
+  size,
+  sizeModifier, spacing,
+} from 'views/configs';
+import collection from 'assets/collection.svg';
 
 const Collection = styled.div`
+  align-self: ${(props) => {
+    switch (props.alignment) {
+      case 'LEFT':
+        return 'flex-start';
+      case 'RIGHT':
+        return 'flex-end';
+      default:
+        return 'center';
+    }
+  }};
+  margin: ${(props) => {
+    switch (props.alignment) {
+      case 'CENTER':
+        return 'auto';
+      case 'TOP':
+        return '0 auto auto auto';
+      case 'BOTTOM':
+        return 'auto auto 0 auto';
+      case 'LEFT':
+        return 'auto auto auto 0';
+      case 'RIGHT':
+        return 'auto 0 auto auto';
+      default:
+        return '0 0';
+    }
+  }};
   width: ${(props) => {
     if (props.size?.width !== undefined) {
       return props.size.width + 'px';
@@ -49,10 +81,8 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItem, s
   return (
     <Wrapper
       id={props.id}
-      style={{
-        alignItems: props.alignment,
-        flex: props.size?.height ? '' : '1 1 auto',
-      }}
+      {...settingsUI}
+      {...props}
     >
       <Collection {...settingsUI} {...props} ref={drop} backgroundColor={backgroundColor} className="draggable">
         <div>{listItem && renderHandlebars([listItem], 'document2').components}</div>
@@ -111,6 +141,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
       {...props}
       backgroundColor={backgroundColor}
       distance={1}
+      shouldCancelStart={onSortMove}
     />
   );
 };
@@ -127,7 +158,6 @@ const block = {
     dataSource: '',
   },
   defaultData: {
-    alignment: 'CENTER',
     backgroundColor: '#C6C6C6',
     spacing: 16,
     size: {
@@ -154,43 +184,12 @@ const block = {
     },
   },
   config: {
-    alignment: {
-      type: 'select',
-      name: 'Alignment',
-      options: [
-        {label: 'Center', value: 'CENTER'},
-        {label: 'Left', value: 'LEFT'},
-        {label: 'Right', value: 'RIGHT'},
-        {label: 'Justify', value: 'JUSTIFY'},
-        {label: 'Fill', value: 'FILL'},
-      ],
-    },
-    backgroundColor: {type: 'color', name: 'Background color'},
-    spacing: {type: 'number', name: 'Spacing'},
-    size: {
-      height: {
-        type: 'units',
-        name: 'Height',
-        options: [
-          {label: 'px', value: 'px'},
-          {label: '%', value: '%'},
-        ],
-      },
-      width: {
-        type: 'units',
-        name: 'Width',
-        options: [
-          {label: 'px', value: 'px'},
-          {label: '%', value: '%'},
-        ],
-      },
-    },
-    padding: {
-      left: {type: 'number', name: 'Left'},
-      top: {type: 'number', name: 'Top'},
-      right: {type: 'number', name: 'Right'},
-      bottom: {type: 'number', name: 'Bottom'},
-    },
+    sizeModifier,
+    alignment: alignmentConfig.both,
+    backgroundColor,
+    spacing,
+    size,
+    padding,
     collectionUiConfig: {
       metricStyle: {type: 'string', name: 'Metric style'},
       pointHeight: {type: 'number', name: 'Point height'},

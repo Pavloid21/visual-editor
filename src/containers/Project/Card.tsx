@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {ReactComponent as Dots} from '../../assets/dots.svg';
+import {ReactComponent as Dots} from 'assets/dots.svg';
 import Dropdown, {ReactDropdownProps} from 'react-dropdown';
 import 'react-dropdown/style.css';
 import {deleteProject} from 'services/ApiService';
@@ -15,7 +15,7 @@ type TCardProps = {
   onDelete: (id: string) => void;
 };
 
-const DropdownIcon = styled(Dropdown)<ReactDropdownProps>`
+const DropdownIcon = styled<any>(Dropdown)<ReactDropdownProps>`
   & > .Dropdown-control {
     padding: 0;
     background-color: transparent;
@@ -31,7 +31,7 @@ const DropdownIcon = styled(Dropdown)<ReactDropdownProps>`
 const Container = styled.div`
   width: 422px;
   height: 287px;
-  box-shadow: 0px 0px 4px 1px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.25);
   border-radius: 20px;
   position: relative;
   overflow: hidden;
@@ -95,7 +95,7 @@ export const Card: React.FC<TCardProps> = ({name, description, icon, onClick, on
     deleteProject(id);
     onDelete(id);
   };
-  const {ref, isShow, setIsShow} = useOutside(false);
+  const {ref, isShow} = useOutside(false, true);
 
   return (
     <Container

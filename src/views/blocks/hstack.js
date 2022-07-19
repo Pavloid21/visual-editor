@@ -1,18 +1,55 @@
 import React from 'react';
 import {useDrop} from 'react-dnd';
-import {ItemTypes} from '../../constants/actionTypes';
-import renderHandlebars from '../../utils/renderHandlebars';
+import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 import {sortableContainer} from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
-import {observer} from '../../utils/observer';
-import {useSelector} from 'react-redux';
-import {useDispatch} from 'react-redux';
-import actionTypes from '../../constants/actionTypes';
-import hstack from '../../assets/hstack.svg';
-import Wrapper from '../../utils/wrapper';
+import Wrapper from 'utils/wrapper';
+import {onSortMove} from 'utils/hooks';
+import {observer} from 'utils/observer';
+import renderHandlebars from 'utils/renderHandlebars';
+import actionTypes, {ItemTypes} from 'constants/actionTypes';
+import {
+  alignmentConfig,
+  backgroundColor,
+  corners,
+  distribution,
+  padding,
+  sizeModifier,
+  spacing,
+} from 'views/configs';
+import hstack from 'assets/hstack.svg';
 
 const HStack = styled.div`
+  align-self: ${(props) => {
+    switch (props.alignment) {
+      case 'LEFT':
+        return 'flex-start';
+      case 'RIGHT':
+        return 'flex-end';
+      default:
+        return 'center';
+    }
+  }};
+  margin: ${(props) => {
+    switch (props.alignment) {
+      case 'CENTER':
+        return 'auto';
+      case 'TOP':
+        return '0 auto auto auto';
+      case 'BOTTOM':
+        return 'auto auto 0 auto';
+      case 'LEFT':
+        return 'auto auto auto 0';
+      case 'RIGHT':
+        return 'auto 0 auto auto';
+      default:
+        return '0 0';
+    }
+  }};
+  width: ${(props) =>
+    ['FULLWIDTH', 'FULLSIZE'].includes(props.sizeModifier) ? '100%' : 'fit-content'};
+  height: ${(props) => (['FULLHEIGHT', 'FULLSIZE'].includes(props.sizeModifier) ? '100%' : 'fit-content')};
   background-color: ${(props) => props.backgroundColor};
   display: flex;
   justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
@@ -31,16 +68,11 @@ const HStack = styled.div`
     ${props.corners?.bottomRightRadius}px
     ${props.corners?.bottomLeftRadius}px 
   `};
-  ${(props) => {
-    if (!props.alignment || props.alignment === 'FILL') {
-      return 'width: 100%;';
-    }
-  }}
 `;
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, settingsUI, ...props}) => {
   return (
-    <Wrapper id={props.id}>
+    <Wrapper id={props.id} {...settingsUI} {...props} sizeModifier="FULLSIZE">
       <HStack {...settingsUI} {...props} backgroundColor={backgroundColor} ref={drop} className="draggable">
         {listItems && renderHandlebars(listItems, 'document2').components}
       </HStack>
@@ -99,6 +131,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
       {...props}
       settingsUI={settingsUI}
       distance={1}
+      shouldCancelStart={onSortMove}
     />
   );
 };
@@ -115,7 +148,7 @@ const block = {
     {label: 'Horizontal', value: 'HSTACK'},
   ],
   defaultData: {
-    alignment: 'CENTER',
+    sizeModifier: 'FULLWIDTH',
     backgroundColor: '#C6C6C6',
     distribution: 'SPACEBETWEEN',
     spacing: 16,
@@ -134,63 +167,13 @@ const block = {
   },
   listItems: [],
   config: {
-    alignment: {
-      type: 'select',
-      name: 'Alignment',
-      options: [
-        {label: 'Center', value: 'CENTER'},
-        {label: 'Left', value: 'LEFT'},
-        {label: 'Right', value: 'RIGHT'},
-        {label: 'Justify', value: 'JUSTIFY'},
-        {label: 'Fill', value: 'FILL'},
-      ],
-    },
-    backgroundColor: {type: 'color', name: 'Background color'},
-    distribution: {
-      type: 'select',
-      name: 'Distribution',
-      options: [{label: 'Space between', value: 'SPACEBETWEEN'}],
-    },
-    spacing: {
-      type: 'number',
-      name: 'Spacing',
-    },
-    padding: {
-      top: {
-        type: 'number',
-        name: 'Top',
-      },
-      bottom: {
-        type: 'number',
-        name: 'Bottom',
-      },
-      left: {
-        type: 'number',
-        name: 'Left',
-      },
-      right: {
-        type: 'number',
-        name: 'Right',
-      },
-    },
-    corners: {
-      topLeftRadius: {
-        type: 'number',
-        name: 'Top left radius',
-      },
-      topRightRadius: {
-        type: 'number',
-        name: 'Top right radius',
-      },
-      bottomLeftRadius: {
-        type: 'number',
-        name: 'Bottom left radius',
-      },
-      bottomRightRadius: {
-        type: 'number',
-        name: 'Bottom right radius',
-      },
-    },
+    sizeModifier,
+    alignment: alignmentConfig.both,
+    backgroundColor,
+    distribution,
+    spacing,
+    padding,
+    corners,
   },
 };
 

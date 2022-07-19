@@ -1,6 +1,6 @@
 import {AnyAction} from 'redux';
 import actionTypes from '../constants/actionTypes';
-import { SideBar } from './types';
+import {SideBar} from './types';
 
 const initialState: SideBar = {
   left: true,

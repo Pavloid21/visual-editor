@@ -1,8 +1,43 @@
-import passwordtextfield from '../../assets/passwordtextfield.svg';
 import styled from 'styled-components';
-import Wrapper from '../../utils/wrapper';
+import Wrapper from 'utils/wrapper';
+import passwordtextfield from 'assets/passwordtextfield.svg';
+import {
+  alignmentConfig, backgroundColor, fontSize,
+  placeholder,
+  placeholderColor, size,
+  sizeModifier,
+  text,
+  textAlignment, textColor,
+} from 'views/configs';
 
 const Container = styled.div`
+  display: flex;
+  align-self: ${(props) => {
+    switch (props.alignment) {
+      case 'LEFT':
+        return 'flex-start';
+      case 'RIGHT':
+        return 'flex-end';
+      default:
+        return 'center';
+    }
+  }};
+  margin: ${(props) => {
+    switch (props.alignment) {
+      case 'CENTER':
+        return 'auto';
+      case 'TOP':
+        return '0 auto auto auto';
+      case 'BOTTOM':
+        return 'auto auto 0 auto';
+      case 'LEFT':
+        return 'auto auto auto 0';
+      case 'RIGHT':
+        return 'auto 0 auto auto';
+      default:
+        return '0 0';
+    }
+  }};
   width: ${(props) => {
     if (props.size?.width !== undefined) {
       return props.size.width + 'px';
@@ -11,15 +46,16 @@ const Container = styled.div`
     }
     return '100%';
   }};
-  height: ${(props) => {
-    if (props.size?.height !== undefined) {
-      return props.size.height + 'px';
-    } else if (props.size?.heightInPercent !== undefined) {
-      return props.size.heightInPercent + '%';
-    }
-    return 'auto';
-  }};
   & > input {
+    height: ${(props) => {
+      if (props.size?.height !== undefined) {
+        return props.size.height + 'px';
+      } else if (props.size?.heightInPercent !== undefined) {
+        return props.size.heightInPercent + '%';
+      }
+      return 'auto';
+    }};
+    display: block;
     pointer-events: none;
     color: ${(props) => props.textColor};
     background-color: ${(props) => props.backgroundColor};
@@ -32,11 +68,11 @@ const Container = styled.div`
   }
 `;
 
-const Component = (props) => {
-  const {placeholder, text, alignment} = props.settingsUI;
+const Component = ({settingsUI, ...props}) => {
+  const {placeholder, text} = settingsUI;
   return (
-    <Wrapper id={props.id} style={{alignItems: alignment}}>
-      <Container className="draggable" {...props} {...props.settingsUI}>
+    <Wrapper id={props.id} {...settingsUI} {...props}>
+      <Container className="draggable" {...props} {...settingsUI}>
         <input {...props} type="password" className="form-control" placeholder={placeholder} value={text} />
       </Container>
     </Wrapper>
@@ -63,7 +99,6 @@ const block = {
     text: 'neo',
     textColor: '#000000',
     backgroundColor: '#FFFFFF',
-    textAlignment: 'LEFT',
     fontSize: 16,
     alignment: 'LEFT',
     size: {
@@ -72,40 +107,16 @@ const block = {
     },
   },
   config: {
-    placeholder: {type: 'string', name: 'Placeholder'},
-    placeholderColor: {type: 'color', name: 'Placeholder color'},
-    text: {type: 'string', name: 'Text'},
-    textAlignment: {
-      type: 'select',
-      name: 'Text alignment',
-      options: [
-        {label: 'Center', value: 'CENTER'},
-        {label: 'Left', value: 'LEFT'},
-        {label: 'Right', value: 'RIGHT'},
-      ],
-    },
-    textColor: {type: 'color', name: 'Text color'},
-    backgroundColor: {type: 'color', name: 'Background color'},
-    fontSize: {type: 'number', name: 'Font size'},
-    alignment: {type: 'string', name: 'Alignment'},
-    size: {
-      height: {
-        type: 'units',
-        name: 'Height',
-        options: [
-          {label: 'px', value: 'px'},
-          {label: '%', value: '%'},
-        ],
-      },
-      width: {
-        type: 'units',
-        name: 'Width',
-        options: [
-          {label: 'px', value: 'px'},
-          {label: '%', value: '%'},
-        ],
-      },
-    },
+    sizeModifier,
+    alignment: alignmentConfig.both,
+    placeholder,
+    placeholderColor,
+    text,
+    textAlignment,
+    textColor,
+    backgroundColor,
+    fontSize,
+    size,
   },
   interactive: {
     field: {type: 'string', name: 'Field name'},

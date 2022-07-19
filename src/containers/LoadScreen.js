@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import styled from "styled-components";
-import v4 from "uuid/dist/v4";
-import actionTypes from "../constants/actionTypes";
+import React, {useEffect, useState} from 'react';
+import {useDispatch} from 'react-redux';
+import styled from 'styled-components';
+import v4 from 'uuid/dist/v4';
+import actionTypes from '../constants/actionTypes';
 
 const ScreenItem = styled.div`
-  padding: 4px 0px;
+  padding: 4px 0;
   &:hover {
     cursor: pointer;
     color: blue;
@@ -17,7 +17,7 @@ const LoadScreen = (props) => {
   const dispatch = useDispatch();
   useEffect(() => {
     fetch(
-      "/api/v1/configurations"
+      '/api/v1/configurations'
     )
       .then((response) => response.json())
       .then((data) => {
@@ -50,7 +50,7 @@ const LoadScreen = (props) => {
     };
     if (object.bottomBar) {
       action.bottomBar = {
-        blockId: "bottombar",
+        blockId: 'bottombar',
         uuid: v4(),
         data: {
           ...object.bottomBar.settingsUI,
@@ -60,7 +60,7 @@ const LoadScreen = (props) => {
     }
     if (object.appBar) {
       action.appBar = {
-        blockId: "topappbar",
+        blockId: 'topappbar',
         uuid: v4(),
         data: {
           ...object.appBar.settingsUI,
@@ -74,7 +74,6 @@ const LoadScreen = (props) => {
   const changeHandler = (event) => {
     try {
       const json = JSON.parse(event.target.value);
-      // console.log("json", json);
       buildLayout(json);
     } catch (e) {
       console.log(e);
@@ -95,6 +94,7 @@ const LoadScreen = (props) => {
         {availableScreenes.map((screen) => {
           return (
             <ScreenItem
+              key={screen}
               onClick={() => {
                 fetch(
                   `/api/v1/configurations/${screen}`
@@ -104,7 +104,7 @@ const LoadScreen = (props) => {
                     try {
                       buildLayout(data);
                     } catch (e) {
-                      console.log("e", e);
+                      console.log('e', e);
                     }
                   });
               }}

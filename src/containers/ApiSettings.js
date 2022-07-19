@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import actionTypes from "../constants/actionTypes";
-import { useForm, Controller, useFieldArray } from "react-hook-form";
-import { RemoveButton } from "./Inspector";
-import styled from "styled-components";
+import React, {useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import actionTypes from '../constants/actionTypes';
+import {useForm, Controller, useFieldArray} from 'react-hook-form';
+import {RemoveButton} from './Inspector';
+import styled from 'styled-components';
 
 const ApiSettings = (props) => {
   const {
@@ -13,18 +13,18 @@ const ApiSettings = (props) => {
     getValues,
     control,
     watch,
-    formState: { errors },
+    formState: {errors},
   } = useForm();
-  const { fields, append, replace, remove } = useFieldArray({
+  const {fields, append, replace, remove} = useFieldArray({
     control,
-    name: "headers",
+    name: 'headers',
   });
   const paramsFieldsArray = useFieldArray({
     control,
-    name: "params",
+    name: 'params',
   });
-  const watchFieldArray = watch("headers");
-  const watchParamsArray = watch("params");
+  const watchFieldArray = watch('headers');
+  const watchParamsArray = watch('params');
   const controlledFields = fields.map((field, index) => {
     return {
       ...field,
@@ -41,15 +41,15 @@ const ApiSettings = (props) => {
 
   const handleAddHeaderButton = () => {
     append({
-      key: "",
-      value: "",
+      key: '',
+      value: '',
     });
   };
 
   const handleAddParamButton = () => {
     paramsFieldsArray.append({
-      key: "",
-      value: "",
+      key: '',
+      value: '',
     });
   };
 
@@ -64,10 +64,10 @@ const ApiSettings = (props) => {
   }
 
   const handleAddButton = () => {
-    resetField("varName");
-    resetField("url");
-    resetField("headers");
-    resetField("params");
+    resetField('varName');
+    resetField('url');
+    resetField('headers');
+    resetField('params');
     setAPIFormShow(true);
   };
 
@@ -89,10 +89,10 @@ const ApiSettings = (props) => {
 
   const handleItemClick = (index) => {
     setSelected(index);
-    setValue("varName", APIs[index].varName);
-    setValue("url", APIs[index].url);
-    setValue("headers", APIs[index].headers);
-    setValue("params", APIs[index].params);
+    setValue('varName', APIs[index].varName);
+    setValue('url', APIs[index].url);
+    setValue('headers', APIs[index].headers);
+    setValue('params', APIs[index].params);
     replace(APIs[index].headers);
     paramsFieldsArray.replace(APIs[index].params);
     setAPIFormShow(true);
@@ -120,7 +120,7 @@ const ApiSettings = (props) => {
               <Controller
                 name="varName"
                 control={control}
-                render={({ field }) => (
+                render={({field}) => (
                   <input className="form-control" {...field} />
                 )}
               />
@@ -130,7 +130,7 @@ const ApiSettings = (props) => {
               <Controller
                 name="url"
                 control={control}
-                render={({ field }) => (
+                render={({field}) => (
                   <input className="form-control" {...field} />
                 )}
               />
@@ -138,9 +138,9 @@ const ApiSettings = (props) => {
             <div>
               <div
                 style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  marginBottom: "8px",
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  marginBottom: '8px',
                 }}
               >
                 <h5>Headers</h5>
@@ -156,14 +156,14 @@ const ApiSettings = (props) => {
                   <Controller
                     name={`headers.${index}.key`}
                     control={control}
-                    render={({ field }) => {
+                    render={({field}) => {
                       return <input {...field} placeholder="Key" />;
                     }}
                   />
                   <Controller
                     name={`headers.${index}.value`}
                     control={control}
-                    render={({ field }) => (
+                    render={({field}) => (
                       <input placeholder="Value" {...field} />
                     )}
                   />
@@ -181,9 +181,9 @@ const ApiSettings = (props) => {
             <div>
               <div
                 style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  marginBottom: "8px",
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  marginBottom: '8px',
                 }}
               >
                 <h5>Params</h5>
@@ -199,14 +199,14 @@ const ApiSettings = (props) => {
                   <Controller
                     name={`params.${index}.key`}
                     control={control}
-                    render={({ field }) => {
+                    render={({field}) => {
                       return <input {...field} placeholder="Key" />;
                     }}
                   />
                   <Controller
                     name={`params.${index}.value`}
                     control={control}
-                    render={({ field }) => (
+                    render={({field}) => (
                       <input placeholder="Value" {...field} />
                     )}
                   />
@@ -225,7 +225,7 @@ const ApiSettings = (props) => {
               className="btn btn-primary"
               onClick={handleSubmit(onSubmit)}
             >
-              {isEditing ? "Edit" : "Save"} API
+              {isEditing ? 'Edit' : 'Save'} API
             </button>
           </form>
           <hr />
@@ -236,7 +236,7 @@ const ApiSettings = (props) => {
         {APIs.map((item, index) => {
           return (
             <div
-              style={{ display: "flex", justifyContent: "space-between" }}
+              style={{display: 'flex', justifyContent: 'space-between'}}
               key={`api_${index}`}
             >
               <p onClick={() => handleItemClick(index)}>{item.varName}</p>

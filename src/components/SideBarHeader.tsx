@@ -4,12 +4,17 @@ import {useForm} from 'react-hook-form';
 import {useLocation, useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
 import {useModal} from 'utils/hooks';
-import {ReactComponent as ArrowBack} from '../assets/arrow_back.svg';
-import {ReactComponent as Settings} from '../assets/settings.svg';
+import {ReactComponent as ArrowBack} from 'assets/arrow_back.svg';
+import {ReactComponent as Settings} from 'assets/settings.svg';
+import {ReactComponent as Warning} from 'assets/warning.svg';
 import {editProject, getProjectData} from 'services/ApiService';
 import Modal from 'containers/Project/Modal';
 import actionTypes from 'constants/actionTypes';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import CustomModal from './Modal';
+import {Button} from 'components/controls/Button';
+import {Store} from 'reducers/types';
+import {useBackListener} from 'constants/utils';
 
 const Header = styled.div`
   min-height: 60px;
@@ -27,7 +32,7 @@ const Header = styled.div`
 const Subheader = styled.div`
   height: 44px;
   border-bottom: 1px solid #e6e6e6;
-  padding: 0px 16px;
+  padding: 0 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -45,6 +50,36 @@ const Subheader = styled.div`
   }
 `;
 
+const WarningWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex: 1;
+  & > svg {
+    margin-bottom: 30px;
+  }
+  & > h3 {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    margin-bottom: 24px;
+  }
+  & > p {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    max-width: 384px;
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  & > .button_group {
+    display: flex;
+    gap: 16px;
+  }
+`;
+
 type SideBarHeaderProps = {
   title: string;
   left?: boolean;
@@ -54,6 +89,9 @@ const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal();
+  const [warningOpen, setWarningOpen, toggleWarning] = useModal();
+  const layout = useSelector((state: Store) => state.layout);
+  const location = useLocation();
   const {
     setValue,
     getValues,
@@ -69,7 +107,6 @@ const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
   });
   const {title, left} = props;
   const formRef = React.createRef<HTMLFormElement>();
-  const location = useLocation();
   const [project, setProject] = useState({
     id: '',
     name: '',
@@ -86,6 +123,14 @@ const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
       });
     });
   }, [itemModalOpen]);
+
+  useBackListener(() => {
+    if (layout.editedScreens.length || layout.deletedScreens.length) {
+      toggleWarning();
+    } else {
+      redirect();
+    }
+  });
 
   const handleSave = () => {
     const {name, icon, description} = getValues().form;
@@ -106,17 +151,25 @@ const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
     });
   };
 
+  const redirect = () => {
+    dispatch({
+      type: actionTypes.SET_LAYOUT,
+      layout: [],
+    });
+    navigate('/project');
+  };
+
   return (
     <Header>
       {left && (
         <ArrowBack
           className="icon"
           onClick={() => {
-            dispatch({
-              type: actionTypes.SET_LAYOUT,
-              layout: [],
-            });
-            navigate('/project');
+            if (layout.editedScreens.length || layout.deletedScreens.length) {
+              toggleWarning();
+            } else {
+              redirect();
+            }
           }}
         />
       )}
@@ -141,6 +194,29 @@ const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
         form={form}
         isEdit
       />
+      <CustomModal
+        handleClose={() => setWarningOpen(false)}
+        isActive={warningOpen}
+        style={{maxWidth: '432px', minHeight: '268px', display: 'flex'}}
+      >
+        <WarningWrapper>
+          <Warning />
+          <h3>Warning!</h3>
+          <p>You are about to leave the page, but there are unsaved changes. Do you want to leave the page?</p>
+          <div className="button_group">
+            <Button
+              onClick={() => {
+                redirect();
+              }}
+            >
+              Don&#39;t save
+            </Button>
+            <Button className="secondary" onClick={() => toggleWarning()}>
+              Cancel
+            </Button>
+          </div>
+        </WarningWrapper>
+      </CustomModal>
     </Header>
   );
 };

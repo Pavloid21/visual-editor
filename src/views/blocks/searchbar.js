@@ -1,21 +1,54 @@
 import React from 'react';
-import styled from 'styled-components';
-import searchbar from '../../assets/searchbar.svg';
-import Wrapper from '../../utils/wrapper';
 import {useDrop} from 'react-dnd';
-import {ItemTypes} from '../../constants/actionTypes';
-import {observer} from '../../utils/observer';
-import {sortableContainer} from 'react-sortable-hoc';
+import styled from 'styled-components';
 import {arrayMoveImmutable} from 'array-move';
-import {useSelector} from 'react-redux';
-import {useDispatch} from 'react-redux';
-import actionTypes from '../../constants/actionTypes';
-import renderHandlebars from '../../utils/renderHandlebars';
+import {sortableContainer} from 'react-sortable-hoc';
+import {useDispatch, useSelector} from 'react-redux';
+import searchbar from 'assets/searchbar.svg';
+import Wrapper from 'utils/wrapper';
+import actionTypes, {ItemTypes} from 'constants/actionTypes';
+import {observer} from 'utils/observer';
+import renderHandlebars from 'utils/renderHandlebars';
+import {onSortMove} from 'utils/hooks';
+import {
+  alignmentConfig, backgroundColor, fontSize,
+  imageUrl,
+  placeholder,
+  placeholderColor, size,
+  sizeModifier, text,
+  textAlignment, textColor,
+} from 'views/configs';
 
 const SearchBar = styled.div`
   display: flex;
   flex-direction: column;
   max-height: 100%;
+  align-self: ${(props) => {
+    switch (props.alignment) {
+      case 'LEFT':
+        return 'flex-start';
+      case 'RIGHT':
+        return 'flex-end';
+      default:
+        return 'center';
+    }
+  }};
+  margin: ${(props) => {
+    switch (props.alignment) {
+      case 'CENTER':
+        return 'auto';
+      case 'TOP':
+        return '0 auto auto auto';
+      case 'BOTTOM':
+        return 'auto auto 0 auto';
+      case 'LEFT':
+        return 'auto auto auto 0';
+      case 'RIGHT':
+        return 'auto 0 auto auto';
+      default:
+        return '0 0';
+    }
+  }};
   & > input {
     pointer-events: none;
     &::placeholder {
@@ -61,7 +94,7 @@ const SearchBar = styled.div`
 const SortableContainer = sortableContainer(
   ({drop, backgroundColor, listItems, text, placeholder, settingsUI, ...props}) => {
     return (
-      <Wrapper id={props.id} style={{maxHeight: '100%'}}>
+      <Wrapper id={props.id} {...settingsUI} {...props} style={{maxHeight: '100%'}}>
         <SearchBar {...props.settingsUI} {...props} ref={drop} backgroundColor={backgroundColor}>
           <input type="text" className="form-control draggable" placeholder={placeholder} value={text} />
           {listItems && renderHandlebars(listItems, 'document2').components}
@@ -121,6 +154,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
       {...props}
       backgroundColor={backgroundColor}
       distance={1}
+      shouldCancelStart={onSortMove}
     />
   );
 };
@@ -134,6 +168,7 @@ const block = {
   imgUrl: 'https://icons.getbootstrap.com/assets/icons/search.svg',
   category: 'Controls',
   defaultData: {
+    sizeModifier: 'FULLWIDTH',
     placeholder: 'Введите имя',
     placeholderColor: '#7F7F7F',
     imageUrl: 'https://icons.getbootstrap.com/assets/icons/search.svg',
@@ -146,40 +181,17 @@ const block = {
     },
   },
   config: {
-    placeholder: {type: 'string', name: 'Placeholder'},
-    imageUrl: {type: 'string', name: 'Image URL'},
-    placeholderColor: {type: 'color', name: 'Placeholder color'},
-    text: {type: 'string', name: 'Text'},
-    textAlignment: {
-      type: 'select',
-      name: 'Text alignment',
-      options: [
-        {label: 'Center', value: 'CENTER'},
-        {label: 'Left', value: 'LEFT'},
-        {label: 'Right', value: 'RIGHT'},
-      ],
-    },
-    textColor: {type: 'color', name: 'Text color'},
-    backgroundColor: {type: 'color', name: 'Background color'},
-    fontSize: {type: 'number', name: 'Font size'},
-    size: {
-      height: {
-        type: 'units',
-        name: 'Height',
-        options: [
-          {label: 'px', value: 'px'},
-          {label: '%', value: '%'},
-        ],
-      },
-      width: {
-        type: 'units',
-        name: 'Width',
-        options: [
-          {label: 'px', value: 'px'},
-          {label: '%', value: '%'},
-        ],
-      },
-    },
+    sizeModifier,
+    alignment: alignmentConfig.both,
+    placeholder,
+    imageUrl,
+    placeholderColor,
+    text,
+    textAlignment,
+    textColor,
+    backgroundColor,
+    fontSize,
+    size,
   },
 };
 

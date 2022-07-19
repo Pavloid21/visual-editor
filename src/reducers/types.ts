@@ -1,5 +1,4 @@
-
-import { Zoom } from 'containers/ZoomSelect/types';
+import {Zoom} from 'containers/ZoomSelect/types';
 import {Action} from 'redux';
 
 export type Actions = {

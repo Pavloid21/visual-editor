@@ -7,14 +7,16 @@ import Editor from 'react-simple-code-editor';
 import fullScreenIcon from '../assets/full-screen.svg';
 import {useModal} from '../utils/hooks';
 import Prism from 'prismjs';
-import {stackoverflowLight} from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import {atomOneLight} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import CustomModal from '../components/Modal';
+import {Store} from 'reducers/types';
+import {snippet} from 'utils/prepareModel';
 
 const Container = styled.div`
   padding: 14px;
 `;
 
-const EditorWrapper = styled.div`
+const EditorWrapper = styled.div<any>`
   max-height: 638px;
   overflow: auto;
   padding: 8px 12px;
@@ -34,9 +36,11 @@ const EditorWrapper = styled.div`
   }
 `;
 
-const Screen = (props) => {
-  const screenName = useSelector((state) => state.output.screen);
-  const logic = useSelector((state) => state.output.logic);
+const Screen: React.FC<any> = (props) => {
+  const screenName = useSelector((state: Store) => state.output.screen);
+  const logic = useSelector((state: Store) => state.output.logic);
+  const selectedScreen = useSelector((state: Store) => state.layout.selectedScreen);
+  const layout = useSelector((state: Store) => state.layout);
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal();
   const dispatch = useDispatch();
   return props.display ? (
@@ -49,10 +53,18 @@ const Screen = (props) => {
           type="text"
           placeholder="Screen name"
           value={screenName}
-          onChange={(e) =>
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement> & React.ChangeEvent<HTMLInputElement>) =>
             dispatch({
               type: actionTypes.EDIT_SCREEN_NAME,
               screen: e.target.value,
+              snippet: {
+                screenID: selectedScreen.uuid,
+                endpoint: e.target.value.replace(/\s/g, '_'),
+                snippet: snippet({
+                  screen: e.target.value,
+                  listItems: layout,
+                }),
+              },
             })
           }
         />
@@ -76,7 +88,7 @@ const Screen = (props) => {
                 });
               }}
               style={{
-                ...stackoverflowLight,
+                ...atomOneLight,
                 fontSize: '16px',
                 lineHeight: '20px',
               }}
@@ -98,7 +110,7 @@ const Screen = (props) => {
               });
             }}
             style={{
-              ...stackoverflowLight,
+              ...atomOneLight,
               fontSize: '16px',
               lineHeight: '20px',
             }}

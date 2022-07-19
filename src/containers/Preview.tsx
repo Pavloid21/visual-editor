@@ -1,7 +1,7 @@
-import React, {useEffect} from 'react';
+import React, {ReactNode, useEffect} from 'react';
 import {useDrop} from 'react-dnd';
 import {useDispatch, useSelector} from 'react-redux';
-import {sortableContainer} from 'react-sortable-hoc';
+import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 import actionTypes, {ItemTypes} from '../constants/actionTypes';
 import {arrayMoveImmutable} from 'array-move';
 import {observer} from '../utils/observer';
@@ -15,17 +15,19 @@ import {ReactComponent as Save} from '../assets/save.svg';
 import MobileSelect from './MobileSelect';
 import clsx from 'clsx';
 import ZoomSelect from './ZoomSelect';
+import {Beforeunload} from 'react-beforeunload';
+import {Store} from 'reducers/types';
+import {onSortMove} from 'utils/hooks';
 
-const Bar = styled.div`
+const Bar = styled.div<any>`
   height: 60px;
   background: var(--background);
-  width: 100%;
   position: absolute;
   left: 0;
-  padding-left: ${(props) => (props.barState.left ? '437px' : '16px')};
-  padding-right: ${(props) => (props.barState.right ? '437px' : '16px')};
-  padding-top: 10px;
-  padding-bottom: 10px;
+  right: 0;
+  margin-left: ${(props) => (props.barState.left ? '421px' : '0px')};
+  margin-right: ${(props) => (props.barState.right ? '422px' : '0px')};
+  padding: 10px 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -35,20 +37,21 @@ const Bar = styled.div`
     display: flex;
   }
   @media (max-width: 1500px) {
-    padding-left: ${(props) => (props.barState.left ? '315px' : '16px')};
-    padding-right: ${(props) => (props.barState.right ? '315px' : '16px')};
+    margin-left: ${(props) => (props.barState.left ? '299px' : '0px')};
+    margin-right: ${(props) => (props.barState.right ? '300px' : '0px')};
   }
 `;
 
-const ServiceBar = styled.div`
+const ServiceBar = styled.div<any>`
   height: 42px;
   background: var(--background);
-  width: 100%;
   position: absolute;
   left: 0;
   bottom: 0;
-  padding-left: ${(props) => (props.barState?.left ? '437px' : '16px')};
-  padding-right: ${(props) => (props.barState?.right ? '437px' : '16px')};
+  right: 0;
+  padding: 0 25px;
+  margin-left: ${(props) => (props.barState?.left ? '421px' : '0px')};
+  margin-right: ${(props) => (props.barState?.right ? '422px' : '0px')};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -57,12 +60,12 @@ const ServiceBar = styled.div`
     display: flex;
   }
   @media (max-width: 1500px) {
-    padding-left: ${(props) => (props.barState.left ? '315px' : '16px')};
-    padding-right: ${(props) => (props.barState.right ? '315px' : '16px')};
+    margin-left: ${(props) => (props.barState.left ? '299px' : '0px')};
+    margin-right: ${(props) => (props.barState.right ? '300px' : '0px')};
   }
 `;
 
-const Container = styled.div`
+const Container = styled.div<any>`
   height: 100%;
   background-color: ${(props) => props.backgroundColor};
   position: relative;
@@ -79,62 +82,75 @@ const Container = styled.div`
   }
 `;
 
-const SortableContainer = sortableContainer(({children, drop, backgroundColor}) => {
-  const bottomBar = useSelector((state) => state.layout.bottomBar);
+interface ISortableList {
+  backgroundColor: string;
+  drop: React.Ref<any>;
+  list: ReactNode[];
+}
+
+const SortableItem = SortableElement((props: any) => <>{props.children}</>);
+
+const SortableList = SortableContainer<ISortableList>(({drop, backgroundColor, list}: ISortableList) => {
+  const bottomBar = useSelector((state: Store) => state.layout.bottomBar);
   return (
     <Container backgroundColor={backgroundColor} ref={drop}>
       <div style={{flex: bottomBar ? 1 : 'none'}}>
-        {children.map((child, index) => {
-          if (index !== children.length - 1) {
-            return child;
+        {list.map((child: ReactNode, index: number) => {
+          if (index !== list.length - 1) {
+            // @ts-ignore
+            return <SortableItem index={index}>{child}</SortableItem>;
           }
           return null;
         })}
       </div>
-      {children[children.length - 1]}
+      {/* @ts-ignore*/}
+      {list.length > 0 && <SortableItem index={list.length - 1}>{list[list.length - 1]}</SortableItem>}
     </Container>
   );
 });
 
-const Preview = (props) => {
-  const selectedScreen = useSelector((state) => state.layout.selectedScreen);
-  const [{canDrop, isOver}, drop] = useDrop(() => ({
-    accept: ItemTypes.BOX,
-    drop: (item) => {
-      return;
-    },
-    canDrop: (item) => {
-      return item.type === 'Container' && !!selectedScreen;
-    },
-    collect: (monitor) => ({
-      isOver: monitor.isOver({shallow: true}),
-      canDrop: monitor.canDrop(),
+const Preview = (props: any) => {
+  const selectedScreen = useSelector((state: Store) => state.layout.selectedScreen);
+  const [{canDrop, isOver}, drop] = useDrop(
+    () => ({
+      accept: ItemTypes.BOX,
+      drop: (item) => {
+        return item;
+      },
+      canDrop: (item: {type: string}) => {
+        return item.type === 'Container' && !!selectedScreen;
+      },
+      collect: (monitor) => ({
+        isOver: monitor.isOver({shallow: true}),
+        canDrop: monitor.canDrop(),
+      }),
     }),
-  }), [selectedScreen]);
+    [selectedScreen]
+  );
 
   const dispatch = useDispatch();
-  const editorMode = useSelector((state) => state.editorMode.mode);
-  const layout = useSelector((state) => state.layout);
-  const barState = useSelector((state) => state.sideBar);
+  const editorMode = useSelector((state: Store) => state.editorMode.mode);
+  const layout = useSelector((state: Store) => state.layout);
+  const barState = useSelector((state: Store) => state.sideBar);
 
   useEffect(() => {
     const scrollY = localStorage.getItem('scrollY');
     const bodyHeight = localStorage.getItem('bodyHeight');
     if (scrollY) {
-      window.scrollTo(0, scrollY);
+      window.scrollTo(0, +scrollY);
     }
 
     if (bodyHeight) {
-      window.scroll(0, scrollY);
+      window.scroll(0, +scrollY!);
     }
 
     window.addEventListener('scroll', () => {
-      localStorage.setItem('scrollY', window.scrollY);
+      localStorage.setItem('scrollY', `${window.scrollY}`);
     });
   }, [selectedScreen]);
 
-  const onSortEnd = ({oldIndex, newIndex, nodes}) => {
-    const newOrder = arrayMoveImmutable(nodes, oldIndex, newIndex).map((item) => item.node.getAttribute('id'));
+  const onSortEnd = ({oldIndex, newIndex, nodes}: any) => {
+    const newOrder = arrayMoveImmutable(nodes, oldIndex, newIndex).map((item: any) => item.node.getAttribute('id'));
     observer.broadcast({
       layout,
       newOrder,
@@ -143,7 +159,7 @@ const Preview = (props) => {
     });
   };
 
-  const handleModeClick = (mode) => {
+  const handleModeClick = (mode: string) => {
     dispatch({
       type: actionTypes.SET_EDITOR_MODE,
       mode,
@@ -172,6 +188,14 @@ const Preview = (props) => {
 
   return (
     <>
+      {layout.editedScreens.length && (
+        <Beforeunload
+          onBeforeunload={(event) => {
+            event.preventDefault();
+            return;
+          }}
+        />
+      )}
       <Bar barState={barState}>
         {editorMode === 'editor' && <MobileSelect />}
         <div className="mode_selector">
@@ -201,16 +225,22 @@ const Preview = (props) => {
       >
         {editorMode === 'editor' && (
           <PhoneContainer>
-            <SortableContainer drop={drop} backgroundColor={backgroundColor} onSortEnd={onSortEnd} distance={1}>
-              {props.components}
-            </SortableContainer>
+            {/* @ts-ignore*/}
+            <SortableList
+              drop={drop}
+              backgroundColor={backgroundColor}
+              onSortEnd={onSortEnd}
+              shouldCancelStart={onSortMove}
+              distance={1}
+              list={props.components}
+            />
           </PhoneContainer>
         )}
         {editorMode === 'json' && <Code />}
       </div>
       <ServiceBar barState={barState}>
         {editorMode === 'json' && <Save className="icon" onClick={handleSaveSnippet} />}
-        <ZoomSelect/>
+        <ZoomSelect />
       </ServiceBar>
     </>
   );

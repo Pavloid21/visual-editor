@@ -1,9 +1,8 @@
 import actionTypes from '../constants/actionTypes';
-import { optionsByDevice } from 'containers/MobileSelect/consts';
-import { Device } from 'containers/MobileSelect/consts';
+import {Device, optionsByDevice} from 'containers/MobileSelect/consts';
 import {AnyAction} from 'redux';
-import { EditorMode } from './types';
-import { Zoom } from 'containers/ZoomSelect/types';
+import {EditorMode} from './types';
+import {Zoom} from 'containers/ZoomSelect/types';
 
 const initialState: EditorMode = {
   mode: 'editor',
@@ -36,7 +35,7 @@ export default function reducer(state = initialState, action: AnyAction) {
       return {
         ...state,
         zoom: action.zoom
-      }
+      };
     }
     default:
       return state;

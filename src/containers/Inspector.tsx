@@ -1,17 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {useSelector} from 'react-redux';
-import actionTypes from '../constants/actionTypes';
-import blocks from '../views/blocks';
+import {useSelector, useDispatch} from 'react-redux';
+import actionTypes from 'constants/actionTypes';
+import blocks from 'views/blocks';
 import styled from 'styled-components';
-import {ReactComponent as Trash} from '../assets/trash.svg';
-import ColorPicker from '../components/ColorPicker';
-import {leadLetter} from '../constants/utils';
-import {Button, Input, UnitsInput} from '../components/controls';
-import {Select as SelectBase} from '../components/controls';
-import {Container} from '../components/controls/Input';
-import {Label} from 'components/Input';
-import {useDispatch} from 'react-redux';
+import {ReactComponent as Trash} from 'assets/trash.svg';
+import ColorPicker from 'components/ColorPicker';
+import {leadLetter} from 'constants/utils';
+import {Button, Input, UnitsInput, Select as SelectBase} from 'components/controls';
 import {Store} from 'reducers/types';
 
 const Division = styled.div`
@@ -148,6 +144,7 @@ const Inspector: React.FC<any> = ({display}) => {
                 onChange={(value) => handleChangeBlockData(blockUuid, el, value, parentKey)}
                 options={config[el].options}
                 value={endpoint ? endpoint[el] : null}
+                clearable
               />
             </div>
           );
@@ -200,7 +197,7 @@ const Inspector: React.FC<any> = ({display}) => {
 
   const findInTree = (tree: any, uuid: string): any => {
     let result = null;
-    for (let item of tree) {
+    for (const item of tree) {
       if (item && item.uuid === uuid) {
         result = item;
       }

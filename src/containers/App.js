@@ -1,11 +1,10 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {Routes, Route, Navigate} from 'react-router-dom';
+import {Routes, Route, Navigate, useLocation} from 'react-router-dom';
 import renderHandlebars from '../utils/renderHandlebars';
 import LeftSidebar from '../components/LeftSidebar';
 import Preview from './Preview';
 import actionTypes from '../constants/actionTypes';
-import {useLocation} from 'react-router-dom';
 import {observer} from '../utils/observer';
 import {findInTree} from '../reducers/layout';
 import TopBar from '../components/TopBar';
@@ -18,6 +17,7 @@ import {useKeycloak} from '@react-keycloak/web';
 import {Project} from './Project';
 import {API} from 'services/ApiService';
 import Loader from 'components/Loader';
+import 'react-notifications-component/dist/theme.css';
 
 const App = () => {
   const layout = useSelector((state) => state.layout);
@@ -105,7 +105,7 @@ const App = () => {
       const next = order.filter((item) => uuids.includes(item.uuid));
       dispatch({
         type: actionTypes.REORDER_LAYOUT,
-        newBlocksLayout: next,
+        newBlocksLayout: [...new Set(next.map(JSON.stringify))].map(JSON.parse),
       });
     }
   };

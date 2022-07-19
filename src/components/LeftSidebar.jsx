@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
@@ -65,6 +66,9 @@ export default function LeftSidebar({children, ...props}) {
   const bottomBar = useSelector((state) => state.layout.bottomBar);
   const selectedBlock = useSelector((state) => state.layout.selectedBlockUuid);
   const selectedScreen = useSelector((state) => state.layout.selectedScreen);
+  const currentSnippet = useSelector((state) =>
+    state.layout.snippets.filter((snippetData) => snippetData.screenID === selectedScreen)[0]
+  );
   const {project} = useParams();
   const projectName = useSelector((state) => state.project.name);
   const [activeTab, setActiveTab] = useState(0);
@@ -179,7 +183,7 @@ export default function LeftSidebar({children, ...props}) {
         },
         interactive: {
           appBarItems: {...object.topAppBar.appBarItems},
-        }
+        },
       };
     }
     return {newBlock, action, screenEndpoint: screen};
@@ -242,6 +246,7 @@ export default function LeftSidebar({children, ...props}) {
       if (item.uuid === selectedScreen) {
         layouts.push({
           ...item,
+          screenEndpoint: currentSnippet?.endpoint,
           action: {
             ...item.action,
             layout: layout,
@@ -258,7 +263,7 @@ export default function LeftSidebar({children, ...props}) {
 
     setScreenes(layouts);
     setTree(layouts.map((layout) => prepareTree(layout)));
-  }, [layout, topAppBar, bottomBar, output]);
+  }, [layout, topAppBar, bottomBar, output, currentSnippet]);
 
   useEffect(() => {
     const screenLayout = availableScreenes.filter((screen) => screen.uuid === selectedScreen)[0];
@@ -382,6 +387,8 @@ export default function LeftSidebar({children, ...props}) {
 
   const handleDeleteScreen = (event, node) => {
     event.stopPropagation();
+    const layouts = [...availableScreenes];
+    setScreenes(layouts.filter((layout) => layout.uuid !== node.uuid));
     const newTree = treeData.filter((item) => item.uuid !== node.uuid);
     setTree(newTree);
     dispatch({
@@ -425,7 +432,7 @@ export default function LeftSidebar({children, ...props}) {
   return (
     <Container show={show}>
       <div>
-        <SideBarHeader title={projectName} left/>
+        <SideBarHeader title={projectName} left />
         <SideBarSubheader>
           <div>
             <span

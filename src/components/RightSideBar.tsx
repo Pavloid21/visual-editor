@@ -1,17 +1,18 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
 import SideBarHeader from './SideBarHeader';
-import Inspector from '../containers/Inspector';
-import Screen from '../containers/Screen';
-import {Button} from '../components/controls';
-import actionTypes from '../constants/actionTypes';
-import ActionForm from '../containers/ActionForm';
+import Inspector from 'containers/Inspector';
+import Screen from 'containers/Screen';
+import {Button, Input} from './controls';
+import actionTypes from 'constants/actionTypes';
+import ActionForm from 'containers/ActionForm';
 import {useSelector, useDispatch} from 'react-redux';
-import {ReactComponent as Plus} from '../assets/plus.svg';
-import {ReactComponent as Remove} from '../assets/trash.svg';
-import {ReactComponent as Pencil} from '../assets/pencil.svg';
-import {Input} from './controls';
+import {ReactComponent as Plus} from 'assets/plus.svg';
+import {ReactComponent as Remove} from 'assets/trash.svg';
+import {ReactComponent as Pencil} from 'assets/pencil.svg';
 import {useForm, useFieldArray, Controller} from 'react-hook-form';
+import {Store} from 'reducers/types';
+import {noop} from 'external/lodash';
 
 const Container = styled.div`
   min-width: 422px;
@@ -21,7 +22,6 @@ const Container = styled.div`
   flex-direction: column;
   border-left: 1px solid var(--neo-gray);
   height: calc(100vh - 60px);
-  z-index: 1;
   & > div {
     height: 100%;
   }
@@ -60,23 +60,17 @@ const APIRow = styled.section`
   align-items: center;
 `;
 
-export default function RightSidebar({children, ...props}) {
-  const APIs = useSelector((state) => state.api.list);
-  const activeTab = useSelector((state) => state.config.activeTab);
-  const selectedBlock = useSelector((state) => state.layout.selectedBlockUuid);
-  const selectedAction = useSelector((state) => state.actions.selected);
+const RightSidebar: React.FC<any> = ({children, ...props}) => {
+  const APIs = useSelector((state: Store) => state.api.list);
+  const activeTab = useSelector((state: Store) => state.config.activeTab);
+  const selectedBlock = useSelector((state: Store) => state.layout.selectedBlockUuid);
+  const selectedAction = useSelector((state: Store) => state.actions.selected);
+  const selectedScreen = useSelector((state: Store) => state.layout.selectedScreen);
   const [showForm, setAPIFormShow] = useState(false);
   const [isEditing, setEditing] = useState(false);
-  const [selected, setSelected] = useState();
+  const [selected, setSelected] = useState<number | undefined>();
   const dispatch = useDispatch();
-  const {
-    handleSubmit,
-    resetField,
-    setValue,
-    control,
-    watch,
-    formState: {errors},
-  } = useForm();
+  const {handleSubmit, resetField, setValue, control, watch} = useForm();
   const {fields, append, replace, remove} = useFieldArray({
     control,
     name: 'headers',
@@ -123,7 +117,7 @@ export default function RightSidebar({children, ...props}) {
     setAPIFormShow(true);
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: any) => {
     if (isEditing) {
       dispatch({
         type: actionTypes.EDIT_API,
@@ -139,7 +133,7 @@ export default function RightSidebar({children, ...props}) {
     setAPIFormShow(false);
   };
 
-  const handleItemClick = (index) => {
+  const handleItemClick = (index: number) => {
     setSelected(index);
     setValue('varName', APIs[index].varName);
     setValue('url', APIs[index].url);
@@ -161,10 +155,10 @@ export default function RightSidebar({children, ...props}) {
         <SideBarHeader title="Properties" />
         <Inspector display />
         {selectedAction && !selectedBlock && <ActionForm action={selectedAction} />}
-        {activeTab === 5 && (
-          <Screen category="screen" display={activeTab === 5} onPushBlock={() => {}} onPushBlockInside={() => {}} />
+        {activeTab === 5 && selectedScreen && (
+          <Screen category="screen" display={activeTab === 5} onPushBlock={noop} onPushBlockInside={noop} />
         )}
-        {!selectedBlock && !selectedAction && (
+        {!selectedBlock && !selectedAction && activeTab !== 5 && (
           <APIContainer>
             <div>
               <span>API Settings</span>
@@ -179,12 +173,12 @@ export default function RightSidebar({children, ...props}) {
                 <Controller
                   name="varName"
                   control={control}
-                  render={({field}) => <Input type="text" label="Endpoint name" clearable isWide {...field} />}
+                  render={({field}) => <Input type="text" label="Endpoint name" $clearable $isWide {...field} />}
                 />
                 <Controller
                   name="url"
                   control={control}
-                  render={({field}) => <Input type="text" label="URL" clearable isWide {...field} />}
+                  render={({field}) => <Input type="text" label="URL" $clearable $isWide {...field} />}
                 />
                 <div>
                   <span>Headers</span>
@@ -193,20 +187,22 @@ export default function RightSidebar({children, ...props}) {
                 {controlledFields.map((field, index) => (
                   <RowContainer key={field.id}>
                     <Controller
+                      //@ts-ignore
                       name={`headers.${index}.key`}
                       control={control}
                       render={({field}) => {
-                        return <Input placeholder="Key" label="Key" clearable {...field} />;
+                        return <Input placeholder="Key" label="Key" $clearable {...field} />;
                       }}
                     />
                     <Controller
+                      //@ts-ignore
                       name={`headers.${index}.value`}
                       control={control}
-                      render={({field}) => <Input placeholder="Value" label="Value" clearable {...field} />}
+                      render={({field}) => <Input placeholder="Value" label="Value" $clearable {...field} />}
                     />
                     <Remove
                       className="icon"
-                      onClick={(e) => {
+                      onClick={() => {
                         remove(index);
                       }}
                     />
@@ -219,20 +215,22 @@ export default function RightSidebar({children, ...props}) {
                 {controlledParams.map((field, index) => (
                   <RowContainer key={field.id}>
                     <Controller
+                      //@ts-ignore
                       name={`params.${index}.key`}
                       control={control}
                       render={({field}) => {
-                        return <Input placeholder="Key" label="Key" clearable {...field} />;
+                        return <Input placeholder="Key" label="Key" $clearable {...field} />;
                       }}
                     />
                     <Controller
+                      //@ts-ignore
                       name={`params.${index}.value`}
                       control={control}
-                      render={({field}) => <Input placeholder="Value" label="Value" clearable {...field} />}
+                      render={({field}) => <Input placeholder="Value" label="Value" $clearable {...field} />}
                     />
                     <Remove
                       className="icon"
-                      onClick={(e) => {
+                      onClick={() => {
                         paramsFieldsArray.remove(index);
                       }}
                     />
@@ -252,7 +250,7 @@ export default function RightSidebar({children, ...props}) {
                     <Pencil className="icon" onClick={() => handleItemClick(index)} />
                     <Remove
                       className="icon"
-                      onClick={(e) => {
+                      onClick={() => {
                         dispatch({
                           type: actionTypes.REMOVE_API_ITEM,
                           index,
@@ -268,4 +266,6 @@ export default function RightSidebar({children, ...props}) {
       </div>
     </Container>
   );
-}
+};
+
+export default RightSidebar;

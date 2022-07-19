@@ -1,19 +1,46 @@
 import React from 'react';
 import {useDrop} from 'react-dnd';
-import {ItemTypes} from '../../constants/actionTypes';
-import renderHandlebars from '../../utils/renderHandlebars';
 import styled from 'styled-components';
-import {sortableContainer} from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
-import {observer} from '../../utils/observer';
-import {useSelector} from 'react-redux';
-import {useDispatch} from 'react-redux';
-import actionTypes from '../../constants/actionTypes';
-import card from '../../assets/card.svg';
-import Wrapper from '../../utils/wrapper';
-import {hexToRgb} from '../../constants/utils';
+import {sortableContainer} from 'react-sortable-hoc';
+import {useSelector, useDispatch} from 'react-redux';
+import Wrapper from 'utils/wrapper';
+import {observer} from 'utils/observer';
+import {onSortMove} from 'utils/hooks';
+import renderHandlebars from 'utils/renderHandlebars';
+import {hexToRgb} from 'constants/utils';
+import actionTypes, {ItemTypes} from 'constants/actionTypes';
+import card from 'assets/card.svg';
+import {
+  alignmentConfig, backgroundColor, corners, elevation, interactive,
+  padding, shadowConfigBuilder,
+  shapeConfigBuilder,
+  sizeModifier,
+} from 'views/configs';
 
 const Card = styled.div`
+  align-self: ${(props) => {
+    switch (props.alignment) {
+      case 'LEFT':
+        return 'flex-start';
+      case 'RIGHT':
+        return 'flex-end';
+      default:
+        return 'stretch';
+    }
+  }};
+  margin: ${(props) => {
+    switch (props.alignment) {
+      case 'CENTER':
+        return 'auto';
+      case 'LEFT':
+        return 'auto auto auto 0';
+      case 'RIGHT':
+        return 'auto 0 auto auto';
+      default:
+        return '0 0';
+    }
+  }};
   box-sizing: border-box;
   border: ${(props) => props.border};
   background-color: ${(props) => props.backgroundColor};
@@ -30,14 +57,13 @@ const Card = styled.div`
     } else if (props.size?.heightInPercent !== undefined) {
       return props.size.heightInPercent + '%';
     }
-    return 'auto';
+    return 'fit-content';
   }};
   overflow: hidden;
   box-shadow: ${(props) => {
     const RGB = hexToRgb(props.shadow?.color);
     return `${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px 8px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b}, ${props.shadow?.opacity})`;
   }};
-  gap: ${(props) => props.spacing}px;
   border-radius: ${(props) => `
     ${props.corners?.topLeftRadius}px 
     ${props.corners?.topRightRadius}px 
@@ -47,9 +73,8 @@ const Card = styled.div`
 `;
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, settingsUI, ...props}) => {
-  console.log('backgroundColor', backgroundColor);
   return (
-    <Wrapper id={props.id}>
+    <Wrapper id={props.id} {...settingsUI} {...props}>
       <Card {...settingsUI} {...props} backgroundColor={backgroundColor} ref={drop} className="draggable">
         {listItems && renderHandlebars(listItems, 'document2').components}
       </Card>
@@ -108,6 +133,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
       {...props}
       backgroundColor={backgroundColor}
       distance={1}
+      shouldCancelStart={onSortMove}
     />
   );
 };
@@ -124,7 +150,7 @@ const block = {
   },
   defaultData: {
     elevation: 3,
-    alignment: 'CENTER',
+    sizeModifier: 'FULLWIDTH',
     backgroundColor: '#C6C6C6',
     spacing: 16,
     padding: {
@@ -157,60 +183,17 @@ const block = {
   },
   listItems: [],
   config: {
-    elevation: {type: 'number', name: 'Elevation'},
-    alignment: {
-      type: 'select',
-      name: 'Alignment',
-      options: [
-        {label: 'Center', value: 'CENTER'},
-        {label: 'Left', value: 'LEFT'},
-        {label: 'Right', value: 'RIGHT'},
-        {label: 'Justify', value: 'JUSTIFY'},
-        {label: 'Fill', value: 'FILL'},
-      ],
-    },
-    backgroundColor: {type: 'color', name: 'Background color'},
-    spacing: {type: 'number', name: 'Spacing'},
-    shape: {
-      type: {
-        type: 'select',
-        name: 'Shape type',
-        options: [{label: 'All corners round', value: 'ALLCORNERSROUND'}],
-      },
-      radius: {type: 'number', name: 'Radius'},
-    },
-    corners: {
-      topLeftRadius: {type: 'number', name: 'Top left radius'},
-      topRightRadius: {type: 'number', name: 'Top right radius'},
-      bottomLeftRadius: {type: 'number', name: 'Bottom left radius'},
-      bottomRightRadius: {type: 'number', name: 'Bottom right radius'},
-    },
-    shadow: {
-      color: {type: 'color', name: 'Shadow color'},
-      opacity: {type: 'number', name: 'Opacity'},
-      offsetSize: {
-        width: {type: 'number', name: 'Width'},
-        height: {type: 'number', name: 'Height'},
-      },
-    },
-    padding: {
-      top: {
-        type: 'number',
-        name: 'Top',
-      },
-      bottom: {
-        type: 'number',
-        name: 'Bottom',
-      },
-      left: {
-        type: 'number',
-        name: 'Left',
-      },
-      right: {
-        type: 'number',
-        name: 'Right',
-      },
-    },
+    elevation,
+    sizeModifier,
+    alignment: alignmentConfig.horizontally,
+    backgroundColor,
+    shape: shapeConfigBuilder()
+      .withAllCornersRound
+      .withRadius
+      .done(),
+    corners,
+    shadow: shadowConfigBuilder().done(),
+    padding,
     size: {
       height: {
         type: 'units',
@@ -222,16 +205,7 @@ const block = {
       },
     },
   },
-  interactive: {
-    action: {
-      url: {
-        type: 'string',
-        name: 'Action URL',
-      },
-      target: {type: 'string', name: 'Target'},
-      fields: {type: 'array', name: 'Fields set'},
-    },
-  },
+  interactive,
 };
 
 export default block;

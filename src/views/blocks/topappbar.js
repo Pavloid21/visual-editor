@@ -1,8 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
-import invertColor from '../../utils/invertColor';
-import topappbar from '../../assets/topappbar.svg';
-import Wrapper from '../../utils/wrapper';
+import Wrapper from 'utils/wrapper';
+import invertColor from 'utils/invertColor';
+import topappbar from 'assets/topappbar.svg';
+import {
+  action,
+  backgroundColor,
+  fontSize,
+  padding,
+  sizeModifier,
+  textAlignment,
+  textColor
+} from 'views/configs';
 
 const TopAppBar = styled.div`
   padding-top: ${(props) => props.padding?.top || 16}px;
@@ -39,16 +48,10 @@ const TopAppBar = styled.div`
   }
 `;
 
-const Icon = styled.div`
-  width: 16px;
-  height: 16px;
-  mask: url(${(props) => props.iconUrl}) no-repeat center;
-`;
-
 const Component = ({settingsUI, ...props}) => {
   const {appBarItems} = props.interactive;
   return (
-    <Wrapper id={props.id} style={{padding: 0}}>
+    <Wrapper id={props.id} style={{padding: 0}} sizeModifier='FULLWIDTH'>
       <TopAppBar {...settingsUI} {...props}>
         <label>{appBarItems?.title}</label>
       </TopAppBar>
@@ -74,7 +77,6 @@ const block = {
     textColor: '#E9E8EA',
     sizeModifier: 'FULLSIZE',
     backgroundColor: '#423649',
-    textAlignment: 'LEFT',
     padding: {
       top: 8,
       bottom: 8,
@@ -86,36 +88,13 @@ const block = {
     },
   },
   config: {
-    fontSize: {type: 'number', name: 'Font size'},
-    sizeModifier: {
-      type: 'select',
-      name: 'Size modifier',
-      options: [
-        {label: 'Full width', value: 'FULLWIDTH'},
-        {label: 'Full height', value: 'FULLHEIGHT'},
-        {label: 'Full size', value: 'FULLSIZE'},
-      ],
-    },
-    textColor: {type: 'color', name: 'Text color'},
-    textAlignment: {
-      type: 'select',
-      name: 'Text alignment',
-      options: [
-        {label: 'Center', value: 'CENTER'},
-        {label: 'Left', value: 'LEFT'},
-        {label: 'Right', value: 'RIGHT'},
-      ],
-    },
-    backgroundColor: {type: 'color', name: 'Background color'},
-    padding: {
-      top: {type: 'number', name: 'Top'},
-      bottom: {type: 'number', name: 'Bottom'},
-      left: {type: 'number', name: 'Left'},
-      right: {type: 'number', name: 'Right'},
-    },
-    action: {
-      url: {type: 'string', name: 'URL'},
-    },
+    fontSize,
+    sizeModifier,
+    textColor,
+    textAlignment,
+    backgroundColor,
+    padding,
+    action,
   },
   interactive: {
     appBarItems: {

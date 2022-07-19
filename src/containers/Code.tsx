@@ -5,7 +5,7 @@ import {atomOneLight} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import {useSelector, useDispatch} from 'react-redux';
 import actionTypes from '../constants/actionTypes';
 import {snippet} from '../utils/prepareModel';
-import { Store } from 'reducers/types';
+import {Store} from 'reducers/types';
 
 const Container = styled.div`
   display: flex;

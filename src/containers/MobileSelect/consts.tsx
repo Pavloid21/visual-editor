@@ -11,7 +11,17 @@ import {ReactComponent as Iphone11or10} from 'assets/mockups/iPhone_X.svg';
 import {ReactComponent as IphoneSE} from 'assets/mockups/iPhoneSE.svg';
 import {ReactComponent as Iphone8Plus} from 'assets/mockups/iPhone8_Plus.svg';
 import {ReactComponent as Iphone8} from 'assets/mockups/iPhone8.svg';
-import {CSSProperties} from 'styled-components';
+import styled, {CSSProperties} from 'styled-components';
+import {ReactComponent as LeftSide} from 'assets/mockups/left_side.svg';
+import {ReactComponent as RightSide} from 'assets/mockups/right_side.svg';
+import {ReactComponent as LeftSideSE} from 'assets/mockups/left_side_se.svg';
+import {ReactComponent as RightSideSE} from 'assets/mockups/right_side_se.svg';
+import {ReactComponent as Time} from 'assets/mockups/time.svg';
+import {ReactComponent as TimeAndroid} from 'assets/mockups/time_android.svg';
+import {ReactComponent as RightSideAndroid} from 'assets/mockups/right_side_android.svg';
+import {useSelector} from 'react-redux';
+import {Store} from 'reducers/types';
+import {hexToRgb, setContrast} from 'constants/utils';
 
 export enum Device {
   IOS = 'IOS',
@@ -61,7 +71,7 @@ export const stylesByDeviceKey: Record<DeviceKeys, CSSProperties> = {
     width: '424px',
     height: '997px',
     clipPath: 'url(#clipPath)',
-    padding: '86px 26px 100px'
+    padding: '86px 26px 100px',
   },
   [DeviceKeys.IPHONE_13_PRO_MAX]: {
     width: '475px',
@@ -69,50 +79,52 @@ export const stylesByDeviceKey: Record<DeviceKeys, CSSProperties> = {
     padding: '22px',
     clipPath: 'url(#clipPath)',
     borderRadius: '50px',
-    paddingTop: '55px',
+    paddingTop: '22px',
   },
   [DeviceKeys.IPHONE_13]: {
     width: '439px',
     height: '886px',
     borderRadius: '50px',
     clipPath: 'url(#clipPath)',
-    padding: '52px 26px 19px'
+    padding: '20px 26px 19px',
   },
   [DeviceKeys.IPHONE_13_MINI]: {
     width: '422px',
     height: '853px',
     borderRadius: '63px',
-    padding: '52px 25px 20px',
+    padding: '20px 25px 20px',
     clipPath: 'url(#clipPath)',
   },
   [DeviceKeys.IPHONE_11_PRO_MAX]: {
     width: '474px',
     height: '953px',
     clipPath: 'url(#clipPath)',
+    padding: '22px 26px 0px',
   },
   [DeviceKeys.IPHONE_11_PRO_10]: {
     width: '428px',
     height: '836px',
     clipPath: 'url(#maskRect1)',
+    padding: '22px 26px 0px',
   },
   [DeviceKeys.IPHONE_SE]: {
     width: '361px',
     height: '753px',
     padding: '86px 20px 90px',
-    clipPath: 'url(#clipPath)'
+    clipPath: 'url(#clipPath)',
   },
   [DeviceKeys.IPHONE_8_PLUS]: {
     width: '467px',
     height: '975px',
     padding: '115px 26px 119px',
     borderRadius: '65px',
-    clipPath: 'url(#clipPath)'
+    clipPath: 'url(#clipPath)',
   },
   [DeviceKeys.IPHONE_8]: {
     clipPath: 'url(#clipPath)',
     width: '425px',
     height: '883px',
-    padding: '105px 26px 105px'
+    padding: '105px 26px 105px',
   },
 };
 
@@ -131,4 +143,129 @@ export const optionsByDevice: Record<Device, IOption[]> = {
     {label: 'Android Small', value: DeviceKeys.ANDROID_SMALL},
     {label: 'Android Large', value: DeviceKeys.ANDROID_LARGE},
   ],
+};
+
+const StatusBar = styled.div<any>`
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 21px 0px;
+  background-color: #fff;
+  ${(props) => props.styled}
+  ${(props) => {
+    const appBar = useSelector((state: Store) => state.layout.topAppBar);
+    return `background-color: ${appBar?.settingsUI.backgroundColor};
+            & > svg > g {
+              fill: ${setContrast(hexToRgb(appBar?.settingsUI.backgroundColor || '#FFFFFF'))};
+            }`;
+  }}
+`;
+
+export const statusBarByDevice = (backgroundColor: string, model: string) => {
+  const bars = {
+    [DeviceKeys.IPHONE_13_PRO_MAX]: (
+      <StatusBar backgroundColor={backgroundColor}>
+        <LeftSide />
+        <RightSide />
+      </StatusBar>
+    ),
+    [DeviceKeys.ANDROID_SMALL]: (
+      <StatusBar
+        backgroundColor={backgroundColor}
+        styled={{
+          padding: '8px 10px',
+          alignItems: 'center',
+        }}
+      >
+        <TimeAndroid />
+        <RightSideAndroid />
+      </StatusBar>
+    ),
+    [DeviceKeys.ANDROID_LARGE]: (
+      <StatusBar
+        backgroundColor={backgroundColor}
+        styled={{
+          padding: '12px 10px',
+          alignItems: 'center',
+        }}
+      >
+        <TimeAndroid />
+        <RightSideAndroid />
+      </StatusBar>
+    ),
+    [DeviceKeys.IPHONE_13]: (
+      <StatusBar backgroundColor={backgroundColor}>
+        <LeftSide />
+        <RightSide />
+      </StatusBar>
+    ),
+    [DeviceKeys.IPHONE_13_MINI]: (
+      <StatusBar backgroundColor={backgroundColor}>
+        <LeftSide />
+        <RightSide />
+      </StatusBar>
+    ),
+    [DeviceKeys.IPHONE_11_PRO_MAX]: (
+      <StatusBar
+        backgroundColor={backgroundColor}
+        styled={{
+          height: '42px',
+          alignItems: 'self-start',
+        }}
+      >
+        <LeftSide />
+        <RightSide />
+      </StatusBar>
+    ),
+    [DeviceKeys.IPHONE_11_PRO_10]: (
+      <StatusBar
+        backgroundColor={backgroundColor}
+        styled={{
+          padding: '10px 20px 0px',
+        }}
+      >
+        <LeftSide />
+        <RightSide />
+      </StatusBar>
+    ),
+    [DeviceKeys.IPHONE_SE]: (
+      <StatusBar
+        backgroundColor={backgroundColor}
+        styled={{
+          padding: '10px 10px 4px',
+          alignItems: 'center',
+        }}
+      >
+        <LeftSideSE />
+        <Time />
+        <RightSideSE />
+      </StatusBar>
+    ),
+    [DeviceKeys.IPHONE_8_PLUS]: (
+      <StatusBar
+        backgroundColor={backgroundColor}
+        styled={{
+          padding: '10px 10px 4px',
+          alignItems: 'center',
+        }}
+      >
+        <LeftSideSE />
+        <Time />
+        <RightSideSE />
+      </StatusBar>
+    ),
+    [DeviceKeys.IPHONE_8]: (
+      <StatusBar
+        backgroundColor={backgroundColor}
+        styled={{
+          padding: '10px 10px 4px',
+          alignItems: 'center',
+        }}
+      >
+        <LeftSideSE />
+        <Time />
+        <RightSideSE />
+      </StatusBar>
+    ),
+  };
+  return bars[model as DeviceKeys];
 };

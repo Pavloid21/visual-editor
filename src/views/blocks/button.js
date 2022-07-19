@@ -1,11 +1,52 @@
 import React from 'react';
 import styled from 'styled-components';
-import button from '../../assets/button.svg';
-import {hexToRgb} from '../../constants/utils';
-import Wrapper from '../../utils/wrapper';
+import Wrapper from 'utils/wrapper';
+import {hexToRgb} from 'constants/utils';
+import button from 'assets/button.svg';
+import {
+  alignmentConfig, AlignmentValues, textAlignment,
+  backgroundColor,
+  borderColor, borderWidth,
+  buttonImagePadding, buttonTextPadding,
+  fontSize, fontWeight,
+  imageUrl,
+  padding,
+  shadowConfigBuilder,
+  shapeConfigBuilder,
+  size, sizeModifier,
+  text, textColor
+} from 'views/configs';
 
 const Button = styled.div`
   position: relative;
+  align-self: ${(props) => {
+    switch (props.alignment) {
+      case AlignmentValues.Left:
+        return 'start';
+      case AlignmentValues.Right:
+        return 'end';
+      case AlignmentValues.Center:
+        return 'center';
+      default:
+        return 'auto';
+    }
+  }};
+  margin: ${(props) => {
+    switch (props.alignment) {
+      case AlignmentValues.Center:
+        return 'auto';
+      case AlignmentValues.Left:
+        return 'auto auto auto 0';
+      case AlignmentValues.Right:
+        return 'auto 0 auto auto';
+      default:
+        return '0 0';
+    }
+  }};
+  padding-top: ${(props) => props.padding?.top}px;
+  padding-bottom: ${(props) => props.padding?.bottom}px;
+  padding-left: ${(props) => props.padding?.left}px;
+  padding-right: ${(props) => props.padding?.right}px;
   box-sizing: border-box;
   font-size: ${(props) => props.fontSize}px;
   color: ${(props) => props.textColor};
@@ -17,12 +58,14 @@ const Button = styled.div`
   border-style: solid;
   border-color: ${(props) => props.borderColor};
   width: ${(props) => {
-    if (props.size?.width !== undefined) {
+    if (!props.alignment) {
+      return '100%';
+    } else if (props.size?.width) {
       return props.size.width + 'px';
     } else if (props.size?.widthInPercent !== undefined) {
       return props.size.widthInPercent + '%';
     }
-    return '100%';
+    return 'fit-content';
   }};
   height: ${(props) => {
     if (props.size?.height !== undefined) {
@@ -50,6 +93,30 @@ const Button = styled.div`
   & > span {
     width: 100%;
     font-size: inherit;
+    font-weight: ${(props) => {
+      switch (props.fontWeight) {
+        case 'THIN':
+          return 100;
+        case 'ULTALIGHT':
+          return 200;
+        case 'LIGHT':
+          return 300;
+        case 'REGULAR':
+          return 400;
+        case 'MEDIUM':
+          return 500;
+        case 'SEMIBOLD':
+          return 600;
+        case 'BOLD':
+          return 700;
+        case 'BLACK':
+          return 800;
+        case 'HEAVY':
+          return 900;
+        default:
+          return 400;
+      }
+    }};
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: ${(props) => props.textAlignment};
@@ -67,22 +134,9 @@ const Button = styled.div`
 `;
 
 const Component = (props) => {
-  const {text, imageUrl, alignment} = props.settingsUI;
-  const calculateAlignment = (alignment) => {
-    console.log('alignmrnt', alignment);
-    switch (alignment) {
-      case 'LEFT':
-        return 'start';
-      case 'RIGHT':
-        return 'end';
-      case 'FILL':
-        return 'stretch';
-      default:
-        return 'center';
-    }
-  };
+  const {text, imageUrl, sizeModifier} = props.settingsUI;
   return (
-    <Wrapper id={props.id} style={{alignItems: calculateAlignment(alignment)}}>
+    <Wrapper id={props.id} sizeModifier={sizeModifier}>
       <Button className="draggable" {...props.settingsUI} {...props}>
         <span>{text}</span>
         {imageUrl && <img src={imageUrl} />}
@@ -106,8 +160,6 @@ const block = {
     fontSize: '24',
     textColor: '#000000',
     backgroundColor: '#FFFFFF',
-    alignment: 'CENTER',
-    textAlignment: 'center',
     imageUrl: '',
     borderColor: '#EFEFEF',
     borderWidth: 1,
@@ -127,6 +179,7 @@ const block = {
       type: 'ALLCORNERSROUND',
       radius: '4',
     },
+    sizeModifier: 'FULLWIDTH',
     size: {
       height: 48,
       width: 230,
@@ -152,80 +205,28 @@ const block = {
     },
   },
   config: {
-    text: {type: 'string', name: 'Text'},
-    fontSize: {type: 'number', name: 'Font size'},
-    textColor: {type: 'color', name: 'Text color'},
-    backgroundColor: {type: 'color', name: 'Background color'},
-    borderColor: {type: 'color', name: 'Border color'},
-    borderWidth: {type: 'number', name: 'Border width'},
-    alignment: {
-      type: 'select',
-      name: 'Alignment',
-      options: [
-        {label: 'Center', value: 'CENTER'},
-        {label: 'Left', value: 'LEFT'},
-        {label: 'Right', value: 'RIGHT'},
-        {label: 'Justify', value: 'JUSTIFY'},
-        {label: 'Fill', value: 'FILL'},
-      ],
-    },
-    textAlignment: {
-      type: 'select',
-      name: 'Text alignment',
-      options: [
-        {label: 'Center', value: 'CENTER'},
-        {label: 'Left', value: 'LEFT'},
-        {label: 'Right', value: 'RIGHT'},
-      ],
-    },
-    buttonTextPadding: {
-      top: {type: 'number', name: 'Text padding top'},
-      right: {type: 'number', name: 'Text padding right'},
-      bottom: {type: 'number', name: 'Text padding bottom'},
-      left: {type: 'number', name: 'Text padding left'},
-    },
-    buttonImagePadding: {
-      top: {type: 'number', name: 'Image padding top'},
-      right: {type: 'number', name: 'Image padding right'},
-      bottom: {type: 'number', name: 'Image padding bottom'},
-      left: {type: 'number', name: 'Image padding left'},
-    },
-    imageUrl: {type: 'string', name: 'imageUrl'},
-    shape: {
-      type: {
-        type: 'select',
-        name: 'Shape type',
-        options: [{label: 'All corners round', value: 'ALLCORNERSROUND'}],
-      },
-      radius: {type: 'number', name: 'Shape radius'},
-    },
-    size: {
-      height: {
-        type: 'units',
-        name: 'Height',
-        options: [
-          {label: 'px', value: 'px'},
-          {label: '%', value: '%'},
-        ],
-      },
-      width: {
-        type: 'units',
-        name: 'Width',
-        options: [
-          {label: 'px', value: 'px'},
-          {label: '%', value: '%'},
-        ],
-      },
-    },
-    shadow: {
-      color: {type: 'color', name: 'Color'},
-      opacity: {type: 'number', name: 'Opacity'},
-      offsetSize: {
-        width: {type: 'number', name: 'Width'},
-        height: {type: 'number', name: 'Height'},
-      },
-      radius: {type: 'number', name: 'Radius'},
-    },
+    text,
+    fontSize,
+    fontWeight,
+    textColor,
+    backgroundColor,
+    borderColor,
+    borderWidth,
+    sizeModifier,
+    alignment: alignmentConfig.horizontally,
+    textAlignment,
+    buttonTextPadding,
+    buttonImagePadding,
+    imageUrl,
+    shape: shapeConfigBuilder()
+      .withAllCornersRound
+      .withRadius
+      .done(),
+    size,
+    padding,
+    shadow: shadowConfigBuilder()
+      .withRadius
+      .done()
   },
 };
 

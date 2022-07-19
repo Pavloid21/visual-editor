@@ -1,4 +1,4 @@
-import blocks from '../views/blocks';
+import blocks from 'views/blocks';
 import {sortableElement} from 'react-sortable-hoc';
 import {observer} from './observer';
 
@@ -20,8 +20,8 @@ function render(layoutBlocks, documentId, bottomBar, topAppBar) {
   const components = [];
   if (layoutBlocks[0]) {
     layoutBlocks.forEach((layoutBlock) => {
-      if (blocks[layoutBlock.blockId.toLowerCase()]?.Component) {
-        const Component = blocks[layoutBlock.blockId.toLowerCase()]?.Component;
+      const Component = blocks[layoutBlock.blockId.toLowerCase()]?.Component;
+      if (Component) {
         components.push(
           <SortableItem
             id={layoutBlock.uuid}

@@ -1,14 +1,15 @@
 import React, {Dispatch, useState, useRef, useEffect} from 'react';
+import {SortEvent, SortEventWithTag} from 'react-sortable-hoc';
 
 export const useModal = (
-  initialMode: boolean = false
+  initialMode = false
 ): [modalOpen: boolean, setModalOpen: Dispatch<React.SetStateAction<boolean>>, toggle: () => void] => {
   const [modalOpen, setModalOpen] = useState(initialMode);
   const toggle = () => setModalOpen(!modalOpen);
   return [modalOpen, setModalOpen, toggle];
 };
 
-export const useOutside = (initialIsVisible: boolean) => {
+export const useOutside = (initialIsVisible: boolean, canSelfOpen?: boolean) => {
   const [isShow, setIsShow] = useState(initialIsVisible);
   const ref = useRef(null);
 
@@ -16,7 +17,7 @@ export const useOutside = (initialIsVisible: boolean) => {
     //@ts-ignore
     if (ref.current && !ref.current.contains(evt.target)) {
       setIsShow(false);
-    } else {
+    } else if (canSelfOpen) {
       setIsShow(true);
     }
   };
@@ -29,4 +30,8 @@ export const useOutside = (initialIsVisible: boolean) => {
   });
 
   return {ref, isShow, setIsShow};
+};
+
+export const onSortMove = (event: SortEvent | SortEventWithTag): boolean => {
+  return event.altKey;
 };

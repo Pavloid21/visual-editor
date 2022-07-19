@@ -1,6 +1,6 @@
 import React from 'react';
 import styledComponents from 'styled-components';
-import {ReactComponent as Remove} from '../../../assets/circle_cross.svg';
+import {ReactComponent as Remove} from 'assets/circle_cross.svg';
 import Input from 'rc-input';
 import Textarea, {TextAreaProps} from 'rc-textarea';
 import {NeoInputProps} from './types';
@@ -18,7 +18,7 @@ export const Container = styledComponents.section<TextAreaProps & NeoInputProps>
   }
 
   & .extra {
-    color: ${(props) => (props.status === 'error' ? `var(--error-text)` : 'green')};
+    color: ${(props) => (props.status === 'error' ? 'var(--error-text)' : 'green')};
     font-size: 14px;
   }
 `;
@@ -28,7 +28,7 @@ font-size: 14px;
 & > .rc-input, &[type="text"] {
     background: #FFFFFF;
     width: ${(props) => (props.$isWide ? '100%' : 'auto')};
-    border: 1px solid ${(props) => (props.status === 'error' ? `var(--error-text)` : 'var(--neo-gray)')};
+    border: 1px solid ${(props) => (props.status === 'error' ? 'var(--error-text)' : 'var(--neo-gray)')};
     height: 36px;
     line-height: 20px;
     border-radius: 4px;
@@ -43,13 +43,13 @@ font-size: 14px;
     &:focus {
       border: 1px solid #2A356C;
       outline: none;
-    } 
+    }
   }
   ${(props) =>
     props.type === 'number' &&
     `
   width: ${props.$isWide ? '100%' : 'auto'};
-  border: 1px solid ${props.status === 'error' ? `var(--error-text)` : 'var(--neo-gray)'};
+  border: 1px solid ${props.status === 'error' ? 'var(--error-text)' : 'var(--neo-gray)'};
   height: 36px;
   line-height: 20px;
   border-radius: 4px;
@@ -64,12 +64,12 @@ font-size: 14px;
   &:focus {
     border: 1px solid #2A356C;
     outline: none;
-  } 
+  }
   `}
-  
+
 `;
 
-const StyledNeoTextArea = styledComponents(Textarea)<TextAreaProps & NeoInputProps>`
+const StyledNeoTextArea = styledComponents<any>(Textarea)<TextAreaProps & NeoInputProps>`
   background: #FFFFFF;
   width: ${(props) => (props.$isWide ? '100%' : 'auto')};
   border: 1px solid var(--neo-gray);

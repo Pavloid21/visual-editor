@@ -1,5 +1,5 @@
-import { IOption } from "components/controls/Select/types";
-import { Zoom } from "./types";
+import {IOption} from 'components/controls/Select/types';
+import {Zoom} from './types';
 
 export const options: IOption[] = [
     {label: '25%', value: Zoom['25%']},

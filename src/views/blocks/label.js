@@ -1,12 +1,62 @@
 import React from 'react';
 import styledComponents from 'styled-components';
-import label from '../../assets/label.svg';
-import Wrapper from '../../utils/wrapper';
+import label from 'assets/label.svg';
+import Wrapper from 'utils/wrapper';
+import {hexToRgb} from 'constants/utils';
+import {
+  alignmentConfig, backgroundColor, fontSize,
+  fontWeight,
+  padding,
+  shadowConfigBuilder,
+  shapeConfigBuilder, size, sizeModifier, text,
+  textAlignment, textColor,
+} from 'views/configs';
 
 const Label = styledComponents.div`
-  text-align: ${(props) => props.alignment};
-  width: 100%;
   box-sizing: border-box;
+  display: flex;
+  width: fit-content;
+  align-self: ${(props) => {
+    switch (props.alignment) {
+      case 'LEFT':
+        return 'flex-start';
+      case 'RIGHT':
+        return 'flex-end';
+      default:
+        return 'center';
+    }
+  }};
+  margin: ${(props) => {
+    switch (props.alignment) {
+      case 'CENTER':
+        return 'auto';
+      case 'TOP':
+        return '0 auto auto auto';
+      case 'BOTTOM':
+        return 'auto auto 0 auto';
+      case 'LEFT':
+        return 'auto auto auto 0';
+      case 'RIGHT':
+        return 'auto 0 auto auto';
+      default:
+        return '0 0';
+    }
+  }};
+  ${({shape}) => {
+    if (shape?.type === 'ALLCORNERSROUND') {
+      return `border-radius: ${shape.radius}px;`;
+    }
+  }}
+  overflow: hidden;
+  ${({shadow}) => {
+    if (shadow) {
+      return `box-shadow: ${shadow?.offsetSize?.width}px ${shadow?.offsetSize?.height}px ${
+        shadow?.radius || 0
+      }px rgba(${hexToRgb(shadow?.color).r}, ${hexToRgb(shadow?.color).g}, ${
+        hexToRgb(shadow?.color).b
+      }, ${shadow?.opacity});`;
+    }
+  }}
   & > span {
     display: block;
     width: ${(props) => {
@@ -63,7 +113,7 @@ const Label = styledComponents.div`
 const Component = ({settingsUI, ...props}) => {
   const {text} = settingsUI;
   return (
-    <Wrapper id={props.id}>
+    <Wrapper id={props.id} {...settingsUI} {...props}>
       <Label {...props} {...settingsUI} className="draggable">
         <span>{text}</span>
       </Label>
@@ -79,12 +129,15 @@ const block = {
   previewImageUrl: label,
   category: 'Element',
   defaultData: {
-    alignment: 'CENTER',
+    sizeModifier: 'FULLWIDTH',
     text: 'Вход',
-    textAlignment: 'CENTER',
     backgroundColor: '#FFFFFF',
     textColor: '#000000',
     fontSize: 24,
+    shape: {
+      type: 'ALLCORNERSROUND',
+      radius: '0',
+    },
     size: {
       width: 100,
       height: 48,
@@ -96,83 +149,34 @@ const block = {
       right: 0,
     },
     fontWeight: 'REGULAR',
+    shadow: {
+      color: '#000000',
+      opacity: 0.3,
+      offsetSize: {
+        width: 0,
+        height: 0,
+      },
+      radius: 8,
+    },
   },
   config: {
-    alignment: {
-      type: 'select',
-      name: 'Alignment',
-      options: [
-        {label: 'Center', value: 'CENTER'},
-        {label: 'Left', value: 'LEFT'},
-        {label: 'Right', value: 'RIGHT'},
-        {label: 'Justify', value: 'JUSTIFY'},
-        {label: 'Fill', value: 'FILL'},
-      ],
-    },
-    text: {type: 'string', name: 'Text'},
-    textAlignment: {
-      type: 'select',
-      name: 'Text alignment',
-      options: [
-        {label: 'Center', value: 'CENTER'},
-        {label: 'Left', value: 'LEFT'},
-        {label: 'Right', value: 'RIGHT'},
-      ],
-    },
-    backgroundColor: {type: 'color', name: 'Background color'},
-    textColor: {type: 'color', name: 'Text color'},
-    fontSize: {type: 'number', name: 'Font size'},
-    fontWeight: {
-      type: 'select',
-      name: 'Font weight',
-      options: [
-        {label: 'Ultralight', value: 'ULTRALIGHT'},
-        {label: 'Thin', value: 'THIN'},
-        {label: 'Light', value: 'LIGHT'},
-        {label: 'Regular', value: 'REGULAR'},
-        {label: 'Medium', value: 'MEDIUM'},
-        {label: 'Semibold', value: 'SEMIBOLD'},
-        {label: 'Bold', value: 'BOLD'},
-        {label: 'Heavy', value: 'HEAVY'},
-        {label: 'Black', value: 'BLACK'},
-      ],
-    },
-    size: {
-      width: {
-        type: 'units',
-        name: 'Width',
-        options: [
-          {label: 'px', value: 'px'},
-          {label: '%', value: '%'},
-        ],
-      },
-      height: {
-        type: 'units',
-        name: 'Height',
-        options: [
-          {label: 'px', value: 'px'},
-          {label: '%', value: '%'},
-        ],
-      },
-    },
-    padding: {
-      top: {
-        type: 'number',
-        name: 'Top',
-      },
-      bottom: {
-        type: 'number',
-        name: 'Bottom',
-      },
-      left: {
-        type: 'number',
-        name: 'Left',
-      },
-      right: {
-        type: 'number',
-        name: 'Right',
-      },
-    },
+    sizeModifier,
+    alignment: alignmentConfig.both,
+    text,
+    textAlignment,
+    backgroundColor,
+    textColor,
+    fontSize,
+    fontWeight,
+    shape: shapeConfigBuilder()
+      .withAllCornersRound
+      .withRadius
+      .done(),
+    size,
+    padding,
+    shadow: shadowConfigBuilder()
+      .withRadius
+      .done()
   },
 };
 

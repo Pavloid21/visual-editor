@@ -32,7 +32,7 @@ const ZoomSelect = () => {
     });
   };
 
-  const mappedZoomValue = options.map(o => o.value)
+  const mappedZoomValue = options.map(o => o.value);
 
   const handleDecrementZoom = () => {
     const currentIndex = mappedZoomValue.findIndex(z => z === zoom);
@@ -40,20 +40,20 @@ const ZoomSelect = () => {
       dispatch({
         type: actionTypes.SET_ZOOM,
         zoom: mappedZoomValue[currentIndex - 1]
-      })
+      });
     }
-  }
+  };
 
   const handleIncrementZoom = () => {
     const currentIndex = mappedZoomValue.findIndex(z => z === zoom);
     if(currentIndex < mappedZoomValue.length - 1) {
-      console.log(currentIndex, mappedZoomValue)
+      console.log(currentIndex, mappedZoomValue);
       dispatch({
         type: actionTypes.SET_ZOOM,
         zoom: mappedZoomValue[currentIndex + 1]
-      })
+      });
     }
-  }
+  };
 
   return (
     <FlexContainer>

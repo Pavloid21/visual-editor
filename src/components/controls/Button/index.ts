@@ -45,7 +45,7 @@ export const Button = styled.button<React.HTMLProps<HTMLButtonElement>>`
           color: #E6E6E6;
           border-color: #E6E6E6;
         }
-      `
+      `;
     }
   }}
 `;
