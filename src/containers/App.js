@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Routes, Route, Navigate, useLocation} from 'react-router-dom';
 import {renderHandlebars, observer} from 'utils';
-import LeftSidebar from '../components/LeftSidebar';
+import {LeftSidebar} from '../components/LeftSideBar';
 import Preview from './Preview';
 import actionTypes from '../constants/actionTypes';
 import {findInTree} from '../reducers/layout';

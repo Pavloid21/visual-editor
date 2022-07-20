@@ -51,12 +51,12 @@ export const getProjectData = async (projectId: string) => {
   return await callApi(url, null, 'GET');
 };
 
-export const getScreenesList = async (projectId: string) => {
+export const getScreenesList = async (projectId?: string) => {
   const url = API.defaults.baseURL + `projects/${projectId}/admin/screens`;
   return await callApi(url, null, 'GET');
 };
 
-export const getScreenByName = async (projectId: string, screenName: string, parsed: boolean) => {
+export const getScreenByName = async (screenName: string, parsed: boolean, projectId?: string) => {
   const url = API.defaults.baseURL + `projects/${projectId}/admin/screens/${screenName}${parsed ? '?view=parsed' : ''}`;
   return await callApi(url, null, 'GET');
 };
