@@ -7,7 +7,7 @@ import {arrayMoveImmutable} from 'array-move';
 import {observer, onSortMove} from 'utils';
 import PhoneContainer from './PhoneContainer';
 import styled from 'styled-components';
-import Code from './Code';
+import {Code} from './Code';
 import {ReactComponent as Screen} from '../assets/screen.svg';
 import {ReactComponent as Json} from '../assets/json.svg';
 import {ReactComponent as Reference} from '../assets/preview.svg';

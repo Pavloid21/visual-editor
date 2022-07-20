@@ -1,33 +1,18 @@
 import React, {useEffect} from 'react';
-import styled from 'styled-components';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import {atomOneLight} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import {useSelector, useDispatch} from 'react-redux';
-import actionTypes from '../constants/actionTypes';
+import actionTypes from '../../constants/actionTypes';
 import {snippet} from 'utils';
 import {Store} from 'reducers/types';
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-`;
-
-const EditorWrapper = styled.div`
-  overflow-y: auto;
-  width: 100%;
-`;
+import {Container, EditorWrapper} from './Code.styled';
 
 const Code: React.FC<any> = (props) => {
   const code = useSelector((state: Store) => state.code);
   const dispatch = useDispatch();
   const api = useSelector((state: Store) => state.api);
-  const bottomBar = useSelector((state: Store) => state.layout.bottomBar);
-  const selectedScreen = useSelector((state: Store) => state.layout.selectedScreen);
-  const topAppBar = useSelector((state: Store) => state.layout.topAppBar);
-  const blocks = useSelector((state: Store) => state.layout.blocks);
+  const {bottomBar, blocks, selectedScreen, topAppBar, snippets} = useSelector((state: Store) => state.layout);
   const initial = useSelector((state: Store) => state.output);
-  const snippets = useSelector((state: Store) => state.layout.snippets);
 
   useEffect(() => {
     if (api) {

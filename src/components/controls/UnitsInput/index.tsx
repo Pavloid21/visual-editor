@@ -55,7 +55,7 @@ const StyledSelect = styled(Select)<ISelect>`
   }
 `;
 
-export const UnitsInput = (props: UnitsInputProps) => {
+export const UnitsInput: React.FC<UnitsInputProps> = (props) => {
   const {label, value, onChange, select} = props;
   return (
     <Wrapper>

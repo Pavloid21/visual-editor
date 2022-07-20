@@ -1,15 +1,13 @@
-import React, {useRef} from 'react';
 import styled from 'styled-components';
-import {Label} from './controls';
 
-const Wrapper = styled.section`
+export const Wrapper = styled.section`
   position: relative;
   margin-bottom: 12px;
   display: flex;
   flex-direction: column;
 `;
 
-const Container = styled.span`
+export const Container = styled.span<{isWide?: boolean}>`
   display: inline-flex;
   align-items: center;
   width: ${(props) => (props.isWide ? '100%' : 'auto')};
@@ -36,7 +34,7 @@ const Container = styled.span`
     left: 0;
   }
 
-  input[type="color"] {
+  input[type='color'] {
     -webkit-appearance: none;
     -moz-appearance: none;
     max-width: 20px;
@@ -61,24 +59,8 @@ const Container = styled.span`
     }
   }
 
-  input[type="text"] {
+  input[type='text'] {
     border: none;
     width: 100%;
   }
 `;
-
-const ColorPicker = ({value, onChange, ...rest}) => {
-  const colorRef = useRef(null);
-
-  return (
-    <Wrapper>
-      {rest.label && <Label>{rest.label}</Label>}
-      <Container color={value}>
-        <input ref={colorRef} type="color" value={value} onChange={onChange} />
-        <input type="text" value={value} onChange={onChange} {...rest} />
-      </Container>
-    </Wrapper>
-  );
-};
-
-export default ColorPicker;

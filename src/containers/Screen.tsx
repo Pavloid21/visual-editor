@@ -1,14 +1,14 @@
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {Input, Label} from '../components/controls';
-import actionTypes from '../constants/actionTypes';
+import {Input, Label} from 'components/controls';
+import actionTypes from 'constants/actionTypes';
 import styled from 'styled-components';
 import Editor from 'react-simple-code-editor';
 import fullScreenIcon from '../assets/full-screen.svg';
 import {useModal, snippet} from 'utils';
 import Prism from 'prismjs';
 import {atomOneLight} from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import CustomModal from '../components/Modal';
+import {CustomModal} from 'components';
 import {Store} from 'reducers/types';
 
 const Container = styled.div`

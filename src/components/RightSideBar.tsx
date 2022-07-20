@@ -5,7 +5,7 @@ import Inspector from 'containers/Inspector';
 import Screen from 'containers/Screen';
 import {Button, Input} from './controls';
 import actionTypes from 'constants/actionTypes';
-import ActionForm from 'containers/ActionForm';
+import {ActionForm} from 'containers/ActionForm';
 import {useSelector, useDispatch} from 'react-redux';
 import {ReactComponent as Plus} from 'assets/plus.svg';
 import {ReactComponent as Remove} from 'assets/trash.svg';
@@ -81,10 +81,12 @@ const RightSidebar: React.FC<any> = ({children, ...props}) => {
   });
 
   const wrapperRef = useRef(null);
-  useOutsideAlerter(wrapperRef, () => dispatch({
-    type: actionTypes.SET_SELECTED_BLOCK,
-    blockUuid: '',
-  }));
+  useOutsideAlerter(wrapperRef, () =>
+    dispatch({
+      type: actionTypes.SET_SELECTED_BLOCK,
+      blockUuid: '',
+    })
+  );
 
   const watchFieldArray = watch('headers');
   const watchParamsArray = watch('params');

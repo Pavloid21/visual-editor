@@ -3,7 +3,7 @@ import {Button, Label} from 'components/controls';
 import {ButtonGroup, Container} from 'components/layouts';
 import {IButtonSelector} from './types';
 
-const ButtonSelector = (props: IButtonSelector) => {
+const ButtonSelector: React.FC<IButtonSelector> = (props) => {
   const {label, buttons, value} = props;
   return (
     <Container className={props.className}>

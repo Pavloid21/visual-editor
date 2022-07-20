@@ -1,58 +1,26 @@
 import React, {useEffect} from 'react';
 import {useForm, Controller} from 'react-hook-form';
 import Editor from 'react-simple-code-editor';
-import {stackoverflowLight} from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import {gruvboxLight} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import Prism from 'prismjs';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism.css';
-import styled from 'styled-components';
-import fullScreenIcon from '../assets/full-screen.svg';
-import CustomModal from '../components/Modal';
+import fullScreenIcon from '../../assets/full-screen.svg';
+import CustomModal from 'components/Modal';
 import {useModal} from 'utils';
-import {Button, Input, Label} from '../components/controls';
-import ButtonSelector from '../components/ButtonSelector';
+import {Button, Input, Label} from 'components/controls';
+import ButtonSelector from 'components/ButtonSelector';
 import {useSelector, useDispatch} from 'react-redux';
-import actionTypes from '../constants/actionTypes';
+import actionTypes from '../../constants/actionTypes';
 import {v4} from 'uuid';
+import {Container, EditorWrapper} from './ActionForm.styled';
+import {ActionItem, Store} from 'reducers/types';
 
-const Container = styled.div`
-  padding: 16px;
-  max-width: 422px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: calc(100% - 60px);
-  & > .buttons {
-    display: flex;
-    gap: 16px;
-  }
-`;
-
-const EditorWrapper = styled.div`
-  max-height: 638px;
-  overflow: auto;
-  padding: 8px 12px;
-  border: 1px solid var(--neo-gray);
-  border-radius: 4px;
-  position: relative;
-  & > button.fullScreen {
-    position: absolute;
-    right: 12px;
-    padding: 0;
-    border: none;
-    background: transparent;
-    background-image: url(${(props) => props.icon});
-    width: 16px;
-    height: 16px;
-    z-index: 2;
-  }
-`;
-
-const ActionForm = ({action}) => {
+const ActionForm: React.FC<{action: ActionItem}> = ({action}) => {
   const dispatch = useDispatch();
   const {setValue, getValues, control} = useForm();
-  const snippets = useSelector((state) => state.actions);
+  const snippets = useSelector((state: Store) => state.actions);
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal();
   useEffect(() => {
     setValue('actionName', action.action);
@@ -120,7 +88,7 @@ const ActionForm = ({action}) => {
         <Controller
           name="actionName"
           control={control}
-          render={({field}) => <Input type="text" label="Action name" clearable isWide {...field} />}
+          render={({field}) => <Input type="text" label="Action name" $clearable $isWide {...field} />}
         />
         <Controller
           name="type"
@@ -156,7 +124,7 @@ const ActionForm = ({action}) => {
                     highlight={(code) => Prism.highlight(code, Prism.languages.js, 'javascript')}
                     onValueChange={field.onChange}
                     style={{
-                      ...stackoverflowLight,
+                      ...gruvboxLight,
                       fontSize: '16px',
                       lineHeight: '20px',
                     }}
@@ -187,7 +155,7 @@ const ActionForm = ({action}) => {
                     highlight={(code) => Prism.highlight(code, Prism.languages.js, 'javascript')}
                     onValueChange={field.onChange}
                     style={{
-                      ...stackoverflowLight,
+                      ...gruvboxLight,
                       fontSize: '16px',
                       lineHeight: '20px',
                     }}

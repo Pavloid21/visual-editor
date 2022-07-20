@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {DndProvider} from 'react-dnd';
 import {HTML5Backend} from 'react-dnd-html5-backend';
 
-export const DndWrapper = (props: any) => {
+export const DndWrapper: React.FC<any> = (props) => {
   const [context, setContext] = useState<HTMLElement | null>(null);
 
   useEffect(() => {

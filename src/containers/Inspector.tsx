@@ -5,9 +5,8 @@ import actionTypes from 'constants/actionTypes';
 import blocks from 'views/blocks';
 import styled from 'styled-components';
 import {ReactComponent as Trash} from 'assets/trash.svg';
-import ColorPicker from 'components/ColorPicker';
 import {leadLetter} from 'constants/utils';
-import {Button, Input, UnitsInput, Select as SelectBase} from 'components/controls';
+import {Button, Input, UnitsInput, Select as SelectBase, ColorPicker} from 'components/controls';
 import {Store} from 'reducers/types';
 
 const Division = styled.div`

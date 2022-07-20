@@ -1,18 +1,8 @@
 import React, {useCallback} from 'react';
 import {Button} from 'components/controls';
-import styled from 'styled-components';
 import {Navigate} from 'react-router-dom';
 import {useKeycloak} from '@react-keycloak/web';
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  & > p {
-    color: var(--neo-secondary-gray);
-  }
-`;
+import {Container} from './Login.styled';
 
 const Login: React.FC<any> = () => {
   const currentLocationState: any = {

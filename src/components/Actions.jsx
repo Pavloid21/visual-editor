@@ -6,12 +6,7 @@ import actionTypes from 'constants/actionTypes';
 import {ReactComponent as CodeIcon} from 'assets/code.svg';
 import {ReactComponent as DataIcon} from 'assets/folder-upload.svg';
 import {ReactComponent as Trash} from 'assets/trash.svg';
-import {
-  getActionsList,
-  getActionByName,
-  getDataActionsList,
-  getDataActionByName
-} from 'services/ApiService';
+import {getActionsList, getActionByName, getDataActionsList, getDataActionByName} from 'services/ApiService';
 
 const Container = styled.div`
   height: calc(100% - 104px);
@@ -61,12 +56,13 @@ const Actions = () => {
   );
   const selectedAction = useSelector((state) => state.actions.selected);
   const projectID = useSelector((state) => state.project.id);
+  const project_id = projectID || location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
   useEffect(() => {
-    getActionsList(projectID)
+    getActionsList(project_id)
       .then((response) => response.data)
       .then((actions) => {
         const actionsArr = actions?.map((action) => {
-          return getActionByName(projectID, action)
+          return getActionByName(project_id, action)
             .then((response) => response.data)
             .then((data) => ({action, object: data}))
             .catch((e) => {
@@ -88,11 +84,11 @@ const Actions = () => {
           })
           .catch(console.log);
       });
-    getDataActionsList(projectID)
+    getDataActionsList(project_id)
       .then((response) => response.data)
       .then((actions) => {
         const actionsArr = actions?.map((action) => {
-          return getDataActionByName(projectID, action)
+          return getDataActionByName(project_id, action)
             .then((response) => response.data)
             .then((data) => ({action, object: data}))
             .catch((e) => {

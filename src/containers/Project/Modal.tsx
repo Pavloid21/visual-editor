@@ -1,11 +1,10 @@
-import CustomModal from 'components/Modal';
 import React from 'react';
+import {CustomModal, VerticalDivider} from 'components';
+import {Button, Input} from 'components/controls';
 import {Control, Controller, FieldError, UseFormHandleSubmit} from 'react-hook-form';
 import {ReactComponent as Logo} from '../../assets/logo.svg';
 import {ReactComponent as Close} from '../../assets/close.svg';
 import styled from 'styled-components';
-import {VerticalDivider} from 'components/TopBar';
-import {Button, Input} from 'components/controls';
 import {Inputs} from './Project';
 
 const Bar = styled.div<any>`
