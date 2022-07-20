@@ -3,7 +3,7 @@ import React, {useState, useEffect, useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import actionTypes from '../../constants/actionTypes';
 import SideBarHeader, {SideBarSubheader} from '../SideBarHeader';
-import Gallery from '../../containers/Gallery';
+import {Gallery} from 'containers/Gallery';
 import Actions from '../Actions';
 import SortableTree from '@nosferatu500/react-sortable-tree';
 import FileExplorerTheme from '@nosferatu500/theme-file-explorer';

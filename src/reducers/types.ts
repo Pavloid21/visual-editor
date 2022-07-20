@@ -59,7 +59,7 @@ export interface LayoutAction extends Action {
 }
 
 export type Layout = {
-  blocks: any[];
+  blocks: BlockItem[];
   selectedBlockUuid: string;
   documentId: string;
   selectedScreen: any | null;

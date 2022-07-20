@@ -41,7 +41,7 @@ const blocks: Blocks = {
   screen,
 };
 
-export const gallery = {
+export const gallery: Record<string, any> = {
   card,
   vstack,
   basictextfield,

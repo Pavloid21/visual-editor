@@ -2,7 +2,7 @@ import {InputProps} from 'rc-input';
 
 export interface NeoInputProps extends InputProps {
   $isWide?: boolean;
-  $clearable: boolean;
+  $clearable?: boolean;
   label?: string;
   $textarea?: boolean;
   $extraText?: string;

@@ -7,6 +7,6 @@ export type TBlockPreview = {
   type: string;
   image: string;
   onPushBlock: (arg: string) => void;
-  onPushBlockInside: () => void;
+  onPushBlockInside: (blockId: string, uuid: string) => void;
   name?: string;
 };
