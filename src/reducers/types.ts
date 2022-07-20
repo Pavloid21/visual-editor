@@ -11,11 +11,16 @@ export type Actions = {
   };
 };
 
+export enum ActionTypes {
+  data = 'data',
+  action = 'action',
+}
+
 export type ActionItem = {
   action: string;
   object: string;
   selected: boolean;
-  type?: 'action' | 'data';
+  type?: ActionTypes;
 };
 
 export type API = {

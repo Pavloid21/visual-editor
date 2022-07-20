@@ -1,18 +1,18 @@
 /* eslint-disable react/jsx-key */
 import React, {useState, useEffect, useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import actionTypes from '../../constants/actionTypes';
+import actionTypes from 'constants/actionTypes';
 import SideBarHeader, {SideBarSubheader} from '../SideBarHeader';
 import {Gallery} from 'containers/Gallery';
-import Actions from '../Actions';
+import {Actions} from 'components';
 import SortableTree from '@nosferatu500/react-sortable-tree';
 import FileExplorerTheme from '@nosferatu500/theme-file-explorer';
-import {ReactComponent as Copy} from '../../assets/copy.svg';
-import {ReactComponent as Trash} from '../../assets/trash.svg';
-import {ReactComponent as Plus} from '../../assets/plus.svg';
-import models from '../../views/blocks/index';
+import {ReactComponent as Copy} from 'assets/copy.svg';
+import {ReactComponent as Trash} from 'assets/trash.svg';
+import {ReactComponent as Plus} from 'assets/plus.svg';
+import models from 'views/blocks/index';
 import {v4} from 'uuid';
-import {getScreenesList, getScreenByName} from '../../services/ApiService';
+import {getScreenesList, getScreenByName} from 'services/ApiService';
 import {BounceLoader} from 'react-spinners';
 import {css} from '@emotion/react';
 import Loader from '../Loader';
@@ -53,19 +53,18 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
   useEffect(() => {
     setLoading(true);
     getScreenesList(project).then((screenes) => {
-      const screenesArr = screenes.data.map((screen: string) => {
-        return getScreenByName(screen, true, project)
-          .then((response) => {
-            return {
-              screen,
-              object: response.data,
-              logic: response.data,
-              project,
-            };
-          })
-          .catch((e) => {
-            console.log('e :>> ', e);
-          });
+      const screenesArr = screenes.data.map(async (screen: string) => {
+        try {
+          const response = await getScreenByName(screen, true, project);
+          return {
+            screen,
+            object: response.data,
+            logic: response.data,
+            project,
+          };
+        } catch (e) {
+          console.log('e :>> ', e);
+        }
       });
       Promise.allSettled(screenesArr)
         .then((resolves) => {

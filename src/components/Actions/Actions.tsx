@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-import styled from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
 import {orderBy} from 'external/lodash';
 import actionTypes from 'constants/actionTypes';
@@ -7,71 +6,40 @@ import {ReactComponent as CodeIcon} from 'assets/code.svg';
 import {ReactComponent as DataIcon} from 'assets/folder-upload.svg';
 import {ReactComponent as Trash} from 'assets/trash.svg';
 import {getActionsList, getActionByName, getDataActionsList, getDataActionByName} from 'services/ApiService';
+import {Container} from './Actions.styled';
+import {ActionItem, ActionTypes, Store} from 'reducers/types';
 
-const Container = styled.div`
-  height: calc(100% - 104px);
-  padding: 9px 19px;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  & > .action-item {
-    min-height: 36px;
-    line-height: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    & > div {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    & > div > svg > * {
-      fill: #404040;
-    }
-    &:hover {
-      cursor: pointer;
-      background-color: var(--light-orange);
-    }
-    &.active {
-      & > div > svg > * {
-        fill: #ffffff;
-      }
-      color: #ffffff;
-      background-color: var(--main-color);
-    }
-  }
-`;
-
-const Actions = () => {
+const Actions: React.FC<unknown> = () => {
   const dispatch = useDispatch();
-  const availableActions = useSelector((state) =>
+  const availableActions: ActionItem[] = useSelector((state: Store) =>
     orderBy(
       [
-        ...state.actions.actions.map((item) => ({...item, type: 'action'})),
-        ...state.actions.data.map((item) => ({...item, type: 'data'})),
+        ...state.actions.actions.map((item) => ({...item, type: ActionTypes.action})),
+        ...state.actions.data.map((item) => ({...item, type: ActionTypes.data})),
       ],
       'action',
       'asc'
     )
   );
-  const selectedAction = useSelector((state) => state.actions.selected);
-  const projectID = useSelector((state) => state.project.id);
+  const selectedAction = useSelector((state: Store) => state.actions.selected);
+  const projectID = useSelector((state: Store) => state.project.id);
   const project_id = projectID || location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
   useEffect(() => {
     getActionsList(project_id)
       .then((response) => response.data)
-      .then((actions) => {
-        const actionsArr = actions?.map((action) => {
-          return getActionByName(project_id, action)
-            .then((response) => response.data)
-            .then((data) => ({action, object: data}))
-            .catch((e) => {
-              console.log('e :>> ', e);
-            });
+      .then((actions: string[]) => {
+        const actionsArr = actions?.map(async (action) => {
+          try {
+            const response = await getActionByName(project_id, action);
+            const data = response.data;
+            return {action, object: data};
+          } catch (e) {
+            console.log('e :>> ', e);
+          }
         });
         Promise.allSettled(actionsArr)
           .then((resolves) => {
-            const actions = [];
+            const actions: any[] = [];
             resolves.forEach((result) => {
               if (result.status === 'fulfilled') {
                 actions.push({...result.value, selected: false});
@@ -86,18 +54,19 @@ const Actions = () => {
       });
     getDataActionsList(project_id)
       .then((response) => response.data)
-      .then((actions) => {
-        const actionsArr = actions?.map((action) => {
-          return getDataActionByName(project_id, action)
-            .then((response) => response.data)
-            .then((data) => ({action, object: data}))
-            .catch((e) => {
-              console.log('e :>> ', e);
-            });
+      .then((actions: string[]) => {
+        const actionsArr = actions?.map(async (action) => {
+          try {
+            const response = await getDataActionByName(project_id, action);
+            const data = response.data;
+            return {action, object: data};
+          } catch (e) {
+            console.log('e :>> ', e);
+          }
         });
         Promise.allSettled(actionsArr)
           .then((resolves) => {
-            const actions = [];
+            const actions: any[] = [];
             resolves.forEach((result) => {
               if (result.status === 'fulfilled') {
                 actions.push({...result.value, selected: false});
@@ -112,14 +81,14 @@ const Actions = () => {
       });
   }, []);
 
-  const handleSelectSnippet = (action) => {
+  const handleSelectSnippet = (action: ActionItem | null) => {
     dispatch({
       type: actionTypes.SELECT_ACTION,
       selected: action,
     });
   };
 
-  const handleDeleteSnippet = (action) => {
+  const handleDeleteSnippet = (action: ActionItem | null) => {
     dispatch({
       type: actionTypes.DELETE_ACTION,
       selected: action,
@@ -140,7 +109,7 @@ const Actions = () => {
               onClick={() => handleSelectSnippet(action)}
             >
               <div>
-                {action.type === 'action' ? <CodeIcon /> : <DataIcon />}
+                {action.type === ActionTypes.action ? <CodeIcon /> : <DataIcon />}
                 <span>{action.action}</span>
               </div>
               <Trash
