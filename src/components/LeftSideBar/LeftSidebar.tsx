@@ -158,53 +158,50 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
     }
   }, [output]);
 
-  const handleItemClick = useCallback(
-    async (event, item) => {
-      event.stopPropagation();
-      const uuid = item.node.subtitle;
-      if (uuid === 'screen') {
-        setLoadScreen({uuid: item.node.uuid, load: true});
-        const script = await getScreenByName(item.node.endpoint, false, project);
-        setLoadScreen({uuid: item.node.uuid, load: false});
-        const screenLayout = availableScreenes.filter((screen) => screen.uuid === item.node.uuid)[0];
-        dispatch({
-          type: actionTypes.CHANGE_ACTIVE_TAB,
-          index: 5,
-        });
-        dispatch({
-          type: actionTypes.SELECT_SCREEN,
-          screen: item.node.uuid,
-        });
-        dispatch({
-          type: actionTypes.SET_SELECTED_BLOCK,
-          selectedBlockUuid: '',
-        });
-        dispatch({
-          type: actionTypes.EDIT_SCREEN_NAME,
-          screen: item.node.screen,
-          snippet: {
-            screenID: item.node.uuid,
-            endpoint: item.node.endpoint,
-            logic: script.data?.match(/.*return/gs)[0] || ' ',
-            snippet: snippet(
-              {
-                screen: item.node.screen,
-                listItems: layout,
-              },
-              api,
-              layout,
-              topAppBar,
-              bottomBar
-            ),
-          },
-        });
-        dispatch(screenLayout.action);
-      } else {
-        observer.broadcast({blockId: uuid, event: 'click'});
-      }
-    },
-    [api, availableScreenes, bottomBar, dispatch, layout, project, topAppBar]
-  );
+  const handleItemClick = async (event: React.MouseEvent, item: Record<string, any>) => {
+    event.stopPropagation();
+    const uuid = item.node.subtitle;
+    if (uuid === 'screen') {
+      setLoadScreen({uuid: item.node.uuid, load: true});
+      const script = await getScreenByName(item.node.endpoint, false, project);
+      setLoadScreen({uuid: item.node.uuid, load: false});
+      const screenLayout = availableScreenes.filter((screen) => screen.uuid === item.node.uuid)[0];
+      dispatch({
+        type: actionTypes.CHANGE_ACTIVE_TAB,
+        index: 5,
+      });
+      dispatch({
+        type: actionTypes.SELECT_SCREEN,
+        screen: item.node.uuid,
+      });
+      dispatch({
+        type: actionTypes.SET_SELECTED_BLOCK,
+        selectedBlockUuid: '',
+      });
+      dispatch({
+        type: actionTypes.EDIT_SCREEN_NAME,
+        screen: item.node.screen,
+        snippet: {
+          screenID: item.node.uuid,
+          endpoint: item.node.endpoint,
+          logic: script.data?.match(/.*return/gs)[0] || ' ',
+          snippet: snippet(
+            {
+              screen: item.node.screen,
+              listItems: layout,
+            },
+            api,
+            layout,
+            topAppBar,
+            bottomBar
+          ),
+        },
+      });
+      dispatch(screenLayout.action);
+    } else {
+      observer.broadcast({blockId: uuid, event: 'click'});
+    }
+  };
 
   const handleDeleteBlock = useCallback(
     (blockUuid) => {

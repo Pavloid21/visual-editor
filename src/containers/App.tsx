@@ -55,7 +55,7 @@ const App: React.FC<unknown> = () => {
     };
 
     observer.subscribe((data: Record<string, any>) => {
-      handleMessage({data, event: data.event});
+      handleMessage({...data, event: data.event});
     });
   }, [layout, bottomBar]);
 
