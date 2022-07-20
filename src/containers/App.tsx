@@ -17,14 +17,15 @@ import {Project} from './Project';
 import {API} from 'services/ApiService';
 import Loader from 'components/Loader';
 import 'react-notifications-component/dist/theme.css';
+import {BlockItem, Store} from 'reducers/types';
 
-const App = () => {
-  const layout = useSelector((state) => state.layout);
+const App: React.FC<unknown> = () => {
+  const layout = useSelector((state: Store) => state.layout);
   const location = useLocation();
-  const bottomBar = useSelector((state) => state.layout.bottomBar);
-  const topAppBar = useSelector((state) => state.layout.topAppBar);
-  const config = useSelector((state) => state.config);
-  const barState = useSelector((state) => state.sideBar);
+  const bottomBar = useSelector((state: Store) => state.layout.bottomBar);
+  const topAppBar = useSelector((state: Store) => state.layout.topAppBar);
+  const config = useSelector((state: Store) => state.config);
+  const barState = useSelector((state: Store) => state.sideBar);
   const dispatch = useDispatch();
   const {initialized, keycloak} = useKeycloak();
   const setHeaderAuthorizationToken = () => {
@@ -42,18 +43,18 @@ const App = () => {
   }, [!keycloak.authenticated]);
 
   useEffect(() => {
-    const handleMessage = (event) => {
-      if (event.data.event) {
-        if (event.data.blockId && event.data.event === 'click') {
+    const handleMessage = (data: Record<string, any>) => {
+      if (data.event) {
+        if (data.blockId && data.event === 'click') {
           handleChangeActiveTab(0);
-          handleSetSelectedBlock(event.data.blockId);
-        } else if (event.data.newOrder && event.data.event === 'sorted') {
-          handleReorderLayout(event.data.newOrder, event.data.parentID, layout.blocks);
+          handleSetSelectedBlock(data.blockId);
+        } else if (data.newOrder && data.event === 'sorted') {
+          handleReorderLayout(data.newOrder, data.parentID, layout.blocks);
         }
       }
     };
 
-    observer.subscribe((data) => {
+    observer.subscribe((data: Record<string, any>) => {
       handleMessage({data, event: data.event});
     });
   }, [layout, bottomBar]);
@@ -64,36 +65,39 @@ const App = () => {
     });
   }, [location, dispatch]);
 
-  const handleChangeActiveTab = (index) => {
+  const handleChangeActiveTab = (index: number) => {
     dispatch({
       type: actionTypes.CHANGE_ACTIVE_TAB,
       index,
     });
   };
 
-  const handleChangePreviewMode = (mode) => {
+  const handleChangePreviewMode = (mode: number) => {
     dispatch({
       type: actionTypes.CHANGE_PREVIEW_MODE,
       mode,
     });
   };
 
-  const handleSetSelectedBlock = (blockUuid) => {
+  const handleSetSelectedBlock = (blockUuid: string) => {
     dispatch({
       type: actionTypes.SET_SELECTED_BLOCK,
       blockUuid,
     });
   };
 
-  const handleReorderLayout = (newOrder, parentID, blocksLayout) => {
-    const order = [];
-    let parent = null;
+  const handleReorderLayout = (newOrder: string[], parentID: string, blocksLayout: BlockItem[]) => {
+    const order: BlockItem[] = [];
+    let parent: BlockItem | null = null;
     newOrder.forEach((blockUuid) => {
       const block = findInTree(blocksLayout, blockUuid);
       parent = findInTree(blocksLayout, parentID);
-      order.push(block);
+      if (block) {
+        order.push(block);
+      }
     });
     if (parent) {
+      // @ts-ignore
       parent.listItems = order;
       dispatch({
         type: actionTypes.REPLACE_ELEMENT,
@@ -104,6 +108,7 @@ const App = () => {
       const next = order.filter((item) => uuids.includes(item.uuid));
       dispatch({
         type: actionTypes.REORDER_LAYOUT,
+        // @ts-ignore
         newBlocksLayout: [...new Set(next.map(JSON.stringify))].map(JSON.parse),
       });
     }
@@ -130,10 +135,9 @@ const App = () => {
       >
         <TopBar />
         <Routes>
-          <Route exact path="/" element={<Navigate to="/project" />} />
-          <Route exact path="/login" element={<Login />} />
+          <Route path="/" element={<Navigate to="/project" />} />
+          <Route path="/login" element={<Login />} />
           <Route
-            exact
             path="/project"
             element={
               <RequireAuth>
