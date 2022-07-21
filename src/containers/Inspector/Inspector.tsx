@@ -1,69 +1,53 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import actionTypes from 'constants/actionTypes';
 import blocks from 'views/blocks';
-import styled from 'styled-components';
 import {ReactComponent as Trash} from 'assets/trash.svg';
 import {leadLetter} from 'constants/utils';
-import {Button, Input, UnitsInput, Select as SelectBase, ColorPicker} from 'components/controls';
+import {Button, Input, UnitsInput, ColorPicker} from 'components/controls';
 import {Store} from 'reducers/types';
+import {Division, Select} from './Inspector.styled';
+import {TInspector} from './types';
+import {findInTree} from 'utils';
 
-const Division = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #e6e6e6;
-  margin-bottom: 8px;
-`;
-
-const Select = styled(SelectBase)`
-  svg {
-    position: static;
-  }
-  [class$='control'] {
-    border-color: var(--neo-gray) !important;
-    font-size: 14px;
-    min-height: 36px;
-    & > div:first-child {
-      padding: 0 12px;
-    }
-    & > div:last-child {
-      max-height: 36px;
-    }
-  }
-`;
-
-const Inspector: React.FC<any> = ({display}) => {
+const Inspector: React.FC<TInspector> = ({display}) => {
   const dispatch = useDispatch();
   const layout = useSelector((state: Store) => state.layout);
-  const handleChangeBlockData = (blockUuid: string, key: string, value: any, parentKey: string | undefined) => {
-    dispatch({
-      type: actionTypes.CHANGE_BLOCK_DATA,
-      blockUuid,
-      key,
-      parentKey,
-      value,
-    });
-  };
+  const handleChangeBlockData = useCallback(
+    (blockUuid: string, key: string, value: any, parentKey: string | undefined) => {
+      dispatch({
+        type: actionTypes.CHANGE_BLOCK_DATA,
+        blockUuid,
+        key,
+        parentKey,
+        value,
+      });
+    },
+    [dispatch]
+  );
 
-  const handleChangeUnits = (blockUuid: string, key: string, value: string | undefined, parentKey: string) => {
-    dispatch({
-      type: actionTypes.CHANGE_UNITS,
-      blockUuid,
-      key,
-      parentKey,
-      value,
-    });
-  };
+  const handleChangeUnits = useCallback(
+    (blockUuid: string, key: string, value: string | undefined, parentKey: string) => {
+      dispatch({
+        type: actionTypes.CHANGE_UNITS,
+        blockUuid,
+        key,
+        parentKey,
+        value,
+      });
+    },
+    [dispatch]
+  );
 
-  const handleChangeElemType = (blockId: string) => {
-    dispatch({
-      type: actionTypes.SWITCH_ELEMENT_TYPE,
-      blockId,
-    });
-  };
+  const handleChangeElemType = useCallback(
+    (blockId: string) => {
+      dispatch({
+        type: actionTypes.SWITCH_ELEMENT_TYPE,
+        blockId,
+      });
+    },
+    [dispatch]
+  );
 
   const parseConfig = (config: any, blockUuid: string, endpoint: any, parentKey?: any) => {
     return Object.keys(config).map((el: string, index: number) => {
@@ -194,22 +178,6 @@ const Inspector: React.FC<any> = ({display}) => {
 
   if (!display) return null;
 
-  const findInTree = (tree: any, uuid: string): any => {
-    let result = null;
-    for (const item of tree) {
-      if (item && item.uuid === uuid) {
-        result = item;
-      }
-      if (!result && item && item.listItems) {
-        result = findInTree(item.listItems, uuid);
-      }
-      if (!result && item && item.listItem) {
-        result = findInTree([item.listItem], uuid);
-      }
-    }
-    return result;
-  };
-
   const blockUuid = layout.selectedBlockUuid;
   const block =
     findInTree(layout.blocks, blockUuid) ||
@@ -313,11 +281,6 @@ const Inspector: React.FC<any> = ({display}) => {
       )}
     </div>
   );
-};
-
-Inspector.propTypes = {
-  layout: PropTypes.object,
-  display: PropTypes.bool,
 };
 
 export default Inspector;

@@ -1,7 +1,7 @@
 import {v4 as uuidv4} from 'uuid';
 import actionTypes from 'constants/actionTypes';
 import blocks from 'views/blocks';
-import {getData} from 'utils';
+import {findInTree, getData} from 'utils';
 import {get} from 'external/lodash';
 import {Layout, BlockItem, LayoutAction} from './types';
 
@@ -13,23 +13,6 @@ const initialState: Layout = {
   editedScreens: [],
   deletedScreens: [],
   snippets: [],
-};
-
-export const findInTree = (tree: BlockItem[], uuid: string): BlockItem | null => {
-  let result: BlockItem | null = null;
-  tree.forEach((item) => {
-    if (item.uuid === uuid) {
-      result = item;
-    }
-    if (!result && item.listItems) {
-      result = findInTree(item.listItems, uuid);
-    }
-    if (!result && item.listItem) {
-      result = findInTree([item.listItem], uuid);
-    }
-  });
-
-  return result;
 };
 
 const removeFromList = (tree: any[], uuid: string) => {
@@ -230,8 +213,8 @@ export default function reducer(state = initialState, action: LayoutAction) {
         findInTree(newBlocksSet, action.blockUuid!) ||
         (action.blockUuid === state.bottomBar?.uuid
           ? {
-            ...state.bottomBar,
-          }
+              ...state.bottomBar,
+            }
           : {...state.topAppBar});
       if (action.parentKey && !Array.isArray(action.parentKey)) {
         let test = targetElement.settingsUI[action.parentKey];
@@ -242,7 +225,7 @@ export default function reducer(state = initialState, action: LayoutAction) {
         delete test[action.key!];
         test[
           action.value! === '%' ? action.key + 'InPercent' : action.key!.substring(0, action.key?.indexOf('InPercent'))
-          ] = val;
+        ] = val;
       }
       return {
         ...state,
@@ -255,8 +238,8 @@ export default function reducer(state = initialState, action: LayoutAction) {
         findInTree(newBlocks, action.blockUuid!) ||
         (action.blockUuid === state.bottomBar?.uuid
           ? {
-            ...state.bottomBar,
-          }
+              ...state.bottomBar,
+            }
           : {...state.topAppBar});
       if (action.parentKey && Array.isArray(action.parentKey)) {
         element.settingsUI[action.parentKey[1]][action.parentKey[0]][action.key!] = action.value;
@@ -275,7 +258,7 @@ export default function reducer(state = initialState, action: LayoutAction) {
         const valueKeeper = findDataBlock(
           {settingsUI: element.settingsUI, interactive: element.interactive},
           action.parentKey,
-          action.key!,
+          action.key!
         );
         if (valueKeeper) {
           valueKeeper[action.key!] = action.value;

@@ -1,11 +1,10 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Routes, Route, Navigate, useLocation} from 'react-router-dom';
-import {renderHandlebars, observer} from 'utils';
+import {renderHandlebars, observer, findInTree} from 'utils';
 import {LeftSidebar, TopBar, RightSidebar, HighlightedElement, Loader} from 'components';
 import Preview from './Preview';
 import actionTypes from 'constants/actionTypes';
-import {findInTree} from 'reducers/layout';
 import GlobalStyles from 'constants/theme';
 import {Login} from './Login';
 import RequireAuth from 'auth/RequireAuth';

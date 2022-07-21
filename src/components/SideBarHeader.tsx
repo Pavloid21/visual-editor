@@ -11,7 +11,7 @@ import {editProject, getProjectData} from 'services/ApiService';
 import Modal from 'containers/Project/Modal';
 import actionTypes from 'constants/actionTypes';
 import {useDispatch, useSelector} from 'react-redux';
-import CustomModal from './Modal';
+import {Modal as CustomModal} from './Modal';
 import {Button} from 'components/controls/Button';
 import {Store} from 'reducers/types';
 import {useBackListener} from 'constants/utils';

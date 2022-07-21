@@ -23,7 +23,7 @@ const Bar = styled.div<any>`
   align-items: center;
   justify-content: space-between;
   padding: 6px 16px;
-  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.05), 0px 4px 4px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid #e6e6e6;
   position: fixed;
   top: 0;
   z-index: 3;
@@ -65,7 +65,7 @@ const Bar = styled.div<any>`
 
 export const VerticalDivider = styled.div`
   width: 1px;
-  background: #b3b3b3;
+  background: #e6e6e6;
   margin: 0 16px;
 `;
 

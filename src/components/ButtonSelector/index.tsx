@@ -11,7 +11,7 @@ const ButtonSelector: React.FC<IButtonSelector> = (props) => {
       <ButtonGroup>
         {buttons.map(({title, key, uuid}) => {
           return (
-            <Button key={uuid} className={`sm ${key !== value && 'secondary'}`} onClick={() => props.onChange(key)}>
+            <Button key={uuid} className={`sm ${key !== value && 'transparent'}`} onClick={() => props.onChange(key)}>
               {title}
             </Button>
           );

@@ -8,7 +8,7 @@ import fullScreenIcon from '../assets/full-screen.svg';
 import {useModal, snippet} from 'utils';
 import Prism from 'prismjs';
 import {atomOneLight} from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import {CustomModal} from 'components';
+import {Modal} from 'components';
 import {Store} from 'reducers/types';
 
 const Container = styled.div`
@@ -98,7 +98,7 @@ const Screen: React.FC<any> = (props) => {
           </EditorWrapper>
         </>
       </div>
-      <CustomModal isActive={itemModalOpen} handleClose={() => setItemModalOpen(false)} padding="16px">
+      <Modal isActive={itemModalOpen} handleClose={() => setItemModalOpen(false)} padding="16px">
         <EditorWrapper icon={fullScreenIcon}>
           <Editor
             highlight={(code) => Prism.highlight(code, Prism.languages.js, 'javascript')}
@@ -118,7 +118,7 @@ const Screen: React.FC<any> = (props) => {
             value={logic || ''}
           />
         </EditorWrapper>
-      </CustomModal>
+      </Modal>
     </Container>
   ) : null;
 };

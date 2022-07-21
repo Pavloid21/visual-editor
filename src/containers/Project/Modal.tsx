@@ -1,5 +1,5 @@
 import React from 'react';
-import {CustomModal, VerticalDivider} from 'components';
+import {Modal as CustomModal, VerticalDivider} from 'components';
 import {Button, Input} from 'components/controls';
 import {Control, Controller, FieldError, UseFormHandleSubmit} from 'react-hook-form';
 import {ReactComponent as Logo} from '../../assets/logo.svg';

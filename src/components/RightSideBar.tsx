@@ -1,7 +1,7 @@
 import React, {useRef, useState} from 'react';
 import styled from 'styled-components';
 import SideBarHeader from './SideBarHeader';
-import Inspector from 'containers/Inspector';
+import {Inspector} from 'containers/Inspector';
 import Screen from 'containers/Screen';
 import {Button, Input} from './controls';
 import actionTypes from 'constants/actionTypes';

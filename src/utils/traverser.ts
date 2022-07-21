@@ -1,4 +1,5 @@
 import actionTypes from 'constants/actionTypes';
+import {BlockItem} from 'reducers/types';
 import {AnyAction} from 'redux';
 import {v4} from 'uuid';
 
@@ -111,4 +112,21 @@ export const buildLayout = ({screen, object}: Record<string, any>) => {
     };
   }
   return {newBlock, action, screenEndpoint: screen};
+};
+
+export const findInTree = (tree: BlockItem[], uuid: string): BlockItem | null => {
+  let result: BlockItem | null = null;
+  tree.forEach((item) => {
+    if (item.uuid === uuid) {
+      result = item;
+    }
+    if (!result && item.listItems) {
+      result = findInTree(item.listItems, uuid);
+    }
+    if (!result && item.listItem) {
+      result = findInTree([item.listItem], uuid);
+    }
+  });
+
+  return result;
 };

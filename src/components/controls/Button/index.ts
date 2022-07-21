@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Button = styled.button<React.HTMLProps<HTMLButtonElement>>`
   background-color: var(--main-color);
@@ -21,6 +21,18 @@ export const Button = styled.button<React.HTMLProps<HTMLButtonElement>>`
     background-color: #ffffff;
     color: var(--main-color);
     border: 1px solid var(--main-color);
+    &:hover {
+      border: 1px solid var(--hover-color);
+    }
+    &:active {
+      border: 1px solid var(--active-color);
+      color: var(--active-color);
+    }
+  }
+  &.transparent {
+    background-color: transparent;
+    color: var(--neo-black);
+    border: 1px solid var(--neo-gray);
     &:hover {
       border: 1px solid var(--hover-color);
     }

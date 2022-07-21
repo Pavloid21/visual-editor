@@ -47,6 +47,8 @@ const P = styled.p`
 
 const Header = styled.div`
   background-color: #f3f3f3;
+  border: 1px solid #e6e6e6;
+  border-radius: 4px 4px 0 0;
   padding: 14px 16px;
   display: flex;
   justify-content: space-between;
@@ -61,7 +63,9 @@ const Content = styled.div`
   flex: 1 1 auto;
   overflow-y: auto;
   background: #fafafa;
-  box-shadow: inset 0px -1px 4px rgba(0, 0, 0, 0.3);
+  border: 1px solid #e6e6e6;
+  border-radius: 0 0 4px 4px;
+  border-top: none;
   flex-wrap: wrap;
   gap: 32px;
   padding: 32px;

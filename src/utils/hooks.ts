@@ -38,8 +38,8 @@ export const onSortMove = (event: SortEvent | SortEventWithTag): boolean => {
 
 export const useOutsideAlerter = (ref: React.RefObject<any>, callback: () => void) => {
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (ref.current && !ref.current.contains(event.target)) {
+    function handleClickOutside(event: any) {
+      if (ref.current && !ref.current.contains(event.target) && !event.target.onclick) {
         callback();
       }
     }

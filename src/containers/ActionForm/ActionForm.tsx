@@ -7,7 +7,7 @@ import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism.css';
 import fullScreenIcon from '../../assets/full-screen.svg';
-import CustomModal from 'components/Modal';
+import {Modal} from 'components';
 import {useModal} from 'utils';
 import {Button, Input, Label} from 'components/controls';
 import ButtonSelector from 'components/ButtonSelector';
@@ -143,7 +143,7 @@ const ActionForm: React.FC<{action: ActionItem}> = ({action}) => {
           <Button onClick={handleSave}>Save</Button>
         </div>
       </Container>
-      <CustomModal isActive={itemModalOpen} handleClose={() => setItemModalOpen(false)}>
+      <Modal isActive={itemModalOpen} handleClose={() => setItemModalOpen(false)}>
         <Controller
           name="code"
           control={control}
@@ -169,7 +169,7 @@ const ActionForm: React.FC<{action: ActionItem}> = ({action}) => {
             );
           }}
         />
-      </CustomModal>
+      </Modal>
     </>
   );
 };
