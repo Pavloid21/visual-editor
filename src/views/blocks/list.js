@@ -9,7 +9,7 @@ import renderHandlebars from 'utils/renderHandlebars';
 import {onSortMove} from 'utils/hooks';
 import {observer} from 'utils/observer';
 import Wrapper from 'utils/wrapper';
-import actionTypes, {ItemTypes} from 'constants/actionTypes';
+import {ItemTypes} from 'constants/actionTypes';
 import lists from 'assets/lists.svg';
 import {
   backgroundColor,
@@ -19,6 +19,7 @@ import {
   sizeModifier,
   startPage
 } from 'views/configs';
+import {pushBlockInside} from 'store/layout.slice';
 
 const List = styled.div`
   align-self: center;
@@ -80,11 +81,10 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
     accept: ItemTypes.BOX,
     drop: (item) => {
       if (target.isOver()) {
-        dispatch({
-          type: actionTypes.PUSH_BLOCK_INSIDE,
+        dispatch(pushBlockInside({
           blockId: item.id,
           uuid,
-        });
+        }));
       }
       return {
         uuid,

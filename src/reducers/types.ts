@@ -19,7 +19,7 @@ export enum ActionTypes {
 export type ActionItem = {
   action: string;
   object: string;
-  selected: boolean;
+  selected?: boolean;
   type?: ActionTypes;
 };
 
@@ -77,7 +77,7 @@ export type Layout = {
 
 export type BlockItem = {
   uuid: string;
-  blockId: string;
+  blockId: number | string;
   settingsUI: any;
   interactive?: any;
   listItems?: any[];

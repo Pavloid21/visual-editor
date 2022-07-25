@@ -20,6 +20,17 @@ import {useParams} from 'react-router-dom';
 import {observer, snippet, prepareTree, buildLayout} from 'utils';
 import {Container, Icon, ScreenTitle} from './LeftSideBar.styled';
 import {Store} from 'reducers/types';
+import {addAction, setSelectAction} from 'store/actions.slice';
+import {setActiveTab as setActiveTabAction} from 'store/config.slice';
+import {saveCode} from 'store/code.slice';
+import {
+  cloneBlock,
+  deleteBlock,
+  selectScreen,
+  setLayout,
+  setSelectedBlock,
+  setSnippet,
+} from 'store/layout.slice';
 
 const LeftSidebar: React.FC<any> = ({children, ...props}) => {
   const {
@@ -148,12 +159,11 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
           snippet: constants,
         },
       });
-      dispatch({type: actionTypes.SAVE_CODE, code: constants});
-      dispatch({
-        type: actionTypes.SET_SNIPPET,
+      dispatch(saveCode(constants));
+      dispatch(setSnippet({
         snippet: constants,
         selectedScreen,
-      });
+      }));
     }
   }, [output]);
 
@@ -165,18 +175,11 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
       const script = await getScreenByName(item.node.endpoint, false, project);
       setLoadScreen({uuid: item.node.uuid, load: false});
       const screenLayout = availableScreenes.filter((screen) => screen.uuid === item.node.uuid)[0];
-      dispatch({
-        type: actionTypes.CHANGE_ACTIVE_TAB,
-        index: 5,
-      });
-      dispatch({
-        type: actionTypes.SELECT_SCREEN,
+      dispatch(setActiveTabAction(5));
+      dispatch(selectScreen({
         screen: item.node.uuid,
-      });
-      dispatch({
-        type: actionTypes.SET_SELECTED_BLOCK,
-        selectedBlockUuid: '',
-      });
+      }));
+      dispatch(setSelectedBlock(''));
       dispatch({
         type: actionTypes.EDIT_SCREEN_NAME,
         screen: item.node.screen,
@@ -196,7 +199,7 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
           ),
         },
       });
-      dispatch(screenLayout.action);
+      dispatch(setLayout(screenLayout.action));
     } else {
       observer.broadcast({blockId: uuid, event: 'click'});
     }
@@ -204,20 +207,14 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
 
   const handleDeleteBlock = useCallback(
     (blockUuid) => {
-      dispatch({
-        type: actionTypes.DELETE_BLOCK,
-        blockUuid,
-      });
+      dispatch(deleteBlock(blockUuid));
     },
     [dispatch]
   );
 
   const handleCloneBlock = useCallback(
     (blockUuid) => {
-      dispatch({
-        type: actionTypes.CLONE_BLOCK,
-        blockUuid,
-      });
+      dispatch(cloneBlock(blockUuid));
     },
     [dispatch]
   );
@@ -229,11 +226,10 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
       setScreenes(layouts.filter((layout) => layout.uuid !== node.uuid));
       const newTree = treeData.filter((item) => item.uuid !== node.uuid);
       setTree(newTree);
-      dispatch({
-        type: actionTypes.SELECT_SCREEN,
+      dispatch(selectScreen({
         delete: true,
         screen: node.uuid,
-      });
+      }));
       dispatch({
         type: actionTypes.EDIT_SCREEN_NAME,
         screen: node.screen,
@@ -269,10 +265,7 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
       action: 'new_action',
       object: '',
     };
-    dispatch({
-      type: actionTypes.ADD_ACTION,
-      action: added,
-    });
+    dispatch(addAction(added));
   }, [dispatch]);
 
   const handleCloneScreen = useCallback(
@@ -311,7 +304,7 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
               className={activeTab === 0 ? 'tab_active' : ''}
               onClick={() => {
                 setActiveTab(0);
-                dispatch({type: actionTypes.SELECT_ACTION, selected: null});
+                dispatch(setSelectAction(null));
               }}
             >
               Screens

@@ -9,12 +9,12 @@ import {createProject, getProjectData, getProjectsList} from 'services/ApiServic
 import {Card} from 'containers/Card';
 import {useNavigate} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
-import actionTypes from 'constants/actionTypes';
 import {Project as TProject} from 'reducers/types';
 import {AxiosResponse} from 'axios';
 import {useModal} from 'utils';
 import {useForm} from 'react-hook-form';
 import Modal from './Modal';
+import {selectProject} from 'store/project.slice';
 
 export type Inputs = {
   form: {
@@ -112,10 +112,9 @@ export const Project: React.FC<any> = () => {
   }, []);
 
   const handleProjectSelect = (project: TProject) => {
-    dispatch({
-      type: actionTypes.SELECT_PROJECT,
-      ...project,
-    });
+    dispatch(selectProject({
+      ...project
+    }));
     navigate(`/editor/${project.id}`);
   };
 

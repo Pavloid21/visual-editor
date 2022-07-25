@@ -1,6 +1,5 @@
 import React, {useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import actionTypes from 'constants/actionTypes';
 import blocks from 'views/blocks';
 import {ReactComponent as Trash} from 'assets/trash.svg';
 import {leadLetter} from 'constants/utils';
@@ -9,42 +8,44 @@ import {Store} from 'reducers/types';
 import {Division, Select} from './Inspector.styled';
 import {TInspector} from './types';
 import {findInTree} from 'utils';
+import {
+  addBottomBarItem,
+  addTopAppBarItem, changeBlockData,
+  changeUnits,
+  removeBottomBarItem,
+  removeTopAppBarItem, switchElementType,
+} from 'store/layout.slice';
 
 const Inspector: React.FC<TInspector> = ({display}) => {
   const dispatch = useDispatch();
   const layout = useSelector((state: Store) => state.layout);
   const handleChangeBlockData = useCallback(
     (blockUuid: string, key: string, value: any, parentKey: string | undefined) => {
-      dispatch({
-        type: actionTypes.CHANGE_BLOCK_DATA,
+      dispatch(changeBlockData({
         blockUuid,
         key,
         parentKey,
         value,
-      });
+      }));
     },
     [dispatch]
   );
 
   const handleChangeUnits = useCallback(
     (blockUuid: string, key: string, value: string | undefined, parentKey: string) => {
-      dispatch({
-        type: actionTypes.CHANGE_UNITS,
+      dispatch(changeUnits({
         blockUuid,
         key,
         parentKey,
         value,
-      });
+      }));
     },
     [dispatch]
   );
 
   const handleChangeElemType = useCallback(
     (blockId: string) => {
-      dispatch({
-        type: actionTypes.SWITCH_ELEMENT_TYPE,
-        blockId,
-      });
+      dispatch(switchElementType(blockId));
     },
     [dispatch]
   );
@@ -213,10 +214,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
                   <Trash
                     className="icon"
                     onClick={(e) => {
-                      dispatch({
-                        type: actionTypes.REMOVE_BOTTOMBAR_ITEM,
-                        index,
-                      });
+                      dispatch(removeBottomBarItem(index));
                     }}
                   />
                 </Division>
@@ -230,9 +228,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
           })}
           <Button
             onClick={() => {
-              dispatch({
-                type: actionTypes.ADD_BOTTOMBAR_ITEM,
-              });
+              dispatch(addBottomBarItem());
             }}
           >
             Add item
@@ -253,10 +249,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
                     <Trash
                       className="icon"
                       onClick={(e) => {
-                        dispatch({
-                          type: actionTypes.REMOVE_TOPAPPBAR_ITEM,
-                          index,
-                        });
+                        dispatch(removeTopAppBarItem(index));
                       }}
                     />
                   </Division>
@@ -270,9 +263,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
           })}
           <Button
             onClick={() => {
-              dispatch({
-                type: actionTypes.ADD_TOPAPPBAR_ITEM,
-              });
+              dispatch(addTopAppBarItem());
             }}
           >
             Add item

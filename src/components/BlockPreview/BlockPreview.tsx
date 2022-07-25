@@ -1,9 +1,10 @@
 import React from 'react';
 import {useDrag} from 'react-dnd';
-import actionTypes, {ItemTypes} from 'constants/actionTypes';
+import {ItemTypes} from 'constants/actionTypes';
 import {useDispatch} from 'react-redux';
 import {Container} from './BlockPreview.styled';
 import {TBlockPreview} from './types';
+import {pushBottomBar, pushTopAppBar} from 'store/layout.slice';
 
 const BlockPreview: React.FC<TBlockPreview> = (props) => {
   const dispatch = useDispatch();
@@ -15,11 +16,10 @@ const BlockPreview: React.FC<TBlockPreview> = (props) => {
       if (item && dropResult) {
         if (!dropResult.uuid && item.id !== 'bottombar' && item.id !== 'topappbar') {
           props.onPushBlock(props.blockId);
-        } else if (item.id === 'bottombar' || item.id === 'topappbar') {
-          dispatch({
-            type: item.id === 'bottombar' ? actionTypes.PUSH_BOTTOMBAR : actionTypes.PUSH_TOPAPPBAR,
-            blockId: item.id,
-          });
+        } else if (item.id === 'topappbar') {
+          dispatch(pushTopAppBar(item.id));
+        } else if (item.id === 'bottombar') {
+          dispatch(pushBottomBar(item.id));
         }
       }
     },

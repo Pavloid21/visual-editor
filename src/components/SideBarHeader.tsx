@@ -9,12 +9,12 @@ import {ReactComponent as Settings} from 'assets/settings.svg';
 import {ReactComponent as Warning} from 'assets/warning.svg';
 import {editProject, getProjectData} from 'services/ApiService';
 import Modal from 'containers/Project/Modal';
-import actionTypes from 'constants/actionTypes';
 import {useDispatch, useSelector} from 'react-redux';
 import {Modal as CustomModal} from './Modal';
 import {Button} from 'components/controls/Button';
 import {Store} from 'reducers/types';
 import {useBackListener} from 'constants/utils';
+import {setLayout} from 'store/layout.slice';
 
 const Header = styled.div`
   min-height: 60px;
@@ -152,10 +152,9 @@ const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
   };
 
   const redirect = () => {
-    dispatch({
-      type: actionTypes.SET_LAYOUT,
+    dispatch(setLayout({
       layout: [],
-    });
+    }));
     navigate('/project');
   };
 

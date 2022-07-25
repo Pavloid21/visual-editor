@@ -6,16 +6,16 @@ import Prism from 'prismjs';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism.css';
-import fullScreenIcon from '../../assets/full-screen.svg';
+import fullScreenIcon from 'assets/full-screen.svg';
 import {Modal} from 'components';
 import {useModal} from 'utils';
 import {Button, Input, Label} from 'components/controls';
 import ButtonSelector from 'components/ButtonSelector';
 import {useSelector, useDispatch} from 'react-redux';
-import actionTypes from '../../constants/actionTypes';
 import {v4} from 'uuid';
 import {Container, EditorWrapper} from './ActionForm.styled';
 import {ActionItem, Store} from 'reducers/types';
+import {setActions, setSelectAction} from 'store/actions.slice';
 
 const ActionForm: React.FC<{action: ActionItem}> = ({action}) => {
   const dispatch = useDispatch();
@@ -38,8 +38,7 @@ const ActionForm: React.FC<{action: ActionItem}> = ({action}) => {
       if (item.action === actionName) {
         ref.splice(index, 1);
         if (type === 'data') {
-          dispatch({
-            type: actionTypes.SET_ACTIONS,
+          dispatch(setActions({
             actions: nextActions,
             data: [
               ...nextData,
@@ -48,10 +47,9 @@ const ActionForm: React.FC<{action: ActionItem}> = ({action}) => {
                 object: code,
               },
             ],
-          });
+          }));
         } else {
-          dispatch({
-            type: actionTypes.SET_ACTIONS,
+          dispatch(setActions({
             actions: [
               ...nextActions,
               {
@@ -60,12 +58,11 @@ const ActionForm: React.FC<{action: ActionItem}> = ({action}) => {
               },
             ],
             data: nextData,
-          });
+          }));
         }
       } else {
         const param = type === 'action' ? 'actions' : 'data';
-        dispatch({
-          type: actionTypes.SET_ACTIONS,
+        dispatch(setActions({
           [param]: [
             ...snippets[param],
             {
@@ -73,13 +70,10 @@ const ActionForm: React.FC<{action: ActionItem}> = ({action}) => {
               object: code,
             },
           ],
-        });
+        }));
       }
     });
-    dispatch({
-      type: actionTypes.SELECT_ACTION,
-      selected: null,
-    });
+    dispatch(setSelectAction(null));
   };
 
   return (

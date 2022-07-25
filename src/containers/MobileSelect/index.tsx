@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import {ButtonSelector as ButtonSelectorBase} from 'components';
 import {buttons, optionsByDevice, Device} from './consts';
 import {useDispatch, useSelector} from 'react-redux';
-import actionTypes from 'constants/actionTypes';
 import {Select as SelectBase} from 'components/controls';
+import {setDevice, setModelDevice} from 'store/editor-mode.slice';
 
 const ButtonSelector = styled(ButtonSelectorBase)`
   ${Container.className} {
@@ -25,17 +25,11 @@ const MobileSelect = () => {
   // TODO типизировать стейт
 
   const handleChangePlatform = (key: Device) => {
-    dispatch({
-      type: actionTypes.SET_DEVICE,
-      device: key,
-    });
+    dispatch(setDevice(key));
   };
 
   const handleChangeMobile = (e: any) => {
-    dispatch({
-      type: actionTypes.SET_MODEL_DEVICE,
-      model: e
-    });
+    dispatch(setModelDevice(e));
   };
 
   return (

@@ -5,7 +5,6 @@ import {ReactComponent as HideLeft} from '../assets/hide_left.svg';
 import {ReactComponent as HideRight} from '../assets/hide_right.svg';
 import {Button} from 'components/controls';
 import {useDispatch, useSelector} from 'react-redux';
-import actionTypes from '../constants/actionTypes';
 import {deleteAction, deleteScreen, saveAction, saveScreen} from '../services/ApiService';
 import {useKeycloak} from '@react-keycloak/web';
 import {useLocation} from 'react-router-dom';
@@ -13,6 +12,8 @@ import {Store} from 'react-notifications-component';
 import {Store as RuduxStore} from 'reducers/types';
 import {successNotification} from 'constants/notifications';
 import {useOutside} from 'utils';
+import {changesSaved} from 'store/layout.slice';
+import {toggleLeftBar, toggleRightBar} from 'store/side-bar.slice';
 
 const Bar = styled.div<any>`
   height: 60px;
@@ -90,10 +91,10 @@ const TopBar = () => {
   const editedScreens = useSelector((state: RuduxStore) => state.layout.editedScreens);
   const projectID = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
   const handleHideLeft = () => {
-    dispatch({type: actionTypes.TOGGLE_LEFT_BAR});
+    dispatch(toggleLeftBar());
   };
   const handleHideRight = () => {
-    dispatch({type: actionTypes.TOGGLE_RIGHT_BAR});
+    dispatch(toggleRightBar());
   };
   const handleSaveApplication: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     event.stopPropagation();
@@ -123,9 +124,7 @@ const TopBar = () => {
         });
       }
     );
-    dispatch({
-      type: actionTypes.CHANGES_SAVED,
-    });
+    dispatch(changesSaved());
   };
   const openMenu = () => {
     setIsShow(true);

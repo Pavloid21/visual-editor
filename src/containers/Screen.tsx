@@ -10,6 +10,7 @@ import Prism from 'prismjs';
 import {atomOneLight} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import {Modal} from 'components';
 import {Store} from 'reducers/types';
+import {editLogic} from 'store/output.slice';
 
 const Container = styled.div`
   padding: 14px;
@@ -81,10 +82,7 @@ const Screen: React.FC<any> = (props) => {
               textareaClassName="code"
               highlight={(code) => Prism.highlight(code, Prism.languages.js, 'javascript')}
               onValueChange={(value) => {
-                dispatch({
-                  type: actionTypes.EDIT_LOGIC,
-                  logic: value,
-                });
+                dispatch(editLogic(value));
               }}
               style={{
                 ...atomOneLight,
@@ -103,10 +101,7 @@ const Screen: React.FC<any> = (props) => {
           <Editor
             highlight={(code) => Prism.highlight(code, Prism.languages.js, 'javascript')}
             onValueChange={(value) => {
-              dispatch({
-                type: actionTypes.EDIT_LOGIC,
-                logic: value,
-              });
+              dispatch(editLogic(value));
             }}
             style={{
               ...atomOneLight,

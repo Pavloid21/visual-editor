@@ -6,9 +6,9 @@ import {BlockPreview} from 'components';
 import {gallery as blocks} from 'views/blocks';
 import {useDispatch, useSelector} from 'react-redux';
 import {snippet} from 'utils';
-import actionTypes from 'constants/actionTypes';
 import {Collapse, Container, GalleryHeader, Wrapper} from './Gallery.styled';
 import {Store} from 'reducers/types';
+import {pushBlock, pushBlockInside, setSnippet} from 'store/layout.slice';
 
 const Gallery: React.FC<any> = (props) => {
   const dispatch = useDispatch();
@@ -28,26 +28,21 @@ const Gallery: React.FC<any> = (props) => {
       bottomBar,
       'code'
     );
-    dispatch({
-      type: actionTypes.SET_SNIPPET,
+    dispatch(setSnippet({
       snippet: constants,
       selectedScreen,
-    });
+    }));
   }, [layout]);
 
   const handlePushBlock = (blockId: string) => {
-    dispatch({
-      type: actionTypes.PUSH_BLOCK,
-      blockId,
-    });
+    dispatch(pushBlock(blockId));
   };
 
   const handlePushBlockInside = (blockId: string, uuid: string) => {
-    dispatch({
-      type: actionTypes.PUSH_BLOCK_INSIDE,
+    dispatch(pushBlockInside({
       blockId,
       uuid,
-    });
+    }));
   };
 
   const [viewMode, setMode] = useState('grid');
