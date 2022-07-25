@@ -1,13 +1,13 @@
 import React, {useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {orderBy} from 'external/lodash';
-import actionTypes from 'constants/actionTypes';
 import {ReactComponent as CodeIcon} from 'assets/code.svg';
 import {ReactComponent as DataIcon} from 'assets/folder-upload.svg';
 import {ReactComponent as Trash} from 'assets/trash.svg';
 import {getActionsList, getActionByName, getDataActionsList, getDataActionByName} from 'services/ApiService';
 import {Container} from './Actions.styled';
 import {ActionItem, ActionTypes, Store} from 'reducers/types';
+import {deleteAction, setActions, setSelectAction} from 'store/actions.slice';
 
 const Actions: React.FC<unknown> = () => {
   const dispatch = useDispatch();
@@ -45,10 +45,7 @@ const Actions: React.FC<unknown> = () => {
                 actions.push({...result.value, selected: false});
               }
             });
-            dispatch({
-              type: actionTypes.SET_ACTIONS,
-              actions,
-            });
+            dispatch(setActions({actions}));
           })
           .catch(console.log);
       });
@@ -72,27 +69,18 @@ const Actions: React.FC<unknown> = () => {
                 actions.push({...result.value, selected: false});
               }
             });
-            dispatch({
-              type: actionTypes.SET_ACTIONS,
-              data: actions,
-            });
+            dispatch(setActions({data: actions}));
           })
           .catch(console.log);
       });
   }, []);
 
   const handleSelectSnippet = (action: ActionItem | null) => {
-    dispatch({
-      type: actionTypes.SELECT_ACTION,
-      selected: action,
-    });
+    dispatch(setSelectAction(action));
   };
 
   const handleDeleteSnippet = (action: ActionItem | null) => {
-    dispatch({
-      type: actionTypes.DELETE_ACTION,
-      selected: action,
-    });
+    dispatch(deleteAction(action));
   };
 
   return (

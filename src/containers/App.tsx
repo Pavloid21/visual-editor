@@ -12,15 +12,18 @@ import {useKeycloak} from '@react-keycloak/web';
 import {Project} from './Project';
 import {API} from 'services/ApiService';
 import 'react-notifications-component/dist/theme.css';
-import {BlockItem, Store} from 'reducers/types';
+import {BlockItem} from 'reducers/types';
+import {setActiveTab, setPreviewMode} from 'store/config.slice';
+import {reOrderLayout, replaceElement, setSelectedBlock} from 'store/layout.slice';
+import {RootState} from 'store';
 
 const App: React.FC<unknown> = () => {
-  const layout = useSelector((state: Store) => state.layout);
+  const layout = useSelector((state: RootState) => state.layout);
   const location = useLocation();
-  const bottomBar = useSelector((state: Store) => state.layout.bottomBar);
-  const topAppBar = useSelector((state: Store) => state.layout.topAppBar);
-  const config = useSelector((state: Store) => state.config);
-  const barState = useSelector((state: Store) => state.sideBar);
+  const bottomBar = useSelector((state: RootState) => state.layout.bottomBar);
+  const topAppBar = useSelector((state: RootState) => state.layout.topAppBar);
+  const config = useSelector((state: RootState) => state.config);
+  const barState = useSelector((state: RootState) => state.sideBar);
   const dispatch = useDispatch();
   const {initialized, keycloak} = useKeycloak();
   const setHeaderAuthorizationToken = () => {
@@ -61,24 +64,15 @@ const App: React.FC<unknown> = () => {
   }, [location, dispatch]);
 
   const handleChangeActiveTab = (index: number) => {
-    dispatch({
-      type: actionTypes.CHANGE_ACTIVE_TAB,
-      index,
-    });
+    dispatch(setActiveTab(index));
   };
 
   const handleChangePreviewMode = (mode: number) => {
-    dispatch({
-      type: actionTypes.CHANGE_PREVIEW_MODE,
-      mode,
-    });
+    dispatch(setPreviewMode(mode));
   };
 
   const handleSetSelectedBlock = (blockUuid: string) => {
-    dispatch({
-      type: actionTypes.SET_SELECTED_BLOCK,
-      blockUuid,
-    });
+    dispatch(setSelectedBlock(blockUuid));
   };
 
   const handleReorderLayout = (newOrder: string[], parentID: string, blocksLayout: BlockItem[]) => {
@@ -94,18 +88,14 @@ const App: React.FC<unknown> = () => {
     if (parent) {
       // @ts-ignore
       parent.listItems = order;
-      dispatch({
-        type: actionTypes.REPLACE_ELEMENT,
-        element: parent,
-      });
+      dispatch(replaceElement(parent));
     } else {
       const uuids = blocksLayout.map((block) => block.uuid);
       const next = order.filter((item) => uuids.includes(item.uuid));
-      dispatch({
-        type: actionTypes.REORDER_LAYOUT,
-        // @ts-ignore
-        newBlocksLayout: [...new Set(next.map(JSON.stringify))].map(JSON.parse),
-      });
+      const uniqueBlockItemList: BlockItem[] = [
+        ...new Set(next.map((blockItem) => JSON.stringify(blockItem)))
+      ].map((blockItem) => JSON.parse(blockItem));
+      dispatch(reOrderLayout(uniqueBlockItemList));
     }
   };
 

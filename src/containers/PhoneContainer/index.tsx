@@ -6,7 +6,7 @@ import {PanZoom} from 'react-easy-panzoom';
 import {Zoom} from 'containers/ZoomSelect/types';
 import {Store} from 'reducers/types';
 import {ReactComponent as AlignCenterIcon} from 'assets/align-center.svg';
-import actionTypes from 'constants/actionTypes';
+import {setZoom} from 'store/editor-mode.slice';
 
 const Wrapper = styled.div<any>`
   position: absolute;
@@ -60,10 +60,7 @@ const PhoneContainer = (props: IPhoneContainer) => {
   const handleCenter = () => {
     // @ts-ignore
     zoomRef.current.autoCenter();
-    dispatch({
-      type: actionTypes.SET_ZOOM,
-      zoom: Zoom['100%'],
-    });
+    dispatch(setZoom(Zoom['100%']));
   };
 
   return (

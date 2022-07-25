@@ -1,6 +1,5 @@
 import {Select} from 'components/controls';
 import {FlexContainer as FlexContainerBase} from 'components/layouts';
-import actionTypes from 'constants/actionTypes';
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
@@ -8,6 +7,7 @@ import {Zoom} from './types';
 import {options} from './consts';
 import {ReactComponent as MinusIcon} from 'assets/zoom_minus.svg';
 import {ReactComponent as PlusIcon} from 'assets/zoom_plus.svg';
+import {setZoom} from 'store/editor-mode.slice';
 
 const FlexContainer = styled(FlexContainerBase)`
   margin-left: auto;
@@ -26,10 +26,7 @@ const ZoomSelect = () => {
   const dispatch = useDispatch();
 
   const handleChangeZoom = (e: Zoom) => {
-    dispatch({
-      type: actionTypes.SET_ZOOM,
-      zoom: e,
-    });
+    dispatch(setZoom(e));
   };
 
   const mappedZoomValue = options.map(o => o.value);
@@ -37,10 +34,7 @@ const ZoomSelect = () => {
   const handleDecrementZoom = () => {
     const currentIndex = mappedZoomValue.findIndex(z => z === zoom);
     if(currentIndex > 0) {
-      dispatch({
-        type: actionTypes.SET_ZOOM,
-        zoom: mappedZoomValue[currentIndex - 1]
-      });
+      dispatch(setZoom(mappedZoomValue[currentIndex - 1] as Zoom));
     }
   };
 
@@ -48,10 +42,7 @@ const ZoomSelect = () => {
     const currentIndex = mappedZoomValue.findIndex(z => z === zoom);
     if(currentIndex < mappedZoomValue.length - 1) {
       console.log(currentIndex, mappedZoomValue);
-      dispatch({
-        type: actionTypes.SET_ZOOM,
-        zoom: mappedZoomValue[currentIndex + 1]
-      });
+      dispatch(setZoom(mappedZoomValue[currentIndex + 1] as Zoom));
     }
   };
 

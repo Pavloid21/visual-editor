@@ -9,7 +9,7 @@ import {observer} from 'utils/observer';
 import {onSortMove} from 'utils/hooks';
 import renderHandlebars from 'utils/renderHandlebars';
 import {hexToRgb} from 'constants/utils';
-import actionTypes, {ItemTypes} from 'constants/actionTypes';
+import {ItemTypes} from 'constants/actionTypes';
 import card from 'assets/card.svg';
 import {
   alignmentConfig, backgroundColor, corners, elevation, interactive,
@@ -17,6 +17,7 @@ import {
   shapeConfigBuilder,
   sizeModifier,
 } from 'views/configs';
+import {pushBlockInside} from 'store/layout.slice';
 
 const Card = styled.div`
   align-self: ${(props) => {
@@ -65,10 +66,10 @@ const Card = styled.div`
     return `${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px 8px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b}, ${props.shadow?.opacity})`;
   }};
   border-radius: ${(props) => `
-    ${props.corners?.topLeftRadius}px 
-    ${props.corners?.topRightRadius}px 
+    ${props.corners?.topLeftRadius}px
+    ${props.corners?.topRightRadius}px
     ${props.corners?.bottomRightRadius}px
-    ${props.corners?.bottomLeftRadius}px 
+    ${props.corners?.bottomLeftRadius}px
   `};
 `;
 
@@ -89,11 +90,10 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
     accept: ItemTypes.BOX,
     drop: (item) => {
       if (target.isOver()) {
-        dispatch({
-          type: actionTypes.PUSH_BLOCK_INSIDE,
+        dispatch(pushBlockInside({
           blockId: item.id,
           uuid,
-        });
+        }));
       }
       return {
         uuid,

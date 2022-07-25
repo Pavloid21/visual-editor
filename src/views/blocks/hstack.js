@@ -8,7 +8,7 @@ import Wrapper from 'utils/wrapper';
 import {onSortMove} from 'utils/hooks';
 import {observer} from 'utils/observer';
 import renderHandlebars from 'utils/renderHandlebars';
-import actionTypes, {ItemTypes} from 'constants/actionTypes';
+import {ItemTypes} from 'constants/actionTypes';
 import {
   alignmentConfig,
   backgroundColor,
@@ -19,6 +19,7 @@ import {
   spacing,
 } from 'views/configs';
 import hstack from 'assets/hstack.svg';
+import {pushBlockInside} from 'store/layout.slice';
 
 const HStack = styled.div`
   align-self: ${(props) => {
@@ -63,10 +64,10 @@ const HStack = styled.div`
   gap: ${(props) => props.spacing}px;
   position: relative;
   border-radius: ${(props) => `
-    ${props.corners?.topLeftRadius}px 
-    ${props.corners?.topRightRadius}px 
+    ${props.corners?.topLeftRadius}px
+    ${props.corners?.topRightRadius}px
     ${props.corners?.bottomRightRadius}px
-    ${props.corners?.bottomLeftRadius}px 
+    ${props.corners?.bottomLeftRadius}px
   `};
 `;
 
@@ -87,11 +88,10 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
     accept: ItemTypes.BOX,
     drop: (item) => {
       if (target.isOver()) {
-        dispatch({
-          type: actionTypes.PUSH_BLOCK_INSIDE,
+        dispatch(pushBlockInside({
           blockId: item.id,
           uuid,
-        });
+        }));
       }
       return {
         uuid,

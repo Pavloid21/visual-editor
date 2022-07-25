@@ -2,21 +2,22 @@ import React, {ReactNode, useEffect} from 'react';
 import {useDrop} from 'react-dnd';
 import {useDispatch, useSelector} from 'react-redux';
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
-import actionTypes, {ItemTypes} from '../constants/actionTypes';
+import {ItemTypes} from 'constants/actionTypes';
 import {arrayMoveImmutable} from 'array-move';
 import {observer, onSortMove} from 'utils';
 import PhoneContainer from './PhoneContainer';
 import styled from 'styled-components';
 import {Code} from './Code';
-import {ReactComponent as Screen} from '../assets/screen.svg';
-import {ReactComponent as Json} from '../assets/json.svg';
-import {ReactComponent as Reference} from '../assets/preview.svg';
-import {ReactComponent as Save} from '../assets/save.svg';
+import {ReactComponent as Screen} from 'assets/screen.svg';
+import {ReactComponent as Json} from 'assets/json.svg';
+import {ReactComponent as Reference} from 'assets/preview.svg';
+import {ReactComponent as Save} from 'assets/save.svg';
 import MobileSelect from './MobileSelect';
 import clsx from 'clsx';
 import ZoomSelect from './ZoomSelect';
 import {Beforeunload} from 'react-beforeunload';
 import {Store} from 'reducers/types';
+import {setEditorMode} from 'store/editor-mode.slice';
 
 const Bar = styled.div<any>`
   height: 60px;
@@ -159,10 +160,7 @@ const Preview = (props: any) => {
   };
 
   const handleModeClick = (mode: string) => {
-    dispatch({
-      type: actionTypes.SET_EDITOR_MODE,
-      mode,
-    });
+    dispatch(setEditorMode(mode));
   };
 
   const handleSaveSnippet = () => {

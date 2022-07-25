@@ -4,7 +4,6 @@ import SideBarHeader from './SideBarHeader';
 import {Inspector} from 'containers/Inspector';
 import Screen from 'containers/Screen';
 import {Button, Input} from './controls';
-import actionTypes from 'constants/actionTypes';
 import {ActionForm} from 'containers/ActionForm';
 import {useSelector, useDispatch} from 'react-redux';
 import {ReactComponent as Plus} from 'assets/plus.svg';
@@ -14,6 +13,8 @@ import {useForm, useFieldArray, Controller} from 'react-hook-form';
 import {Store} from 'reducers/types';
 import {noop} from 'external/lodash';
 import {useOutsideAlerter} from 'utils';
+import {addAPI, editAPI, removeAPI} from 'store/api-settings.slice';
+import {setSelectedBlock} from 'store/layout.slice';
 
 const Container = styled.div`
   min-width: 422px;
@@ -82,10 +83,7 @@ const RightSidebar: React.FC<any> = ({children, ...props}) => {
 
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef, () =>
-    dispatch({
-      type: actionTypes.SET_SELECTED_BLOCK,
-      blockUuid: '',
-    })
+    dispatch(setSelectedBlock(''))
   );
 
   const watchFieldArray = watch('headers');
@@ -126,17 +124,13 @@ const RightSidebar: React.FC<any> = ({children, ...props}) => {
   };
 
   const onSubmit = (data: any) => {
-    if (isEditing) {
-      dispatch({
-        type: actionTypes.EDIT_API,
+    if (isEditing && selected) {
+      dispatch(editAPI({
         api: data,
         index: selected,
-      });
+      }));
     } else {
-      dispatch({
-        type: actionTypes.ADD_API,
-        api: data,
-      });
+      dispatch(addAPI(data));
     }
     setAPIFormShow(false);
   };
@@ -259,10 +253,7 @@ const RightSidebar: React.FC<any> = ({children, ...props}) => {
                     <Remove
                       className="icon"
                       onClick={() => {
-                        dispatch({
-                          type: actionTypes.REMOVE_API_ITEM,
-                          index,
-                        });
+                        dispatch(removeAPI(index));
                       }}
                     />
                   </span>

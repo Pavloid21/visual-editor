@@ -6,7 +6,7 @@ import {sortableContainer} from 'react-sortable-hoc';
 import {useDispatch, useSelector} from 'react-redux';
 import searchbar from 'assets/searchbar.svg';
 import Wrapper from 'utils/wrapper';
-import actionTypes, {ItemTypes} from 'constants/actionTypes';
+import {ItemTypes} from 'constants/actionTypes';
 import {observer} from 'utils/observer';
 import renderHandlebars from 'utils/renderHandlebars';
 import {onSortMove} from 'utils/hooks';
@@ -18,6 +18,7 @@ import {
   sizeModifier, text,
   textAlignment, textColor,
 } from 'views/configs';
+import {pushBlockInside} from 'store/layout.slice';
 
 const SearchBar = styled.div`
   display: flex;
@@ -111,11 +112,10 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
     accept: ItemTypes.BOX,
     drop: (item) => {
       if (target.isOver()) {
-        dispatch({
-          type: actionTypes.PUSH_BLOCK_INSIDE,
+        dispatch(pushBlockInside({
           blockId: item.id,
           uuid,
-        });
+        }));
       }
       return {
         uuid,

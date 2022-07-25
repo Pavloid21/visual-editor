@@ -2,10 +2,10 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {ReactComponent as Copy} from '../../assets/sm_copy.svg';
 import {ReactComponent as Remove} from '../../assets/close-c.svg';
-import actionTypes from '../../constants/actionTypes';
 import {Store} from 'reducers/types';
 import {TPosition} from './types';
 import {Wrapper} from './HighlightedElement.styled';
+import {cloneBlock, deleteBlock} from 'store/layout.slice';
 
 const HighlightedElement: React.FC<any> = () => {
   const selectedBlock = useSelector((state: Store) => state.layout.selectedBlockUuid);
@@ -42,18 +42,12 @@ const HighlightedElement: React.FC<any> = () => {
 
   const handleRemove: React.MouseEventHandler<SVGElement> = (event) => {
     event.stopPropagation();
-    dispatch({
-      type: actionTypes.DELETE_BLOCK,
-      blockUuid: selectedBlock,
-    });
+    dispatch(deleteBlock(selectedBlock));
   };
 
   const handleClone: React.MouseEventHandler<SVGElement> = (event) => {
     event.stopPropagation();
-    dispatch({
-      type: actionTypes.CLONE_BLOCK,
-      blockUuid: selectedBlock,
-    });
+    dispatch(cloneBlock(selectedBlock));
   };
 
   const {width, height, left, top} = position;

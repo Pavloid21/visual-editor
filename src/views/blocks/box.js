@@ -9,7 +9,7 @@ import {onSortMove} from 'utils/hooks';
 import {observer} from 'utils/observer';
 import renderHandlebars from 'utils/renderHandlebars';
 import {hexToRgb} from 'constants/utils';
-import actionTypes, {ItemTypes} from 'constants/actionTypes';
+import {ItemTypes} from 'constants/actionTypes';
 import box from 'assets/box.svg';
 import {
   backgroundColor,
@@ -19,6 +19,7 @@ import {
   shapeConfigBuilder,
   size
 } from 'views/configs';
+import {pushBlockInside} from 'store/layout.slice';
 
 const Box = styled.div`
   border: ${(props) => `${props.borderWidth}px solid ${props.borderColor}`};
@@ -52,11 +53,10 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
     accept: ItemTypes.BOX,
     drop: (item) => {
       if (target.isOver()) {
-        dispatch({
-          type: actionTypes.PUSH_BLOCK_INSIDE,
+        dispatch(pushBlockInside({
           blockId: item.id,
           uuid,
-        });
+        }));
       }
       return {
         uuid,

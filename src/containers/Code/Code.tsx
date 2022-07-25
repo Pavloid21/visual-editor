@@ -2,10 +2,11 @@ import React, {useEffect} from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import {atomOneLight} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import {useSelector, useDispatch} from 'react-redux';
-import actionTypes from '../../constants/actionTypes';
 import {snippet} from 'utils';
 import {Store} from 'reducers/types';
 import {Container, EditorWrapper} from './Code.styled';
+import {saveCode} from 'store/code.slice';
+import {setSnippet} from 'store/layout.slice';
 
 const Code: React.FC<any> = (props) => {
   const code = useSelector((state: Store) => state.code);
@@ -27,12 +28,11 @@ const Code: React.FC<any> = (props) => {
         bottomBar,
         'code'
       );
-      dispatch({type: actionTypes.SAVE_CODE, code: constants});
-      dispatch({
-        type: actionTypes.SET_SNIPPET,
+      dispatch(saveCode(constants));
+      dispatch(setSnippet({
         snippet: constants,
         selectedScreen,
-      });
+      }));
     }
   }, [api, initial, blocks, bottomBar, topAppBar, code]);
 

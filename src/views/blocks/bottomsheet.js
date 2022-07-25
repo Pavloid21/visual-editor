@@ -4,13 +4,14 @@ import styled from 'styled-components';
 import {sortableContainer} from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
 import {useDispatch, useSelector} from 'react-redux';
-import actionTypes, {ItemTypes} from 'constants/actionTypes';
+import {ItemTypes} from 'constants/actionTypes';
 import renderHandlebars from 'utils/renderHandlebars';
 import {observer} from 'utils/observer';
 import bottomsheet from 'assets/bottomsheet.svg';
 import Wrapper from 'utils/wrapper';
 import {onSortMove} from 'utils/hooks';
 import {backgroundColor, shapeConfigBuilder} from 'views/configs';
+import {pushBlockInside} from 'store/layout.slice';
 
 const BottomSheet = styled.div`
   margin-top: auto;
@@ -23,10 +24,10 @@ const BottomSheet = styled.div`
   flex-direction: column;
   box-sizing: border-box;
   border-radius: ${(props) => `
-    ${props.shape?.radius || 0}px 
-    ${props.shape?.radius || 0}px 
     ${props.shape?.radius || 0}px
-    ${props.shape?.radius || 0}px 
+    ${props.shape?.radius || 0}px
+    ${props.shape?.radius || 0}px
+    ${props.shape?.radius || 0}px
   `};
 `;
 
@@ -47,11 +48,10 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
     accept: ItemTypes.BOX,
     drop: (item) => {
       if (target.isOver()) {
-        dispatch({
-          type: actionTypes.PUSH_BLOCK_INSIDE,
+        dispatch(pushBlockInside({
           blockId: item.id,
           uuid,
-        });
+        }));
       }
       return {
         uuid,
