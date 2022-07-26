@@ -1,5 +1,3 @@
-import {IButton} from 'components/ButtonSelector/types';
-import {IOption} from 'components/controls/Select/types';
 import {v4} from 'uuid';
 import {ReactComponent as AndroidSmall} from 'assets/mockups/Android_Small.svg';
 import {ReactComponent as AndroidLarge} from 'assets/mockups/Android_Large.svg';
@@ -20,8 +18,10 @@ import {ReactComponent as Time} from 'assets/mockups/time.svg';
 import {ReactComponent as TimeAndroid} from 'assets/mockups/time_android.svg';
 import {ReactComponent as RightSideAndroid} from 'assets/mockups/right_side_android.svg';
 import {useSelector} from 'react-redux';
-import {Store} from 'reducers/types';
 import {hexToRgb, setContrast} from 'constants/utils';
+import type {IButton} from 'components/ButtonSelector/types';
+import type {IOption} from 'components/controls/Select/types';
+import type {RootStore} from 'store/types';
 
 export enum Device {
   IOS = 'IOS',
@@ -152,7 +152,7 @@ const StatusBar = styled.div<any>`
   background-color: #fff;
   ${(props) => props.styled}
   ${(props) => {
-    const appBar = useSelector((state: Store) => state.layout.topAppBar);
+    const appBar = useSelector((state: RootStore) => state.layout.topAppBar);
     return `background-color: ${appBar?.settingsUI.backgroundColor};
             & > svg > g {
               fill: ${setContrast(hexToRgb(appBar?.settingsUI.backgroundColor || '#FFFFFF'))};

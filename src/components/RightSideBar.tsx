@@ -10,11 +10,11 @@ import {ReactComponent as Plus} from 'assets/plus.svg';
 import {ReactComponent as Remove} from 'assets/trash.svg';
 import {ReactComponent as Pencil} from 'assets/pencil.svg';
 import {useForm, useFieldArray, Controller} from 'react-hook-form';
-import {Store} from 'reducers/types';
 import {noop} from 'external/lodash';
 import {useOutsideAlerter} from 'utils';
 import {addAPI, editAPI, removeAPI} from 'store/api-settings.slice';
 import {setSelectedBlock} from 'store/layout.slice';
+import {RootStore} from 'store/types';
 
 const Container = styled.div`
   min-width: 422px;
@@ -63,10 +63,10 @@ const APIRow = styled.section`
 `;
 
 const RightSidebar: React.FC<any> = ({children, ...props}) => {
-  const APIs = useSelector((state: Store) => state.api.list);
-  const activeTab = useSelector((state: Store) => state.config.activeTab);
-  const {selectedBlockUuid: selectedBlock, selectedScreen} = useSelector((state: Store) => state.layout);
-  const selectedAction = useSelector((state: Store) => state.actions.selected);
+  const APIs = useSelector((state: RootStore) => state.api.list);
+  const activeTab = useSelector((state: RootStore) => state.config.activeTab);
+  const {selectedBlockUuid: selectedBlock, selectedScreen} = useSelector((state: RootStore) => state.layout);
+  const selectedAction = useSelector((state: RootStore) => state.actions.selected);
   const [showForm, setAPIFormShow] = useState(false);
   const [isEditing, setEditing] = useState(false);
   const [selected, setSelected] = useState<number | undefined>();

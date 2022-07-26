@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {EditorMode} from 'reducers/types';
 import {Device, optionsByDevice} from 'containers/MobileSelect/consts';
 import {Zoom} from 'containers/ZoomSelect/types';
+import type {EditorMode} from './types';
 
 const initialState: EditorMode = {
   mode: 'editor',

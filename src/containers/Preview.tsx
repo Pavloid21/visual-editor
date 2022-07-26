@@ -16,8 +16,8 @@ import MobileSelect from './MobileSelect';
 import clsx from 'clsx';
 import ZoomSelect from './ZoomSelect';
 import {Beforeunload} from 'react-beforeunload';
-import {Store} from 'reducers/types';
 import {setEditorMode} from 'store/editor-mode.slice';
+import type {RootStore} from 'store/types';
 
 const Bar = styled.div<any>`
   height: 60px;
@@ -91,7 +91,7 @@ interface ISortableList {
 const SortableItem = SortableElement((props: any) => <>{props.children}</>);
 
 const SortableList = SortableContainer<ISortableList>(({drop, backgroundColor, list}: ISortableList) => {
-  const bottomBar = useSelector((state: Store) => state.layout.bottomBar);
+  const bottomBar = useSelector((state: RootStore) => state.layout.bottomBar);
   return (
     <Container backgroundColor={backgroundColor} ref={drop}>
       <div style={{flex: bottomBar ? 1 : 'none'}}>
@@ -110,7 +110,7 @@ const SortableList = SortableContainer<ISortableList>(({drop, backgroundColor, l
 });
 
 const Preview = (props: any) => {
-  const selectedScreen = useSelector((state: Store) => state.layout.selectedScreen);
+  const selectedScreen = useSelector((state: RootStore) => state.layout.selectedScreen);
   const [{canDrop, isOver}, drop] = useDrop(
     () => ({
       accept: ItemTypes.BOX,
@@ -129,9 +129,9 @@ const Preview = (props: any) => {
   );
 
   const dispatch = useDispatch();
-  const editorMode = useSelector((state: Store) => state.editorMode.mode);
-  const layout = useSelector((state: Store) => state.layout);
-  const barState = useSelector((state: Store) => state.sideBar);
+  const editorMode = useSelector((state: RootStore) => state.editorMode.mode);
+  const layout = useSelector((state: RootStore) => state.layout);
+  const barState = useSelector((state: RootStore) => state.sideBar);
 
   useEffect(() => {
     const scrollY = localStorage.getItem('scrollY');

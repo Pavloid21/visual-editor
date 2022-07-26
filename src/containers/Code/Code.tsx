@@ -3,17 +3,17 @@ import SyntaxHighlighter from 'react-syntax-highlighter';
 import {atomOneLight} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import {useSelector, useDispatch} from 'react-redux';
 import {snippet} from 'utils';
-import {Store} from 'reducers/types';
 import {Container, EditorWrapper} from './Code.styled';
 import {saveCode} from 'store/code.slice';
 import {setSnippet} from 'store/layout.slice';
+import type {RootStore} from 'store/types';
 
 const Code: React.FC<any> = (props) => {
-  const code = useSelector((state: Store) => state.code);
+  const code = useSelector((state: RootStore) => state.code);
   const dispatch = useDispatch();
-  const api = useSelector((state: Store) => state.api);
-  const {bottomBar, blocks, selectedScreen, topAppBar, snippets} = useSelector((state: Store) => state.layout);
-  const initial = useSelector((state: Store) => state.output);
+  const api = useSelector((state: RootStore) => state.api);
+  const {bottomBar, blocks, selectedScreen, topAppBar, snippets} = useSelector((state: RootStore) => state.layout);
+  const initial = useSelector((state: RootStore) => state.output);
 
   useEffect(() => {
     if (api) {

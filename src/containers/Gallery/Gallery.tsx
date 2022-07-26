@@ -7,14 +7,14 @@ import {gallery as blocks} from 'views/blocks';
 import {useDispatch, useSelector} from 'react-redux';
 import {snippet} from 'utils';
 import {Collapse, Container, GalleryHeader, Wrapper} from './Gallery.styled';
-import {Store} from 'reducers/types';
 import {pushBlock, pushBlockInside, setSnippet} from 'store/layout.slice';
+import type {RootStore} from 'store/types';
 
 const Gallery: React.FC<any> = (props) => {
   const dispatch = useDispatch();
-  const output = useSelector((state: Store) => state.output.screen);
-  const {selectedScreen, blocks: layout, topAppBar, bottomBar} = useSelector((state: Store) => state.layout);
-  const api = useSelector((state: Store) => state.api);
+  const output = useSelector((state: RootStore) => state.output.screen);
+  const {selectedScreen, blocks: layout, topAppBar, bottomBar} = useSelector((state: RootStore) => state.layout);
+  const api = useSelector((state: RootStore) => state.api);
 
   useEffect(() => {
     const constants = snippet(

@@ -9,11 +9,11 @@ import {deleteAction, deleteScreen, saveAction, saveScreen} from '../services/Ap
 import {useKeycloak} from '@react-keycloak/web';
 import {useLocation} from 'react-router-dom';
 import {Store} from 'react-notifications-component';
-import {Store as RuduxStore} from 'reducers/types';
 import {successNotification} from 'constants/notifications';
 import {useOutside} from 'utils';
 import {changesSaved} from 'store/layout.slice';
 import {toggleLeftBar, toggleRightBar} from 'store/side-bar.slice';
+import type {RootStore} from 'store/types';
 
 const Bar = styled.div<any>`
   height: 60px;
@@ -74,21 +74,21 @@ const TopBar = () => {
   const dispatch = useDispatch();
   const {keycloak} = useKeycloak();
   const location = useLocation();
-  const snippets = useSelector((state: RuduxStore) => state.layout.snippets);
+  const snippets = useSelector((state: RootStore) => state.layout.snippets);
   const {ref, isShow, setIsShow} = useOutside(false);
-  const actions = useSelector((state: RuduxStore) => [
+  const actions = useSelector((state: RootStore) => [
     ...state.actions.actions.map((item) => ({...item, type: 'actions'})),
     ...state.actions.data.map((item) => ({...item, type: 'data'})),
   ]);
-  const deletedActions = useSelector((state: RuduxStore) => [
+  const deletedActions = useSelector((state: RootStore) => [
     ...state.actions.deleted.actions.map((item) => ({
       ...item,
       type: 'actions',
     })),
     ...state.actions.deleted.data.map((item) => ({...item, type: 'data'})),
   ]);
-  const deletedScreens = useSelector((state: RuduxStore) => state.layout.deletedScreens);
-  const editedScreens = useSelector((state: RuduxStore) => state.layout.editedScreens);
+  const deletedScreens = useSelector((state: RootStore) => state.layout.deletedScreens);
+  const editedScreens = useSelector((state: RootStore) => state.layout.editedScreens);
   const projectID = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
   const handleHideLeft = () => {
     dispatch(toggleLeftBar());

@@ -4,9 +4,7 @@ import blocks from 'views/blocks';
 import {ReactComponent as Trash} from 'assets/trash.svg';
 import {leadLetter} from 'constants/utils';
 import {Button, Input, UnitsInput, ColorPicker} from 'components/controls';
-import {Store} from 'reducers/types';
 import {Division, Select} from './Inspector.styled';
-import {TInspector} from './types';
 import {findInTree} from 'utils';
 import {
   addBottomBarItem,
@@ -15,10 +13,12 @@ import {
   removeBottomBarItem,
   removeTopAppBarItem, switchElementType,
 } from 'store/layout.slice';
+import type {TInspector} from './types';
+import type {RootStore} from 'store/types';
 
 const Inspector: React.FC<TInspector> = ({display}) => {
   const dispatch = useDispatch();
-  const layout = useSelector((state: Store) => state.layout);
+  const layout = useSelector((state: RootStore) => state.layout);
   const handleChangeBlockData = useCallback(
     (blockUuid: string, key: string, value: any, parentKey: string | undefined) => {
       dispatch(changeBlockData({

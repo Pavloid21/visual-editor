@@ -1,11 +1,14 @@
-import {BlockItem, Layout} from 'reducers/types';
 import {v4 as uuidv4} from 'uuid';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import actionTypes from 'constants/actionTypes';
 import {getData} from 'utils/prepareModel';
 import blocks from 'views/blocks';
 import {get} from 'external/lodash';
-import {EditScreenNamePayloadAction} from './types';
+import type {
+  BlockItem,
+  EditScreenNamePayloadAction,
+  Layout
+} from './types';
 
 type ChangeUnitsPayloadAction = PayloadAction<{
   blockUuid: string;

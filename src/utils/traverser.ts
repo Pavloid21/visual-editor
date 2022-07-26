@@ -1,7 +1,7 @@
 import actionTypes from 'constants/actionTypes';
-import {BlockItem} from 'reducers/types';
 import {AnyAction} from 'redux';
 import {v4} from 'uuid';
+import type {BlockItem} from 'store/types';
 
 export const traverse = function (tree: Record<string, any>[]) {
   return tree.map((item) => {

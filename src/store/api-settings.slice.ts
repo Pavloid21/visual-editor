@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import type {API, APIItem} from 'reducers/types';
+import type {API, APIItem} from './types';
 
 const initialState: API = {
   list: [],

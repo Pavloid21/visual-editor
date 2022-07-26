@@ -5,4 +5,3 @@ export {snippet, getData, buildJSONitem, prepareJSON, walker} from './prepareMod
 export {default as invertColor} from './invertColor';
 export {default as renderHandlebars} from './renderHandlebars';
 export {default as reportWebVitals} from './reportWebVitals';
-export {default as globalStore} from './store';

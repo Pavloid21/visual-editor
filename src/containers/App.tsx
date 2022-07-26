@@ -12,18 +12,17 @@ import {useKeycloak} from '@react-keycloak/web';
 import {Project} from './Project';
 import {API} from 'services/ApiService';
 import 'react-notifications-component/dist/theme.css';
-import {BlockItem} from 'reducers/types';
 import {setActiveTab, setPreviewMode} from 'store/config.slice';
 import {reOrderLayout, replaceElement, setSelectedBlock} from 'store/layout.slice';
-import {RootState} from 'store';
+import type {BlockItem, RootStore} from 'store/types';
 
 const App: React.FC<unknown> = () => {
-  const layout = useSelector((state: RootState) => state.layout);
+  const layout = useSelector((state: RootStore) => state.layout);
   const location = useLocation();
-  const bottomBar = useSelector((state: RootState) => state.layout.bottomBar);
-  const topAppBar = useSelector((state: RootState) => state.layout.topAppBar);
-  const config = useSelector((state: RootState) => state.config);
-  const barState = useSelector((state: RootState) => state.sideBar);
+  const bottomBar = useSelector((state: RootStore) => state.layout.bottomBar);
+  const topAppBar = useSelector((state: RootStore) => state.layout.topAppBar);
+  const config = useSelector((state: RootStore) => state.config);
+  const barState = useSelector((state: RootStore) => state.sideBar);
   const dispatch = useDispatch();
   const {initialized, keycloak} = useKeycloak();
   const setHeaderAuthorizationToken = () => {
