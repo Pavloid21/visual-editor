@@ -9,8 +9,8 @@ import {useModal, snippet} from 'utils';
 import Prism from 'prismjs';
 import {atomOneLight} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import {Modal} from 'components';
-import {Store} from 'reducers/types';
 import {editLogic} from 'store/output.slice';
+import type {RootStore} from 'store/types';
 
 const Container = styled.div`
   padding: 14px;
@@ -37,10 +37,10 @@ const EditorWrapper = styled.div<any>`
 `;
 
 const Screen: React.FC<any> = (props) => {
-  const screenName = useSelector((state: Store) => state.output.screen);
-  const logic = useSelector((state: Store) => state.output.logic);
-  const selectedScreen = useSelector((state: Store) => state.layout.selectedScreen);
-  const layout = useSelector((state: Store) => state.layout);
+  const screenName = useSelector((state: RootStore) => state.output.screen);
+  const logic = useSelector((state: RootStore) => state.output.logic);
+  const selectedScreen = useSelector((state: RootStore) => state.layout.selectedScreen);
+  const layout = useSelector((state: RootStore) => state.layout);
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal();
   const dispatch = useDispatch();
   return props.display ? (

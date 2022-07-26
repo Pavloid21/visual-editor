@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {SideBar} from 'reducers/types';
+import type {SideBar} from './types';
 
 const initialState: SideBar = {
   left: true,

@@ -4,9 +4,9 @@ import styled from 'styled-components';
 import {DeviceKeys, mockByDeviceKey, statusBarByDevice, stylesByDeviceKey} from 'containers/MobileSelect/consts';
 import {PanZoom} from 'react-easy-panzoom';
 import {Zoom} from 'containers/ZoomSelect/types';
-import {Store} from 'reducers/types';
 import {ReactComponent as AlignCenterIcon} from 'assets/align-center.svg';
 import {setZoom} from 'store/editor-mode.slice';
+import type {RootStore} from 'store/types';
 
 const Wrapper = styled.div<any>`
   position: absolute;
@@ -38,9 +38,9 @@ interface IPhoneContainer {
 }
 
 const PhoneContainer = (props: IPhoneContainer) => {
-  const topAppBar = useSelector((state: Store) => state.layout.topAppBar);
-  const model: string = useSelector((state: Store) => state.editorMode.model);
-  const zoom: Zoom = useSelector((state: Store) => state.editorMode.zoom);
+  const topAppBar = useSelector((state: RootStore) => state.layout.topAppBar);
+  const model: string = useSelector((state: RootStore) => state.editorMode.model);
+  const zoom: Zoom = useSelector((state: RootStore) => state.editorMode.zoom);
 
   const dispatch = useDispatch();
 

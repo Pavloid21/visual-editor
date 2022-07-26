@@ -12,9 +12,9 @@ import Modal from 'containers/Project/Modal';
 import {useDispatch, useSelector} from 'react-redux';
 import {Modal as CustomModal} from './Modal';
 import {Button} from 'components/controls/Button';
-import {Store} from 'reducers/types';
 import {useBackListener} from 'constants/utils';
 import {setLayout} from 'store/layout.slice';
+import type {RootStore} from '../store/types';
 
 const Header = styled.div`
   min-height: 60px;
@@ -90,7 +90,7 @@ const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
   const dispatch = useDispatch();
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal();
   const [warningOpen, setWarningOpen, toggleWarning] = useModal();
-  const layout = useSelector((state: Store) => state.layout);
+  const layout = useSelector((state: RootStore) => state.layout);
   const location = useLocation();
   const {
     setValue,

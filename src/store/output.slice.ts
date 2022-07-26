@@ -1,7 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {Output} from 'reducers/types';
 import actionTypes from 'constants/actionTypes';
-import {EditScreenNamePayloadAction} from './types';
+import type {EditScreenNamePayloadAction, Output} from './types';
 
 const initialState: Output = {
   screen: 'screen name',
