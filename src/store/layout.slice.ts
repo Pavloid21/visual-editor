@@ -188,7 +188,7 @@ const layoutSlice = createSlice({
         if (action.payload.blockId === 'bottombar' || action.payload.blockId === 'topappbar') {
           return;
         }
-        const target = findInTree(state.blocks, action.payload.uuid!);
+        const target = findInTree(state.blocks, action.payload.uuid)!;
         const list = blocks[action.payload.blockId].listItems;
         const obj = blocks[action.payload.blockId].listItem;
         const newBloc: BlockItem = {
@@ -221,12 +221,14 @@ const layoutSlice = createSlice({
             ...newBloc,
           };
         }
-        const nextBlocks = state.blocks.map((block, index) => {
+
+        const nextBlocks = state.blocks.map((block) => {
           if (target && (block.uuid === action.payload.uuid)) {
             return target;
           }
           return block;
         });
+
         state.blocks = nextBlocks;
       },
       setSelectedBlock: (state, action: PayloadAction<string>) => {
@@ -316,14 +318,14 @@ const layoutSlice = createSlice({
         };
       },
       deleteBlock: (state, action: PayloadAction<string>) => {
-        const mustBeRemoved = removeFromList(state.blocks, action.payload!);
+        state.blocks = removeFromList(state.blocks, action.payload);
         if (action.payload === state.bottomBar?.uuid) {
           delete state.bottomBar;
         }
         if (action.payload === state.topAppBar?.uuid) {
           delete state.topAppBar;
         }
-        state.blocks = [...mustBeRemoved];
+
         state.selectedBlockUuid = '';
       },
       setLayout: (state, action: SetLayoutPayloadAction) => {
