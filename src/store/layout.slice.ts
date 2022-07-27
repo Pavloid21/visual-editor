@@ -188,7 +188,7 @@ const layoutSlice = createSlice({
         if (action.payload.blockId === 'bottombar' || action.payload.blockId === 'topappbar') {
           return state;
         }
-        const target = findInTree(state.blocks, action.payload.uuid!);
+        const target = findInTree(state.blocks, action.payload.uuid)!;
         const list = blocks[action.payload.blockId].listItems;
         const obj = blocks[action.payload.blockId].listItem;
         const newBloc: BlockItem = {
@@ -221,16 +221,13 @@ const layoutSlice = createSlice({
             ...newBloc,
           };
         }
-        const nextBlocks = state.blocks.map((block, index) => {
+
+        state.blocks.forEach((block) => {
           if (block.uuid === action.payload.uuid) {
-            return target;
-          }
-          return block;
-        });
-        return {
-          ...state,
-          blocks: nextBlocks,
-        };
+          block = target;
+        }});
+
+        return state;
       },
       setSelectedBlock: (state, action: PayloadAction<string>) => {
         state.selectedBlockUuid = action.payload;
@@ -319,20 +316,15 @@ const layoutSlice = createSlice({
         };
       },
       deleteBlock: (state, action: PayloadAction<string>) => {
-        const newArr = [...state.blocks];
-        const mustBeRemoved = removeFromList(newArr, action.payload!);
-        const stateReference = {...state};
+        state.blocks = removeFromList(state.blocks, action.payload);
         if (action.payload === state.bottomBar?.uuid) {
-          delete stateReference.bottomBar;
+          delete state.bottomBar;
         }
         if (action.payload === state.topAppBar?.uuid) {
-          delete stateReference.topAppBar;
+          delete state.topAppBar;
         }
-        return {
-          ...stateReference,
-          blocks: [...mustBeRemoved],
-          selectedBlockUuid: '',
-        };
+
+        state.selectedBlockUuid = '';
       },
       changeDocumentId: (state, action: PayloadAction<string>) => {
         state.documentId = action.payload;
