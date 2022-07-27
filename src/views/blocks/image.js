@@ -82,7 +82,7 @@ const Component = ({settingsUI, sizeModifier, ...props}) => {
   );
 };
 
-const block = {
+const block = () => ({
   Component,
   name: 'IMAGE',
   title: 'Image',
@@ -128,6 +128,6 @@ const block = {
       .done(),
     shadow: shadowConfigBuilder().done()
   },
-};
+});
 
 export default block;

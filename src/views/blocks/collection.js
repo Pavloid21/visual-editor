@@ -146,7 +146,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
   );
 };
 
-const block = {
+const block = () => ({
   Component,
   name: 'COLLECTION',
   title: 'Collection',
@@ -196,6 +196,6 @@ const block = {
       itemsInHorisontal: {type: 'number', name: 'Items in horizontal'},
     },
   },
-};
+});
 
 export default block;

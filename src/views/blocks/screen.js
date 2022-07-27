@@ -158,7 +158,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
   );
 };
 
-const block = {
+const block = () => ({
   Component,
   name: 'SCREEN',
   title: 'Screen',
@@ -177,6 +177,6 @@ const block = {
     backgroundColor,
     spacing,
   },
-};
+});
 
 export default block;

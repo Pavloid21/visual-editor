@@ -59,7 +59,7 @@ const Component = ({settingsUI, ...props}) => {
   );
 };
 
-const block = {
+const block = () => ({
   Component,
   name: 'TOPAPPBAR',
   title: 'App bars: top',
@@ -110,6 +110,6 @@ const block = {
       fields: {type: 'array', name: 'Fields set'},
     },
   },
-};
+});
 
 export default block;

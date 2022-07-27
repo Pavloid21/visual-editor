@@ -3,6 +3,7 @@ import {AlignmentValues} from './alignment';
 export * from './alignment';
 export * from './shape';
 export * from './shadow';
+export * from './size';
 
 export const textAlignment = {
   type: 'select',
@@ -52,25 +53,6 @@ export const fontWeight = {
 export const borderColor = {type: 'color', name: 'Border color'};
 
 export const borderWidth = {type: 'number', name: 'Border width'};
-
-export const size = {
-  height: {
-    type: 'units',
-    name: 'Height',
-    options: [
-      {label: 'px', value: 'px'},
-      {label: '%', value: '%'},
-    ],
-  },
-  width: {
-    type: 'units',
-    name: 'Width',
-    options: [
-      {label: 'px', value: 'px'},
-      {label: '%', value: '%'},
-    ],
-  },
-};
 
 export const sizeModifier = {
   type: 'select',

@@ -96,14 +96,15 @@ const layoutSlice = createSlice({
         state.deletedScreens = [];
       },
       pushTopAppBar: (state, action: PayloadAction<string>) => {
+        const blockConfig = blocks[action.payload]();
         const topAppBar = {
           uuid: uuidv4(),
           blockId: action.payload,
           settingsUI: {
-            ...getData(blocks[action.payload].defaultData),
+            ...getData(blockConfig.defaultData),
           },
           interactive: {
-            ...getData(blocks[action.payload].defaultInteractiveOptions),
+            ...getData(blockConfig.defaultInteractiveOptions),
           },
         };
 
@@ -114,7 +115,7 @@ const layoutSlice = createSlice({
           uuid: uuidv4(),
           blockId: action.payload,
           settingsUI: {
-            ...getData(blocks[action.payload].defaultData),
+            ...getData(blocks[action.payload]().defaultData),
           },
         };
         return {...state, bottomBar};
@@ -122,7 +123,7 @@ const layoutSlice = createSlice({
       addBottomBarItem: (state) => {
         const extendedItems = [...get(state, 'bottomBar.settingsUI.navigationItems', [])];
         extendedItems.push({
-          ...blocks.bottombar.defaultData.navigationItems[0],
+          ...blocks.bottombar().defaultData.navigationItems[0],
           uuid: uuidv4(),
         });
         const bar = {...state.bottomBar};
@@ -132,7 +133,7 @@ const layoutSlice = createSlice({
       addTopAppBarItem: (state) => {
         const nextItems = [...get(state, 'topAppBar.settingsUI.topAppBarItems', [])];
         nextItems.push({
-          ...blocks.topappbar.defaultData.topAppBarItems[0],
+          ...blocks.topappbar().defaultData.topAppBarItems[0],
           uuid: uuidv4(),
         });
         const abar = {...state.topAppBar};
@@ -154,18 +155,19 @@ const layoutSlice = createSlice({
         return {...state, topAppBar: {...newAppBar}};
       },
       pushBlock: (state, action: PayloadAction<string>) => {
-        const listItems = blocks[action.payload].listItems;
-        const listItem = blocks[action.payload].listItem;
+        const blockConfig = blocks[action.payload]();
+        const listItems = blockConfig.listItems;
+        const listItem = blockConfig.listItem;
         const newBlock: BlockItem = {
           uuid: uuidv4(),
           blockId: action.payload,
           settingsUI: {
-            ...getData(blocks[action.payload].defaultData),
+            ...getData(blockConfig.defaultData),
           },
         };
-        if (blocks[action.payload].defaultInteractiveOptions) {
+        if (blockConfig.defaultInteractiveOptions) {
           newBlock.interactive = {
-            ...getData(blocks[action.payload].defaultInteractiveOptions),
+            ...getData(blockConfig.defaultInteractiveOptions),
           };
         }
         if (listItems) {
@@ -189,18 +191,19 @@ const layoutSlice = createSlice({
           return state;
         }
         const target = findInTree(state.blocks, action.payload.uuid!);
-        const list = blocks[action.payload.blockId].listItems;
-        const obj = blocks[action.payload.blockId].listItem;
+        const blockConfig = blocks[action.payload.blockId]();
+        const list = blockConfig.listItems;
+        const obj = blockConfig.listItem;
         const newBloc: BlockItem = {
           uuid: uuidv4(),
           blockId: action.payload.blockId,
           settingsUI: {
-            ...getData(blocks[action.payload.blockId].defaultData),
+            ...getData(blockConfig.defaultData),
           },
         };
-        if (blocks[action.payload.blockId].defaultInteractiveOptions) {
+        if (blockConfig.defaultInteractiveOptions) {
           newBloc.interactive = {
-            ...getData(blocks[action.payload.blockId].defaultInteractiveOptions),
+            ...getData(blockConfig.defaultInteractiveOptions),
           };
         }
         if (list) {
@@ -209,14 +212,14 @@ const layoutSlice = createSlice({
         if (obj !== undefined) {
           newBloc.listItem = obj;
         }
-        if (blocks[target!.blockId].listItems) {
+        if (blocks[target!.blockId]().listItems) {
           target!.listItems = [
             ...(target!.listItems || []),
             {
               ...newBloc,
             },
           ];
-        } else if (blocks[target!.blockId].listItem !== undefined) {
+        } else if (blocks[target!.blockId]().listItem !== undefined) {
           target!.listItem = {
             ...newBloc,
           };
@@ -307,7 +310,7 @@ const layoutSlice = createSlice({
             element.settingsUI[action.payload.parentKey] = {[action.payload.key!]: action.payload.value};
           }
         } else {
-          if (element.settingsUI[action.payload.key!] !== undefined || blocks[element.blockId].config[action.payload.key!]) {
+          if (element.settingsUI[action.payload.key!] !== undefined || blocks[element.blockId]().config[action.payload.key!]) {
             element.settingsUI[action.payload.key!] = action.payload.value;
           } else if (element.interactive) {
             element.interactive[action.payload.key!] = action.payload.value;

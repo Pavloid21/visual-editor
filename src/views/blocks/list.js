@@ -128,7 +128,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
   );
 };
 
-const block = {
+const block = () => ({
   Component,
   name: 'LIST',
   title: 'Lists',
@@ -162,6 +162,6 @@ const block = {
     backgroundColor,
     size,
   },
-};
+});
 
 export default block;

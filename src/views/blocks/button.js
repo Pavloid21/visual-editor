@@ -13,9 +13,11 @@ import {
   padding,
   shadowConfigBuilder,
   shapeConfigBuilder,
-  size, sizeModifier,
-  text, textColor
+  sizeModifier,
+  text, textColor, getSizeConfig
 } from 'views/configs';
+import {blockStateUnsafeSelector} from 'store/selectors';
+import store from 'store';
 
 const Button = styled.div`
   position: relative;
@@ -145,89 +147,93 @@ const Component = (props) => {
   );
 };
 
-const block = {
-  Component,
-  name: 'BUTTON',
-  title: 'Button',
-  description: 'Displays a button icon the user can click to initiate an action.',
-  previewImageUrl: button,
-  category: 'Controls',
-  defaultInteractiveOptions: {
-    action: {url: 'nextScreenName', fields: ['field1', 'field2'], target: ''},
-  },
-  defaultData: {
-    text: 'Войти',
-    fontSize: '24',
-    textColor: '#000000',
-    backgroundColor: '#FFFFFF',
-    imageUrl: '',
-    borderColor: '#EFEFEF',
-    borderWidth: 1,
-    buttonTextPadding: {
-      top: 16,
-      right: 16,
-      bottom: 16,
-      left: 16,
+const block = (state) => {
+  const blockState = state || blockStateUnsafeSelector(store.getState());
+
+  return ({
+    Component,
+    name: 'BUTTON',
+    title: 'Button',
+    description: 'Displays a button icon the user can click to initiate an action.',
+    previewImageUrl: button,
+    category: 'Controls',
+    defaultInteractiveOptions: {
+      action: {url: 'nextScreenName', fields: ['field1', 'field2'], target: ''},
     },
-    buttonImagePadding: {
-      top: 16,
-      right: 16,
-      bottom: 16,
-      left: 16,
-    },
-    shape: {
-      type: 'ALLCORNERSROUND',
-      radius: '4',
-    },
-    sizeModifier: 'FULLWIDTH',
-    size: {
-      height: 48,
-      width: 230,
-    },
-    shadow: {
-      color: '#000000',
-      opacity: 0.3,
-      offsetSize: {
-        width: 0,
-        height: 0,
+    defaultData: {
+      text: 'Войти',
+      fontSize: '24',
+      textColor: '#000000',
+      backgroundColor: '#FFFFFF',
+      imageUrl: '',
+      borderColor: '#EFEFEF',
+      borderWidth: 1,
+      buttonTextPadding: {
+        top: 16,
+        right: 16,
+        bottom: 16,
+        left: 16,
       },
-      radius: 8,
-    },
-  },
-  interactive: {
-    action: {
-      url: {
-        type: 'string',
-        name: 'Action URL',
+      buttonImagePadding: {
+        top: 16,
+        right: 16,
+        bottom: 16,
+        left: 16,
       },
-      target: {type: 'string', name: 'Target'},
-      fields: {type: 'array', name: 'Fields set'},
+      shape: {
+        type: 'ALLCORNERSROUND',
+        radius: '4',
+      },
+      sizeModifier: 'FULLWIDTH',
+      size: {
+        height: 48,
+        width: 230,
+      },
+      shadow: {
+        color: '#000000',
+        opacity: 0.3,
+        offsetSize: {
+          width: 0,
+          height: 0,
+        },
+        radius: 8,
+      },
     },
-  },
-  config: {
-    text,
-    fontSize,
-    fontWeight,
-    textColor,
-    backgroundColor,
-    borderColor,
-    borderWidth,
-    sizeModifier,
-    alignment: alignmentConfig.horizontally,
-    textAlignment,
-    buttonTextPadding,
-    buttonImagePadding,
-    imageUrl,
-    shape: shapeConfigBuilder()
-      .withAllCornersRound
-      .withRadius
-      .done(),
-    size,
-    padding,
-    shadow: shadowConfigBuilder()
-      .withRadius
-      .done()
-  },
+    interactive: {
+      action: {
+        url: {
+          type: 'string',
+          name: 'Action URL',
+        },
+        target: {type: 'string', name: 'Target'},
+        fields: {type: 'array', name: 'Fields set'},
+      },
+    },
+    config: {
+      text,
+      fontSize,
+      fontWeight,
+      textColor,
+      backgroundColor,
+      borderColor,
+      borderWidth,
+      sizeModifier,
+      alignment: alignmentConfig.horizontally,
+      textAlignment,
+      buttonTextPadding,
+      buttonImagePadding,
+      imageUrl,
+      shape: shapeConfigBuilder()
+        .withAllCornersRound
+        .withRadius
+        .done(),
+      size: getSizeConfig(blockState.deviceInfo.device),
+      padding,
+      shadow: shadowConfigBuilder()
+        .withRadius
+        .done(),
+    },
+  });
 };
 
 export default block;

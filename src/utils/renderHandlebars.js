@@ -20,7 +20,7 @@ function render(layoutBlocks, documentId, bottomBar, topAppBar) {
   const components = [];
   if (layoutBlocks[0]) {
     layoutBlocks.forEach((layoutBlock) => {
-      const Component = blocks[layoutBlock.blockId.toLowerCase()]?.Component;
+      const Component = blocks[layoutBlock.blockId.toLowerCase()]().Component;
       if (Component) {
         components.push(
           <SortableItem
@@ -36,7 +36,7 @@ function render(layoutBlocks, documentId, bottomBar, topAppBar) {
   }
 
   if (bottomBar) {
-    const Component = blocks[bottomBar.blockId.toLowerCase()].Component;
+    const Component = blocks[bottomBar.blockId.toLowerCase()]().Component;
     components.push(
       <Component
         {...{...bottomBar, uuid: bottomBar.uuid}}
@@ -52,7 +52,7 @@ function render(layoutBlocks, documentId, bottomBar, topAppBar) {
   }
 
   if (topAppBar) {
-    const Component = blocks[topAppBar.blockId.toLowerCase()].Component;
+    const Component = blocks[topAppBar.blockId.toLowerCase()]().Component;
     components.unshift(
       <Component
         {...{...topAppBar, uuid: topAppBar.uuid}}

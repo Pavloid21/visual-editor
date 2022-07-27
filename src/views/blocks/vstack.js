@@ -189,7 +189,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
   );
 };
 
-const block = {
+const block = () => ({
   Component,
   name: 'VSTACK',
   title: 'Container',
@@ -241,6 +241,6 @@ const block = {
     shadow: shadowConfigBuilder().withRadius.done(),
     corners,
   },
-};
+});
 
 export default block;

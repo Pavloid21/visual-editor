@@ -136,7 +136,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
   );
 };
 
-const block = {
+const block = () => ({
   Component,
   name: 'HSTACK',
   title: 'HStack',
@@ -175,6 +175,6 @@ const block = {
     padding,
     corners,
   },
-};
+});
 
 export default block;

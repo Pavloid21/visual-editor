@@ -121,7 +121,7 @@ const Component = ({settingsUI, ...props}) => {
   );
 };
 
-const block = {
+const block = () => ({
   Component,
   name: 'LABEL',
   title: 'Label',
@@ -178,6 +178,6 @@ const block = {
       .withRadius
       .done()
   },
-};
+});
 
 export default block;

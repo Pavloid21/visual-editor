@@ -122,7 +122,7 @@ const Component = ({settingsUI, ...props}) => {
   );
 };
 
-const block = {
+const block = () => ({
   Component,
   name: 'BASICTEXTFIELD',
   title: 'Input',
@@ -192,6 +192,6 @@ const block = {
   interactive: {
     field: {type: 'string', name: 'Field name'},
   },
-};
+});
 
 export default block;

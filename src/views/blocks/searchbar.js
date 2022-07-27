@@ -159,7 +159,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
   );
 };
 
-const block = {
+const block = () => ({
   Component,
   name: 'SEARCHBAR',
   title: 'Search',
@@ -193,6 +193,6 @@ const block = {
     fontSize,
     size,
   },
-};
+});
 
 export default block;

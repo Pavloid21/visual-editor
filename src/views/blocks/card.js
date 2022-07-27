@@ -138,7 +138,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
   );
 };
 
-const block = {
+const block = () => ({
   Component,
   name: 'CARD',
   title: 'Card',
@@ -206,6 +206,6 @@ const block = {
     },
   },
   interactive,
-};
+});
 
 export default block;

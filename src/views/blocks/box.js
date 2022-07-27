@@ -100,7 +100,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
   );
 };
 
-const block = {
+const block = () => ({
   Component,
   name: 'BOX',
   title: 'Box',
@@ -141,6 +141,6 @@ const block = {
       .done(),
     shadow: shadowConfigBuilder().done(),
   },
-};
+});
 
 export default block;

@@ -15,10 +15,12 @@ import {
 } from 'store/layout.slice';
 import type {TInspector} from './types';
 import type {RootStore} from 'store/types';
+import {blockStateUnsafeSelector} from 'store/selectors';
 
 const Inspector: React.FC<TInspector> = ({display}) => {
   const dispatch = useDispatch();
   const layout = useSelector((state: RootStore) => state.layout);
+  const blockState = useSelector(blockStateUnsafeSelector);
   const handleChangeBlockData = useCallback(
     (blockUuid: string, key: string, value: any, parentKey: string | undefined) => {
       dispatch(changeBlockData({
@@ -188,7 +190,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
   if (!block) return null;
 
   /* @ts-ignore */
-  const {config, interactive, complex, name} = blocks[block.blockId];
+  const {config, interactive, complex, name} = blocks[block.blockId](blockState);
 
   return (
     <div
