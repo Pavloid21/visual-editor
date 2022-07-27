@@ -48,13 +48,7 @@ const PhoneContainer = (props: IPhoneContainer) => {
 
   useEffect(() => {
     // @ts-ignore
-    zoomRef.current.zoomAbs(
-      // @ts-ignore
-      zoomRef.current.container.current.clientWidth / 2,
-      // @ts-ignore
-      zoomRef.current.container.current.clientHeight / 2,
-      Number(zoom)
-    );
+    zoomRef.current.autoCenter(Number(zoom));
   }, [zoom]);
 
   const handleCenter = () => {
