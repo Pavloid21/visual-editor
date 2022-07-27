@@ -388,7 +388,7 @@ const layoutSlice = createSlice({
         const blocksArr = [...state.blocks];
         const currentElement = findInTree(blocksArr, state.selectedBlockUuid);
         currentElement!.blockId = action.payload.toLowerCase();
-        return {...state, blocks: blocksArr};
+        state.blocks = blocksArr;
       },
     },
     extraReducers: (builder) => {
