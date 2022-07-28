@@ -128,7 +128,7 @@ const layoutSlice = createSlice({
         });
         const bar = {...state.bottomBar};
         bar.settingsUI.navigationItems = extendedItems;
-        return {...state, bottomBar: {...bar}};
+        state.bottomBar = {...bar};
       },
       addTopAppBarItem: (state) => {
         const nextItems = [...get(state, 'topAppBar.settingsUI.topAppBarItems', [])];
@@ -138,21 +138,21 @@ const layoutSlice = createSlice({
         });
         const abar = {...state.topAppBar};
         abar.settingsUI.topAppBarItems = nextItems;
-        return {...state, topAppBar: {...abar}};
+        state.topAppBar = {...abar};
       },
       removeBottomBarItem: (state, action: PayloadAction<number>) => {
         const newBarItems = [...state.bottomBar.settingsUI.navigationItems];
         newBarItems.splice(action.payload, 1);
         const newBottomBar = {...state.bottomBar};
         newBottomBar.settingsUI.navigationItems = newBarItems;
-        return {...state, bottomBar: {...newBottomBar}};
+        state.bottomBar = {...newBottomBar};
       },
       removeTopAppBarItem: (state, action: PayloadAction<number>) => {
         const newAppBarItems = [...state.topAppBar.settingsUI.topAppBarItems];
         newAppBarItems.splice(action.payload, 1);
         const newAppBar = {...state.topAppBar};
         newAppBar.settingsUI.topAppBarItems = newAppBarItems;
-        return {...state, topAppBar: {...newAppBar}};
+        state.topAppBar = {...newAppBar};
       },
       pushBlock: (state, action: PayloadAction<string>) => {
         const blockConfig = blocks[action.payload]();
@@ -188,9 +188,9 @@ const layoutSlice = createSlice({
       },
       pushBlockInside: (state, action: PayloadAction<{blockId: string, uuid: string}>) => {
         if (action.payload.blockId === 'bottombar' || action.payload.blockId === 'topappbar') {
-          return state;
+          return;
         }
-        const target = findInTree(state.blocks, action.payload.uuid!);
+        const target = findInTree(state.blocks, action.payload.uuid)!;
         const blockConfig = blocks[action.payload.blockId]();
         const list = blockConfig.listItems;
         const obj = blockConfig.listItem;
@@ -224,16 +224,15 @@ const layoutSlice = createSlice({
             ...newBloc,
           };
         }
-        const nextBlocks = state.blocks.map((block, index) => {
-          if (block.uuid === action.payload.uuid) {
+
+        const nextBlocks = state.blocks.map((block) => {
+          if (target && (block.uuid === action.payload.uuid)) {
             return target;
           }
           return block;
         });
-        return {
-          ...state,
-          blocks: nextBlocks,
-        };
+
+        state.blocks = nextBlocks;
       },
       setSelectedBlock: (state, action: PayloadAction<string>) => {
         state.selectedBlockUuid = action.payload;
@@ -241,15 +240,15 @@ const layoutSlice = createSlice({
       reOrderLayout: (state, action: PayloadAction<BlockItem[]>) => {
         state.blocks = [...action.payload];
       },
-      replaceElement: (state, action: PayloadAction<BlockItem>) => {
-        const blocksRef = [...state.blocks];
-        let parentElement = findInTree(blocksRef, action.payload.uuid);
-        parentElement = action.payload;
-        state.blocks = blocksRef;
-        return {
-          ...state,
-          blocks: blocksRef,
-        };
+      replaceElement: (state, action: PayloadAction<BlockItem>) => { // todo не работало, надо починить
+        // const blocksRef = [...state.blocks];
+        // let parentElement = findInTree(state.blocks, action.payload.uuid);
+        // parentElement = action.payload;
+        // state.blocks = state.blocks;
+        // return {
+        //   ...state,
+        //   blocks: state.blocks,
+        // };
       },
       changeUnits: (state, action: ChangeUnitsPayloadAction) => {
         const newBlocksSet = JSON.parse(JSON.stringify(state.blocks));
@@ -322,23 +321,15 @@ const layoutSlice = createSlice({
         };
       },
       deleteBlock: (state, action: PayloadAction<string>) => {
-        const newArr = [...state.blocks];
-        const mustBeRemoved = removeFromList(newArr, action.payload!);
-        const stateReference = {...state};
+        state.blocks = removeFromList(state.blocks, action.payload);
         if (action.payload === state.bottomBar?.uuid) {
-          delete stateReference.bottomBar;
+          delete state.bottomBar;
         }
         if (action.payload === state.topAppBar?.uuid) {
-          delete stateReference.topAppBar;
+          delete state.topAppBar;
         }
-        return {
-          ...stateReference,
-          blocks: [...mustBeRemoved],
-          selectedBlockUuid: '',
-        };
-      },
-      changeDocumentId: (state, action: PayloadAction<string>) => {
-        state.documentId = action.payload;
+
+        state.selectedBlockUuid = '';
       },
       setLayout: (state, action: SetLayoutPayloadAction) => {
         return {
@@ -363,20 +354,15 @@ const layoutSlice = createSlice({
         return nextScreenState;
       },
       cloneBlock: (state, action: PayloadAction<string>) => {
-        const blocksArray = [...state.blocks];
-        const withClone = cloneToList(blocksArray, action.payload!);
-        const stateRef = {...state};
+        const withClone = cloneToList(state.blocks, action.payload!);
         if (action.payload === state.bottomBar?.uuid) {
-          delete stateRef.bottomBar;
+          delete state.bottomBar;
         }
         if (action.payload === state.topAppBar?.uuid) {
-          delete stateRef.topAppBar;
+          delete state.topAppBar;
         }
-        return {
-          ...stateRef,
-          blocks: withClone,
-          selectedBlockUuid: '',
-        };
+        state.blocks = withClone;
+        state.selectedBlockUuid = '';
       },
       setSnippet: (state, action: SetSnippetPayloadAction) => {
         const snippetsRef = [...state.snippets];
@@ -391,7 +377,7 @@ const layoutSlice = createSlice({
         const blocksArr = [...state.blocks];
         const currentElement = findInTree(blocksArr, state.selectedBlockUuid);
         currentElement!.blockId = action.payload.toLowerCase();
-        return {...state, blocks: blocksArr};
+        state.blocks = blocksArr;
       },
     },
     extraReducers: (builder) => {
@@ -441,7 +427,6 @@ export const {
   changeUnits,
   changeBlockData,
   deleteBlock,
-  changeDocumentId,
   setLayout,
   selectScreen,
   cloneBlock,
