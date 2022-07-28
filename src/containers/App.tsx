@@ -77,17 +77,18 @@ const App: React.FC<unknown> = () => {
   const handleReorderLayout = (newOrder: string[], parentID: string, blocksLayout: BlockItem[]) => {
     const order: BlockItem[] = [];
     let parent: BlockItem | null = null;
-    newOrder.forEach((blockUuid) => {
+    for (const blockUuid of newOrder) {
       const block = findInTree(blocksLayout, blockUuid);
       parent = findInTree(blocksLayout, parentID);
       if (block) {
         order.push(block);
       }
-    });
+    }
     if (parent) {
-      // @ts-ignore
-      parent.listItems = order;
-      dispatch(replaceElement(parent));
+      dispatch(replaceElement({
+        ...parent,
+        listItems: order
+      }));
     } else {
       const uuids = blocksLayout.map((block) => block.uuid);
       const next = order.filter((item) => uuids.includes(item.uuid));

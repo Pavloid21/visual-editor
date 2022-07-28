@@ -116,7 +116,7 @@ export const buildLayout = ({screen, object}: Record<string, any>) => {
 
 export const findInTree = (tree: BlockItem[], uuid: string): BlockItem | null => {
   let result: BlockItem | null = null;
-  tree.forEach((item) => {
+  for (const item of tree) {
     if (item.uuid === uuid) {
       result = item;
     }
@@ -126,7 +126,7 @@ export const findInTree = (tree: BlockItem[], uuid: string): BlockItem | null =>
     if (!result && item.listItem) {
       result = findInTree([item.listItem], uuid);
     }
-  });
+  }
 
   return result;
 };
