@@ -142,7 +142,7 @@ export const elevation = {type: 'number', name: 'Elevation'};
 export const placeholder = {type: 'string', name: 'Placeholder'};
 export const placeholderColor = {type: 'color', name: 'Placeholder color'};
 export const thumbOnColor = {type: 'color', name: 'Thumb on color'};
-export const checked = {type: 'boolean', name: 'Checked'};
+export const isActive = {type: 'boolean', name: 'isActive'};
 export const action = {
   url: {type: 'string', name: 'URL'},
 };
