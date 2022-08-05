@@ -8,13 +8,13 @@ import {createProject, getProjectData, getProjectsList} from 'services/ApiServic
 import {Card} from 'containers/Card';
 import {useNavigate} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
-import {Project as TProject} from 'reducers/types';
 import {AxiosResponse} from 'axios';
 import {useModal} from 'utils';
 import {useForm} from 'react-hook-form';
 import Modal from './Modal/Modal';
 import {selectProject} from 'store/project.slice';
 import {Container, Content, H1, Header, P} from './Project.styled';
+import type {Project as TProject} from '../../store/types';
 
 export type Inputs = {
   form: {

@@ -6,12 +6,12 @@ import {ReactComponent as DataIcon} from 'assets/folder-upload.svg';
 import {ReactComponent as Trash} from 'assets/trash.svg';
 import {getActionsList, getActionByName, getDataActionsList, getDataActionByName} from 'services/ApiService';
 import {Container} from './Actions.styled';
-import {ActionItem, ActionTypes, Store} from 'reducers/types';
 import {deleteAction, setActions, setSelectAction} from 'store/actions.slice';
+import {ActionItem, ActionTypes, RootStore} from 'store/types';
 
 const Actions: React.FC<unknown> = () => {
   const dispatch = useDispatch();
-  const availableActions: ActionItem[] = useSelector((state: Store) =>
+  const availableActions: ActionItem[] = useSelector((state: RootStore) =>
     orderBy(
       [
         ...state.actions.actions.map((item) => ({...item, type: ActionTypes.action})),
@@ -21,8 +21,8 @@ const Actions: React.FC<unknown> = () => {
       'asc'
     )
   );
-  const selectedAction = useSelector((state: Store) => state.actions.selected);
-  const projectID = useSelector((state: Store) => state.project.id);
+  const selectedAction = useSelector((state: RootStore) => state.actions.selected);
+  const projectID = useSelector((state: RootStore) => state.project.id);
   const project_id = projectID || location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
   useEffect(() => {
     getActionsList(project_id)

@@ -1,13 +1,20 @@
-import {Select} from 'components/controls';
-import {FlexContainer as FlexContainerBase} from 'components/layouts';
-import React from 'react';
+import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
-import {Zoom} from './types';
-import {options} from './consts';
 import {ReactComponent as MinusIcon} from 'assets/zoom_minus.svg';
 import {ReactComponent as PlusIcon} from 'assets/zoom_plus.svg';
 import {setZoom} from 'store/editor-mode.slice';
+import {SelectCreatable} from 'components/controls';
+import {FlexContainer as FlexContainerBase} from 'components/layouts';
+import {
+  createOption,
+  formatCreateLabel,
+  isValidNewOption,
+  onInputChange,
+  transformValue,
+} from './utils';
+import type {Zoom} from './types';
+import {options as defaultOptions} from './consts';
 
 const FlexContainer = styled(FlexContainerBase)`
   margin-left: auto;
@@ -22,6 +29,7 @@ const FlexContainer = styled(FlexContainerBase)`
 `;
 
 const ZoomSelect = () => {
+  const [options, setOptions] = useState(defaultOptions);
   const zoom = useSelector((state: any) => state.editorMode.zoom);
   const dispatch = useDispatch();
 
@@ -30,6 +38,14 @@ const ZoomSelect = () => {
   };
 
   const mappedZoomValue = options.map(o => o.value);
+
+  const onCreateOption = (value: string) => {
+    const zoomValue = transformValue(value);
+    const option = createOption(value);
+
+    setOptions([...defaultOptions, option]);
+    dispatch(setZoom(zoomValue as Zoom));
+  };
 
   const handleDecrementZoom = () => {
     const currentIndex = mappedZoomValue.findIndex(z => z === zoom);
@@ -49,11 +65,15 @@ const ZoomSelect = () => {
   return (
     <FlexContainer>
       <MinusIcon className='icon' onClick={handleDecrementZoom}/>
-      <Select
+      <SelectCreatable
         options={options}
         onChange={handleChangeZoom}
         value={zoom}
-        menuPlacement="top"
+        clearable={false}
+        onCreateOption={onCreateOption}
+        formatCreateLabel={formatCreateLabel}
+        isValidNewOption={isValidNewOption}
+        onInputChange={onInputChange}
         styles={{
           control: (props) => ({
             ...props,
@@ -73,6 +93,10 @@ const ZoomSelect = () => {
             height: 30,
             lineHeight: '14px',
           }),
+          container: (props) => ({
+            ...props,
+            minWidth: '90px'
+          })
         }}
       />
       <PlusIcon className='icon' onClick={handleIncrementZoom}/>

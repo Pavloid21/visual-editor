@@ -2,14 +2,14 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {ReactComponent as Copy} from '../../assets/sm_copy.svg';
 import {ReactComponent as Remove} from '../../assets/close-c.svg';
-import {Store} from 'reducers/types';
-import {TPosition} from './types';
 import {Wrapper} from './HighlightedElement.styled';
 import {cloneBlock, deleteBlock} from 'store/layout.slice';
+import type {TPosition} from './types';
+import type {RootStore} from 'store/types';
 
 const HighlightedElement: React.FC<any> = () => {
-  const selectedBlock = useSelector((state: Store) => state.layout.selectedBlockUuid);
-  const uiMode = useSelector((state: Store) => state.editorMode.mode);
+  const selectedBlock = useSelector((state: RootStore) => state.layout.selectedBlockUuid);
+  const uiMode = useSelector((state: RootStore) => state.editorMode.mode);
   const dispatch = useDispatch();
   const [position, setPosition] = useState<TPosition>({
     width: 0,

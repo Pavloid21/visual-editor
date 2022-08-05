@@ -19,7 +19,6 @@ import Loader from '../Loader';
 import {useParams} from 'react-router-dom';
 import {observer, snippet, prepareTree, buildLayout} from 'utils';
 import {Container, Icon, ScreenTitle} from './LeftSideBar.styled';
-import {Store} from 'reducers/types';
 import {addAction, setSelectAction} from 'store/actions.slice';
 import {setActiveTab as setActiveTabAction} from 'store/config.slice';
 import {saveCode} from 'store/code.slice';
@@ -31,6 +30,7 @@ import {
   setSelectedBlock,
   setSnippet,
 } from 'store/layout.slice';
+import type {RootStore} from 'store/types';
 
 const LeftSidebar: React.FC<any> = ({children, ...props}) => {
   const {
@@ -39,14 +39,14 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
     selectedBlockUuid: selectedBlock,
     selectedScreen,
     blocks: layout,
-  } = useSelector((state: Store) => state.layout);
+  } = useSelector((state: RootStore) => state.layout);
   const [loading, setLoading] = useState(false);
-  const api = useSelector((state: Store) => state.api);
-  const output = useSelector((state: Store) => state.output.screen);
+  const api = useSelector((state: RootStore) => state.api);
+  const output = useSelector((state: RootStore) => state.output.screen);
   const currentSnippet = useSelector(
-    (state: Store) => state.layout.snippets.filter((snippetData) => snippetData.screenID === selectedScreen)[0]
+    (state: RootStore) => state.layout.snippets.filter((snippetData) => snippetData.screenID === selectedScreen)[0]
   );
-  const projectName = useSelector((state: Store) => state.project.name);
+  const projectName = useSelector((state: RootStore) => state.project.name);
   const {project} = useParams();
   const [activeTab, setActiveTab] = useState(0);
   const [availableScreenes, setScreenes] = useState<Record<string, any>[]>([]);

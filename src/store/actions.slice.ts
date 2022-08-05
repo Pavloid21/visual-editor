@@ -1,6 +1,6 @@
-import {ActionItem, Actions} from 'reducers/types';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import actionTypes from 'constants/actionTypes';
+import type {ActionItem, Actions} from './types';
 
 const initialState: Actions = {
   actions: [],

@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {Project as TProject} from 'reducers/types';
+import type {Project as TProject} from './types';
 
 const initialState: TProject = {
   id: '',

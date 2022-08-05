@@ -14,13 +14,13 @@ import ButtonSelector from 'components/ButtonSelector';
 import {useSelector, useDispatch} from 'react-redux';
 import {v4} from 'uuid';
 import {Container, EditorWrapper} from './ActionForm.styled';
-import {ActionItem, Store} from 'reducers/types';
 import {setActions, setSelectAction} from 'store/actions.slice';
+import type {ActionItem, RootStore} from 'store/types';
 
 const ActionForm: React.FC<{action: ActionItem}> = ({action}) => {
   const dispatch = useDispatch();
   const {setValue, getValues, control} = useForm();
-  const snippets = useSelector((state: Store) => state.actions);
+  const snippets = useSelector((state: RootStore) => state.actions);
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal();
   useEffect(() => {
     setValue('actionName', action.action);
