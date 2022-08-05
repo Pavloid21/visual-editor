@@ -123,3 +123,8 @@ export const deleteProject = async (projectId: string) => {
   const url = API.defaults.baseURL + `projects/${projectId}`;
   return await callApi(url, null, 'DELETE');
 };
+
+export const getTemplates = async () => {
+  const url = API.defaults.baseURL + 'templates';
+  return await callApi(url, null, 'GET');
+};

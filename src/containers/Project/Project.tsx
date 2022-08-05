@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import styled from 'styled-components';
 import {useKeycloak} from '@react-keycloak/web';
 import {ButtonSelector, Loader} from 'components';
 import {v4} from 'uuid';
@@ -13,66 +12,21 @@ import {Project as TProject} from 'reducers/types';
 import {AxiosResponse} from 'axios';
 import {useModal} from 'utils';
 import {useForm} from 'react-hook-form';
-import Modal from './Modal';
+import Modal from './Modal/Modal';
 import {selectProject} from 'store/project.slice';
+import {Container, Content, H1, Header, P} from './Project.styled';
 
 export type Inputs = {
   form: {
     name: string;
     icon: string;
     description: string;
+    platform: string;
+    url: string;
   };
 };
 
-const Container = styled.div`
-  display: flex;
-  height: 100%;
-  width: 100%;
-  padding: 48px 36px;
-  flex-direction: column;
-  & > div {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-`;
-
-const H1 = styled.h1`
-  font-size: 40px;
-`;
-
-const P = styled.p`
-  color: var(--neo-secondary-gray);
-`;
-
-const Header = styled.div`
-  background-color: #f3f3f3;
-  border: 1px solid #e6e6e6;
-  border-radius: 4px 4px 0 0;
-  padding: 14px 16px;
-  display: flex;
-  justify-content: space-between;
-  & > section {
-    margin-bottom: 0;
-  }
-`;
-
-const Content = styled.div`
-  position: relative;
-  display: flex;
-  flex: 1 1 auto;
-  overflow-y: auto;
-  background: #fafafa;
-  border: 1px solid #e6e6e6;
-  border-radius: 0 0 4px 4px;
-  border-top: none;
-  flex-wrap: wrap;
-  gap: 32px;
-  padding: 32px;
-  height: calc(100vh - 300px);
-`;
-
-export const Project: React.FC<any> = () => {
+export const Project: React.FC<unknown> = () => {
   const {keycloak} = useKeycloak();
   const {name, preferred_username} = keycloak.idTokenParsed!;
   const [projects, setProjects] = useState<TProject[]>([]);
@@ -112,9 +66,11 @@ export const Project: React.FC<any> = () => {
   }, []);
 
   const handleProjectSelect = (project: TProject) => {
-    dispatch(selectProject({
-      ...project
-    }));
+    dispatch(
+      selectProject({
+        ...project,
+      })
+    );
     navigate(`/editor/${project.id}`);
   };
 

@@ -18,6 +18,7 @@ export default createGlobalStyle`
     --neo-secondary-gray: #8C8C8C;
     --error-text: #BA346A;
     --neo-black: #404040;
+    --ctrl-background: #fafafa;
     font-size: 16px;
   }
 

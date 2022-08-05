@@ -8,7 +8,7 @@ import {ReactComponent as ArrowBack} from 'assets/arrow_back.svg';
 import {ReactComponent as Settings} from 'assets/settings.svg';
 import {ReactComponent as Warning} from 'assets/warning.svg';
 import {editProject, getProjectData} from 'services/ApiService';
-import Modal from 'containers/Project/Modal';
+import Modal from 'containers/Project/Modal/Modal';
 import {useDispatch, useSelector} from 'react-redux';
 import {Modal as CustomModal} from './Modal';
 import {Button} from 'components/controls/Button';
@@ -120,6 +120,8 @@ const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
         name: project.data.name,
         description: project.data.description,
         icon: project.data.icon,
+        platform: project.data.platform,
+        url: project.data.url,
       });
     });
   }, [itemModalOpen]);
@@ -152,9 +154,11 @@ const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
   };
 
   const redirect = () => {
-    dispatch(setLayout({
-      layout: [],
-    }));
+    dispatch(
+      setLayout({
+        layout: [],
+      })
+    );
     navigate('/project');
   };
 
