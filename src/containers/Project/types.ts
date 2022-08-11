@@ -6,7 +6,7 @@ export type ModalProps = {
   setItemModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   form?: {
     name?: FieldError | undefined;
-    icon?: FieldError | undefined;
+    icon?: FieldError[] | undefined;
     description?: FieldError | undefined;
   };
   formRef: React.RefObject<HTMLFormElement>;

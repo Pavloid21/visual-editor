@@ -10,8 +10,10 @@ type OptionsType = {
   params: any;
 };
 
+export const BASE_URL = 'http://mobile-platform.apps.msa31.do.neoflex.ru/api/v2/';
+
 export const API = axios.create({
-  baseURL: 'http://mobile-platform.apps.msa31.do.neoflex.ru/api/v2/',
+  baseURL: BASE_URL,
 });
 
 export const callApi = async (

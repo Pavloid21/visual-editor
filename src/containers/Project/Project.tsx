@@ -4,7 +4,7 @@ import {ButtonSelector, Loader} from 'components';
 import {v4} from 'uuid';
 import {Button} from 'components/controls';
 import {ReactComponent as Plus} from '../../assets/button_plus.svg';
-import {createProject, getProjectData, getProjectsList} from 'services/ApiService';
+import {BASE_URL, createProject, getProjectData, getProjectsList} from 'services/ApiService';
 import {Card} from 'containers/Card';
 import {useNavigate} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
@@ -14,12 +14,14 @@ import {useForm} from 'react-hook-form';
 import Modal from './Modal/Modal';
 import {selectProject} from 'store/project.slice';
 import {Container, Content, H1, Header, P} from './Project.styled';
-import type {Project as TProject} from '../../store/types';
+import type {Project as TProject} from 'store/types';
+import {filesToDTO} from 'utils/files';
+import {head} from 'external/lodash';
 
 export type Inputs = {
   form: {
     name: string;
-    icon: string;
+    icon: File[];
     description: string;
     platform: string;
     url: string;
@@ -54,7 +56,14 @@ export const Project: React.FC<unknown> = () => {
       if (projects.data) {
         const promises: Promise<AxiosResponse>[] = projects.data.map((project: string) => getProjectData(project));
         Promise.allSettled(promises).then((data: PromiseSettledResult<any>[]) => {
-          setProjects(data.map((item: any) => item.value.data));
+          setProjects(data.map((item: any) => {
+            const {data} = item.value;
+
+            return {
+              ...data,
+              icon: `${BASE_URL}projects/${data.id}/files/${data.icon}`
+            };
+          }));
           setLoading(false);
         });
       }
@@ -78,16 +87,17 @@ export const Project: React.FC<unknown> = () => {
     toggleModal();
   };
 
-  const handleSave = () => {
-    const {name, icon, description} = getValues().form;
+  const handleSave = async () => {
+    const {name, icon: icons, description} = getValues().form;
     resetField('form.name');
     resetField('form.icon');
     resetField('form.description');
+    const requestIcons = await filesToDTO(icons);
     createProject(
       JSON.stringify({
         id: v4(),
         name,
-        icon,
+        icon: head(requestIcons),
         description,
       })
     ).then(() => {

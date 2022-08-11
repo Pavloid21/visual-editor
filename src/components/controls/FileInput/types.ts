@@ -1,7 +1,7 @@
-import {InputHTMLAttributes} from 'react';
-
-export interface FileInputProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface FileInputProps {
   label?: string;
   placeholder?: string;
   onFileChange: (arg: File[]) => void;
+  value: File[];
+  accept: string;
 }
