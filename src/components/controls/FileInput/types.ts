@@ -4,4 +4,5 @@ export interface FileInputProps {
   onFileChange: (arg: File[]) => void;
   value: File[];
   accept: string;
+  multiple?: boolean;
 }

@@ -20,7 +20,7 @@ export const FileInput: React.FC<FileInputProps> = ({label, placeholder, onFileC
     // @ts-ignore
     const newFile: File = e.target.files[0];
     if (newFile) {
-      const updatedList: File[] = [...fileList, newFile];
+      const updatedList: File[] = props.multiple ? [...fileList, newFile] : [newFile];
       setFileList(updatedList);
       onFileChange(updatedList);
     }
