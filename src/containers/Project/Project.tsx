@@ -23,7 +23,11 @@ export type Inputs = {
     name: string;
     icon: File[];
     description: string;
-    platform: string;
+    platform: Record<string, any> & {
+      ios: boolean;
+      android: boolean;
+      aurora: boolean;
+    };
     url: string;
   };
 };
@@ -39,6 +43,7 @@ export const Project: React.FC<unknown> = () => {
     getValues,
     resetField,
     handleSubmit,
+    setValue,
     control,
     formState: {
       errors: {form},
@@ -56,14 +61,16 @@ export const Project: React.FC<unknown> = () => {
       if (projects.data) {
         const promises: Promise<AxiosResponse>[] = projects.data.map((project: string) => getProjectData(project));
         Promise.allSettled(promises).then((data: PromiseSettledResult<any>[]) => {
-          setProjects(data.map((item: any) => {
-            const {data} = item.value;
+          setProjects(
+            data.map((item: any) => {
+              const {data} = item.value;
 
-            return {
-              ...data,
-              icon: `${BASE_URL}projects/${data.id}/files/${data.icon}`
-            };
-          }));
+              return {
+                ...data,
+                icon: `${BASE_URL}projects/${data.id}/files/${data.icon}`,
+              };
+            })
+          );
           setLoading(false);
         });
       }
@@ -88,10 +95,11 @@ export const Project: React.FC<unknown> = () => {
   };
 
   const handleSave = async () => {
-    const {name, icon: icons, description} = getValues().form;
+    const {name, icon: icons, description, platform, url} = getValues().form;
     resetField('form.name');
     resetField('form.icon');
     resetField('form.description');
+    resetField('form.platform');
     const requestIcons = await filesToDTO(icons);
     createProject(
       JSON.stringify({
@@ -99,12 +107,19 @@ export const Project: React.FC<unknown> = () => {
         name,
         icon: head(requestIcons),
         description,
+        platform,
+        url,
       })
     ).then(() => {
       setProjects([]);
       toggleModal();
       getProjects();
     });
+  };
+
+  const refresh = () => {
+    setProjects([]);
+    getProjects();
   };
 
   return (
@@ -139,6 +154,7 @@ export const Project: React.FC<unknown> = () => {
                   const nextProject = projects.filter((item) => item.id !== id);
                   setProjects(nextProject);
                 }}
+                onChangeState={refresh}
                 onClick={(e) => {
                   e.stopPropagation();
                   handleProjectSelect(project);
@@ -155,6 +171,7 @@ export const Project: React.FC<unknown> = () => {
         handleSubmit={handleSubmit}
         itemModalOpen={itemModalOpen}
         setItemModalOpen={setItemModalOpen}
+        setValue={setValue}
         form={form}
       />
     </>

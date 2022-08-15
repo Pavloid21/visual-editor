@@ -1,6 +1,6 @@
 import React, {useRef, useState} from 'react';
 import styled from 'styled-components';
-import SideBarHeader from './SideBarHeader';
+import {SideBarHeader} from 'components';
 import {Inspector} from 'containers/Inspector';
 import Screen from 'containers/Screen';
 import {Button, Input} from './controls';
@@ -82,9 +82,7 @@ const RightSidebar: React.FC<any> = ({children, ...props}) => {
   });
 
   const wrapperRef = useRef(null);
-  useOutsideAlerter(wrapperRef, () =>
-    dispatch(setSelectedBlock(''))
-  );
+  useOutsideAlerter(wrapperRef, () => dispatch(setSelectedBlock('')));
 
   const watchFieldArray = watch('headers');
   const watchParamsArray = watch('params');
@@ -125,10 +123,12 @@ const RightSidebar: React.FC<any> = ({children, ...props}) => {
 
   const onSubmit = (data: any) => {
     if (isEditing && selected) {
-      dispatch(editAPI({
-        api: data,
-        index: selected,
-      }));
+      dispatch(
+        editAPI({
+          api: data,
+          index: selected,
+        })
+      );
     } else {
       dispatch(addAPI(data));
     }

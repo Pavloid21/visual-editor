@@ -1,4 +1,4 @@
-import {Control, FieldError, UseFormHandleSubmit} from 'react-hook-form';
+import {Control, FieldError, UseFormHandleSubmit, UseFormSetValue} from 'react-hook-form';
 import {Inputs} from './Project';
 
 export type ModalProps = {
@@ -13,5 +13,6 @@ export type ModalProps = {
   control: Control<Inputs, any>;
   handleSave: () => void;
   handleSubmit: UseFormHandleSubmit<Inputs>;
+  setValue: UseFormSetValue<Inputs>;
   isEdit?: boolean;
 };

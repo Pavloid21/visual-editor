@@ -2,9 +2,8 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import actionTypes from 'constants/actionTypes';
-import SideBarHeader, {SideBarSubheader} from '../SideBarHeader';
 import {Gallery} from 'containers/Gallery';
-import {Actions} from 'components';
+import {Actions, SideBarHeader, SideBarSubheader} from 'components';
 import SortableTree from '@nosferatu500/react-sortable-tree';
 import FileExplorerTheme from '@nosferatu500/theme-file-explorer';
 import {ReactComponent as Copy} from 'assets/copy.svg';
@@ -22,14 +21,7 @@ import {Container, Icon, ScreenTitle} from './LeftSideBar.styled';
 import {addAction, setSelectAction} from 'store/actions.slice';
 import {setActiveTab as setActiveTabAction} from 'store/config.slice';
 import {saveCode} from 'store/code.slice';
-import {
-  cloneBlock,
-  deleteBlock,
-  selectScreen,
-  setLayout,
-  setSelectedBlock,
-  setSnippet,
-} from 'store/layout.slice';
+import {cloneBlock, deleteBlock, selectScreen, setLayout, setSelectedBlock, setSnippet} from 'store/layout.slice';
 import type {RootStore} from 'store/types';
 
 const LeftSidebar: React.FC<any> = ({children, ...props}) => {
@@ -160,10 +152,12 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
         },
       });
       dispatch(saveCode(constants));
-      dispatch(setSnippet({
-        snippet: constants,
-        selectedScreen,
-      }));
+      dispatch(
+        setSnippet({
+          snippet: constants,
+          selectedScreen,
+        })
+      );
     }
   }, [output]);
 
@@ -176,9 +170,11 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
       setLoadScreen({uuid: item.node.uuid, load: false});
       const screenLayout = availableScreenes.filter((screen) => screen.uuid === item.node.uuid)[0];
       dispatch(setActiveTabAction(5));
-      dispatch(selectScreen({
-        screen: item.node.uuid,
-      }));
+      dispatch(
+        selectScreen({
+          screen: item.node.uuid,
+        })
+      );
       dispatch(setSelectedBlock(''));
       dispatch({
         type: actionTypes.EDIT_SCREEN_NAME,
@@ -226,10 +222,12 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
       setScreenes(layouts.filter((layout) => layout.uuid !== node.uuid));
       const newTree = treeData.filter((item) => item.uuid !== node.uuid);
       setTree(newTree);
-      dispatch(selectScreen({
-        delete: true,
-        screen: node.uuid,
-      }));
+      dispatch(
+        selectScreen({
+          delete: true,
+          screen: node.uuid,
+        })
+      );
       dispatch({
         type: actionTypes.EDIT_SCREEN_NAME,
         screen: node.screen,

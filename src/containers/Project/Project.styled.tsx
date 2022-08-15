@@ -34,16 +34,16 @@ export const Header = styled.div`
 `;
 
 export const Content = styled.div`
-  position: relative;
-  display: flex;
-  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 422px);
+  grid-auto-rows: min-content;
+  gap: 32px;
   overflow-y: auto;
   background: #fafafa;
   border: 1px solid #e6e6e6;
   border-radius: 0 0 4px 4px;
   border-top: none;
-  flex-wrap: wrap;
-  gap: 32px;
   padding: 32px;
-  height: calc(100vh - 300px);
+  height: 100%;
+  align-items: start;
 `;

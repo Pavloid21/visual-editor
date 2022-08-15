@@ -1,13 +1,24 @@
 import React from 'react';
 import {Modal as CustomModal} from 'components';
 import {Button, FileInput, Input, Label} from 'components/controls';
-import {Controller} from 'react-hook-form';
+import {Controller, ControllerRenderProps} from 'react-hook-form';
 import {ReactComponent as Close} from 'assets/close.svg';
 import {Bar, ButtonGroup, Actions} from './Modal.styled';
 import type {ModalProps} from '../types';
+import {Inputs} from '../Project';
 
 const Modal: React.FC<ModalProps> = (props) => {
-  const {itemModalOpen, setItemModalOpen, form, formRef, control, handleSave, handleSubmit, isEdit} = props;
+  const {itemModalOpen, setItemModalOpen, form, formRef, control, handleSave, handleSubmit, isEdit, setValue} = props;
+
+  const handlePlatformButtonClick = (
+    event: React.MouseEvent,
+    field: ControllerRenderProps<Inputs, 'form.platform'>
+  ) => {
+    const platform = event.currentTarget.attributes.getNamedItem('data-platform')?.value;
+    if (platform) {
+      setValue(`form.platform`, {...field.value, [platform]: field.value ? !field.value[platform] : true});
+    }
+  };
 
   return (
     <CustomModal isActive={itemModalOpen} handleClose={() => setItemModalOpen(false)} style={{maxWidth: '502px'}}>
@@ -52,9 +63,27 @@ const Modal: React.FC<ModalProps> = (props) => {
                 <div>
                   <Label>Platform</Label>
                   <ButtonGroup>
-                    <Button>iOS</Button>
-                    <Button className="secondary">Android</Button>
-                    <Button className="secondary">Aurora</Button>
+                    <Button
+                      data-platform="ios"
+                      className={field.value?.ios ? undefined : 'secondary'}
+                      onClick={(event) => handlePlatformButtonClick(event, field)}
+                    >
+                      iOS
+                    </Button>
+                    <Button
+                      data-platform="android"
+                      className={field.value?.android ? undefined : 'secondary'}
+                      onClick={(event) => handlePlatformButtonClick(event, field)}
+                    >
+                      Android
+                    </Button>
+                    <Button
+                      data-platform="aurora"
+                      className={field.value?.aurora ? undefined : 'secondary'}
+                      onClick={(event) => handlePlatformButtonClick(event, field)}
+                    >
+                      Aurora
+                    </Button>
                   </ButtonGroup>
                 </div>
               );

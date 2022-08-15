@@ -2,7 +2,6 @@ import {Inputs} from 'containers/Project/Project';
 import React, {useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {useLocation, useNavigate} from 'react-router-dom';
-import styled from 'styled-components';
 import {useModal} from 'utils';
 import {ReactComponent as ArrowBack} from 'assets/arrow_back.svg';
 import {ReactComponent as Settings} from 'assets/settings.svg';
@@ -10,82 +9,15 @@ import {ReactComponent as Warning} from 'assets/warning.svg';
 import {editProject, getProjectData} from 'services/ApiService';
 import Modal from 'containers/Project/Modal/Modal';
 import {useDispatch, useSelector} from 'react-redux';
-import {Modal as CustomModal} from './Modal';
+import {Modal as CustomModal} from '../Modal';
 import {Button} from 'components/controls/Button';
 import {useBackListener} from 'constants/utils';
 import {setLayout} from 'store/layout.slice';
-import type {RootStore} from '../store/types';
+import type {RootStore} from '../../store/types';
+import type {SideBarHeaderProps} from './types';
+import {Header, Subheader, WarningWrapper} from './SideBarHeader.styled';
 
-const Header = styled.div`
-  min-height: 60px;
-  background-color: var(--background);
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 24px;
-  color: var(--neo-black);
-  padding: 18px 16px;
-  display: flex;
-  align-items: center;
-  gap: 18px;
-`;
-
-const Subheader = styled.div`
-  height: 44px;
-  border-bottom: 1px solid #e6e6e6;
-  padding: 0 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  & div {
-    display: flex;
-    font-size: 16px;
-    line-height: 20px;
-    gap: 8px;
-  }
-  & span {
-    color: var(--neo-secondary-gray);
-    &:hover {
-      cursor: pointer;
-    }
-  }
-`;
-
-const WarningWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  flex: 1;
-  & > svg {
-    margin-bottom: 30px;
-  }
-  & > h3 {
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 24px;
-    margin-bottom: 24px;
-  }
-  & > p {
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 20px;
-    max-width: 384px;
-    text-align: center;
-    margin-bottom: 28px;
-  }
-  & > .button_group {
-    display: flex;
-    gap: 16px;
-  }
-`;
-
-type SideBarHeaderProps = {
-  title: string;
-  left?: boolean;
-};
-
-const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
+export const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal();
@@ -194,6 +126,7 @@ const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
         handleSubmit={handleSubmit}
         itemModalOpen={itemModalOpen}
         setItemModalOpen={setItemModalOpen}
+        setValue={setValue}
         form={form}
         isEdit
       />
@@ -227,5 +160,3 @@ const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
 export const SideBarSubheader = (props: React.HTMLProps<any>) => {
   return <Subheader>{props.children}</Subheader>;
 };
-
-export default SideBarHeader;
