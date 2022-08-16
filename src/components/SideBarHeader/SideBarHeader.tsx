@@ -16,6 +16,8 @@ import {setLayout} from 'store/layout.slice';
 import type {RootStore} from '../../store/types';
 import type {SideBarHeaderProps} from './types';
 import {Header, Subheader, WarningWrapper} from './SideBarHeader.styled';
+import {filesToDTO} from 'utils/files';
+import {head} from 'external/lodash';
 
 export const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
   const navigate = useNavigate();
@@ -38,7 +40,6 @@ export const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
     mode: 'onBlur',
   });
   const {title, left} = props;
-  const formRef = React.createRef<HTMLFormElement>();
   const [project, setProject] = useState({
     id: '',
     name: '',
@@ -52,7 +53,7 @@ export const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
         name: project.data.name,
         description: project.data.description,
         icon: project.data.icon,
-        platform: project.data.platform,
+        platform: JSON.stringify(project.data.platform),
         url: project.data.url,
       });
     });
@@ -66,15 +67,18 @@ export const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
     }
   });
 
-  const handleSave = () => {
-    const {name, icon, description} = getValues().form;
+  const handleSave = async () => {
+    const {name, icon: icons, description, platform, url} = getValues().form;
+    const requestIcons = await filesToDTO(icons);
     editProject(
       projectId,
       JSON.stringify({
         id: project?.id,
         name,
-        icon,
+        icon: head(requestIcons),
         description,
+        platform: JSON.parse(platform.toString()),
+        url,
       })
     ).then((project) => {
       resetField('form.name');
@@ -121,7 +125,6 @@ export const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
       )}
       <Modal
         control={control}
-        formRef={formRef}
         handleSave={handleSave}
         handleSubmit={handleSubmit}
         itemModalOpen={itemModalOpen}

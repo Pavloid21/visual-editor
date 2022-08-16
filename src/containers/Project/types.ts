@@ -9,7 +9,6 @@ export type ModalProps = {
     icon?: FieldError[] | undefined;
     description?: FieldError | undefined;
   };
-  formRef: React.RefObject<HTMLFormElement>;
   control: Control<Inputs, any>;
   handleSave: () => void;
   handleSubmit: UseFormHandleSubmit<Inputs>;

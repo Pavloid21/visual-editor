@@ -22,7 +22,7 @@ export const TemplatePreview: React.FC<{projectData: any}> = ({projectData}) => 
   };
 
   const handleSaveProject = () => {
-    createProject(JSON.stringify(projectData)).then((project) => {
+    createProject(JSON.stringify({...projectData, platform: JSON.parse(projectData.platform)})).then((project) => {
       handleProjectSelect(project.data);
     });
   };

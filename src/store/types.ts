@@ -3,14 +3,14 @@ import {Zoom} from 'containers/ZoomSelect/types';
 import store from './index';
 
 export type EditScreenNamePayloadAction = Action<string> & {
-  screen: string,
+  screen: string;
   snippet: {
-    snippet: string,
-    endpoint: string,
-    selectedScreen: string,
-    screenID: string,
-    logic: string
-  }
+    snippet: string;
+    endpoint: string;
+    selectedScreen: string;
+    screenID: string;
+    logic: string;
+  };
 };
 
 export type Actions = {
@@ -43,6 +43,11 @@ export type Project = {
   id: string;
   name: string;
   description: string;
+  platform?: Record<string, boolean> & {
+    ios: boolean;
+    android: boolean;
+    aurora: boolean;
+  };
   icon: string;
 };
 

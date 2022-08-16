@@ -1,22 +1,18 @@
 import React from 'react';
 import {Modal as CustomModal} from 'components';
 import {Button, FileInput, Input, Label} from 'components/controls';
-import {Controller, ControllerRenderProps} from 'react-hook-form';
+import {Controller} from 'react-hook-form';
 import {ReactComponent as Close} from 'assets/close.svg';
 import {Bar, ButtonGroup, Actions} from './Modal.styled';
 import type {ModalProps} from '../types';
-import {Inputs} from '../Project';
 
 const Modal: React.FC<ModalProps> = (props) => {
-  const {itemModalOpen, setItemModalOpen, form, formRef, control, handleSave, handleSubmit, isEdit, setValue} = props;
-
-  const handlePlatformButtonClick = (
-    event: React.MouseEvent,
-    field: ControllerRenderProps<Inputs, 'form.platform'>
-  ) => {
+  const {itemModalOpen, setItemModalOpen, form, control, handleSave, handleSubmit, isEdit, setValue} = props;
+  const formRef = React.createRef<HTMLFormElement>();
+  const handlePlatformButtonClick = (event: React.MouseEvent, value: any) => {
     const platform = event.currentTarget.attributes.getNamedItem('data-platform')?.value;
     if (platform) {
-      setValue(`form.platform`, {...field.value, [platform]: field.value ? !field.value[platform] : true});
+      setValue('form.platform', JSON.stringify({...value, [platform]: value ? !value[platform] : true}));
     }
   };
 
@@ -58,29 +54,30 @@ const Modal: React.FC<ModalProps> = (props) => {
           <Controller
             name="form.platform"
             control={control}
-            render={({field}) => {
+            render={({field: {value}}) => {
+              const platform = JSON.parse(value ? value.toString() : '{}');
               return (
                 <div>
                   <Label>Platform</Label>
                   <ButtonGroup>
                     <Button
                       data-platform="ios"
-                      className={field.value?.ios ? undefined : 'secondary'}
-                      onClick={(event) => handlePlatformButtonClick(event, field)}
+                      className={platform?.ios ? undefined : 'secondary'}
+                      onClick={(event) => handlePlatformButtonClick(event, platform)}
                     >
                       iOS
                     </Button>
                     <Button
                       data-platform="android"
-                      className={field.value?.android ? undefined : 'secondary'}
-                      onClick={(event) => handlePlatformButtonClick(event, field)}
+                      className={platform?.android ? undefined : 'secondary'}
+                      onClick={(event) => handlePlatformButtonClick(event, platform)}
                     >
                       Android
                     </Button>
                     <Button
                       data-platform="aurora"
-                      className={field.value?.aurora ? undefined : 'secondary'}
-                      onClick={(event) => handlePlatformButtonClick(event, field)}
+                      className={platform?.aurora ? undefined : 'secondary'}
+                      onClick={(event) => handlePlatformButtonClick(event, platform)}
                     >
                       Aurora
                     </Button>

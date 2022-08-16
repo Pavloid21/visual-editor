@@ -28,7 +28,7 @@ export type Inputs = {
       ios: boolean;
       android: boolean;
       aurora: boolean;
-    };
+    } | string;
     url: string;
   };
 };
@@ -39,7 +39,6 @@ export const Project: React.FC<unknown> = () => {
   const [projects, setProjects] = useState<TProject[]>([]);
   const [loading, setLoading] = useState(false);
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal();
-  const formRef = React.createRef<HTMLFormElement>();
   const {
     getValues,
     resetField,
@@ -164,7 +163,6 @@ export const Project: React.FC<unknown> = () => {
       </Container>
       <Modal
         control={control}
-        formRef={formRef}
         handleSave={handleSave}
         handleSubmit={handleSubmit}
         itemModalOpen={itemModalOpen}

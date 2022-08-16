@@ -33,6 +33,7 @@ export const Card: React.FC<TCardProps> = ({
         const duplicated: Project = {
           name,
           description,
+          platform,
           icon: '',
           id: newProjId,
         };
