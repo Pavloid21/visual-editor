@@ -1,7 +1,8 @@
+/* eslint-disable no-case-declarations */
 import React, {useEffect, useState} from 'react';
 import {ReactComponent as Dots} from 'assets/dots.svg';
 import 'react-dropdown/style.css';
-import {createProject, deleteProject} from 'services/ApiService';
+import {createProject, deleteProject, getScreenByName, getScreenesList, saveScreen} from 'services/ApiService';
 import {useOutside} from 'utils';
 import {Container, DropdownIcon} from './Card.styled';
 import {TCardProps} from './types';
@@ -11,7 +12,16 @@ import {Option} from 'react-dropdown';
 import {Project} from 'store/types';
 import {v4} from 'uuid';
 
-export const Card: React.FC<TCardProps> = ({name, description, icon, onClick, onDelete, onChangeState, id, platform}) => {
+export const Card: React.FC<TCardProps> = ({
+  name,
+  description,
+  icon,
+  onClick,
+  onDelete,
+  onChangeState,
+  id,
+  platform,
+}) => {
   const handleChangeDropdown = async (arg: Option, id: string) => {
     switch (arg.value) {
       case 'Delete':
@@ -19,14 +29,32 @@ export const Card: React.FC<TCardProps> = ({name, description, icon, onClick, on
         onDelete(id);
         break;
       case 'Duplicate':
-        // eslint-disable-next-line no-case-declarations
+        const newProjId = v4();
         const duplicated: Project = {
           name,
           description,
           icon: '',
-          id: v4(),
+          id: newProjId,
         };
+        const screenesList = await getScreenesList(id);
+        const screenesObjArr = screenesList.data.map(async (screen: string) => {
+          try {
+            const response = await getScreenByName(screen, true, id);
+            return {
+              screen,
+              object: response.data,
+              logic: response.data,
+              id,
+            };
+          } catch (e) {
+            console.log('e :>> ', e);
+          }
+        });
+        const resolves = await Promise.allSettled(screenesObjArr);
         await createProject(JSON.stringify(duplicated));
+        resolves.forEach((screen: any) => {
+          saveScreen(newProjId, screen.value.screen, `return ${JSON.stringify(screen.value.logic)}`);
+        });
         onChangeState();
     }
   };
