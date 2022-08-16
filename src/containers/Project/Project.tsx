@@ -4,7 +4,7 @@ import {ButtonSelector, Loader} from 'components';
 import {v4} from 'uuid';
 import {Button} from 'components/controls';
 import {ReactComponent as Plus} from '../../assets/button_plus.svg';
-import {BASE_URL, createProject, getProjectData, getProjectsList} from 'services/ApiService';
+import {BASE_URL, getProjectData, getProjectsList} from 'services/ApiService';
 import {Card} from 'containers/Card';
 import {useNavigate} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
@@ -17,6 +17,7 @@ import {Container, Content, H1, Header, P} from './Project.styled';
 import type {Project as TProject} from 'store/types';
 import {filesToDTO} from 'utils/files';
 import {head} from 'external/lodash';
+import {saveProjectForm} from 'store/project-form.slice';
 
 export type Inputs = {
   form: {
@@ -101,8 +102,8 @@ export const Project: React.FC<unknown> = () => {
     resetField('form.description');
     resetField('form.platform');
     const requestIcons = await filesToDTO(icons);
-    createProject(
-      JSON.stringify({
+    dispatch(
+      saveProjectForm({
         id: v4(),
         name,
         icon: head(requestIcons),
@@ -110,11 +111,8 @@ export const Project: React.FC<unknown> = () => {
         platform,
         url,
       })
-    ).then(() => {
-      setProjects([]);
-      toggleModal();
-      getProjects();
-    });
+    );
+    navigate('/templates');
   };
 
   const refresh = () => {

@@ -15,6 +15,7 @@ import 'react-notifications-component/dist/theme.css';
 import {setActiveTab, setPreviewMode} from 'store/config.slice';
 import {reOrderLayout, replaceElement, setSelectedBlock} from 'store/layout.slice';
 import type {BlockItem, RootStore} from 'store/types';
+import {Templates} from './Templates/Templates';
 
 const App: React.FC<unknown> = () => {
   const layout = useSelector((state: RootStore) => state.layout);
@@ -85,16 +86,18 @@ const App: React.FC<unknown> = () => {
       }
     }
     if (parent) {
-      dispatch(replaceElement({
-        ...parent,
-        listItems: order
-      }));
+      dispatch(
+        replaceElement({
+          ...parent,
+          listItems: order,
+        })
+      );
     } else {
       const uuids = blocksLayout.map((block) => block.uuid);
       const next = order.filter((item) => uuids.includes(item.uuid));
-      const uniqueBlockItemList: BlockItem[] = [
-        ...new Set(next.map((blockItem) => JSON.stringify(blockItem)))
-      ].map((blockItem) => JSON.parse(blockItem));
+      const uniqueBlockItemList: BlockItem[] = [...new Set(next.map((blockItem) => JSON.stringify(blockItem)))].map(
+        (blockItem) => JSON.parse(blockItem)
+      );
       dispatch(reOrderLayout(uniqueBlockItemList));
     }
   };
@@ -127,6 +130,14 @@ const App: React.FC<unknown> = () => {
             element={
               <RequireAuth>
                 <Project />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/templates"
+            element={
+              <RequireAuth>
+                <Templates />
               </RequireAuth>
             }
           />

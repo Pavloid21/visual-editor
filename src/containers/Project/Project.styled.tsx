@@ -4,7 +4,7 @@ export const Container = styled.div`
   display: flex;
   height: 100%;
   width: 100%;
-  padding: 48px 36px;
+  padding: 32px 36px;
   flex-direction: column;
   & > div {
     height: 100%;
@@ -15,10 +15,15 @@ export const Container = styled.div`
 
 export const H1 = styled.h1`
   font-size: 40px;
+  font-weight: 400;
+  margin-bottom: 12px;
 `;
 
 export const P = styled.p`
   color: var(--neo-secondary-gray);
+  margin-bottom: 30px;
+  line-height: 23px;
+  font-weight: 400;
 `;
 
 export const Header = styled.div`
