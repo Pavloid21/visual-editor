@@ -61,7 +61,7 @@ const TopBar = () => {
     const deletedActionsPromises: Promise<any>[] = deletedActions.map((item) => {
       return deleteAction(projectID, item.type, item.action);
     });
-    await editProject(currentProject.id, JSON.stringify(currentProject));
+    await editProject(currentProject.id, JSON.stringify({...currentProject, icon: undefined}));
     Promise.all([...snippetsPromises, ...deletedSnippetsPromises, ...actionsPromises, ...deletedActionsPromises]).then(
       (result) => {
         Store.addNotification({
