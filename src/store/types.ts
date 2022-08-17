@@ -49,6 +49,8 @@ export type Project = {
     aurora: boolean;
   };
   icon: string;
+  created?: string;
+  edited?: string;
 };
 
 export type APIItem = {

@@ -8,6 +8,8 @@ export type TCardProps = {
     android: boolean;
     aurora: boolean;
   };
+  created?: string;
+  edited?: string;
   onClick?: (event: React.MouseEvent) => void;
   onDelete: (id: string) => void;
   onChangeState: () => void;

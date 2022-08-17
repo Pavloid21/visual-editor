@@ -7,10 +7,11 @@ import {useOutside} from 'utils';
 import {Container, DropdownIcon} from './Card.styled';
 import {TCardProps} from './types';
 import logo from 'assets/image_placeholder.png';
-import {capitalize} from 'lodash';
+import {capitalize} from 'external/lodash';
 import {Option} from 'react-dropdown';
 import {Project} from 'store/types';
 import {v4} from 'uuid';
+import moment from 'moment';
 
 export const Card: React.FC<TCardProps> = ({
   name,
@@ -19,6 +20,8 @@ export const Card: React.FC<TCardProps> = ({
   onClick,
   onDelete,
   onChangeState,
+  created,
+  edited,
   id,
   platform,
 }) => {
@@ -96,8 +99,8 @@ export const Card: React.FC<TCardProps> = ({
           <div className="platform_tags">{platforms}</div>
           <div className="project_name">{name}</div>
           <div className="project_dates">
-            <div>Created:</div>
-            <div>Last edit:</div>
+            <div>{`Created: ${created ? moment(created).format('DD.MM.yyyy HH:mm:ss') : ''}`}</div>
+            <div>{`Last edit: ${edited ? moment(edited).format('DD.MM.yyyy HH:mm:ss') : ''}`}</div>
           </div>
         </div>
         <div ref={ref} style={{marginLeft: 'auto'}}>

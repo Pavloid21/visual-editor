@@ -24,11 +24,13 @@ export type Inputs = {
     name: string;
     icon: File[];
     description: string;
-    platform: Record<string, any> & {
-      ios: boolean;
-      android: boolean;
-      aurora: boolean;
-    } | string;
+    platform:
+      | (Record<string, any> & {
+          ios: boolean;
+          android: boolean;
+          aurora: boolean;
+        })
+      | string;
     url: string;
   };
 };
@@ -64,7 +66,6 @@ export const Project: React.FC<unknown> = () => {
           setProjects(
             data.map((item: any) => {
               const {data} = item.value;
-
               return {
                 ...data,
                 icon: `${BASE_URL}projects/${data.id}/files/${data.icon}`,

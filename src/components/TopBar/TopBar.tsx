@@ -4,7 +4,7 @@ import {ReactComponent as HideLeft} from '../../assets/hide_left.svg';
 import {ReactComponent as HideRight} from '../../assets/hide_right.svg';
 import {Button} from 'components/controls';
 import {useDispatch, useSelector} from 'react-redux';
-import {deleteAction, deleteScreen, saveAction, saveScreen} from '../../services/ApiService';
+import {deleteAction, deleteScreen, editProject, saveAction, saveScreen} from '../../services/ApiService';
 import {useKeycloak} from '@react-keycloak/web';
 import {useLocation} from 'react-router-dom';
 import {Store} from 'react-notifications-component';
@@ -20,6 +20,7 @@ const TopBar = () => {
   const {keycloak} = useKeycloak();
   const location = useLocation();
   const snippets = useSelector((state: RootStore) => state.layout.snippets);
+  const currentProject = useSelector((state: RootStore) => state.project);
   const {ref, isShow, setIsShow} = useOutside(false);
   const actions = useSelector((state: RootStore) => [
     ...state.actions.actions.map((item) => ({...item, type: 'actions'})),
@@ -41,7 +42,7 @@ const TopBar = () => {
   const handleHideRight = () => {
     dispatch(toggleRightBar());
   };
-  const handleSaveApplication: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+  const handleSaveApplication: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.stopPropagation();
     const snippetsPromises: Promise<any>[] = snippets.filter((item) => {
       if (editedScreens.includes(item.screenID) && !deletedScreens.includes(item.screenID)) {
@@ -60,6 +61,7 @@ const TopBar = () => {
     const deletedActionsPromises: Promise<any>[] = deletedActions.map((item) => {
       return deleteAction(projectID, item.type, item.action);
     });
+    await editProject(currentProject.id, JSON.stringify(currentProject));
     Promise.all([...snippetsPromises, ...deletedSnippetsPromises, ...actionsPromises, ...deletedActionsPromises]).then(
       (result) => {
         Store.addNotification({
