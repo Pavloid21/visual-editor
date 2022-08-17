@@ -18,6 +18,7 @@ import type {Project as TProject} from 'store/types';
 import {filesToDTO} from 'utils/files';
 import {head} from 'external/lodash';
 import {saveProjectForm} from 'store/project-form.slice';
+import Routes from 'routes/routes';
 
 export type Inputs = {
   form: {
@@ -88,7 +89,7 @@ export const Project: React.FC<unknown> = () => {
         ...project,
       })
     );
-    navigate(`/editor/${project.id}`);
+    navigate(`${Routes.EDITOR}/${project.id}`);
   };
 
   const handleAddProject = () => {

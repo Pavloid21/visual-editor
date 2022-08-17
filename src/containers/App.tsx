@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Routes, Route, Navigate, useLocation} from 'react-router-dom';
+import {default as AppRoutes} from 'routes/routes';
 import {renderHandlebars, observer, findInTree} from 'utils';
 import {LeftSidebar, TopBar, RightSidebar, HighlightedElement, Loader} from 'components';
 import Preview from './Preview';
@@ -123,10 +124,10 @@ const App: React.FC<unknown> = () => {
       >
         <TopBar />
         <Routes>
-          <Route path="/" element={<Navigate to="/project" />} />
-          <Route path="/login" element={<Login />} />
+          <Route path={AppRoutes.HOME} element={<Navigate to={AppRoutes.PROJECT} />} />
+          <Route path={AppRoutes.LOGIN} element={<Login />} />
           <Route
-            path="/project"
+            path={AppRoutes.PROJECT}
             element={
               <RequireAuth>
                 <Project />
@@ -134,7 +135,7 @@ const App: React.FC<unknown> = () => {
             }
           />
           <Route
-            path="/templates"
+            path={AppRoutes.TEMPLATES}
             element={
               <RequireAuth>
                 <Templates />
@@ -142,7 +143,7 @@ const App: React.FC<unknown> = () => {
             }
           />
           <Route
-            path="/editor/:project"
+            path={`${AppRoutes.EDITOR}/:project`}
             element={
               <RequireAuth>
                 <LeftSidebar display={barState.left} />

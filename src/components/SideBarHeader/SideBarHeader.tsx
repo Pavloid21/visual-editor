@@ -18,6 +18,7 @@ import type {SideBarHeaderProps} from './types';
 import {Header, Subheader, WarningWrapper} from './SideBarHeader.styled';
 import {filesToDTO} from 'utils/files';
 import {head} from 'external/lodash';
+import Routes from 'routes/routes';
 
 export const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
   const navigate = useNavigate();
@@ -95,7 +96,7 @@ export const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
         layout: [],
       })
     );
-    navigate('/project');
+    navigate(Routes.PROJECT);
   };
 
   return (

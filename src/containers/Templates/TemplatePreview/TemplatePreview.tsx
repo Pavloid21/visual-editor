@@ -7,6 +7,7 @@ import {H2, PhoneWrapper} from './TemplatePreview.styled';
 import type {Project as TProject} from 'store/types';
 import {useDispatch} from 'react-redux';
 import {selectProject} from 'store/project.slice';
+import Routes from 'routes/routes';
 
 export const TemplatePreview: React.FC<{projectData: any}> = ({projectData}) => {
   const navigate = useNavigate();
@@ -18,13 +19,15 @@ export const TemplatePreview: React.FC<{projectData: any}> = ({projectData}) => 
         ...project,
       })
     );
-    navigate(`/editor/${project.id}`);
+    navigate(`${Routes.EDITOR}/${project.id}`);
   };
 
   const handleSaveProject = () => {
-    createProject(JSON.stringify({...projectData, platform: JSON.parse(projectData.platform || '{}')})).then((project) => {
-      handleProjectSelect(project.data);
-    });
+    createProject(JSON.stringify({...projectData, platform: JSON.parse(projectData.platform || '{}')})).then(
+      (project) => {
+        handleProjectSelect(project.data);
+      }
+    );
   };
 
   return (
