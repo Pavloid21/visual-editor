@@ -16,6 +16,8 @@ import {
   distribution,
   padding,
   sizeModifier,
+  borderColor,
+  borderWidth,
   spacing,
 } from 'views/configs';
 import hstack from 'assets/hstack.svg';
@@ -61,6 +63,9 @@ const HStack = styled.div`
   padding-bottom: ${(props) => props.padding?.bottom}px;
   padding-left: ${(props) => props.padding?.left}px;
   padding-right: ${(props) => props.padding?.right}px;
+  border-width: ${(props) => props.borderWidth}px;
+  border-style: solid;
+  border-color: ${(props) => props.borderColor};
   gap: ${(props) => props.spacing}px;
   position: relative;
   border-radius: ${(props) => `
@@ -152,6 +157,8 @@ const block = {
     backgroundColor: '#C6C6C6',
     distribution: 'SPACEBETWEEN',
     spacing: 16,
+    borderColor: '#000000',
+    borderWidth: 0,
     padding: {
       top: '100',
       bottom: '100',
@@ -172,6 +179,8 @@ const block = {
     backgroundColor,
     distribution,
     spacing,
+    borderColor,
+    borderWidth,
     padding,
     corners,
   },

@@ -18,6 +18,8 @@ import {
   corners,
   distribution,
   scroll,
+  borderColor,
+  borderWidth,
   sizeModifier,
   spacing,
   padding,
@@ -88,6 +90,9 @@ const VStack = styled.div`
   padding-left: ${(props) => props.padding?.left}px;
   padding-right: ${(props) => props.padding?.right}px;
   box-sizing: border-box;
+  border-width: ${(props) => props.borderWidth}px;
+  border-style: solid;
+  border-color: ${(props) => props.borderColor};
   gap: ${(props) => props.spacing}px;
   border-radius: ${(props) => `
     ${props.corners?.topLeftRadius || 0}px
@@ -97,11 +102,9 @@ const VStack = styled.div`
   `};
   ${(props) => {
     if (props.shadow) {
-      return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${
-              props.shadow?.radius
-      }px rgba(${hexToRgb(props.shadow?.color).r}, ${hexToRgb(props.shadow?.color).g}, ${
-              hexToRgb(props.shadow?.color).b
-      }, ${props.shadow?.opacity});`;
+      return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${props.shadow?.radius
+        }px rgba(${hexToRgb(props.shadow?.color).r}, ${hexToRgb(props.shadow?.color).g}, ${hexToRgb(props.shadow?.color).b
+        }, ${props.shadow?.opacity});`;
     }
   }}
 `;
@@ -206,6 +209,8 @@ const block = {
     distribution: '',
     spacing: 0,
     scroll: false,
+    borderColor: '#EFEFEF',
+    borderWidth: 1,
     padding: {
       top: '100',
       bottom: '100',
@@ -236,6 +241,8 @@ const block = {
     distribution,
     spacing,
     scroll,
+    borderColor,
+    borderWidth,
     size,
     padding,
     shadow: shadowConfigBuilder().withRadius.done(),
