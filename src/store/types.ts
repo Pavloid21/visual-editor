@@ -53,6 +53,33 @@ export type Project = {
   edited?: string;
 };
 
+export type Template = {
+  id: string;
+  title: string;
+  description: string;
+  snippets: {
+    screens: Map<string, string>;
+    actions: Map<string, string>;
+    data: Map<string, string>;
+    themes: Map<string, string>;
+    externalActions: Map<string, string>;
+  };
+};
+
+export type ProjectForm = {
+  id: string;
+  name: string;
+  description: string;
+  icon?: any;
+  url? :string;
+  platform: string | {
+    [x: string]: any;
+    ios: boolean;
+    android: boolean;
+    aurora: boolean;
+  };
+};
+
 export type APIItem = {
   headers: {key: string; value: string}[];
   params: {key: string; value: string}[];

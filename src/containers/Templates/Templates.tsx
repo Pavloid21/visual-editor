@@ -1,14 +1,42 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {ButtonSelector} from 'components';
 import {v4} from 'uuid';
 import {H1, P} from '../Project/Project.styled';
 import {Container, Content, TemplatesContainer} from './Templates.styled';
 import {TemplatePreview} from './TemplatePreview/TemplatePreview';
 import {useSelector} from 'react-redux';
-import {RootStore} from 'store/types';
+import {RootStore, Template} from 'store/types';
+import {getTemplateData, getTemplates} from 'services/ApiService';
+import {AxiosResponse} from 'axios';
+import {ITemplatePreview} from './types';
 
 export const Templates: React.FC<unknown> = () => {
   const projectForm = useSelector((state: RootStore) => state.projectForm);
+  const [templates, setTemplates] = useState<ITemplatePreview[]>([]);
+
+  const getTemplatesList = async () => {
+    await getTemplates().then((templates: AxiosResponse) => {
+      if (templates.data) {
+        const promises: Promise<AxiosResponse>[] = templates.data.map((template: string) => getTemplateData(template));
+        Promise.allSettled(promises).then((data: PromiseSettledResult<AxiosResponse<Template, any>>[]) => {
+          setTemplates(
+            data.map((item: any) => {
+              const {data} = item.value;
+              return {
+                project: projectForm,
+                template: data
+              };
+            })
+          );
+        });
+      }
+    });
+  };
+
+  useEffect(() => {
+    getTemplatesList();
+  }, []);
+
   return (
     <>
       <Container>
@@ -28,7 +56,10 @@ export const Templates: React.FC<unknown> = () => {
             value={'business'}
           />
           <TemplatesContainer>
-            <TemplatePreview projectData={projectForm} />
+            <TemplatePreview project={projectForm} />
+            {templates.map((template) => {
+              return <TemplatePreview key={template.template?.id} {...template} />;
+            })}
           </TemplatesContainer>
         </Content>
       </Container>

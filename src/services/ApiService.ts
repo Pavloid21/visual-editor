@@ -130,3 +130,15 @@ export const getTemplates = async () => {
   const url = API.defaults.baseURL + 'templates';
   return await callApi(url, null, 'GET');
 };
+
+export const getTemplateData = async (templateId: string) => {
+  const url = API.defaults.baseURL + `templates/${templateId}`;
+  return await callApi(url, null, 'GET');
+};
+
+export const applyTemplate = async (templateId: string, payload: string) => {
+  const url = API.defaults.baseURL + `templates/${templateId}/extraction`;
+  return await callApi(url, payload, 'POST', undefined, undefined, {
+    'Content-Type': 'application/json',
+  });
+};
