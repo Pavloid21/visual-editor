@@ -25,6 +25,21 @@ export const Card: React.FC<TCardProps> = ({
   id,
   platform,
 }) => {
+  const {ref, isShow} = useOutside(false, true);
+  const [platforms, setPlatforms] = useState('');
+  const [descriptionVisible, setDescriptionVisible] = useState(false);
+
+  useEffect(() => {
+    if (platform) {
+      setPlatforms(
+        Object.keys(platform)
+          .map((key: string) => capitalize(key))
+          .join(' / ')
+          .replace('Ios', 'iOS')
+      );
+    }
+  }, [platform]);
+
   const handleChangeDropdown = async (arg: Option, id: string) => {
     switch (arg.value) {
       case 'Delete':
@@ -62,29 +77,24 @@ export const Card: React.FC<TCardProps> = ({
         onChangeState();
     }
   };
-  const {ref, isShow} = useOutside(false, true);
-  const [platforms, setPlatforms] = useState('');
-  const [descriptionVisible, setDescriptionVisible] = useState(false);
 
-  useEffect(() => {
-    if (platform) {
-      setPlatforms(
-        Object.keys(platform)
-          .map((key: string) => capitalize(key))
-          .join(' / ')
-          .replace('Ios', 'iOS')
-      );
-    }
-  }, [platform]);
+  const handleHoverIn = () => {
+    setDescriptionVisible(true);
+  };
+
+  const handleHoverOut = () => {
+    setDescriptionVisible(false);
+  };
 
   return (
     <Container
       isActive={descriptionVisible}
       onClick={(e) => {
         e.stopPropagation();
-        if (!isShow) setDescriptionVisible(true);
         if (descriptionVisible && !isShow) onClick!(e);
       }}
+      onMouseEnter={handleHoverIn}
+      onMouseLeave={handleHoverOut}
     >
       <div className="card_body">
         <img
