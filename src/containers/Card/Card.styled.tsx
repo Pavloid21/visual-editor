@@ -33,21 +33,28 @@ export const DropdownIcon = styled<any>(Dropdown)<ReactDropdownProps>`
   }
 `;
 
-export const Container = styled.div<{isActive?: boolean}>`
+export const Container = styled.div`
   width: 422px;
   height: fit-content;
   box-shadow: 0px 10px 15px -5px rgba(0, 0, 0, 0.15);
   border-radius: 4px;
-  border: 1px solid ${(props) => (props.isActive ? 'var(--main-color)' : 'var(--neo-gray)')};
+  border: 1px solid var(--neo-gray);
   display: flex;
   flex-direction: column;
   align-self: flex-start;
   &:hover {
     cursor: pointer;
+    border: 1px solid var(--main-color);
+    & > .card_description {
+      display: block;
+    }
   }
-  & > hr {
+  hr {
     margin: 0 0 24px 0;
     border-top: 1px solid var(--neo-gray);
+  }
+  .card_description {
+    display: none;
   }
   .card_body {
     padding: 24px 12px 24px 24px;

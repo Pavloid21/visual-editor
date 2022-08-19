@@ -27,7 +27,6 @@ export const Card: React.FC<TCardProps> = ({
 }) => {
   const {ref, isShow} = useOutside(false, true);
   const [platforms, setPlatforms] = useState('');
-  const [descriptionVisible, setDescriptionVisible] = useState(false);
 
   useEffect(() => {
     if (platform) {
@@ -78,23 +77,12 @@ export const Card: React.FC<TCardProps> = ({
     }
   };
 
-  const handleHoverIn = () => {
-    setDescriptionVisible(true);
-  };
-
-  const handleHoverOut = () => {
-    setDescriptionVisible(false);
-  };
-
   return (
     <Container
-      isActive={descriptionVisible}
       onClick={(e) => {
         e.stopPropagation();
-        if (descriptionVisible && !isShow) onClick!(e);
+        if (!isShow) onClick!(e);
       }}
-      onMouseEnter={handleHoverIn}
-      onMouseLeave={handleHoverOut}
     >
       <div className="card_body">
         <img
@@ -123,11 +111,11 @@ export const Card: React.FC<TCardProps> = ({
           />
         </div>
       </div>
-      {descriptionVisible && description && (
-        <>
+      {description && (
+        <div className="card_description">
           <hr />
           <div className="card_body_description">{description}</div>
-        </>
+        </div>
       )}
     </Container>
   );
