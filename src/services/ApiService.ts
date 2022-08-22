@@ -131,8 +131,13 @@ export const getTemplates = async () => {
   return await callApi(url, null, 'GET');
 };
 
-export const getTemplateData = async (templateId: string) => {
-  const url = API.defaults.baseURL + `templates/${templateId}`;
+export const getScreenTemplates = async () => {
+  const url = API.defaults.baseURL + 'templates?screens=true';
+  return await callApi(url, null, 'GET');
+};
+
+export const getTemplateData = async (templateId: string, params?: string) => {
+  const url = API.defaults.baseURL + `templates/${templateId}${params ? '?' + params : ''}`;
   return await callApi(url, null, 'GET');
 };
 

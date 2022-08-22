@@ -32,7 +32,7 @@ const Component = ({settingsUI, uuid, ...props}) => {
   }
 
   return (
-    <Wrapper id={props.id} {...settingsUI} style={{flex: 1}}>
+    <Wrapper id={props.id} {...settingsUI} sizeModifier={'FULLWIDTH'} style={{flex: 1}}>
       <WebView
         {...props}
         ref={contentRef}
