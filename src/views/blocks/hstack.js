@@ -14,14 +14,18 @@ import {
   backgroundColor,
   corners,
   distribution,
-  padding,
-  sizeModifier,
+  scroll,
   borderColor,
   borderWidth,
   spacing,
+  padding,
+  size,
+  shadowConfigBuilder,
 } from 'views/configs';
 import hstack from 'assets/hstack.svg';
 import {pushBlockInside} from 'store/layout.slice';
+import {isNil} from 'lodash';
+import {hexToRgb} from 'constants/utils';
 
 const HStack = styled.div`
   align-self: ${(props) => {
@@ -50,9 +54,23 @@ const HStack = styled.div`
         return '0 0';
     }
   }};
-  width: ${(props) =>
-    ['FULLWIDTH', 'FULLSIZE'].includes(props.sizeModifier) ? '100%' : 'fit-content'};
-  height: ${(props) => (['FULLHEIGHT', 'FULLSIZE'].includes(props.sizeModifier) ? '100%' : 'fit-content')};
+  width: ${(props) => {
+    if (!isNil(props.size?.width)) {
+      return props.size.width + 'px';
+    } else if (!isNil(props.size?.widthInPercent)) {
+      return props.size.widthInPercent + '%';
+    } else {
+      return 'fit-content';
+    }
+  }};
+  height: ${(props) => {
+    if (!isNil(props.size?.height)) {
+      return props.size.height + 'px';
+    } else if (!isNil(props.size?.heightInPercent)) {
+      return props.size.heightInPercent + '%';
+    }
+    return 'fit-content';
+  }};
   background-color: ${(props) => props.backgroundColor};
   display: flex;
   justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
@@ -69,11 +87,18 @@ const HStack = styled.div`
   gap: ${(props) => props.spacing}px;
   position: relative;
   border-radius: ${(props) => `
-    ${props.corners?.topLeftRadius}px
-    ${props.corners?.topRightRadius}px
-    ${props.corners?.bottomRightRadius}px
-    ${props.corners?.bottomLeftRadius}px
+    ${props.corners?.topLeftRadius || 0}px
+    ${props.corners?.topRightRadius || 0}px
+    ${props.corners?.bottomRightRadius || 0}px
+    ${props.corners?.bottomLeftRadius || 0}px
   `};
+  ${(props) => {
+    if (props.shadow) {
+      return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${props.shadow?.radius
+        }px rgba(${hexToRgb(props.shadow?.color).r}, ${hexToRgb(props.shadow?.color).g}, ${hexToRgb(props.shadow?.color).b
+        }, ${props.shadow?.opacity});`;
+    }
+  }}
 `;
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, settingsUI, ...props}) => {
@@ -153,12 +178,12 @@ const block = {
     {label: 'Horizontal', value: 'HSTACK'},
   ],
   defaultData: {
-    sizeModifier: 'FULLWIDTH',
     backgroundColor: '#C6C6C6',
-    distribution: 'SPACEBETWEEN',
-    spacing: 16,
-    borderColor: '#000000',
-    borderWidth: 0,
+    distribution: '',
+    spacing: 0,
+    scroll: false,
+    borderColor: '#EFEFEF',
+    borderWidth: 1,
     padding: {
       top: '100',
       bottom: '100',
@@ -171,17 +196,28 @@ const block = {
       bottomLeftRadius: 0,
       bottomRightRadius: 0,
     },
+    shadow: {
+      color: '#000000',
+      opacity: 0,
+      offsetSize: {
+        width: 0,
+        height: 0,
+      },
+      radius: 8,
+    },
   },
   listItems: [],
   config: {
-    sizeModifier,
-    alignment: alignmentConfig.both,
+    alignment: alignmentConfig.vertically,
     backgroundColor,
     distribution,
     spacing,
+    scroll,
     borderColor,
     borderWidth,
+    size,
     padding,
+    shadow: shadowConfigBuilder().withRadius.done(),
     corners,
   },
 };

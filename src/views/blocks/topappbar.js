@@ -8,7 +8,6 @@ import {
   backgroundColor,
   fontSize,
   padding,
-  sizeModifier,
   textAlignment,
   textColor
 } from 'views/configs';
@@ -75,7 +74,6 @@ const block = {
   defaultData: {
     fontSize: 16,
     textColor: '#E9E8EA',
-    sizeModifier: 'FULLSIZE',
     backgroundColor: '#423649',
     padding: {
       top: 8,
@@ -89,7 +87,6 @@ const block = {
   },
   config: {
     fontSize,
-    sizeModifier,
     textColor,
     textAlignment,
     backgroundColor,

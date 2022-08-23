@@ -2,42 +2,16 @@ import styled from 'styled-components';
 import Wrapper from 'utils/wrapper';
 import passwordtextfield from 'assets/passwordtextfield.svg';
 import {
-  alignmentConfig, backgroundColor, fontSize,
+  backgroundColor, fontSize,
   placeholder,
   placeholderColor, size,
-  sizeModifier,
   text,
   textAlignment, textColor,
 } from 'views/configs';
 
 const Container = styled.div`
   display: flex;
-  align-self: ${(props) => {
-    switch (props.alignment) {
-      case 'LEFT':
-        return 'flex-start';
-      case 'RIGHT':
-        return 'flex-end';
-      default:
-        return 'center';
-    }
-  }};
-  margin: ${(props) => {
-    switch (props.alignment) {
-      case 'CENTER':
-        return 'auto';
-      case 'TOP':
-        return '0 auto auto auto';
-      case 'BOTTOM':
-        return 'auto auto 0 auto';
-      case 'LEFT':
-        return 'auto auto auto 0';
-      case 'RIGHT':
-        return 'auto 0 auto auto';
-      default:
-        return '0 0';
-    }
-  }};
+  align-self: center;
   width: ${(props) => {
     if (props.size?.width !== undefined) {
       return props.size.width + 'px';
@@ -100,15 +74,12 @@ const block = {
     textColor: '#000000',
     backgroundColor: '#FFFFFF',
     fontSize: 16,
-    alignment: 'LEFT',
     size: {
       width: '',
       height: '',
     },
   },
   config: {
-    sizeModifier,
-    alignment: alignmentConfig.both,
     placeholder,
     placeholderColor,
     text,

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import switch_ic from 'assets/switch.svg';
 import Wrapper from 'utils/wrapper';
 import {
-  alignmentConfig,
   backgroundColor,
   isActive,
   thumbOnColor,
@@ -103,7 +102,6 @@ const block = {
     thumbOnColor: '#FA6621',
   },
   config: {
-    alignment: alignmentConfig.horizontally,
     backgroundColor,
     thumbOnColor,
     isActive,

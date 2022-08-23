@@ -4,7 +4,7 @@ import Wrapper from 'utils/wrapper';
 import {hexToRgb} from 'constants/utils';
 import button from 'assets/button.svg';
 import {
-  alignmentConfig, AlignmentValues, textAlignment,
+  textAlignment,
   backgroundColor,
   borderColor, borderWidth,
   buttonImagePadding, buttonTextPadding,
@@ -13,36 +13,12 @@ import {
   padding,
   shadowConfigBuilder,
   shapeConfigBuilder,
-  size, sizeModifier,
+  size,
   text, textColor
 } from 'views/configs';
 
 const Button = styled.div`
   position: relative;
-  align-self: ${(props) => {
-    switch (props.alignment) {
-      case AlignmentValues.Left:
-        return 'start';
-      case AlignmentValues.Right:
-        return 'end';
-      case AlignmentValues.Center:
-        return 'center';
-      default:
-        return 'auto';
-    }
-  }};
-  margin: ${(props) => {
-    switch (props.alignment) {
-      case AlignmentValues.Center:
-        return 'auto';
-      case AlignmentValues.Left:
-        return 'auto auto auto 0';
-      case AlignmentValues.Right:
-        return 'auto 0 auto auto';
-      default:
-        return '0 0';
-    }
-  }};
   padding-top: ${(props) => props.padding?.top}px;
   padding-bottom: ${(props) => props.padding?.bottom}px;
   padding-left: ${(props) => props.padding?.left}px;
@@ -58,9 +34,7 @@ const Button = styled.div`
   border-style: solid;
   border-color: ${(props) => props.borderColor};
   width: ${(props) => {
-    if (!props.alignment) {
-      return '100%';
-    } else if (props.size?.width) {
+    if (props.size?.width) {
       return props.size.width + 'px';
     } else if (props.size?.widthInPercent !== undefined) {
       return props.size.widthInPercent + '%';
@@ -179,7 +153,6 @@ const block = {
       type: 'ALLCORNERSROUND',
       radius: '4',
     },
-    sizeModifier: 'FULLWIDTH',
     size: {
       height: 48,
       width: 230,
@@ -212,8 +185,6 @@ const block = {
     backgroundColor,
     borderColor,
     borderWidth,
-    sizeModifier,
-    alignment: alignmentConfig.horizontally,
     textAlignment,
     buttonTextPadding,
     buttonImagePadding,

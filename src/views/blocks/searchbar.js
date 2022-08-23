@@ -11,11 +11,11 @@ import {observer} from 'utils/observer';
 import renderHandlebars from 'utils/renderHandlebars';
 import {onSortMove} from 'utils/hooks';
 import {
-  alignmentConfig, backgroundColor, fontSize,
+  backgroundColor, fontSize,
   imageUrl,
   placeholder,
   placeholderColor, size,
-  sizeModifier, text,
+  text,
   textAlignment, textColor,
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
@@ -24,32 +24,7 @@ const SearchBar = styled.div`
   display: flex;
   flex-direction: column;
   max-height: 100%;
-  align-self: ${(props) => {
-    switch (props.alignment) {
-      case 'LEFT':
-        return 'flex-start';
-      case 'RIGHT':
-        return 'flex-end';
-      default:
-        return 'center';
-    }
-  }};
-  margin: ${(props) => {
-    switch (props.alignment) {
-      case 'CENTER':
-        return 'auto';
-      case 'TOP':
-        return '0 auto auto auto';
-      case 'BOTTOM':
-        return 'auto auto 0 auto';
-      case 'LEFT':
-        return 'auto auto auto 0';
-      case 'RIGHT':
-        return 'auto 0 auto auto';
-      default:
-        return '0 0';
-    }
-  }};
+  align-self: center;
   & > input {
     pointer-events: none;
     &::placeholder {
@@ -168,7 +143,6 @@ const block = {
   imgUrl: 'https://icons.getbootstrap.com/assets/icons/search.svg',
   category: 'Controls',
   defaultData: {
-    sizeModifier: 'FULLWIDTH',
     placeholder: 'Введите имя',
     placeholderColor: '#7F7F7F',
     imageUrl: 'https://icons.getbootstrap.com/assets/icons/search.svg',
@@ -181,8 +155,6 @@ const block = {
     },
   },
   config: {
-    sizeModifier,
-    alignment: alignmentConfig.both,
     placeholder,
     imageUrl,
     placeholderColor,

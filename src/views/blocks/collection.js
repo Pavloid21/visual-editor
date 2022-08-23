@@ -10,42 +10,16 @@ import {onSortMove} from 'utils/hooks';
 import {observer} from 'utils/observer';
 import {ItemTypes} from 'constants/actionTypes';
 import {
-  alignmentConfig,
   backgroundColor,
   padding,
   size,
-  sizeModifier, spacing,
+  spacing,
 } from 'views/configs';
 import collection from 'assets/collection.svg';
 import {pushBlockInside} from 'store/layout.slice';
 
 const Collection = styled.div`
-  align-self: ${(props) => {
-    switch (props.alignment) {
-      case 'LEFT':
-        return 'flex-start';
-      case 'RIGHT':
-        return 'flex-end';
-      default:
-        return 'center';
-    }
-  }};
-  margin: ${(props) => {
-    switch (props.alignment) {
-      case 'CENTER':
-        return 'auto';
-      case 'TOP':
-        return '0 auto auto auto';
-      case 'BOTTOM':
-        return 'auto auto 0 auto';
-      case 'LEFT':
-        return 'auto auto auto 0';
-      case 'RIGHT':
-        return 'auto 0 auto auto';
-      default:
-        return '0 0';
-    }
-  }};
+  align-self: center;
   width: ${(props) => {
     if (props.size?.width !== undefined) {
       return props.size.width + 'px';
@@ -184,8 +158,6 @@ const block = {
     },
   },
   config: {
-    sizeModifier,
-    alignment: alignmentConfig.both,
     backgroundColor,
     spacing,
     size,
