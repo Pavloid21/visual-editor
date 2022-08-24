@@ -312,10 +312,6 @@ const layoutSlice = createSlice({
             element.interactive[action.payload.key!] = action.payload.value;
           }
         }
-        return {
-          ...state,
-          blocks: [...newBlocks],
-        };
       },
       deleteBlock: (state, action: PayloadAction<string>) => {
         state.blocks = removeFromList(state.blocks, action.payload);

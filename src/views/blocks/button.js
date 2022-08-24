@@ -127,7 +127,7 @@ const block = {
   previewImageUrl: button,
   category: 'Controls',
   defaultInteractiveOptions: {
-    action: {url: 'nextScreenName', fields: ['field1', 'field2'], target: ''},
+    action: {url: '', target: ''},
   },
   defaultData: {
     text: 'Войти',
@@ -167,16 +167,6 @@ const block = {
       radius: 8,
     },
   },
-  interactive: {
-    action: {
-      url: {
-        type: 'string',
-        name: 'Action URL',
-      },
-      target: {type: 'string', name: 'Target'},
-      fields: {type: 'array', name: 'Fields set'},
-    },
-  },
   config: {
     text,
     fontSize,
@@ -198,6 +188,24 @@ const block = {
     shadow: shadowConfigBuilder()
       .withRadius
       .done()
+  },
+  interactive: {
+    action: {
+      url: {
+        type: 'select',
+        name: 'Action URL',
+        action_types: 'actions,data'
+      },
+      target: {type: 'string', name: 'Target'},
+      method: {
+        type: 'select',
+        name: 'Method',
+        options: [
+          {label: 'Get', value: 'get'},
+          {label: 'Post', value: 'post'},
+        ],
+      },
+    },
   },
 };
 

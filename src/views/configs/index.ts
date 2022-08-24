@@ -121,11 +121,18 @@ export const corners = {
 export const interactive = {
   action: {
     url: {
-      type: 'string',
-        name: 'Action URL',
+      type: 'select',
+      name: 'Action URL',
     },
-    target: {type: 'string', name: 'Target'},
-    fields: {type: 'array', name: 'Fields set'},
+    target: {type: 'select', name: 'Target', options: []},
+    method: {
+      type: 'select',
+      name: 'Method',
+      options: [
+        {label: 'Get', value: 'get'},
+        {label: 'Post', value: 'post'},
+      ],
+    },
   },
 };
 export const elevation = {type: 'number', name: 'Elevation'};

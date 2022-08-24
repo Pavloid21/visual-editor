@@ -87,7 +87,7 @@ const block = {
         screenName: 'Auth',
         iconUrl: 'https://icons.getbootstrap.com/assets/icons/box-arrow-in-right.svg',
         action: {
-          url: 'screenAuth',
+          url: '',
           target: '',
         },
       },
@@ -95,7 +95,7 @@ const block = {
         screenName: 'Contacts',
         iconUrl: 'https://icons.getbootstrap.com/assets/icons/person-lines-fill.svg',
         action: {
-          url: 'screenContacts',
+          url: '',
           target: '',
         },
       },
@@ -103,7 +103,7 @@ const block = {
         screenName: 'Settings',
         iconUrl: 'https://icons.getbootstrap.com/assets/icons/gear.svg',
         action: {
-          url: 'screenSettings',
+          url: '',
           target: '',
         },
       },
@@ -122,10 +122,22 @@ const block = {
     navigationItems: [
       {
         screenName: {type: 'string', name: 'Screen name'},
-        iconUrl: {type: 'string', name: 'Icon URL'},
+        iconUrl: {type: 'string', name: 'Image'},
         action: {
-          url: {type: 'string', name: 'URL'},
+          url: {
+            type: 'select',
+            name: 'Action URL',
+            action_types: 'data'
+          },
           target: {type: 'string', name: 'Target'},
+          method: {
+            type: 'select',
+            name: 'Method',
+            options: [
+              {label: 'Get', value: 'get'},
+              {label: 'Post', value: 'post'},
+            ],
+          },
         },
       },
     ],

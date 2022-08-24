@@ -8,10 +8,12 @@ import {Division, Select} from './Inspector.styled';
 import {findInTree} from 'utils';
 import {
   addBottomBarItem,
-  addTopAppBarItem, changeBlockData,
+  addTopAppBarItem,
+  changeBlockData,
   changeUnits,
   removeBottomBarItem,
-  removeTopAppBarItem, switchElementType,
+  removeTopAppBarItem,
+  switchElementType,
 } from 'store/layout.slice';
 import type {TInspector} from './types';
 import type {RootStore} from 'store/types';
@@ -21,24 +23,28 @@ const Inspector: React.FC<TInspector> = ({display}) => {
   const layout = useSelector((state: RootStore) => state.layout);
   const handleChangeBlockData = useCallback(
     (blockUuid: string, key: string, value: any, parentKey: string | undefined) => {
-      dispatch(changeBlockData({
-        blockUuid,
-        key,
-        parentKey,
-        value,
-      }));
+      dispatch(
+        changeBlockData({
+          blockUuid,
+          key,
+          parentKey,
+          value,
+        })
+      );
     },
     [dispatch]
   );
 
   const handleChangeUnits = useCallback(
     (blockUuid: string, key: string, value: string | undefined, parentKey: string) => {
-      dispatch(changeUnits({
-        blockUuid,
-        key,
-        parentKey,
-        value,
-      }));
+      dispatch(
+        changeUnits({
+          blockUuid,
+          key,
+          parentKey,
+          value,
+        })
+      );
     },
     [dispatch]
   );
@@ -124,9 +130,10 @@ const Inspector: React.FC<TInspector> = ({display}) => {
           return (
             <div className="form-group" key={`${parentKey}_${index}`}>
               <Select
+                async={config[el].action_types}
                 label={config[el].name}
                 onChange={(value) => handleChangeBlockData(blockUuid, el, value, parentKey)}
-                options={config[el].options}
+                options={config[el].options || []}
                 value={endpoint ? endpoint[el] : null}
                 clearable
               />

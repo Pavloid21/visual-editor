@@ -42,8 +42,6 @@ export const screenTemplates = [
 
         action: {
           url: 'nextScreenName',
-          fields: ['field1', 'field2'],
-
           target: '',
         },
 
@@ -410,8 +408,6 @@ export const screenTemplates = [
 
                   action: {
                     url: 'nextScreenName',
-                    fields: ['field1', 'field2'],
-
                     target: '',
                   },
 
@@ -459,8 +455,6 @@ export const screenTemplates = [
 
                   action: {
                     url: 'nextScreenName',
-                    fields: ['field1', 'field2'],
-
                     target: '',
                   },
 
@@ -547,8 +541,6 @@ export const screenTemplates = [
 
                   action: {
                     url: 'nextScreenName',
-                    fields: ['field1', 'field2'],
-
                     target: '',
                   },
 
@@ -596,8 +588,6 @@ export const screenTemplates = [
 
                   action: {
                     url: 'nextScreenName',
-                    fields: ['field1', 'field2'],
-
                     target: '',
                   },
 
@@ -630,8 +620,6 @@ export const screenTemplates = [
 
         action: {
           url: 'nextScreenName',
-          fields: ['field1', 'field2'],
-
           target: '',
         },
 
@@ -1068,8 +1056,6 @@ export const screenTemplates = [
 
                       action: {
                         url: 'nextScreenName',
-                        fields: ['field1', 'field2'],
-
                         target: '',
                       },
                     },
@@ -1102,8 +1088,6 @@ export const screenTemplates = [
 
         action: {
           url: 'nextScreenName',
-          fields: ['field1', 'field2'],
-
           target: '',
         },
 
@@ -1224,8 +1208,6 @@ export const screenTemplates = [
 
         action: {
           url: 'nextScreenName',
-          fields: ['field1', 'field2'],
-
           target: '',
         },
 

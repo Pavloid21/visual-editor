@@ -12,7 +12,7 @@ import {hexToRgb} from 'constants/utils';
 import {ItemTypes} from 'constants/actionTypes';
 import card from 'assets/card.svg';
 import {
-  backgroundColor, corners, elevation, interactive,
+  backgroundColor, corners, elevation,
   padding, shadowConfigBuilder,
   shapeConfigBuilder,
 } from 'views/configs';
@@ -123,7 +123,7 @@ const block = {
   previewImageUrl: card,
   category: 'Element',
   defaultInteractiveOptions: {
-    action: {url: 'nextScreenName', fields: ['field1', 'field2'], target: ''},
+    action: {url: '', target: ''},
   },
   defaultData: {
     elevation: 3,
@@ -179,7 +179,24 @@ const block = {
       },
     },
   },
-  interactive,
+  interactive: {
+    action: {
+      url: {
+        type: 'select',
+        name: 'Action URL',
+        action_types: 'actions,data'
+      },
+      target: {type: 'string', name: 'Target'},
+      method: {
+        type: 'select',
+        name: 'Method',
+        options: [
+          {label: 'Get', value: 'get'},
+          {label: 'Post', value: 'post'},
+        ],
+      },
+    },
+  },
 };
 
 export default block;

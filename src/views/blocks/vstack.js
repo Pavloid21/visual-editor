@@ -199,6 +199,9 @@ const block = {
   description: 'A view that arranges its children.',
   previewImageUrl: vstack,
   category: 'Container',
+  defaultInteractiveOptions: {
+    action: {url: '',  target: ''},
+  },
   complex: [
     {label: 'Vertical', value: 'VSTACK'},
     {label: 'Horizontal', value: 'HSTACK'},
@@ -245,6 +248,24 @@ const block = {
     padding,
     shadow: shadowConfigBuilder().withRadius.done(),
     corners,
+  },
+  interactive: {
+    action: {
+      url: {
+        type: 'select',
+        name: 'Action URL',
+        action_types: 'actions,data'
+      },
+      target: {type: 'string', name: 'Target'},
+      method: {
+        type: 'select',
+        name: 'Method',
+        options: [
+          {label: 'Get', value: 'get'},
+          {label: 'Post', value: 'post'},
+        ],
+      },
+    },
   },
 };
 

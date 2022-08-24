@@ -107,10 +107,25 @@ const block = {
     isActive,
   },
   defaultInteractiveOptions: {
-    field: 'field_name',
+    action: {url: '', target: ''},
   },
   interactive: {
-    field: {type: 'string', name: 'Field name'},
+    action: {
+      url: {
+        type: 'select',
+        name: 'Action URL',
+        action_types: 'actions,data'
+      },
+      target: {type: 'string', name: 'Target'},
+      method: {
+        type: 'select',
+        name: 'Method',
+        options: [
+          {label: 'Get', value: 'get'},
+          {label: 'Post', value: 'post'},
+        ],
+      },
+    },
   },
 };
 
