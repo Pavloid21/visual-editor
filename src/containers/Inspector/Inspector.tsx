@@ -14,6 +14,7 @@ import {
   removeBottomBarItem,
   removeTopAppBarItem,
   switchElementType,
+  removeProperty,
 } from 'store/layout.slice';
 import type {TInspector} from './types';
 import type {RootStore} from 'store/types';
@@ -34,6 +35,16 @@ const Inspector: React.FC<TInspector> = ({display}) => {
     },
     [dispatch]
   );
+
+  const removeProp = useCallback((blockUuid: string, key: string, parentKey: string | undefined) => {
+    dispatch(
+      removeProperty({
+        blockUuid,
+        key,
+        parentKey,
+      })
+    );
+  }, [dispatch]);
 
   const handleChangeUnits = useCallback(
     (blockUuid: string, key: string, value: string | undefined, parentKey: string) => {
@@ -87,6 +98,27 @@ const Inspector: React.FC<TInspector> = ({display}) => {
             </div>
           );
         case 'number':
+          if (config[el].relations) {
+            return Object.keys(config[el].relations).map((keyRelation) => {
+              if (config[el].relations[keyRelation].includes(endpoint[keyRelation])) {
+                return (
+                  <div className="form-group" key={`${parentKey}_${index}`}>
+                    <Input
+                      $isWide
+                      $clearable={false}
+                      label={config[el].name}
+                      type="number"
+                      placeholder={config[el].name}
+                      value={endpoint ? endpoint[el] : null}
+                      onChange={(e: any) => handleChangeBlockData(blockUuid, el, +e.target.value, parentKey)}
+                    />
+                  </div>
+                );
+              } else if (endpoint[el] !== undefined) {
+                removeProp(blockUuid, el, parentKey);
+              }
+            });
+          }
           return (
             <div className="form-group" key={`${parentKey}_${index}`}>
               <Input

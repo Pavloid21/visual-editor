@@ -14,6 +14,8 @@ import {
   padding,
   size,
   spacing,
+  shapeConfigBuilder,
+  metricStyle,
 } from 'views/configs';
 import collection from 'assets/collection.svg';
 import {pushBlockInside} from 'store/layout.slice';
@@ -21,21 +23,21 @@ import {pushBlockInside} from 'store/layout.slice';
 const Collection = styled.div`
   align-self: center;
   width: ${(props) => {
-    if (props.size?.width !== undefined) {
+    if (props.size?.width !== undefined && props.size?.width !== 0) {
       return props.size.width + 'px';
-    } else if (props.size?.widthInPercent !== undefined) {
+  } else if (props.size?.widthInPercent !== undefined && props.size?.widthInPercent !== 0) {
       return props.size.widthInPercent + '%';
-    }
+  }
     return '100%';
-  }};
+}};
   height: ${(props) => {
-    if (props.size?.height !== undefined) {
+    if (props.size?.height !== undefined && props.size?.height !== 0) {
       return props.size.height + 'px';
-    } else if (props.size?.heightInPercent !== undefined) {
+  } else if (props.size?.heightInPercent !== undefined && props.size?.heightInPercent !== 0) {
       return props.size.heightInPercent + '%';
-    }
+  }
     return 'auto';
-  }};
+}};
   background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
   display: flex;
   padding-top: ${(props) => props.padding?.top}px;
@@ -44,12 +46,29 @@ const Collection = styled.div`
   padding-right: ${(props) => props.padding?.right}px;
   flex-direction: column;
   box-sizing: border-box;
+  ${(props) => {
+    if (props.shape?.type === 'ALLCORNERSROUND') {
+      return `border-radius: ${props.shape?.radius || 0}px;`;
+  } else if (props.shape?.type === 'TOPCORNERSROUND') {
+      return `border-top-left-radius: ${props.shape?.radius || 0}px; border-top-right-radius: ${props.shape?.radius || 0}px;`;
+  }
+}}
+  ${(props) => {
+    if (props.collectionUiConfig?.scrollDirection === 'vertical') {
+      return 'overflow-y: scroll;';
+  }
+    if (props.collectionUiConfig?.scrollDirection === 'horizontal') {
+      return 'overflow-x: scroll;';
+  }
+}}
   & > div {
     display: grid;
-    grid-template-columns: repeat(${(props) => props.collectionUiConfig?.itemsInHorisontal}, 1fr);
-    grid-auto-rows: ${(props) => props.collectionUiConfig?.pointHeight}px;
+    grid-template-columns: repeat(${(props) => props.collectionUiConfig?.itemsInHorisontal}, ${(props) => +props.collectionUiConfig?.pointWidth > 0 ? props.collectionUiConfig?.pointWidth + 'px' : '1fr'});
+    grid-template-rows: repeat(${(props) => props.collectionUiConfig?.itemsInVertical}, ${(props) => +props.collectionUiConfig?.pointHeight > 0 ? +props.collectionUiConfig?.pointHeight + 'px' : '1fr'});
+    overflow: hidden;
     grid-gap: ${(props) => props.spacing}px;
-  }
+    background-color: ${(props) => props.collectionUiConfig?.cellBackgroundColor || 'transparent'};
+}
 `;
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItem, settingsUI, ...props}) => {
@@ -76,25 +95,25 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
         dispatch(pushBlockInside({
           blockId: item.id,
           uuid,
-        }));
-      }
+      }));
+    }
       return {
         uuid,
         target: target.targetId,
-      };
-    },
+    };
+  },
     collect: (monitor) => ({
       isOver: monitor.isOver({shallow: true}),
       canDrop: monitor.canDrop(),
       target: monitor,
-    }),
-  }));
+  }),
+}));
 
   const isActive = canDrop && isOver;
   let backgroundColor = settingsUI.backgroundColor;
   if (isActive) {
     backgroundColor = '#f1f8ff';
-  }
+}
 
   const onSortEnd = ({oldIndex, newIndex, nodes}) => {
     const newOrder = arrayMoveImmutable(nodes, oldIndex, newIndex).map((item) => item.node.getAttribute('id'));
@@ -103,8 +122,8 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
       newOrder,
       parentID: nodes[0].node.parentNode.getAttribute('id'),
       event: 'sorted',
-    });
-  };
+  });
+};
 
   return (
     <SortableContainer
@@ -129,45 +148,73 @@ const block = {
   previewImageUrl: collection,
   category: 'Container',
   defaultInteractiveOptions: {
-    dataSource: '',
+    dataSource: {
+      url: '',
+      pageSize: 5,
+      startPage: 1
   },
+},
   defaultData: {
     backgroundColor: '#C6C6C6',
     spacing: 16,
     size: {
       height: 300,
       width: '',
-    },
+  },
     padding: {
       left: 16,
       top: 16,
       right: 16,
       bottom: 16,
-    },
+  },
     collectionUiConfig: {
       metricStyle: 'pointsAndItemsIn',
       pointHeight: 121,
       itemsInHorisontal: 2,
-    },
+      itemsInVertical: 1,
+      scrollDirection: 'vertical',
   },
+},
   listItem: null,
   interactive: {
     dataSource: {
-      type: 'string',
-      name: 'Data Source',
+      url: {
+        type: 'string',
+        name: 'URL',
+    },
+      pageSize: {
+        type: 'number',
+        name: 'Page size',
+    },
+      startPage: {
+        type: 'number',
+        name: 'Start page',
     },
   },
+},
   config: {
     backgroundColor,
     spacing,
     size,
     padding,
+    shape: shapeConfigBuilder().withRadius.withAllCornersRound.withTopCornersRound.done(),
     collectionUiConfig: {
-      metricStyle: {type: 'string', name: 'Metric style'},
-      pointHeight: {type: 'number', name: 'Point height'},
-      itemsInHorisontal: {type: 'number', name: 'Items in horizontal'},
+      cellBackgroundColor: {type: 'color', name: 'Cell background color'},
+      metricStyle,
+      scrollDirection: {
+        type: 'select', name: 'Scroll direction', options: [
+          {label: 'Vertical', value: 'vertical'},
+          {label: 'Horizontal', value: 'horizontal'}
+        ]
     },
+      pointHeight: {type: 'number', name: 'Point height', relations: {metricStyle: ['pointsAndItemsIn', 'points']}},
+      pointWidth: {type: 'number', name: 'Point width', relations: {metricStyle: ['pointsAndItemsIn', 'points']}},
+      itemsInHorisontal: {type: 'number', name: 'Items in horizontal', relations: {metricStyle: ['pointsAndItemsIn', 'itemsInAndProportional', 'itemsIn']}},
+      itemsInVertical: {type: 'number', name: 'Items in vertical', relations: {metricStyle: ['pointsAndItemsIn', 'itemsInAndProportional', 'itemsIn']}},
+      widthToHeight: {type: 'number', name: 'Width to height', relations: {metricStyle: ['itemsInAndProportional']}},
+      heightToWidth: {type: 'number', name: 'Height to width', relations: {metricStyle: ['itemsInAndProportional']}},
   },
+},
 };
 
 export default block;

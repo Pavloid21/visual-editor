@@ -135,6 +135,51 @@ const layoutSlice = createSlice({
       abar.settingsUI.topAppBarItems = nextItems;
       state.topAppBar = {...abar};
     },
+    removeProperty: (state, action: PayloadAction<any>) => {
+      const newBlocks = JSON.parse(JSON.stringify(state.blocks));
+      const element: BlockItem =
+        findInTree(newBlocks, action.payload.blockUuid!) ||
+        (action.payload.blockUuid === state.bottomBar?.uuid
+          ? {
+              ...state.bottomBar,
+            }
+          : {...state.topAppBar});
+      if (action.payload.parentKey && Array.isArray(action.payload.parentKey)) {
+        delete element.settingsUI[action.payload.parentKey[1]][action.payload.parentKey[0]][action.payload.key!];
+      } else if (action.payload.parentKey) {
+        const findDataBlock = (data: any, parentKey: string, key: string) => {
+          let ref: any = null;
+          Object.keys(data).forEach((item) => {
+            if (item === parentKey) {
+              ref = data[item];
+            } else if (typeof data[item] === 'object' && !ref) {
+              ref = findDataBlock(data[item], parentKey, key);
+            }
+          });
+          return ref;
+        };
+        const valueKeeper = findDataBlock(
+          {settingsUI: element.settingsUI, interactive: element.interactive},
+          action.payload.parentKey,
+          action.payload.key!
+        );
+        if (valueKeeper) {
+          delete valueKeeper[action.payload.key!];
+        } else {
+          element.settingsUI[action.payload.parentKey] = {[action.payload.key!]: action.payload.value};
+        }
+      } else {
+        if (
+          element.settingsUI[action.payload.key!] !== undefined ||
+          blocks[element.blockId].config[action.payload.key!]
+        ) {
+          delete element.settingsUI[action.payload.key!];
+        } else if (element.interactive) {
+          delete element.interactive[action.payload.key!];
+        }
+      }
+      state.blocks = [...newBlocks];
+    },
     removeBottomBarItem: (state, action: PayloadAction<number>) => {
       const newBarItems = [...state.bottomBar.settingsUI.navigationItems];
       newBarItems.splice(action.payload, 1);
@@ -341,7 +386,7 @@ const layoutSlice = createSlice({
       if (action.payload.delete) {
         nextScreenState.deletedScreens = Array.from(new Set([...state.deletedScreens, action.payload.screen]));
         nextScreenState.editedScreens = nextScreenState.editedScreens.filter(
-          (screen) => screen !== action.payload.screen
+          (screen: any) => screen !== action.payload.screen
         );
       } else {
         nextScreenState = {
@@ -385,7 +430,7 @@ const layoutSlice = createSlice({
       if (action.snippet?.screenID) {
         const next = [...state.snippets];
         let finded = false;
-        state.snippets.forEach((item, index) => {
+        state.snippets.forEach((item: {screenID: string}, index: any) => {
           if (item.screenID === action.snippet.screenID) {
             next[index] = {
               ...next[index],
@@ -429,5 +474,6 @@ export const {
   cloneBlock,
   setSnippet,
   switchElementType,
+  removeProperty,
 } = layoutSlice.actions;
 export default layoutSlice.reducer;

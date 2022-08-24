@@ -11,7 +11,7 @@ export const textAlignment = {
     {label: 'Center', value: AlignmentValues.Center},
     {label: 'Left', value: AlignmentValues.Left},
     {label: 'Right', value: AlignmentValues.Right},
-  ]
+  ],
 };
 
 export const padding = {
@@ -135,6 +135,16 @@ export const interactive = {
     },
   },
 };
+export const metricStyle = {
+  type: 'select',
+  name: 'Metric style',
+  options: [
+    {label: 'Points and items in', value: 'pointsAndItemsIn'},
+    {label: 'Points', value: 'points'},
+    {label: 'Items in and proportional', value: 'itemsInAndProportional'},
+    {label: 'Items in', value: 'itemsIn'},
+  ],
+};
 export const elevation = {type: 'number', name: 'Elevation'};
 export const placeholder = {type: 'string', name: 'Placeholder'};
 export const placeholderColor = {type: 'color', name: 'Placeholder color'};
@@ -145,8 +155,8 @@ export const action = {
 };
 export const scroll = {
   type: 'select',
-    name: 'Scroll',
-    options: [
+  name: 'Scroll',
+  options: [
     {label: 'Enable scroll', value: true},
     {label: 'Disable scroll', value: false},
   ],

@@ -60,7 +60,7 @@ const VStack = styled.div`
     } else if (!isNil(props.size?.widthInPercent)) {
       return props.size.widthInPercent + '%';
     } else {
-      return 'fit-content';
+      return '100%';
     }
   }};
   height: ${(props) => {
@@ -69,7 +69,7 @@ const VStack = styled.div`
     } else if (!isNil(props.size?.heightInPercent)) {
       return props.size.heightInPercent + '%';
     }
-    return 'fit-content';
+    return '100%';
   }};
   background-color: ${(props) => props.backgroundColor};
   display: flex;
@@ -116,20 +116,6 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, 
       {...settingsUI}
       {...props}
       sizeModifier='FULLSIZE'
-      style={{
-        alignItems: (() => {
-          switch (props.alignment) {
-            case 'LEFT':
-              return 'self-start';
-            case 'RIGHT':
-              return 'self-end';
-            case 'FILL':
-              return 'stretch';
-            default:
-              return 'center';
-          }
-        })(),
-      }}
     >
       <VStack {...settingsUI} {...props} ref={drop} backgroundColor={backgroundColor} className="draggable">
         {listItems && renderHandlebars(listItems, 'document2').components}
