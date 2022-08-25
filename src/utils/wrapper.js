@@ -10,11 +10,23 @@ const Wrapper = styled.div`
     if (['FULLWIDTH', 'FULLSIZE'].includes(props.sizeModifier)) {
       return '100%';
     }
+    if (props?.size?.width) {
+      return props.size.width+'px';
+    }
+    if (props?.size?.widthInPercent) {
+      return props.size.widthInPercent+'%';
+    }
     return 'fit-content';
   }};
   height: ${(props) => {
     if (['FULLHEIGHT', 'FULLSIZE'].includes(props.sizeModifier)) {
       return '100%';
+    }
+    if (props?.size?.height) {
+      return props.size.height+'px';
+    }
+    if (props?.size?.heightInPercent) {
+      return props.size.heightInPercent+'%';
     }
     return 'fit-content';
   }};
