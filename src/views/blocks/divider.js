@@ -2,11 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import Wrapper from 'utils/wrapper';
 import divider from 'assets/divider.svg';
-import {backgroundColor} from 'views/configs';
+import {backgroundColor, size} from 'views/configs';
 
 const HR = styled.hr`
   align-self: center;
   background-color: ${(props) => props.backgroundColor};
+  height: 100%;
   width: 100%;
 `;
 
@@ -26,10 +27,15 @@ const block = {
   previewImageUrl: divider,
   category: 'Element',
   defaultData: {
-    backgroundColor: '#000000',
+    size: {
+      height: 3,
+      widthInPercent: 100,
+    },
+    backgroundColor: '#000000'
   },
   config: {
-    backgroundColor,
+    size,
+    backgroundColor
   },
 };
 
