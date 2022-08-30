@@ -16,6 +16,7 @@ import {
 import type {TInspector} from './types';
 import type {RootStore} from 'store/types';
 import {blockStateUnsafeSelector} from 'store/selectors';
+import {getUnitOptionByDevice} from 'utils/units';
 
 const Inspector: React.FC<TInspector> = ({display}) => {
   const dispatch = useDispatch();
@@ -115,10 +116,11 @@ const Inspector: React.FC<TInspector> = ({display}) => {
                 )
               }
               select={{
-                onChange: (value) =>
-                  handleChangeUnits(blockUuid, endpoint[el] !== undefined ? el : el + 'InPercent', value, parentKey),
+                onChange: (value) => {
+                  handleChangeUnits(blockUuid, el, value, parentKey);
+                },
                 options: config[el].options,
-                value: endpoint && endpoint[el] === undefined ? '%' : 'px',
+                value: endpoint && endpoint[el] === undefined ? '%' : getUnitOptionByDevice(blockState.deviceInfo.device).value,
               }}
             />
           );

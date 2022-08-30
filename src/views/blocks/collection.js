@@ -12,12 +12,16 @@ import {ItemTypes} from 'constants/actionTypes';
 import {
   alignmentConfig,
   backgroundColor,
+  getSizeConfig,
   padding,
-  size,
-  sizeModifier, spacing,
+  sizeModifier,
+  spacing,
 } from 'views/configs';
 import collection from 'assets/collection.svg';
 import {pushBlockInside} from 'store/layout.slice';
+import {blockStateSafeSelector} from 'store/selectors';
+import store from 'store';
+import {getSizeStyle} from 'views/utils/styles/size';
 
 const Collection = styled.div`
   align-self: ${(props) => {
@@ -46,22 +50,8 @@ const Collection = styled.div`
         return '0 0';
     }
   }};
-  width: ${(props) => {
-    if (props.size?.width !== undefined) {
-      return props.size.width + 'px';
-    } else if (props.size?.widthInPercent !== undefined) {
-      return props.size.widthInPercent + '%';
-    }
-    return '100%';
-  }};
-  height: ${(props) => {
-    if (props.size?.height !== undefined) {
-      return props.size.height + 'px';
-    } else if (props.size?.heightInPercent !== undefined) {
-      return props.size.heightInPercent + '%';
-    }
-    return 'auto';
-  }};
+  width: ${(props) => getSizeStyle('width', props)};
+  height: ${(props) => getSizeStyle('height', props)};
   background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
   display: flex;
   padding-top: ${(props) => props.padding?.top}px;
@@ -85,7 +75,13 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItem, s
       {...settingsUI}
       {...props}
     >
-      <Collection {...settingsUI} {...props} ref={drop} backgroundColor={backgroundColor} className="draggable">
+      <Collection
+        {...settingsUI}
+        {...props}
+        ref={drop}
+        backgroundColor={backgroundColor}
+        className="draggable"
+      >
         <div>{listItem && renderHandlebars([listItem], 'document2').components}</div>
       </Collection>
     </Wrapper>
@@ -146,56 +142,60 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
   );
 };
 
-const block = () => ({
-  Component,
-  name: 'COLLECTION',
-  title: 'Collection',
-  description:
-    'A container that presents rows of data arranged in a single column, optionally providing the ability to select one or more members.',
-  previewImageUrl: collection,
-  category: 'Container',
-  defaultInteractiveOptions: {
-    dataSource: '',
-  },
-  defaultData: {
-    backgroundColor: '#C6C6C6',
-    spacing: 16,
-    size: {
-      height: 300,
-      width: '',
+const block = (state) => {
+  const blockState = state || blockStateSafeSelector(store.getState());
+
+  return ({
+    Component,
+    name: 'COLLECTION',
+    title: 'Collection',
+    description:
+      'A container that presents rows of data arranged in a single column, optionally providing the ability to select one or more members.',
+    previewImageUrl: collection,
+    category: 'Container',
+    defaultInteractiveOptions: {
+      dataSource: '',
     },
-    padding: {
-      left: 16,
-      top: 16,
-      right: 16,
-      bottom: 16,
+    defaultData: {
+      backgroundColor: '#C6C6C6',
+      spacing: 16,
+      size: {
+        height: 300,
+        width: '',
+      },
+      padding: {
+        left: 16,
+        top: 16,
+        right: 16,
+        bottom: 16,
+      },
+      collectionUiConfig: {
+        metricStyle: 'pointsAndItemsIn',
+        pointHeight: 121,
+        itemsInHorisontal: 2,
+      },
     },
-    collectionUiConfig: {
-      metricStyle: 'pointsAndItemsIn',
-      pointHeight: 121,
-      itemsInHorisontal: 2,
+    listItem: null,
+    interactive: {
+      dataSource: {
+        type: 'string',
+        name: 'Data Source',
+      },
     },
-  },
-  listItem: null,
-  interactive: {
-    dataSource: {
-      type: 'string',
-      name: 'Data Source',
+    config: {
+      sizeModifier,
+      alignment: alignmentConfig.both,
+      backgroundColor,
+      spacing,
+      size: getSizeConfig(blockState.deviceInfo.device),
+      padding,
+      collectionUiConfig: {
+        metricStyle: {type: 'string', name: 'Metric style'},
+        pointHeight: {type: 'number', name: 'Point height'},
+        itemsInHorisontal: {type: 'number', name: 'Items in horizontal'},
+      },
     },
-  },
-  config: {
-    sizeModifier,
-    alignment: alignmentConfig.both,
-    backgroundColor,
-    spacing,
-    size,
-    padding,
-    collectionUiConfig: {
-      metricStyle: {type: 'string', name: 'Metric style'},
-      pointHeight: {type: 'number', name: 'Point height'},
-      itemsInHorisontal: {type: 'number', name: 'Items in horizontal'},
-    },
-  },
-});
+  });
+};
 
 export default block;

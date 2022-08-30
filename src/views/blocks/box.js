@@ -15,16 +15,19 @@ import {
   backgroundColor,
   borderColor,
   borderWidth,
+  getSizeConfig,
   shadowConfigBuilder,
-  shapeConfigBuilder,
-  size
+  shapeConfigBuilder
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
+import {blockStateSafeSelector} from 'store/selectors';
+import store from 'store';
+import {getSizeStyle} from 'views/utils/styles/size';
 
 const Box = styled.div`
   border: ${(props) => `${props.borderWidth}px solid ${props.borderColor}`};
-  width: ${(props) => (props.size?.width ? props.size.width + 'px' : '100%')};
-  height: ${(props) => props.size?.height}px;
+  width: ${(props) => getSizeStyle('width', props)};
+  height: ${(props) => getSizeStyle('height', props)};
   background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
   display: flex;
   align-items: center;
@@ -39,7 +42,13 @@ const Box = styled.div`
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, settingsUI, ...props}) => {
   return (
     <Wrapper id={props.id} {...settingsUI}>
-      <Box {...settingsUI} {...props} ref={drop} backgroundColor={backgroundColor} className="draggable">
+      <Box
+        {...settingsUI}
+        {...props}
+        ref={drop}
+        backgroundColor={backgroundColor}
+        className="draggable"
+      >
         {listItems && renderHandlebars(listItems, 'document2').components}
       </Box>
     </Wrapper>
@@ -100,47 +109,51 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
   );
 };
 
-const block = () => ({
-  Component,
-  name: 'BOX',
-  title: 'Box',
-  description: 'A stylized view, with an optional label, that visually collects a logical grouping of content.',
-  previewImageUrl: box,
-  category: 'Container',
-  defaultData: {
-    borderColor: '#EFEFEF',
-    borderWidth: 1,
-    backgroundColor: '#FFFFFF',
-    size: {
-      height: 56,
-      width: 100,
-    },
-    shape: {
-      type: 'ALLCORNERSROUND',
-      radius: 4,
-    },
-    shadow: {
-      color: '#000000',
-      opacity: 0.3,
-      offsetSize: {
-        width: 0,
-        height: 0,
+const block = (state) => {
+  const blockState = state || blockStateSafeSelector(store.getState());
+
+  return ({
+    Component,
+    name: 'BOX',
+    title: 'Box',
+    description: 'A stylized view, with an optional label, that visually collects a logical grouping of content.',
+    previewImageUrl: box,
+    category: 'Container',
+    defaultData: {
+      borderColor: '#EFEFEF',
+      borderWidth: 1,
+      backgroundColor: '#FFFFFF',
+      size: {
+        height: 56,
+        width: 100,
       },
-      radius: 8,
+      shape: {
+        type: 'ALLCORNERSROUND',
+        radius: 4,
+      },
+      shadow: {
+        color: '#000000',
+        opacity: 0.3,
+        offsetSize: {
+          width: 0,
+          height: 0,
+        },
+        radius: 8,
+      },
     },
-  },
-  listItems: [],
-  config: {
-    borderColor,
-    borderWidth,
-    backgroundColor,
-    size,
-    shape: shapeConfigBuilder()
-      .withAllCornersRound
-      .withRadius
-      .done(),
-    shadow: shadowConfigBuilder().done(),
-  },
-});
+    listItems: [],
+    config: {
+      borderColor,
+      borderWidth,
+      backgroundColor,
+      size: getSizeConfig(blockState.deviceInfo.device),
+      shape: shapeConfigBuilder()
+        .withAllCornersRound
+        .withRadius
+        .done(),
+      shadow: shadowConfigBuilder().done(),
+    },
+  });
+};
 
 export default block;

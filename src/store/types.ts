@@ -94,6 +94,7 @@ export type EditorMode = {
   device: string;
   model: string;
   zoom: Zoom;
+  dpi: number;
 };
 
 export type RootStore = ReturnType<typeof store.getState>;

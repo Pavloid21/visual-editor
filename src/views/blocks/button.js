@@ -16,8 +16,9 @@ import {
   sizeModifier,
   text, textColor, getSizeConfig
 } from 'views/configs';
-import {blockStateUnsafeSelector} from 'store/selectors';
+import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
+import {getSizeStyle} from 'views/utils/styles/size';
 
 const Button = styled.div`
   position: relative;
@@ -62,21 +63,10 @@ const Button = styled.div`
   width: ${(props) => {
     if (!props.alignment) {
       return '100%';
-    } else if (props.size?.width) {
-      return props.size.width + 'px';
-    } else if (props.size?.widthInPercent !== undefined) {
-      return props.size.widthInPercent + '%';
     }
-    return 'fit-content';
+    return getSizeStyle('width', props);
   }};
-  height: ${(props) => {
-    if (props.size?.height !== undefined) {
-      return props.size.height + 'px';
-    } else if (props.size?.heightInPercent !== undefined) {
-      return props.size.heightInPercent + '%';
-    }
-    return 'auto';
-  }};
+  height: ${(props) => getSizeStyle('height', props)};
   ${(props) => {
     if (props.shadow) {
       return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${
@@ -136,9 +126,9 @@ const Button = styled.div`
 `;
 
 const Component = (props) => {
-  const {text, imageUrl, sizeModifier} = props.settingsUI;
+  const {text, imageUrl, sizeModifier, size} = props.settingsUI;
   return (
-    <Wrapper id={props.id} sizeModifier={sizeModifier}>
+    <Wrapper id={props.id} sizeModifier={sizeModifier} size={size}>
       <Button className="draggable" {...props.settingsUI} {...props}>
         <span>{text}</span>
         {imageUrl && <img src={imageUrl} />}
@@ -148,7 +138,7 @@ const Component = (props) => {
 };
 
 const block = (state) => {
-  const blockState = state || blockStateUnsafeSelector(store.getState());
+  const blockState = state || blockStateSafeSelector(store.getState());
 
   return ({
     Component,

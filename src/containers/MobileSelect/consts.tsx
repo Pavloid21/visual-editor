@@ -128,6 +128,39 @@ export const stylesByDeviceKey: Record<DeviceKeys, CSSProperties> = {
   },
 };
 
+export const optionByDeviceModelKey: Record<string, {dpi: number}> = {
+  [DeviceKeys.ANDROID_SMALL]: {
+    dpi: 120
+  },
+  [DeviceKeys.ANDROID_LARGE]: {
+    dpi: 640
+  },
+  [DeviceKeys.IPHONE_13_PRO_MAX]: {
+    dpi: 458
+  },
+  [DeviceKeys.IPHONE_13]: {
+    dpi: 460
+  },
+  [DeviceKeys.IPHONE_13_MINI]: {
+    dpi: 476
+  },
+  [DeviceKeys.IPHONE_11_PRO_MAX]: {
+    dpi: 458
+  },
+  [DeviceKeys.IPHONE_11_PRO_10]: {
+    dpi: 458
+  },
+  [DeviceKeys.IPHONE_SE]: {
+    dpi: 326
+  },
+  [DeviceKeys.IPHONE_8_PLUS]: {
+    dpi: 401
+  },
+  [DeviceKeys.IPHONE_8]: {
+    dpi: 326,
+  },
+};
+
 export const optionsByDevice: Record<Device, IOption[]> = {
   [Device.IOS]: [
     {label: 'iPhone 13 Pro Max', value: DeviceKeys.IPHONE_13_PRO_MAX},

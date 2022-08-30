@@ -1,4 +1,5 @@
 import {Device} from 'containers/MobileSelect/consts';
+import {getUnitOptionByDevice} from 'utils/units';
 
 export const size = {
   height: {
@@ -20,20 +21,19 @@ export const size = {
 };
 
 export const getSizeConfig = (device: Device) => {
-  const units = device === Device.IOS ?
-    [{label: 'Points', value: 'points'}] :
-    [{label: 'DP', value: 'dp'}];
+  const percentOption = {label: '%', value: '%'};
+  const unitOption = getUnitOptionByDevice(device);
 
   return ({
     height: {
       type: 'units',
       name: 'Height',
-      options: units,
+      options: [percentOption, unitOption],
     },
     width: {
       type: 'units',
       name: 'Width',
-      options: units,
+      options: [percentOption, unitOption],
     },
   });
 };

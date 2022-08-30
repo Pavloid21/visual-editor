@@ -15,7 +15,7 @@ const Wrapper = styled.div`
       width: 100%;
     }
     & > section:last-child {
-      width: 90px;
+      width: 125px;
     }
   }
 `;

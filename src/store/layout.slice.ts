@@ -1,5 +1,5 @@
 import {v4 as uuidv4} from 'uuid';
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createAction, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import actionTypes from 'constants/actionTypes';
 import {getData} from 'utils/prepareModel';
 import blocks from 'views/blocks';
@@ -9,13 +9,16 @@ import type {
   EditScreenNamePayloadAction,
   Layout
 } from './types';
+import {blockStateUnsafeSelector} from './selectors';
+import rootStore from 'store';
+import {getKeyByUnit} from 'utils/units';
 
-type ChangeUnitsPayloadAction = PayloadAction<{
+type ChangeUnitsPayloadAction = {
   blockUuid: string;
   key: string;
   value: string | undefined;
   parentKey?: string;
-}>;
+};
 
 type SelectScreenPayloadAction = PayloadAction<{
   delete?: boolean;
@@ -45,9 +48,9 @@ const initialState: Layout = {
 
 export const findInTree = (tree: BlockItem[], uuid: string): BlockItem | null => {
   let result: BlockItem | null = null;
-  tree.forEach((item) => {
+  for (const item of tree) {
     if (item.uuid === uuid) {
-      result = item;
+      result = {...item};
     }
     if (!result && item.listItems) {
       result = findInTree(item.listItems, uuid);
@@ -55,7 +58,7 @@ export const findInTree = (tree: BlockItem[], uuid: string): BlockItem | null =>
     if (!result && item.listItem) {
       result = findInTree([item.listItem], uuid);
     }
-  });
+  }
 
   return result;
 };
@@ -87,6 +90,195 @@ const cloneToList = (tree: any[], uuid: string) => {
   return result;
 };
 
+export const pushTopAppBar = createAction('layout/pushTopAppBar', (payload) => {
+  const blockConfig = blocks[payload](blockStateUnsafeSelector(rootStore.getState()));
+  const topAppBar = {
+    uuid: uuidv4(),
+    blockId: payload,
+    settingsUI: {
+      ...getData(blockConfig.defaultData),
+    },
+    interactive: {
+      ...getData(blockConfig.defaultInteractiveOptions),
+    },
+  };
+
+  return {
+    payload: topAppBar,
+  };
+});
+
+export const pushBottomBar = createAction('layout/pushBottomBar', (payload) => {
+  const bottomBar = {
+    uuid: uuidv4(),
+    blockId: payload,
+    settingsUI: {
+      ...getData(blocks[payload](blockStateUnsafeSelector(rootStore.getState())).defaultData),
+    },
+  };
+
+  return {
+    payload: bottomBar,
+  };
+});
+
+export const addBottomBarItem = createAction('layout/addBottomBarItem', () => {
+  const store = rootStore.getState();
+  const {layout: state} = store;
+
+  const extendedItems = [...get(state, 'bottomBar.settingsUI.navigationItems', [])];
+  extendedItems.push({
+    ...blocks.bottombar(blockStateUnsafeSelector(store)).defaultData.navigationItems[0],
+    uuid: uuidv4(),
+  });
+
+  return {
+    payload: extendedItems,
+  };
+});
+
+export const pushBlockInside = createAction('layout/pushBlockInside', (payload) => {
+  const store = rootStore.getState();
+  const {layout: state} = store;
+  const blockState = blockStateUnsafeSelector(store);
+
+  if (payload.blockId === 'bottombar' || payload.blockId === 'topappbar') {
+    return {
+      payload: null
+    };
+  }
+  const target = findInTree(state.blocks, payload.uuid)!;
+  const blockConfig = blocks[payload.blockId](blockState);
+  const list = blockConfig.listItems;
+  const obj = blockConfig.listItem;
+  const newBloc: BlockItem = {
+    uuid: uuidv4(),
+    blockId: payload.blockId,
+    settingsUI: {
+      ...getData(blockConfig.defaultData),
+    },
+  };
+  if (blockConfig.defaultInteractiveOptions) {
+    newBloc.interactive = {
+      ...getData(blockConfig.defaultInteractiveOptions),
+    };
+  }
+  if (list) {
+    newBloc.listItems = list;
+  }
+  if (obj !== undefined) {
+    newBloc.listItem = obj;
+  }
+  if (target) {
+    if (blocks[target.blockId](blockState).listItems) {
+      target.listItems = [
+        ...(target.listItems || []),
+        {
+          ...newBloc,
+        },
+      ];
+    } else if (blocks[target.blockId](blockState).listItem !== undefined) {
+      target.listItem = {
+        ...newBloc,
+      };
+    }
+  }
+
+  const nextBlocks = state.blocks.map((block) => {
+    if (target && (block.uuid === payload.uuid)) {
+      return target;
+    }
+    return block;
+  });
+
+  return {
+    payload: nextBlocks
+  };
+});
+
+export const pushBlock = createAction('layout/pushBlock', (payload) => {
+  const store = rootStore.getState();
+  const {layout: state} = store;
+
+  const blockConfig = blocks[payload](blockStateUnsafeSelector(store));
+  const listItems = blockConfig.listItems;
+  const listItem = blockConfig.listItem;
+  const newBlock: BlockItem = {
+    uuid: uuidv4(),
+    blockId: payload,
+    settingsUI: {
+      ...getData(blockConfig.defaultData),
+    },
+  };
+  if (blockConfig.defaultInteractiveOptions) {
+    newBlock.interactive = {
+      ...getData(blockConfig.defaultInteractiveOptions),
+    };
+  }
+  if (listItems) {
+    newBlock.listItems = listItems;
+  }
+  if (listItem) {
+    newBlock.listItem = listItem;
+  }
+  return {
+    payload: [
+      ...state.blocks,
+      {
+        ...newBlock,
+      },
+    ],
+  };
+});
+
+export const changeBlockData = createAction('layout/changeBlockData', (payload: ChangeUnitsPayloadAction) => {
+  const store = rootStore.getState();
+  const {layout: state} = store;
+
+  const newBlocks = JSON.parse(JSON.stringify(state.blocks));
+  const element: BlockItem =
+    findInTree(newBlocks, payload.blockUuid!) ||
+    (payload.blockUuid === state.bottomBar?.uuid
+      ? {
+        ...state.bottomBar,
+      }
+      : {...state.topAppBar});
+  if (payload.parentKey && Array.isArray(payload.parentKey)) {
+    element.settingsUI[payload.parentKey[1]][payload.parentKey[0]][payload.key!] = payload.value;
+  } else if (payload.parentKey) {
+    const findDataBlock = (data: any, parentKey: string, key: string) => {
+      let ref: any = null;
+      Object.keys(data).forEach((item) => {
+        if (item === parentKey) {
+          ref = data[item];
+        } else if (typeof data[item] === 'object' && !ref) {
+          ref = findDataBlock(data[item], parentKey, key);
+        }
+      });
+      return ref;
+    };
+    const valueKeeper = findDataBlock(
+      {settingsUI: element.settingsUI, interactive: element.interactive},
+      payload.parentKey,
+      payload.key!,
+    );
+    if (valueKeeper) {
+      valueKeeper[payload.key!] = payload.value;
+    } else {
+      element.settingsUI[payload.parentKey] = {[payload.key!]: payload.value};
+    }
+  } else {
+    if (element.settingsUI[payload.key!] !== undefined || blocks[element.blockId](blockStateUnsafeSelector(store)).config[payload.key!]) {
+      element.settingsUI[payload.key!] = payload.value;
+    } else if (element.interactive) {
+      element.interactive[payload.key!] = payload.value;
+    }
+  }
+  return {
+    payload: [...newBlocks],
+  };
+});
+
 const layoutSlice = createSlice({
     name: 'layout',
     initialState,
@@ -94,41 +286,6 @@ const layoutSlice = createSlice({
       changesSaved: (state) => {
         state.editedScreens = [];
         state.deletedScreens = [];
-      },
-      pushTopAppBar: (state, action: PayloadAction<string>) => {
-        const blockConfig = blocks[action.payload]();
-        const topAppBar = {
-          uuid: uuidv4(),
-          blockId: action.payload,
-          settingsUI: {
-            ...getData(blockConfig.defaultData),
-          },
-          interactive: {
-            ...getData(blockConfig.defaultInteractiveOptions),
-          },
-        };
-
-        return {...state, topAppBar};
-      },
-      pushBottomBar: (state, action: PayloadAction<string>) => {
-        const bottomBar = {
-          uuid: uuidv4(),
-          blockId: action.payload,
-          settingsUI: {
-            ...getData(blocks[action.payload]().defaultData),
-          },
-        };
-        return {...state, bottomBar};
-      },
-      addBottomBarItem: (state) => {
-        const extendedItems = [...get(state, 'bottomBar.settingsUI.navigationItems', [])];
-        extendedItems.push({
-          ...blocks.bottombar().defaultData.navigationItems[0],
-          uuid: uuidv4(),
-        });
-        const bar = {...state.bottomBar};
-        bar.settingsUI.navigationItems = extendedItems;
-        state.bottomBar = {...bar};
       },
       addTopAppBarItem: (state) => {
         const nextItems = [...get(state, 'topAppBar.settingsUI.topAppBarItems', [])];
@@ -154,86 +311,6 @@ const layoutSlice = createSlice({
         newAppBar.settingsUI.topAppBarItems = newAppBarItems;
         state.topAppBar = {...newAppBar};
       },
-      pushBlock: (state, action: PayloadAction<string>) => {
-        const blockConfig = blocks[action.payload]();
-        const listItems = blockConfig.listItems;
-        const listItem = blockConfig.listItem;
-        const newBlock: BlockItem = {
-          uuid: uuidv4(),
-          blockId: action.payload,
-          settingsUI: {
-            ...getData(blockConfig.defaultData),
-          },
-        };
-        if (blockConfig.defaultInteractiveOptions) {
-          newBlock.interactive = {
-            ...getData(blockConfig.defaultInteractiveOptions),
-          };
-        }
-        if (listItems) {
-          newBlock.listItems = listItems;
-        }
-        if (listItem) {
-          newBlock.listItem = listItem;
-        }
-        return {
-          ...state,
-          blocks: [
-            ...state.blocks,
-            {
-              ...newBlock,
-            },
-          ],
-        };
-      },
-      pushBlockInside: (state, action: PayloadAction<{blockId: string, uuid: string}>) => {
-        if (action.payload.blockId === 'bottombar' || action.payload.blockId === 'topappbar') {
-          return;
-        }
-        const target = findInTree(state.blocks, action.payload.uuid)!;
-        const blockConfig = blocks[action.payload.blockId]();
-        const list = blockConfig.listItems;
-        const obj = blockConfig.listItem;
-        const newBloc: BlockItem = {
-          uuid: uuidv4(),
-          blockId: action.payload.blockId,
-          settingsUI: {
-            ...getData(blockConfig.defaultData),
-          },
-        };
-        if (blockConfig.defaultInteractiveOptions) {
-          newBloc.interactive = {
-            ...getData(blockConfig.defaultInteractiveOptions),
-          };
-        }
-        if (list) {
-          newBloc.listItems = list;
-        }
-        if (obj !== undefined) {
-          newBloc.listItem = obj;
-        }
-        if (blocks[target!.blockId]().listItems) {
-          target!.listItems = [
-            ...(target!.listItems || []),
-            {
-              ...newBloc,
-            },
-          ];
-        } else if (blocks[target!.blockId]().listItem !== undefined) {
-          target!.listItem = {
-            ...newBloc,
-          };
-        }
-
-        const nextBlocks = state.blocks.map((block) => {
-          if (target && (block.uuid === action.payload.uuid)) {
-            return target;
-          }
-          return block;
-        });
-
-        state.blocks = nextBlocks;
-      },
       setSelectedBlock: (state, action: PayloadAction<string>) => {
         state.selectedBlockUuid = action.payload;
       },
@@ -250,7 +327,7 @@ const layoutSlice = createSlice({
         //   blocks: state.blocks,
         // };
       },
-      changeUnits: (state, action: ChangeUnitsPayloadAction) => {
+      changeUnits: (state, action: PayloadAction<ChangeUnitsPayloadAction>) => {
         const newBlocksSet = JSON.parse(JSON.stringify(state.blocks));
         const targetElement: BlockItem =
           findInTree(newBlocksSet, action.payload.blockUuid!) ||
@@ -264,60 +341,14 @@ const layoutSlice = createSlice({
           if (!test) {
             test = targetElement.settingsUI.shadow[action.payload.parentKey];
           }
-          const val = test[action.payload.key!];
+          const val = test[action.payload.key!] || test[action.payload.key! + 'InPercent'];
           delete test[action.payload.key!];
-          test[
-            action.payload.value! === '%' ? action.payload.key + 'InPercent' : action.payload.key!.substring(0, action.payload.key?.indexOf('InPercent'))
-            ] = val;
+          delete test[action.payload.key! + 'InPercent'];
+          test[getKeyByUnit(action.payload.value, action.payload.key)] = val;
         }
         return {
           ...state,
           blocks: [...newBlocksSet],
-        };
-      },
-      changeBlockData: (state, action: ChangeUnitsPayloadAction) => {
-        const newBlocks = JSON.parse(JSON.stringify(state.blocks));
-        const element: BlockItem =
-          findInTree(newBlocks, action.payload.blockUuid!) ||
-          (action.payload.blockUuid === state.bottomBar?.uuid
-            ? {
-              ...state.bottomBar,
-            }
-            : {...state.topAppBar});
-        if (action.payload.parentKey && Array.isArray(action.payload.parentKey)) {
-          element.settingsUI[action.payload.parentKey[1]][action.payload.parentKey[0]][action.payload.key!] = action.payload.value;
-        } else if (action.payload.parentKey) {
-          const findDataBlock = (data: any, parentKey: string, key: string) => {
-            let ref: any = null;
-            Object.keys(data).forEach((item) => {
-              if (item === parentKey) {
-                ref = data[item];
-              } else if (typeof data[item] === 'object' && !ref) {
-                ref = findDataBlock(data[item], parentKey, key);
-              }
-            });
-            return ref;
-          };
-          const valueKeeper = findDataBlock(
-            {settingsUI: element.settingsUI, interactive: element.interactive},
-            action.payload.parentKey,
-            action.payload.key!,
-          );
-          if (valueKeeper) {
-            valueKeeper[action.payload.key!] = action.payload.value;
-          } else {
-            element.settingsUI[action.payload.parentKey] = {[action.payload.key!]: action.payload.value};
-          }
-        } else {
-          if (element.settingsUI[action.payload.key!] !== undefined || blocks[element.blockId]().config[action.payload.key!]) {
-            element.settingsUI[action.payload.key!] = action.payload.value;
-          } else if (element.interactive) {
-            element.interactive[action.payload.key!] = action.payload.value;
-          }
-        }
-        return {
-          ...state,
-          blocks: [...newBlocks],
         };
       },
       deleteBlock: (state, action: PayloadAction<string>) => {
@@ -382,6 +413,26 @@ const layoutSlice = createSlice({
     },
     extraReducers: (builder) => {
       builder.addCase(actionTypes.ERASE, () => initialState);
+      builder.addCase(pushTopAppBar, (state, action) => {
+        state.topAppBar = action.payload;
+      });
+      builder.addCase(pushBottomBar, (state, action) => {
+        state.bottomBar = action.payload;
+      });
+      builder.addCase(addBottomBarItem, (state, action) => {
+        state.bottomBar.settingsUI.navigationItems = action.payload;
+      });
+      builder.addCase(pushBlockInside, (state, action) => {
+        if (action.payload) {
+          state.blocks = action.payload;
+        }
+      });
+      builder.addCase(changeBlockData, (state, action) => {
+        state.blocks = action.payload;
+      });
+      builder.addCase(pushBlock, (state, action) => {
+        state.blocks = action.payload;
+      });
       builder.addCase(actionTypes.EDIT_SCREEN_NAME, (state, action: EditScreenNamePayloadAction) => {
         if (action.snippet?.screenID) {
           const next = [...state.snippets];
@@ -413,19 +464,13 @@ const layoutSlice = createSlice({
 
 export const {
   changesSaved,
-  pushTopAppBar,
-  pushBottomBar,
-  addBottomBarItem,
   addTopAppBarItem,
   removeBottomBarItem,
   removeTopAppBarItem,
-  pushBlock,
-  pushBlockInside,
   setSelectedBlock,
   reOrderLayout,
   replaceElement,
   changeUnits,
-  changeBlockData,
   deleteBlock,
   setLayout,
   selectScreen,

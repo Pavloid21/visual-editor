@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import {sortableContainer} from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
 import {useDispatch, useSelector} from 'react-redux';
-import {isNil} from 'external/lodash';
 import Wrapper from 'utils/wrapper';
 import {onSortMove} from 'utils/hooks';
 import {observer} from 'utils/observer';
@@ -21,10 +20,13 @@ import {
   sizeModifier,
   spacing,
   padding,
-  size,
   shadowConfigBuilder,
+  getSizeConfig,
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
+import {blockStateSafeSelector} from 'store/selectors';
+import store from 'store';
+import {getSizeStyle} from 'views/utils/styles/size';
 
 const VStack = styled.div`
   align-self: ${({alignment}) => {
@@ -52,22 +54,14 @@ const VStack = styled.div`
   width: ${(props) => {
     if (['FULLWIDTH', 'FULLSIZE'].includes(props.sizeModifier)) {
       return '100%';
-    } else if (!isNil(props.size?.width)) {
-      return props.size.width + 'px';
-    } else if (!isNil(props.size?.widthInPercent)) {
-      return props.size.widthInPercent + '%';
     }
-    return 'fit-content';
+    return getSizeStyle('width', props);
   }};
   height: ${(props) => {
     if (['FULLHEIGHT', 'FULLSIZE'].includes(props.sizeModifier)) {
       return '100%';
-    } else if (!isNil(props.size?.height)) {
-      return props.size.height + 'px';
-    } else if (!isNil(props.size?.heightInPercent)) {
-      return props.size.heightInPercent + '%';
     }
-    return 'fit-content';
+    return getSizeStyle('height', props);
   }};
   background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
   display: flex;
@@ -128,7 +122,13 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, 
         })(),
       }}
     >
-      <VStack {...settingsUI} {...props} ref={drop} backgroundColor={backgroundColor} className="draggable">
+      <VStack
+        {...settingsUI}
+        {...props}
+        ref={drop}
+        backgroundColor={backgroundColor}
+        className="draggable"
+      >
         {listItems && renderHandlebars(listItems, 'document2').components}
       </VStack>
     </Wrapper>
@@ -189,58 +189,62 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
   );
 };
 
-const block = () => ({
-  Component,
-  name: 'VSTACK',
-  title: 'Container',
-  description: 'A view that arranges its children.',
-  previewImageUrl: vstack,
-  category: 'Container',
-  complex: [
-    {label: 'Vertical', value: 'VSTACK'},
-    {label: 'Horizontal', value: 'HSTACK'},
-  ],
-  defaultData: {
-    sizeModifier: 'FULLSIZE',
-    backgroundColor: '#C6C6C6',
-    distribution: '',
-    spacing: 0,
-    scroll: false,
-    padding: {
-      top: '100',
-      bottom: '100',
-      left: '10',
-      right: '10',
-    },
-    corners: {
-      topLeftRadius: 0,
-      topRightRadius: 0,
-      bottomLeftRadius: 0,
-      bottomRightRadius: 0,
-    },
-    shadow: {
-      color: '#000000',
-      opacity: 0,
-      offsetSize: {
-        width: 0,
-        height: 0,
+const block = (state) => {
+  const blockState = state || blockStateSafeSelector(store.getState());
+
+  return ({
+    Component,
+    name: 'VSTACK',
+    title: 'Container',
+    description: 'A view that arranges its children.',
+    previewImageUrl: vstack,
+    category: 'Container',
+    complex: [
+      {label: 'Vertical', value: 'VSTACK'},
+      {label: 'Horizontal', value: 'HSTACK'},
+    ],
+    defaultData: {
+      sizeModifier: 'FULLSIZE',
+      backgroundColor: '#C6C6C6',
+      distribution: '',
+      spacing: 0,
+      scroll: false,
+      padding: {
+        top: '100',
+        bottom: '100',
+        left: '10',
+        right: '10',
       },
-      radius: 8,
+      corners: {
+        topLeftRadius: 0,
+        topRightRadius: 0,
+        bottomLeftRadius: 0,
+        bottomRightRadius: 0,
+      },
+      shadow: {
+        color: '#000000',
+        opacity: 0,
+        offsetSize: {
+          width: 0,
+          height: 0,
+        },
+        radius: 8,
+      },
     },
-  },
-  listItems: [],
-  config: {
-    sizeModifier,
-    alignment: alignmentConfig.horizontally,
-    backgroundColor,
-    distribution,
-    spacing,
-    scroll,
-    size,
-    padding,
-    shadow: shadowConfigBuilder().withRadius.done(),
-    corners,
-  },
-});
+    listItems: [],
+    config: {
+      sizeModifier,
+      alignment: alignmentConfig.horizontally,
+      backgroundColor,
+      distribution,
+      spacing,
+      scroll,
+      size: getSizeConfig(blockState.deviceInfo.device),
+      padding,
+      shadow: shadowConfigBuilder().withRadius.done(),
+      corners,
+    },
+  });
+};
 
 export default block;

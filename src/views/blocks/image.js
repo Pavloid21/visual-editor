@@ -5,11 +5,14 @@ import Wrapper from 'utils/wrapper';
 import image from 'assets/image.svg';
 import {
   alignmentConfig, backgroundColor,
-  borderColor, borderWidth,
+  borderColor, borderWidth, getSizeConfig,
   imageUrl, shadowConfigBuilder,
   shapeConfigBuilder,
-  size, sizeModifier,
+  sizeModifier,
 } from 'views/configs';
+import {blockStateSafeSelector} from 'store/selectors';
+import store from 'store';
+import {getSizeStyle} from 'views/utils/styles/size';
 
 const Image = styled.img`
   display: flex;
@@ -51,22 +54,8 @@ const Image = styled.img`
     }
   }};
   z-index: 90;
-  width: ${(props) => {
-    if (props.size?.width !== undefined) {
-      return props.size.width + 'px';
-    } else if (props.size?.widthInPercent !== undefined) {
-      return props.size.widthInPercent + '%';
-    }
-    return '100%';
-  }};
-  height: ${(props) => {
-    if (props.size?.height !== undefined) {
-      return props.size.height + 'px';
-    } else if (props.size?.heightInPercent !== undefined) {
-      return props.size.heightInPercent + '%';
-    }
-    return 'auto';
-  }};
+  width: ${(props) => getSizeStyle('width', props)};
+  height: ${(props) => getSizeStyle('height', props)};
   ${(props) => {
     if (props.shape?.type === 'ALLCORNERSROUND') {
       return `border-radius: ${props.shape?.radius || 0}px;`;
@@ -77,57 +66,66 @@ const Image = styled.img`
 const Component = ({settingsUI, sizeModifier, ...props}) => {
   return (
     <Wrapper id={props.id} {...settingsUI} {...props}>
-      <Image {...settingsUI} {...props} className="draggable" src={settingsUI.imageUrl || image} />
+      <Image
+        {...settingsUI}
+        {...props}
+        className="draggable"
+        src={settingsUI.imageUrl || image}
+      />
     </Wrapper>
   );
 };
 
-const block = () => ({
-  Component,
-  name: 'IMAGE',
-  title: 'Image',
-  description: 'A view that displays an image.',
-  previewImageUrl: image,
-  category: 'Controls',
-  defaultData: {
-    sizeModifier: 'FULLWIDTH',
-    backgroundColor: '#FFFFFF',
-    borderWidth: 0,
-    borderColor: '#000000',
-    imageUrl:
-      'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-    size: {
-      height: 200,
-      width: 400,
-    },
-    shape: {
-      type: 'ALLCORNERSROUND',
-      radius: 4,
-    },
-    shadow: {
-      color: '#000000',
-      opacity: 0.3,
-      offsetSize: {
-        width: 0,
-        height: 0,
+const block = (state) => {
+  const blockState = state || blockStateSafeSelector(store.getState());
+
+  return ({
+    Component,
+    name: 'IMAGE',
+    title: 'Image',
+    description: 'A view that displays an image.',
+    previewImageUrl: image,
+    category: 'Controls',
+    defaultData: {
+      sizeModifier: 'FULLWIDTH',
+      backgroundColor: '#FFFFFF',
+      borderWidth: 0,
+      borderColor: '#000000',
+      imageUrl:
+        'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
+      size: {
+        height: 200,
+        width: 400,
       },
-      radius: 8,
+      shape: {
+        type: 'ALLCORNERSROUND',
+        radius: 4,
+      },
+      shadow: {
+        color: '#000000',
+        opacity: 0.3,
+        offsetSize: {
+          width: 0,
+          height: 0,
+        },
+        radius: 8,
+      },
     },
-  },
-  config: {
-    sizeModifier,
-    alignment: alignmentConfig.both,
-    imageUrl,
-    backgroundColor,
-    borderWidth,
-    borderColor,
-    size,
-    shape: shapeConfigBuilder()
-      .withRadius
-      .withAllCornersRound
-      .done(),
-    shadow: shadowConfigBuilder().done()
-  },
-});
+    config: {
+      sizeModifier,
+      alignment: alignmentConfig.both,
+      imageUrl,
+      backgroundColor,
+      borderWidth,
+      borderColor,
+      size: getSizeConfig(blockState.deviceInfo.device),
+      shape: shapeConfigBuilder()
+        .withRadius
+        .withAllCornersRound
+        .done(),
+      shadow: shadowConfigBuilder().done(),
+    },
+  });
+};
 
 export default block;

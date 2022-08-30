@@ -20,7 +20,8 @@ type SimpleObject = {[key: string]: any};
 export type BlocksState = {
   deviceInfo: {
     device: Device,
-    model: string
+    model: string,
+    dpi: number
   }
 }
 

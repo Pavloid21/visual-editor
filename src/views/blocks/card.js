@@ -12,12 +12,15 @@ import {hexToRgb} from 'constants/utils';
 import {ItemTypes} from 'constants/actionTypes';
 import card from 'assets/card.svg';
 import {
-  alignmentConfig, backgroundColor, corners, elevation, interactive,
+  alignmentConfig, backgroundColor, corners, elevation, getSizeConfig, interactive,
   padding, shadowConfigBuilder,
   shapeConfigBuilder,
   sizeModifier,
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
+import {blockStateSafeSelector} from 'store/selectors';
+import store from 'store';
+import {getSizeStyle} from 'views/utils/styles/size';
 
 const Card = styled.div`
   align-self: ${(props) => {
@@ -52,14 +55,7 @@ const Card = styled.div`
   padding-right: ${(props) => props.padding?.right}px;
   padding-bottom: ${(props) => props.padding?.bottom}px;
   padding-left: ${(props) => props.padding?.left}px;
-  height: ${(props) => {
-    if (props.size?.height !== undefined) {
-      return props.size.height + 'px';
-    } else if (props.size?.heightInPercent !== undefined) {
-      return props.size.heightInPercent + '%';
-    }
-    return 'fit-content';
-  }};
+  height: ${(props) => getSizeStyle('height', props)};
   overflow: hidden;
   box-shadow: ${(props) => {
     const RGB = hexToRgb(props.shadow?.color);
@@ -76,7 +72,13 @@ const Card = styled.div`
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, settingsUI, ...props}) => {
   return (
     <Wrapper id={props.id} {...settingsUI} {...props}>
-      <Card {...settingsUI} {...props} backgroundColor={backgroundColor} ref={drop} className="draggable">
+      <Card
+        {...settingsUI}
+        {...props}
+        backgroundColor={backgroundColor}
+        ref={drop}
+        className="draggable"
+      >
         {listItems && renderHandlebars(listItems, 'document2').components}
       </Card>
     </Wrapper>
@@ -138,74 +140,71 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
   );
 };
 
-const block = () => ({
-  Component,
-  name: 'CARD',
-  title: 'Card',
-  description: 'Cards contain content and actions about a single subject.',
-  previewImageUrl: card,
-  category: 'Element',
-  defaultInteractiveOptions: {
-    action: {url: 'nextScreenName', fields: ['field1', 'field2'], target: ''},
-  },
-  defaultData: {
-    elevation: 3,
-    sizeModifier: 'FULLWIDTH',
-    backgroundColor: '#C6C6C6',
-    spacing: 16,
-    padding: {
-      top: 100,
-      bottom: 100,
-      left: 10,
-      right: 10,
+const block = (state) => {
+  const blockState = state || blockStateSafeSelector(store.getState());
+
+  return ({
+    Component,
+    name: 'CARD',
+    title: 'Card',
+    description: 'Cards contain content and actions about a single subject.',
+    previewImageUrl: card,
+    category: 'Element',
+    defaultInteractiveOptions: {
+      action: {url: 'nextScreenName', fields: ['field1', 'field2'], target: ''},
     },
-    size: {
-      height: 0,
-    },
-    shape: {
-      type: 'ROUND',
-      radius: 20,
-    },
-    corners: {
-      topLeftRadius: 20,
-      topRightRadius: 20,
-      bottomLeftRadius: 0,
-      bottomRightRadius: 0,
-    },
-    shadow: {
-      color: '#000000',
-      opacity: 0.5,
-      offsetSize: {
-        width: 0,
+    defaultData: {
+      elevation: 3,
+      sizeModifier: 'FULLWIDTH',
+      backgroundColor: '#C6C6C6',
+      spacing: 16,
+      padding: {
+        top: 100,
+        bottom: 100,
+        left: 10,
+        right: 10,
+      },
+      size: {
         height: 0,
       },
-    },
-  },
-  listItems: [],
-  config: {
-    elevation,
-    sizeModifier,
-    alignment: alignmentConfig.horizontally,
-    backgroundColor,
-    shape: shapeConfigBuilder()
-      .withAllCornersRound
-      .withRadius
-      .done(),
-    corners,
-    shadow: shadowConfigBuilder().done(),
-    padding,
-    size: {
-      height: {
-        type: 'units',
-        name: 'Height',
-        options: [
-          {label: 'px', value: 'px'},
-          {label: '%', value: '%'},
-        ],
+      shape: {
+        type: 'ROUND',
+        radius: 20,
+      },
+      corners: {
+        topLeftRadius: 20,
+        topRightRadius: 20,
+        bottomLeftRadius: 0,
+        bottomRightRadius: 0,
+      },
+      shadow: {
+        color: '#000000',
+        opacity: 0.5,
+        offsetSize: {
+          width: 0,
+          height: 0,
+        },
       },
     },
-  },
-  interactive,
-});
+    listItems: [],
+    config: {
+      elevation,
+      sizeModifier,
+      alignment: alignmentConfig.horizontally,
+      backgroundColor,
+      shape: shapeConfigBuilder()
+        .withAllCornersRound
+        .withRadius
+        .done(),
+      corners,
+      shadow: shadowConfigBuilder().done(),
+      padding,
+      size: {
+        height: getSizeConfig(blockState.deviceInfo.device).height,
+      },
+    },
+    interactive,
+  });
+};
 
 export default block;

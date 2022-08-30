@@ -13,33 +13,22 @@ import {ItemTypes} from 'constants/actionTypes';
 import lists from 'assets/lists.svg';
 import {
   backgroundColor,
+  getSizeConfig,
   pageSize,
   shapeConfigBuilder,
-  size,
   sizeModifier,
-  startPage
+  startPage,
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
+import {blockStateSafeSelector} from 'store/selectors';
+import store from 'store';
+import {getSizeStyle} from 'views/utils/styles/size';
 
 const List = styled.div`
   align-self: center;
   margin: 0 0;
-  width: ${(props) => {
-      if (props.size?.width !== undefined) {
-        return props.size.width + 'px';
-      } else if (props.size?.widthInPercent !== undefined) {
-        return props.size.widthInPercent + '%';
-      }
-      return '100%';
-    }};
-    height: ${(props) => {
-      if (props.size?.height !== undefined) {
-        return props.size.height + 'px';
-      } else if (props.size?.heightInPercent !== undefined) {
-        return props.size.heightInPercent + '%';
-      }
-      return 'auto';
-    }};
+  width: ${(props) => getSizeStyle('width', props)};
+  height: ${(props) => getSizeStyle('height', props)};
   background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
   display: flex;
   padding: 4px 0;
@@ -67,7 +56,13 @@ const SortableContainer = sortableContainer(({
 
   return (
     <Wrapper id={props.id} {...settingsUI} {...props}>
-      <List {...settingsUI} {...props} ref={drop} backgroundColor={backgroundColor} className="draggable">
+      <List
+        {...settingsUI}
+        {...props}
+        ref={drop}
+        backgroundColor={backgroundColor}
+        className="draggable"
+      >
         {listItems}
       </List>
     </Wrapper>
@@ -128,40 +123,44 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
   );
 };
 
-const block = () => ({
-  Component,
-  name: 'LIST',
-  title: 'Lists',
-  description:
-    'A container that presents rows of data arranged in a single column, optionally providing the ability to select one or more members.',
-  previewImageUrl: lists,
-  category: 'Container',
-  defaultInteractiveOptions: {
-    dataSource: '',
-  },
-  defaultData: {
-    sizeModifier: 'FULLWIDTH',
-    backgroundColor: '#C6C6C6',
-    pageSize: 1,
-  },
-  listItem: null,
-  interactive: {
-    dataSource: {
-      type: 'string',
-      name: 'Data Source',
+const block = (state) => {
+  const blockState = state || blockStateSafeSelector(store.getState());
+
+  return ({
+    Component,
+    name: 'LIST',
+    title: 'Lists',
+    description:
+      'A container that presents rows of data arranged in a single column, optionally providing the ability to select one or more members.',
+    previewImageUrl: lists,
+    category: 'Container',
+    defaultInteractiveOptions: {
+      dataSource: '',
     },
-  },
-  config: {
-    sizeModifier,
-    startPage,
-    pageSize,
-    shape: shapeConfigBuilder()
-      .withRadius
-      .withAllCornersRound
-      .done(),
-    backgroundColor,
-    size,
-  },
-});
+    defaultData: {
+      sizeModifier: 'FULLWIDTH',
+      backgroundColor: '#C6C6C6',
+      pageSize: 1,
+    },
+    listItem: null,
+    interactive: {
+      dataSource: {
+        type: 'string',
+        name: 'Data Source',
+      },
+    },
+    config: {
+      sizeModifier,
+      startPage,
+      pageSize,
+      shape: shapeConfigBuilder()
+        .withRadius
+        .withAllCornersRound
+        .done(),
+      backgroundColor,
+      size: getSizeConfig(blockState.deviceInfo.device),
+    },
+  });
+};
 
 export default block;
