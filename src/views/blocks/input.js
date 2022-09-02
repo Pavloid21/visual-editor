@@ -114,9 +114,10 @@ const block = {
   complex: [
     {label: 'Text', value: 'BASICTEXTFIELD'},
     {label: 'Password', value: 'PASSWORDTEXTFIELD'},
+    {label: 'Calendar', value: 'CALENDAR_TEXT_FIELD'}
   ],
   defaultData: {
-    placeholder: 'Логин',
+    placeholder: 'Login',
     placeholderColor: '#7F7F7F',
     text: 'neo',
     textColor: '#000000',
@@ -125,7 +126,7 @@ const block = {
     borderWidth: 1,
     fontSize: 16,
     size: {
-      width: '',
+      width: 100,
       height: 48,
     },
     shadow: {

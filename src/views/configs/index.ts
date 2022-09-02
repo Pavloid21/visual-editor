@@ -161,3 +161,28 @@ export const scroll = {
     {label: 'Disable scroll', value: false},
   ],
 };
+
+export const systemCalendar = {
+  systemDialog: {
+    type: 'select',
+    name: 'System dialog',
+    options: [
+      {label: 'Wheel calendar with time', value: 'WHEEL_CALENDAR_WITH_SELECTING_TIME '},
+      {label: 'Calendar with time', value: 'CALENDAR_WITH_SELECTING_TIME '},
+      {label: 'Calendar', value: 'CALENDAR'},
+      {label: 'Wheel calendar', value: 'WHEEL_CALENDAR'},
+    ]
+  },
+  timeFormat: {
+    type: 'select',
+    name: 'Time format',
+    options: [
+      {label: 'DD.MM.YYYY', value: 'DD.MM.YYYY'},
+      {label: 'DD-MM-YYYY', value: 'DD-MM-YYYY'},
+      {label: 'DD/MM/YYYY', value: 'DD/MM/YYYY'},
+      {label: 'DD.MM.YYYY HH:mm', value: 'DD.MM.YYYY HH:mm'},
+      {label: 'DD-MM-YYYY HH:mm', value: 'DD-MM-YYYY HH:mm'},
+      {label: 'DD/MM/YYYY HH:mm', value: 'DD/MM/YYYY HH:mm'},
+    ]
+  }
+};

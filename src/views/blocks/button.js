@@ -108,9 +108,9 @@ const Button = styled.div`
 `;
 
 const Component = (props) => {
-  const {text, imageUrl, sizeModifier} = props.settingsUI;
+  const {text, imageUrl} = props.settingsUI;
   return (
-    <Wrapper id={props.id} sizeModifier={sizeModifier}>
+    <Wrapper id={props.id} {...props.settingsUI}>
       <Button className="draggable" {...props.settingsUI} {...props}>
         <span>{text}</span>
         {imageUrl && <img src={imageUrl} />}

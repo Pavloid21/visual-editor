@@ -419,8 +419,26 @@ const layoutSlice = createSlice({
     },
     switchElementType: (state, action: PayloadAction<string>) => {
       const blocksArr = [...state.blocks];
+
       const currentElement = findInTree(blocksArr, state.selectedBlockUuid);
+
       currentElement!.blockId = action.payload.toLowerCase();
+
+      const isInput = action.payload === 'CALENDAR_TEXT_FIELD' ||
+        action.payload === 'PASSWORDTEXTFIELD' ||
+        action.payload === 'BASICTEXTFIELD';
+
+      if (isInput && currentElement) {
+        currentElement!.interactive = {
+          ...currentElement!.interactive,
+          ...getData(blocks[action.payload.toLowerCase()].defaultInteractiveOptions),
+        };
+        currentElement!.settingsUI = {
+          ...currentElement!.settingsUI,
+          placeholder: blocks[action.payload.toLowerCase()].defaultData.placeholder,
+          text: blocks[action.payload.toLowerCase()].defaultData.text
+        };
+      }
       state.blocks = blocksArr;
     },
   },

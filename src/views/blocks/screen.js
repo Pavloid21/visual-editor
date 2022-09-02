@@ -12,9 +12,12 @@ import {ItemTypes} from 'constants/actionTypes';
 import screen from 'assets/screen.svg';
 import {
   backgroundColor,
-  spacing
+  spacing,
+  size,
+  padding
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
+import {pageSize, shadowConfigBuilder, shapeConfigBuilder, startPage} from '../configs/index';
 
 const VStack = styled.div`
   align-self: center;
@@ -116,16 +119,51 @@ const block = {
   description: 'A view that arranges its children.',
   previewImageUrl: screen,
   category: 'Container',
+  defaultInteractiveOptions: {
+    id: 'Screen',
+    url: ''
+  },
   defaultData: {
     backgroundColor: '#C6C6C6',
     wrapContent: '',
     spacing: 0,
+    pageSize: {
+      type: 'number',
+      name: 'Page size',
+    },
+    startPage: {
+      type: 'number',
+      name: 'Start page',
+    },
+    shadow: {
+      offsetSize: {
+        width: 0,
+        height: 0,
+      },
+      radius: 8,
+    },
+    size: {
+      heightInPercent: 100,
+      widthInPercent: 100,
+    }
   },
   listItems: [],
   config: {
     backgroundColor,
     spacing,
+    size,
+    padding,
+    startPage,
+    pageSize,
+    shape: shapeConfigBuilder().withAllCornersRound.withRadius.done(),
+    shadow: shadowConfigBuilder()
+      .withRadius
+      .done(),
   },
+  interactive: {
+    id: {type: 'string', name: 'Screen name'},
+    url: {type: 'string', name: 'URL'},
+  }
 };
 
 export default block;

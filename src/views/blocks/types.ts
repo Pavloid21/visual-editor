@@ -35,4 +35,5 @@ export interface Blocks extends SimpleObject {
   bottomsheet: Block;
   webview: Block;
   screen: Block;
+  calendar_text_field: Block;
 }

@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import Wrapper from 'utils/wrapper';
 import passwordtextfield from 'assets/passwordtextfield.svg';
 import {
@@ -6,48 +5,17 @@ import {
   placeholder,
   placeholderColor, size,
   text,
-  textAlignment, textColor,
+  textAlignment, textColor, systemCalendar
 } from 'views/configs';
+import {Container} from './passwordtextfield';
 
-export const Container = styled.div`
-  display: flex;
-  align-self: center;
-  width: ${(props) => {
-    if (props.size?.width !== undefined) {
-      return props.size.width + 'px';
-    } else if (props.size?.widthInPercent !== undefined) {
-      return props.size.widthInPercent + '%';
-    }
-    return '100%';
-  }};
-  & > input {
-    height: ${(props) => {
-      if (props.size?.height !== undefined) {
-        return props.size.height + 'px';
-      } else if (props.size?.heightInPercent !== undefined) {
-        return props.size.heightInPercent + '%';
-      }
-      return 'auto';
-    }};
-    display: block;
-    pointer-events: none;
-    color: ${(props) => props.textColor};
-    background-color: ${(props) => props.backgroundColor};
-    box-sizing: border-box;
-    text-align: ${(props) => props.textAlignment};
-    font-size: ${(props) => props.fontSize}px;
-    & ::placeholder {
-      color: ${(props) => props.placeholderColor};
-    }
-  }
-`;
 
 const Component = ({settingsUI, ...props}) => {
   const {placeholder, text} = settingsUI;
   return (
     <Wrapper id={props.id} {...settingsUI} {...props}>
       <Container className="draggable" {...props} {...settingsUI}>
-        <input {...props} type="password" className="form-control" placeholder={placeholder} value={text} />
+        <input {...props} type="text" className="form-control" placeholder={placeholder} value={text} />
       </Container>
     </Wrapper>
   );
@@ -55,13 +23,17 @@ const Component = ({settingsUI, ...props}) => {
 
 const block = {
   Component,
-  name: 'PASSWORDTEXTFIELD',
-  title: 'PasswordField',
+  name: 'CALENDAR_TEXT_FIELD',
+  title: 'CALENDAR_TEXT_FIELD',
   description: 'A control into which the user securely enters private text.',
   previewImageUrl: passwordtextfield,
   category: 'Controls',
   defaultInteractiveOptions: {
     field: 'field_name',
+    systemCalendar: {
+      systemDialog: 'CALENDAR',
+      timeFormat: 'DD.MM.YYYY'
+    }
   },
   complex: [
     {label: 'Text', value: 'BASICTEXTFIELD'},
@@ -69,9 +41,9 @@ const block = {
     {label: 'Calendar', value: 'CALENDAR_TEXT_FIELD'},
   ],
   defaultData: {
-    placeholder: 'Password',
+    placeholder: 'Fill in the date',
     placeholderColor: '#7F7F7F',
-    text: 'neo12345',
+    text: '21.12.1990',
     textColor: '#000000',
     backgroundColor: '#FFFFFF',
     fontSize: 16,
@@ -92,6 +64,7 @@ const block = {
   },
   interactive: {
     field: {type: 'string', name: 'Field name'},
+    systemCalendar
   },
 };
 
