@@ -205,7 +205,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
       }
       if (endpoint && !Array.isArray(endpoint[el])) {
         return (
-          <section>
+          <section key={`section_${parentKey}_${index}`}>
             <Division style={{marginTop: '16px'}}>
               <span>{leadLetter(el)}</span>
             </Division>
