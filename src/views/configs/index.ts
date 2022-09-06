@@ -12,7 +12,7 @@ export const textAlignment = {
     {label: 'Center', value: AlignmentValues.Center},
     {label: 'Left', value: AlignmentValues.Left},
     {label: 'Right', value: AlignmentValues.Right},
-  ]
+  ],
 };
 
 export const padding = {
@@ -53,6 +53,25 @@ export const fontWeight = {
 export const borderColor = {type: 'color', name: 'Border color'};
 
 export const borderWidth = {type: 'number', name: 'Border width'};
+
+export const size = {
+  height: {
+    type: 'units',
+    name: 'Height',
+    options: [
+      {label: 'px', value: 'px'},
+      {label: '%', value: '%'},
+    ],
+  },
+  width: {
+    type: 'units',
+    name: 'Width',
+    options: [
+      {label: 'px', value: 'px'},
+      {label: '%', value: '%'},
+    ],
+  },
+};
 
 export const sizeModifier = {
   type: 'select',
@@ -113,26 +132,68 @@ export const corners = {
 export const interactive = {
   action: {
     url: {
-      type: 'string',
-        name: 'Action URL',
+      type: 'select',
+      name: 'Action URL',
     },
-    target: {type: 'string', name: 'Target'},
-    fields: {type: 'array', name: 'Fields set'},
+    target: {type: 'select', name: 'Target', options: []},
+    method: {
+      type: 'select',
+      name: 'Method',
+      options: [
+        {label: 'Get', value: 'get'},
+        {label: 'Post', value: 'post'},
+      ],
+    },
   },
+};
+export const metricStyle = {
+  type: 'select',
+  name: 'Metric style',
+  options: [
+    {label: 'Points and items in', value: 'pointsAndItemsIn'},
+    {label: 'Points', value: 'points'},
+    {label: 'Items in and proportional', value: 'itemsInAndProportional'},
+    {label: 'Items in', value: 'itemsIn'},
+  ],
 };
 export const elevation = {type: 'number', name: 'Elevation'};
 export const placeholder = {type: 'string', name: 'Placeholder'};
 export const placeholderColor = {type: 'color', name: 'Placeholder color'};
 export const thumbOnColor = {type: 'color', name: 'Thumb on color'};
-export const checked = {type: 'boolean', name: 'Checked'};
+export const isActive = {type: 'boolean', name: 'isActive'};
 export const action = {
   url: {type: 'string', name: 'URL'},
 };
 export const scroll = {
   type: 'select',
-    name: 'Scroll',
-    options: [
+  name: 'Scroll',
+  options: [
     {label: 'Enable scroll', value: true},
     {label: 'Disable scroll', value: false},
   ],
+};
+
+export const systemCalendar = {
+  systemDialog: {
+    type: 'select',
+    name: 'System dialog',
+    options: [
+      {label: 'Wheel calendar with time', value: 'WHEEL_CALENDAR_WITH_SELECTING_TIME '},
+      {label: 'Calendar with time', value: 'CALENDAR_WITH_SELECTING_TIME '},
+      {label: 'Calendar', value: 'CALENDAR'},
+      {label: 'Wheel calendar', value: 'WHEEL_CALENDAR'},
+    ]
+  },
+  timeFormat: {
+    type: 'select',
+    name: 'Time format',
+    options: [
+      {label: 'DD.MM.YYYY', value: 'DD.MM.YYYY'},
+      {label: 'DD-MM-YYYY', value: 'DD-MM-YYYY'},
+      {label: 'DD/MM/YYYY', value: 'DD/MM/YYYY'},
+      {label: 'DD.MM.YYYY HH:mm', value: 'DD.MM.YYYY HH:mm'},
+      {label: 'DD-MM-YYYY HH:mm', value: 'DD-MM-YYYY HH:mm'},
+      {label: 'DD/MM/YYYY HH:mm', value: 'DD/MM/YYYY HH:mm'},
+    ]
+  }
 };

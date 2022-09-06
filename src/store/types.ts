@@ -3,14 +3,14 @@ import {Zoom} from 'containers/ZoomSelect/types';
 import store from './index';
 
 export type EditScreenNamePayloadAction = Action<string> & {
-  screen: string,
+  screen: string;
   snippet: {
-    snippet: string,
-    endpoint: string,
-    selectedScreen: string,
-    screenID: string,
-    logic: string
-  }
+    snippet: string;
+    endpoint: string;
+    selectedScreen: string;
+    screenID: string;
+    logic: string;
+  };
 };
 
 export type Actions = {
@@ -43,7 +43,41 @@ export type Project = {
   id: string;
   name: string;
   description: string;
+  platform?: Record<string, boolean> & {
+    ios: boolean;
+    android: boolean;
+    aurora: boolean;
+  };
   icon: string;
+  created?: string;
+  edited?: string;
+};
+
+export type Template = {
+  id: string;
+  title: string;
+  description: string;
+  snippets: {
+    screens: Map<string, string>;
+    actions: Map<string, string>;
+    data: Map<string, string>;
+    themes: Map<string, string>;
+    externalActions: Map<string, string>;
+  };
+};
+
+export type ProjectForm = {
+  id: string;
+  name: string;
+  description: string;
+  icon?: any;
+  url? :string;
+  platform: string | {
+    [x: string]: any;
+    ios: boolean;
+    android: boolean;
+    aurora: boolean;
+  };
 };
 
 export type APIItem = {

@@ -9,6 +9,7 @@ import layoutReducer from './layout.slice';
 import outputReducer from './output.slice';
 import projectReducer from './project.slice';
 import sideBarReducer from './side-bar.slice';
+import projectFormReducer from './project-form.slice';
 
 const rootReducer = combineReducers({
   actions: actionsReducer,
@@ -20,7 +21,8 @@ const rootReducer = combineReducers({
   layout: layoutReducer,
   output: outputReducer,
   project: projectReducer,
-  sideBar: sideBarReducer
+  sideBar: sideBarReducer,
+  projectForm: projectFormReducer,
 });
 
 const store = configureStore({

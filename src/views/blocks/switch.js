@@ -2,7 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import switch_ic from 'assets/switch.svg';
 import Wrapper from 'utils/wrapper';
-import {backgroundColor, checked, thumbOnColor} from 'views/configs';
+import {
+  backgroundColor,
+  isActive,
+  thumbOnColor,
+} from 'views/configs';
 
 const Switch = styled.div`
   font-size: 16px;
@@ -68,7 +72,7 @@ const Switch = styled.div`
       width: 20px;
       height: 20px;
       box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
-        0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+      0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
       transition: background-color 0.2s, transform 0.2s;
       background-color: #FFFFFF;
     }
@@ -79,7 +83,7 @@ const Component = ({settingsUI, ...props}) => {
   return (
     <Wrapper id={props.id}>
       <Switch {...props} {...settingsUI} className="draggable">
-        <input type="checkbox" checked={settingsUI.checked} />
+        <input type="checkbox" checked={settingsUI.isActive} />
         <span></span>
       </Switch>
     </Wrapper>
@@ -100,7 +104,28 @@ const block = () => ({
   config: {
     backgroundColor,
     thumbOnColor,
-    checked,
+    isActive,
+  },
+  defaultInteractiveOptions: {
+    action: {url: '', target: ''},
+  },
+  interactive: {
+    action: {
+      url: {
+        type: 'select',
+        name: 'Action URL',
+        action_types: 'actions,data'
+      },
+      target: {type: 'string', name: 'Target'},
+      method: {
+        type: 'select',
+        name: 'Method',
+        options: [
+          {label: 'Get', value: 'get'},
+          {label: 'Post', value: 'post'},
+        ],
+      },
+    },
   },
 });
 

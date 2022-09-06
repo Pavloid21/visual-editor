@@ -12,10 +12,9 @@ import {hexToRgb} from 'constants/utils';
 import {ItemTypes} from 'constants/actionTypes';
 import card from 'assets/card.svg';
 import {
-  alignmentConfig, backgroundColor, corners, elevation, getSizeConfig, interactive,
+  backgroundColor, corners, elevation, getSizeConfig,
   padding, shadowConfigBuilder,
   shapeConfigBuilder,
-  sizeModifier,
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
 import {blockStateSafeSelector} from 'store/selectors';
@@ -23,33 +22,11 @@ import store from 'store';
 import {getSizeStyle} from 'views/utils/styles/size';
 
 const Card = styled.div`
-  align-self: ${(props) => {
-    switch (props.alignment) {
-      case 'LEFT':
-        return 'flex-start';
-      case 'RIGHT':
-        return 'flex-end';
-      default:
-        return 'stretch';
-    }
-  }};
-  margin: ${(props) => {
-    switch (props.alignment) {
-      case 'CENTER':
-        return 'auto';
-      case 'LEFT':
-        return 'auto auto auto 0';
-      case 'RIGHT':
-        return 'auto 0 auto auto';
-      default:
-        return '0 0';
-    }
-  }};
+  align-self: stretch;
   box-sizing: border-box;
   border: ${(props) => props.border};
   background-color: ${(props) => props.backgroundColor};
   display: flex;
-  align-items: ${(props) => props.alignment};
   flex-direction: column;
   padding-top: ${(props) => props.padding?.top}px;
   padding-right: ${(props) => props.padding?.right}px;
@@ -151,11 +128,10 @@ const block = (state) => {
     previewImageUrl: card,
     category: 'Element',
     defaultInteractiveOptions: {
-      action: {url: 'nextScreenName', fields: ['field1', 'field2'], target: ''},
+      action: {url: '', target: ''},
     },
     defaultData: {
       elevation: 3,
-      sizeModifier: 'FULLWIDTH',
       backgroundColor: '#C6C6C6',
       spacing: 16,
       padding: {
@@ -189,8 +165,6 @@ const block = (state) => {
     listItems: [],
     config: {
       elevation,
-      sizeModifier,
-      alignment: alignmentConfig.horizontally,
       backgroundColor,
       shape: shapeConfigBuilder()
         .withAllCornersRound
@@ -203,7 +177,24 @@ const block = (state) => {
         height: getSizeConfig(blockState.deviceInfo.device).height,
       },
     },
-    interactive,
+    interactive: {
+      action: {
+        url: {
+          type: 'select',
+          name: 'Action URL',
+          action_types: 'actions,data'
+        },
+        target: {type: 'string', name: 'Target'},
+        method: {
+          type: 'select',
+          name: 'Method',
+          options: [
+            {label: 'Get', value: 'get'},
+            {label: 'Post', value: 'post'},
+          ],
+        },
+      },
+    },
   });
 };
 

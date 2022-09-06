@@ -4,11 +4,10 @@ import {hexToRgb} from 'constants/utils';
 import Wrapper from 'utils/wrapper';
 import image from 'assets/image.svg';
 import {
-  alignmentConfig, backgroundColor,
+  backgroundColor,
   borderColor, borderWidth, getSizeConfig,
   imageUrl, shadowConfigBuilder,
   shapeConfigBuilder,
-  sizeModifier,
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
@@ -27,32 +26,7 @@ const Image = styled.img`
       props.shadow?.offsetSize?.height || props.shadow?.offsetSize?.heightInPercent
     }px 8px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b}, ${props.shadow?.opacity})`;
   }};
-  align-self: ${(props) => {
-    switch (props.alignment) {
-      case 'LEFT':
-        return 'flex-start';
-      case 'RIGHT':
-        return 'flex-end';
-      default:
-        return 'center';
-    }
-  }};
-  margin: ${(props) => {
-    switch (props.alignment) {
-      case 'CENTER':
-        return 'auto';
-      case 'TOP':
-        return '0 auto auto auto';
-      case 'BOTTOM':
-        return 'auto auto 0 auto';
-      case 'LEFT':
-        return 'auto auto auto 0';
-      case 'RIGHT':
-        return 'auto 0 auto auto';
-      default:
-        return '0 0';
-    }
-  }};
+  align-self: center;
   z-index: 90;
   width: ${(props) => getSizeStyle('width', props)};
   height: ${(props) => getSizeStyle('height', props)};
@@ -63,7 +37,7 @@ const Image = styled.img`
   }}
 `;
 
-const Component = ({settingsUI, sizeModifier, ...props}) => {
+const Component = ({settingsUI, ...props}) => {
   return (
     <Wrapper id={props.id} {...settingsUI} {...props}>
       <Image
@@ -87,7 +61,6 @@ const block = (state) => {
     previewImageUrl: image,
     category: 'Controls',
     defaultData: {
-      sizeModifier: 'FULLWIDTH',
       backgroundColor: '#FFFFFF',
       borderWidth: 0,
       borderColor: '#000000',
@@ -112,8 +85,6 @@ const block = (state) => {
       },
     },
     config: {
-      sizeModifier,
-      alignment: alignmentConfig.both,
       imageUrl,
       backgroundColor,
       borderWidth,

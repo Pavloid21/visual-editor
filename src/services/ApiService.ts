@@ -10,8 +10,10 @@ type OptionsType = {
   params: any;
 };
 
+export const BASE_URL = 'http://mobile-platform.apps.msa31.do.neoflex.ru/api/v2/';
+
 export const API = axios.create({
-  baseURL: 'http://mobile-platform.apps.msa31.do.neoflex.ru/api/v2/',
+  baseURL: BASE_URL,
 });
 
 export const callApi = async (
@@ -122,4 +124,26 @@ export const editProject = async (projectId: string, payload: string) => {
 export const deleteProject = async (projectId: string) => {
   const url = API.defaults.baseURL + `projects/${projectId}`;
   return await callApi(url, null, 'DELETE');
+};
+
+export const getTemplates = async () => {
+  const url = API.defaults.baseURL + 'templates';
+  return await callApi(url, null, 'GET');
+};
+
+export const getScreenTemplates = async () => {
+  const url = API.defaults.baseURL + 'templates?screens=true';
+  return await callApi(url, null, 'GET');
+};
+
+export const getTemplateData = async (templateId: string, params?: string) => {
+  const url = API.defaults.baseURL + `templates/${templateId}${params ? '?' + params : ''}`;
+  return await callApi(url, null, 'GET');
+};
+
+export const applyTemplate = async (templateId: string, payload: string) => {
+  const url = API.defaults.baseURL + `templates/${templateId}/extraction`;
+  return await callApi(url, payload, 'POST', undefined, undefined, {
+    'Content-Type': 'application/json',
+  });
 };

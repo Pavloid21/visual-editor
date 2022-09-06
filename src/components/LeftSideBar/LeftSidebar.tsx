@@ -2,9 +2,8 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import actionTypes from 'constants/actionTypes';
-import SideBarHeader, {SideBarSubheader} from '../SideBarHeader';
 import {Gallery} from 'containers/Gallery';
-import {Actions} from 'components';
+import {Actions, ButtonSelector, Modal, SideBarHeader, SideBarSubheader} from 'components';
 import SortableTree from '@nosferatu500/react-sortable-tree';
 import FileExplorerTheme from '@nosferatu500/theme-file-explorer';
 import {ReactComponent as Copy} from 'assets/copy.svg';
@@ -12,25 +11,21 @@ import {ReactComponent as Trash} from 'assets/trash.svg';
 import {ReactComponent as Plus} from 'assets/plus.svg';
 import models from 'views/blocks/index';
 import {v4} from 'uuid';
-import {getScreenesList, getScreenByName} from 'services/ApiService';
+import {getScreenesList, getScreenByName, getScreenTemplates, getTemplateData} from 'services/ApiService';
 import {BounceLoader} from 'react-spinners';
 import {css} from '@emotion/react';
 import Loader from '../Loader';
 import {useParams} from 'react-router-dom';
-import {observer, snippet, prepareTree, buildLayout} from 'utils';
-import {Container, Icon, ScreenTitle} from './LeftSideBar.styled';
+import {observer, snippet, prepareTree, buildLayout, useModal} from 'utils';
+import {Container, DefaultTemplateWrapper, Icon, ModalContent, ScreenTitle, TemplateItem} from './LeftSideBar.styled';
 import {addAction, setSelectAction} from 'store/actions.slice';
 import {setActiveTab as setActiveTabAction} from 'store/config.slice';
 import {saveCode} from 'store/code.slice';
-import {
-  cloneBlock,
-  deleteBlock,
-  selectScreen,
-  setLayout,
-  setSelectedBlock,
-  setSnippet,
-} from 'store/layout.slice';
+import {cloneBlock, deleteBlock, selectScreen, setLayout, setSelectedBlock, setSnippet} from 'store/layout.slice';
 import type {RootStore} from 'store/types';
+import {Bar} from 'containers/Project/Modal/Modal.styled';
+import {ReactComponent as Close} from 'assets/close.svg';
+import {screenTemplates as defaultTemplates} from 'constants/screenTemplates';
 
 const LeftSidebar: React.FC<any> = ({children, ...props}) => {
   const {
@@ -53,6 +48,8 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
   const [treeData, setTree] = useState<Record<string, any>[]>([]);
   const [show, toggleComponents] = useState(true);
   const [load, setLoadScreen] = useState<Record<string, any>>();
+  const [templates, setScreenTemplates] = useState<Record<string, any>[]>([]);
+  const [itemModalOpen, setItemModalOpen] = useModal();
   const override = css`
     display: inline-block;
     margin: 0 auto;
@@ -61,23 +58,27 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
   `;
   const dispatch = useDispatch();
 
+  const generatePromiseStack = (data: any[], parsed: boolean) => {
+    const screenesArr = data.map(async (screen: string) => {
+      try {
+        const response = await getScreenByName(screen, parsed, project);
+        return {
+          screen,
+          object: response.data,
+          logic: response.data,
+          project,
+        };
+      } catch (e) {
+        console.log('e :>> ', e);
+      }
+    });
+    return screenesArr;
+  };
+
   useEffect(() => {
     setLoading(true);
-    getScreenesList(project).then((screenes) => {
-      const screenesArr = screenes.data.map(async (screen: string) => {
-        try {
-          const response = await getScreenByName(screen, true, project);
-          return {
-            screen,
-            object: response.data,
-            logic: response.data,
-            project,
-          };
-        } catch (e) {
-          console.log('e :>> ', e);
-        }
-      });
-      Promise.allSettled(screenesArr)
+    getScreenesList(project).then(({data}) => {
+      Promise.allSettled(generatePromiseStack(data, true))
         .then((resolves) => {
           const layouts: Record<string, any>[] = [];
           resolves.forEach((result) => {
@@ -160,10 +161,12 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
         },
       });
       dispatch(saveCode(constants));
-      dispatch(setSnippet({
-        snippet: constants,
-        selectedScreen,
-      }));
+      dispatch(
+        setSnippet({
+          snippet: constants,
+          selectedScreen,
+        })
+      );
     }
   }, [output]);
 
@@ -176,9 +179,11 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
       setLoadScreen({uuid: item.node.uuid, load: false});
       const screenLayout = availableScreenes.filter((screen) => screen.uuid === item.node.uuid)[0];
       dispatch(setActiveTabAction(5));
-      dispatch(selectScreen({
-        screen: item.node.uuid,
-      }));
+      dispatch(
+        selectScreen({
+          screen: item.node.uuid,
+        })
+      );
       dispatch(setSelectedBlock(''));
       dispatch({
         type: actionTypes.EDIT_SCREEN_NAME,
@@ -226,10 +231,12 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
       setScreenes(layouts.filter((layout) => layout.uuid !== node.uuid));
       const newTree = treeData.filter((item) => item.uuid !== node.uuid);
       setTree(newTree);
-      dispatch(selectScreen({
-        delete: true,
-        screen: node.uuid,
-      }));
+      dispatch(
+        selectScreen({
+          delete: true,
+          screen: node.uuid,
+        })
+      );
       dispatch({
         type: actionTypes.EDIT_SCREEN_NAME,
         screen: node.screen,
@@ -247,17 +254,28 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
   );
 
   const handleAddScreen = useCallback(() => {
-    const layouts = [...availableScreenes];
-    const {newBlock, action, screenEndpoint} = buildLayout({
-      screen: 'new_screen',
-      object: {
-        screen: 'new screen',
-        listItems: [],
-      },
+    setItemModalOpen(true);
+    getScreenTemplates().then(({data}) => {
+      const screenesArr = data.map(async (templateId: string) => {
+        try {
+          const template = await getTemplateData(templateId, 'screens=true');
+          return template;
+        } catch (e) {
+          console.log('e', e);
+        }
+      });
+      Promise.allSettled(screenesArr)
+        .then((resolves) => {
+          const screenTemplates = resolves.reduce((acc: any[], result) => {
+            if (result.status === 'fulfilled') {
+              acc.push(result.value.data);
+            }
+            return acc;
+          }, [] as any[]);
+          setScreenTemplates(screenTemplates);
+        })
+        .catch(console.log);
     });
-    layouts.push({uuid: v4(), value: newBlock, action, screenEndpoint});
-    setScreenes(layouts);
-    setTree(layouts.map((layout) => prepareTree(layout, selectedScreen, topAppBar, bottomBar)));
   }, [availableScreenes, bottomBar, selectedScreen, topAppBar]);
 
   const handleAddAction = useCallback(() => {
@@ -290,13 +308,43 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
     [availableScreenes, bottomBar, selectedScreen, topAppBar, treeData]
   );
 
+  const handleSelectTemplate = useCallback(
+    (template: Record<string, any>) => {
+      const {snippets} = template;
+      const screenName = Object.keys(snippets.screens)[0];
+      const code: string = snippets.screens[screenName].replace(/return/g, '');
+      const layouts = [...availableScreenes];
+      const {newBlock, action, screenEndpoint} = buildLayout({
+        screen: screenName,
+        object: JSON.parse(code),
+      });
+      layouts.push({uuid: v4(), value: newBlock, action, screenEndpoint});
+      setScreenes(layouts);
+      setTree(layouts.map((layout) => prepareTree(layout, selectedScreen, topAppBar, bottomBar)));
+      setItemModalOpen(false);
+    },
+    [availableScreenes, bottomBar, selectedScreen, topAppBar]
+  );
+
+  const handleDefaultTemplate = (snippet: any) => {
+    const layouts = [...availableScreenes];
+    const {newBlock, action, screenEndpoint} = buildLayout({
+      screen: snippet.screen,
+      object: snippet,
+    });
+    layouts.push({uuid: v4(), value: newBlock, action, screenEndpoint});
+    setScreenes(layouts);
+    setTree(layouts.map((layout) => prepareTree(layout, selectedScreen, topAppBar, bottomBar)));
+    setItemModalOpen(false);
+  };
+
   if (!props.display) {
     return null;
   }
 
   return (
     <Container show={show}>
-      <div>
+      <div className="gallery">
         <SideBarHeader title={projectName} left />
         <SideBarSubheader>
           <div>
@@ -379,6 +427,44 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
         {activeTab === 1 && <Actions />}
       </div>
       <Gallery toggleComponents={toggleComponents} show={show} />
+      <Modal isActive={itemModalOpen} handleClose={() => setItemModalOpen(false)} style={{width: 'fit-content'}}>
+        <Bar>
+          <h3>Screens</h3>
+          <div>
+            <Close className="icon" onClick={() => setItemModalOpen(false)} />
+          </div>
+        </Bar>
+        <ModalContent>
+          <div id="center">
+            <ButtonSelector
+              buttons={[
+                {title: 'Technical', key: 'technical', uuid: v4()},
+                {title: 'Business', key: 'business', uuid: v4()},
+              ]}
+              onChange={function (): void {
+                throw new Error('Function not implemented.');
+              }}
+              value={'technical'}
+            />
+          </div>
+          <div className="modal_columns">
+            <div className="modal_col side">
+              <h3>Templates</h3>
+              {templates.map((template) => (
+                <TemplateItem onClick={() => handleSelectTemplate(template)}>{template.title}</TemplateItem>
+              ))}
+            </div>
+            <div className="modal_col grid">
+              {defaultTemplates.map(({img: Image, title, snippet}) => (
+                <DefaultTemplateWrapper onClick={() => handleDefaultTemplate(snippet)}>
+                  <Image style={{filter: 'drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.1))'}} />
+                  <span>{title}</span>
+                </DefaultTemplateWrapper>
+              ))}
+            </div>
+          </div>
+        </ModalContent>
+      </Modal>
     </Container>
   );
 };

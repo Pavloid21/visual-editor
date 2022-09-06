@@ -2,6 +2,9 @@ import {useContext, useEffect} from 'react';
 import {UNSAFE_NavigationContext} from 'react-router-dom';
 
 export const leadLetter = (string) => {
+  if (string === 'systemCalendar') {
+    return 'System Calendar';
+  }
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 

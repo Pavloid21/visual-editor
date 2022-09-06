@@ -93,7 +93,7 @@ const Gallery: React.FC<any> = (props) => {
   };
 
   return (
-    <Wrapper show={props.show}>
+    <Wrapper show={props.show} className="gallery">
       <GalleryHeader>
         <span>Components</span>
         <div>

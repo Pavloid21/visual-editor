@@ -10,12 +10,12 @@ import {onSortMove} from 'utils/hooks';
 import {observer} from 'utils/observer';
 import {ItemTypes} from 'constants/actionTypes';
 import {
-  alignmentConfig,
   backgroundColor,
   getSizeConfig,
   padding,
-  sizeModifier,
   spacing,
+  shapeConfigBuilder,
+  metricStyle,
 } from 'views/configs';
 import collection from 'assets/collection.svg';
 import {pushBlockInside} from 'store/layout.slice';
@@ -24,32 +24,7 @@ import store from 'store';
 import {getSizeStyle} from 'views/utils/styles/size';
 
 const Collection = styled.div`
-  align-self: ${(props) => {
-    switch (props.alignment) {
-      case 'LEFT':
-        return 'flex-start';
-      case 'RIGHT':
-        return 'flex-end';
-      default:
-        return 'center';
-    }
-  }};
-  margin: ${(props) => {
-    switch (props.alignment) {
-      case 'CENTER':
-        return 'auto';
-      case 'TOP':
-        return '0 auto auto auto';
-      case 'BOTTOM':
-        return 'auto auto 0 auto';
-      case 'LEFT':
-        return 'auto auto auto 0';
-      case 'RIGHT':
-        return 'auto 0 auto auto';
-      default:
-        return '0 0';
-    }
-  }};
+  align-self: center;
   width: ${(props) => getSizeStyle('width', props)};
   height: ${(props) => getSizeStyle('height', props)};
   background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
@@ -60,12 +35,29 @@ const Collection = styled.div`
   padding-right: ${(props) => props.padding?.right}px;
   flex-direction: column;
   box-sizing: border-box;
+  ${(props) => {
+    if (props.shape?.type === 'ALLCORNERSROUND') {
+      return `border-radius: ${props.shape?.radius || 0}px;`;
+  } else if (props.shape?.type === 'TOPCORNERSROUND') {
+      return `border-top-left-radius: ${props.shape?.radius || 0}px; border-top-right-radius: ${props.shape?.radius || 0}px;`;
+  }
+}}
+  ${(props) => {
+    if (props.collectionUiConfig?.scrollDirection === 'vertical') {
+      return 'overflow-y: scroll;';
+  }
+    if (props.collectionUiConfig?.scrollDirection === 'horizontal') {
+      return 'overflow-x: scroll;';
+  }
+}}
   & > div {
     display: grid;
-    grid-template-columns: repeat(${(props) => props.collectionUiConfig?.itemsInHorisontal}, 1fr);
-    grid-auto-rows: ${(props) => props.collectionUiConfig?.pointHeight}px;
+    grid-template-columns: repeat(${(props) => props.collectionUiConfig?.itemsInHorisontal}, ${(props) => +props.collectionUiConfig?.pointWidth > 0 ? props.collectionUiConfig?.pointWidth + 'px' : '1fr'});
+    grid-template-rows: repeat(${(props) => props.collectionUiConfig?.itemsInVertical}, ${(props) => +props.collectionUiConfig?.pointHeight > 0 ? +props.collectionUiConfig?.pointHeight + 'px' : '1fr'});
+    overflow: hidden;
     grid-gap: ${(props) => props.spacing}px;
-  }
+    background-color: ${(props) => props.collectionUiConfig?.cellBackgroundColor || 'transparent'};
+}
 `;
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItem, settingsUI, ...props}) => {
@@ -154,7 +146,11 @@ const block = (state) => {
     previewImageUrl: collection,
     category: 'Container',
     defaultInteractiveOptions: {
-      dataSource: '',
+      dataSource: {
+        url: '',
+        pageSize: 5,
+        startPage: 1
+      },
     },
     defaultData: {
       backgroundColor: '#C6C6C6',
@@ -173,26 +169,48 @@ const block = (state) => {
         metricStyle: 'pointsAndItemsIn',
         pointHeight: 121,
         itemsInHorisontal: 2,
+        itemsInVertical: 1,
+        scrollDirection: 'vertical',
       },
     },
     listItem: null,
     interactive: {
       dataSource: {
-        type: 'string',
-        name: 'Data Source',
+        url: {
+          type: 'string',
+          name: 'URL',
+        },
+        pageSize: {
+          type: 'number',
+          name: 'Page size',
+        },
+        startPage: {
+          type: 'number',
+          name: 'Start page',
+        },
       },
     },
     config: {
-      sizeModifier,
-      alignment: alignmentConfig.both,
       backgroundColor,
       spacing,
       size: getSizeConfig(blockState.deviceInfo.device),
       padding,
+      shape: shapeConfigBuilder().withRadius.withAllCornersRound.withTopCornersRound.done(),
       collectionUiConfig: {
-        metricStyle: {type: 'string', name: 'Metric style'},
-        pointHeight: {type: 'number', name: 'Point height'},
-        itemsInHorisontal: {type: 'number', name: 'Items in horizontal'},
+        cellBackgroundColor: {type: 'color', name: 'Cell background color'},
+        metricStyle,
+        scrollDirection: {
+          type: 'select', name: 'Scroll direction', options: [
+            {label: 'Vertical', value: 'vertical'},
+            {label: 'Horizontal', value: 'horizontal'}
+          ]
+        },
+        pointHeight: {type: 'number', name: 'Point height', relations: {metricStyle: ['pointsAndItemsIn', 'points']}},
+        pointWidth: {type: 'number', name: 'Point width', relations: {metricStyle: ['pointsAndItemsIn', 'points']}},
+        itemsInHorisontal: {type: 'number', name: 'Items in horizontal', relations: {metricStyle: ['pointsAndItemsIn', 'itemsInAndProportional', 'itemsIn']}},
+        itemsInVertical: {type: 'number', name: 'Items in vertical', relations: {metricStyle: ['pointsAndItemsIn', 'itemsInAndProportional', 'itemsIn']}},
+        widthToHeight: {type: 'number', name: 'Width to height', relations: {metricStyle: ['itemsInAndProportional']}},
+        heightToWidth: {type: 'number', name: 'Height to width', relations: {metricStyle: ['itemsInAndProportional']}},
       },
     },
   });

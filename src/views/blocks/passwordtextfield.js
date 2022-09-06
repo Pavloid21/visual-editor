@@ -2,13 +2,11 @@ import styled from 'styled-components';
 import Wrapper from 'utils/wrapper';
 import passwordtextfield from 'assets/passwordtextfield.svg';
 import {
-  alignmentConfig,
   backgroundColor,
   fontSize,
   getSizeConfig,
   placeholder,
   placeholderColor,
-  sizeModifier,
   text,
   textAlignment,
   textColor,
@@ -17,34 +15,9 @@ import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
 import {getSizeStyle} from 'views/utils/styles/size';
 
-const Container = styled.div`
+export const Container = styled.div`
   display: flex;
-  align-self: ${(props) => {
-    switch (props.alignment) {
-      case 'LEFT':
-        return 'flex-start';
-      case 'RIGHT':
-        return 'flex-end';
-      default:
-        return 'center';
-    }
-  }};
-  margin: ${(props) => {
-    switch (props.alignment) {
-      case 'CENTER':
-        return 'auto';
-      case 'TOP':
-        return '0 auto auto auto';
-      case 'BOTTOM':
-        return 'auto auto 0 auto';
-      case 'LEFT':
-        return 'auto auto auto 0';
-      case 'RIGHT':
-        return 'auto 0 auto auto';
-      default:
-        return '0 0';
-    }
-  }};
+  align-self: center;
   width: ${(props) => getSizeStyle('width', props)};
   & > input {
     height: ${(props) => getSizeStyle('height', props)};
@@ -93,23 +66,21 @@ const block = (state) => {
     complex: [
       {label: 'Text', value: 'BASICTEXTFIELD'},
       {label: 'Password', value: 'PASSWORDTEXTFIELD'},
+      {label: 'Calendar', value: 'CALENDAR_TEXT_FIELD'},
     ],
     defaultData: {
-      placeholder: 'Логин',
+      placeholder: 'Password',
       placeholderColor: '#7F7F7F',
-      text: 'neo',
+      text: 'neo12345',
       textColor: '#000000',
       backgroundColor: '#FFFFFF',
       fontSize: 16,
-      alignment: 'LEFT',
       size: {
         width: '',
         height: '',
       },
     },
     config: {
-      sizeModifier,
-      alignment: alignmentConfig.both,
       placeholder,
       placeholderColor,
       text,

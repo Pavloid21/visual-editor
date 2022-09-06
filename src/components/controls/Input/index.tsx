@@ -11,14 +11,14 @@ export const Container = styledComponents.section<TextAreaProps & NeoInputProps>
   & svg {
     position: absolute;
     right: 12px;
-    top: 44px;
+    top: 38px;
     &:hover {
       cursor: pointer;
     }
   }
 
   & .extra {
-    color: ${(props) => (props.status === 'error' ? 'var(--error-text)' : 'green')};
+    color: ${(props) => (props.status === 'error' ? 'var(--error-text)' : 'var(--neo-black)')};
     font-size: 14px;
   }
 `;
@@ -29,11 +29,10 @@ font-size: 14px;
     background: #FFFFFF;
     width: ${(props) => (props.$isWide ? '100%' : 'auto')};
     border: 1px solid ${(props) => (props.status === 'error' ? 'var(--error-text)' : 'var(--neo-gray)')};
-    height: 36px;
+    height: 40px;
     line-height: 20px;
     border-radius: 4px;
     padding: 8px ${(props) => (props.$clearable ? '36px' : '12px')} 8px 12px ;
-    margin-top: 4px;
     &::placeholder {
       color: #B3B3B3;
     }
@@ -90,21 +89,30 @@ const StyledNeoTextArea = styledComponents<any>(Textarea)<TextAreaProps & NeoInp
 `;
 
 export const Label = styledComponents.label`
-  font-size: 12px;
-  line-height: 16px;
+  font-size: 14px;
+  line-height: 20px;
   position: relative;
+  color: var(--neo-secondary-gray);
+  margin-bottom: 4px;
 `;
 
-export const NeoInput: React.FC<TextAreaProps & NeoInputProps> = (props) => {
+export const NeoInput: React.FC<TextAreaProps & NeoInputProps> = ({
+  label,
+  $clearable,
+  $extraText,
+  $textarea,
+  ...props
+}) => {
+  
   return (
     <Container {...props}>
-      {props.label && <Label>{props.label}</Label>}
-      {props.$textarea ? (
+      {label && <Label>{label}</Label>}
+      {$textarea ? (
         <StyledNeoTextArea autoSize={{minRows: 2, maxRows: 8}} {...props} />
       ) : (
-        <StyledNeoInput allowClear={props.$clearable && {clearIcon: <Remove />}} {...props} />
+        <StyledNeoInput allowClear={$clearable && {clearIcon: <Remove />}} {...props} />
       )}
-      {props.$extraText && <span className="extra">{props.$extraText}</span>}
+      {$extraText && <span className="extra">{$extraText}</span>}
     </Container>
   );
 };

@@ -26,14 +26,14 @@ type SelectScreenPayloadAction = PayloadAction<{
 }>;
 
 type SetSnippetPayloadAction = PayloadAction<{
-  snippet: string,
-  selectedScreen: string
+  snippet: string;
+  selectedScreen: string;
 }>;
 
 type SetLayoutPayloadAction = PayloadAction<{
-  bottomBar?: BlockItem,
-  topAppBar?: BlockItem,
-  layout: Layout[]
+  bottomBar?: BlockItem;
+  topAppBar?: BlockItem;
+  layout: Layout[];
 }>;
 
 const initialState: Layout = {
@@ -147,7 +147,7 @@ export const pushBlockInside = createAction('layout/pushBlockInside', (payload) 
       payload: null
     };
   }
-  const target = findInTree(state.blocks, payload.uuid)!;
+  const target = findInTree(state.blocks, payload.uuid);
   const blockConfig = blocks[payload.blockId](blockState);
   const list = blockConfig.listItems;
   const obj = blockConfig.listItem;
@@ -237,14 +237,14 @@ export const changeBlockData = createAction('layout/changeBlockData', (payload: 
 
   const newBlocks = JSON.parse(JSON.stringify(state.blocks));
   const element: BlockItem =
-    findInTree(newBlocks, payload.blockUuid!) ||
+    findInTree(newBlocks, payload.blockUuid) ||
     (payload.blockUuid === state.bottomBar?.uuid
       ? {
         ...state.bottomBar,
       }
       : {...state.topAppBar});
   if (payload.parentKey && Array.isArray(payload.parentKey)) {
-    element.settingsUI[payload.parentKey[1]][payload.parentKey[0]][payload.key!] = payload.value;
+    element.settingsUI[payload.parentKey[1]][payload.parentKey[0]][payload.key] = payload.value;
   } else if (payload.parentKey) {
     const findDataBlock = (data: any, parentKey: string, key: string) => {
       let ref: any = null;
@@ -260,22 +260,103 @@ export const changeBlockData = createAction('layout/changeBlockData', (payload: 
     const valueKeeper = findDataBlock(
       {settingsUI: element.settingsUI, interactive: element.interactive},
       payload.parentKey,
-      payload.key!,
+      payload.key,
     );
     if (valueKeeper) {
-      valueKeeper[payload.key!] = payload.value;
+      valueKeeper[payload.key] = payload.value;
     } else {
-      element.settingsUI[payload.parentKey] = {[payload.key!]: payload.value};
+      element.settingsUI[payload.parentKey] = {[payload.key]: payload.value};
     }
   } else {
-    if (element.settingsUI[payload.key!] !== undefined || blocks[element.blockId](blockStateUnsafeSelector(store)).config[payload.key!]) {
-      element.settingsUI[payload.key!] = payload.value;
+    if (element.settingsUI[payload.key] !== undefined || blocks[element.blockId](blockStateUnsafeSelector(store)).config[payload.key]) {
+      element.settingsUI[payload.key] = payload.value;
     } else if (element.interactive) {
-      element.interactive[payload.key!] = payload.value;
+      element.interactive[payload.key] = payload.value;
     }
   }
   return {
     payload: [...newBlocks],
+  };
+});
+
+export const removeProperty = createAction('layout/removeProperty', (payload) => {
+  const store = rootStore.getState();
+  const {layout: state} = store;
+
+  const newBlocks = JSON.parse(JSON.stringify(state.blocks));
+  const element: BlockItem =
+    findInTree(newBlocks, payload.blockUuid) ||
+    (payload.blockUuid === state.bottomBar?.uuid
+      ? {
+        ...state.bottomBar,
+      }
+      : {...state.topAppBar});
+  if (payload.parentKey && Array.isArray(payload.parentKey)) {
+    delete element.settingsUI[payload.parentKey[1]][payload.parentKey[0]][payload.key];
+  } else if (payload.parentKey) {
+    const findDataBlock = (data: any, parentKey: string, key: string) => {
+      let ref: any = null;
+      Object.keys(data).forEach((item) => {
+        if (item === parentKey) {
+          ref = data[item];
+        } else if (typeof data[item] === 'object' && !ref) {
+          ref = findDataBlock(data[item], parentKey, key);
+        }
+      });
+      return ref;
+    };
+    const valueKeeper = findDataBlock(
+      {settingsUI: element.settingsUI, interactive: element.interactive},
+      payload.parentKey,
+      payload.key
+    );
+    if (valueKeeper) {
+      delete valueKeeper[payload.key];
+    } else {
+      element.settingsUI[payload.parentKey] = {[payload.key]: payload.value};
+    }
+  } else {
+    if (
+      element.settingsUI[payload.key] !== undefined ||
+      blocks[element.blockId].config[payload.key]
+    ) {
+      delete element.settingsUI[payload.key];
+    } else if (element.interactive) {
+      delete element.interactive[payload.key];
+    }
+  }
+  return {
+    payload: [...newBlocks],
+  };
+});
+
+export const switchElementType = createAction('layout/switchElementType', (payload: string) => {
+  const store = rootStore.getState();
+  const {layout: state} = store;
+
+  const blocksArr = [...state.blocks];
+
+  const currentElement = findInTree(blocksArr, state.selectedBlockUuid);
+
+  const isInput = payload === 'CALENDAR_TEXT_FIELD' ||
+    payload === 'PASSWORDTEXTFIELD' ||
+    payload === 'BASICTEXTFIELD';
+
+  if (isInput && currentElement) {
+    currentElement.blockId = payload.toLowerCase();
+
+    currentElement.interactive = {
+      ...currentElement.interactive,
+      ...getData(blocks[payload.toLowerCase()].defaultInteractiveOptions),
+    };
+    currentElement.settingsUI = {
+      ...currentElement.settingsUI,
+      placeholder: blocks[payload.toLowerCase()].defaultData.placeholder,
+      text: blocks[payload.toLowerCase()].defaultData.text
+    };
+  }
+  return {
+    payload: [...blocksArr],
   };
 });
 
@@ -330,7 +411,7 @@ const layoutSlice = createSlice({
       changeUnits: (state, action: PayloadAction<ChangeUnitsPayloadAction>) => {
         const newBlocksSet = JSON.parse(JSON.stringify(state.blocks));
         const targetElement: BlockItem =
-          findInTree(newBlocksSet, action.payload.blockUuid!) ||
+          findInTree(newBlocksSet, action.payload.blockUuid) ||
           (action.payload.blockUuid === state.bottomBar?.uuid
             ? {
               ...state.bottomBar,
@@ -341,10 +422,17 @@ const layoutSlice = createSlice({
           if (!test) {
             test = targetElement.settingsUI.shadow[action.payload.parentKey];
           }
-          const val = test[action.payload.key!] || test[action.payload.key! + 'InPercent'];
-          delete test[action.payload.key!];
-          delete test[action.payload.key! + 'InPercent'];
-          test[getKeyByUnit(action.payload.value, action.payload.key)] = val;
+          let val = null;
+          if (test) {
+            val = test[action.payload.key] || test[action.payload.key + 'InPercent'] || null;
+            delete test[action.payload.key];
+            delete test[action.payload.key + 'InPercent'];
+            test[getKeyByUnit(action.payload.value, action.payload.key)] = val;
+          } else {
+            targetElement.settingsUI[action.payload.parentKey] = {
+              [getKeyByUnit(action.payload.value, action.payload.key)]: val
+            };
+          }
         }
         return {
           ...state,
@@ -374,7 +462,9 @@ const layoutSlice = createSlice({
         let nextScreenState = {...state};
         if (action.payload.delete) {
           nextScreenState.deletedScreens = Array.from(new Set([...state.deletedScreens, action.payload.screen]));
-          nextScreenState.editedScreens = nextScreenState.editedScreens.filter((screen) => screen !== action.payload.screen);
+          nextScreenState.editedScreens = nextScreenState.editedScreens.filter(
+            (screen: any) => screen !== action.payload.screen
+          );
         } else {
           nextScreenState = {
             ...state,
@@ -385,7 +475,7 @@ const layoutSlice = createSlice({
         return nextScreenState;
       },
       cloneBlock: (state, action: PayloadAction<string>) => {
-        const withClone = cloneToList(state.blocks, action.payload!);
+        const withClone = cloneToList(state.blocks, action.payload);
         if (action.payload === state.bottomBar?.uuid) {
           delete state.bottomBar;
         }
@@ -397,18 +487,12 @@ const layoutSlice = createSlice({
       },
       setSnippet: (state, action: SetSnippetPayloadAction) => {
         const snippetsRef = [...state.snippets];
-        const snippetRef = snippetsRef.filter((item) => item.screenID === action.payload.selectedScreen!)[0];
+        const snippetRef = snippetsRef.filter((item) => item.screenID === action.payload.selectedScreen)[0];
         if (snippetRef) {
           snippetRef.snippet = action.payload.snippet;
           state.snippets = snippetsRef;
         }
         return state;
-      },
-      switchElementType: (state, action: PayloadAction<string>) => {
-        const blocksArr = [...state.blocks];
-        const currentElement = findInTree(blocksArr, state.selectedBlockUuid);
-        currentElement!.blockId = action.payload.toLowerCase();
-        state.blocks = blocksArr;
       },
     },
     extraReducers: (builder) => {
@@ -433,11 +517,17 @@ const layoutSlice = createSlice({
       builder.addCase(pushBlock, (state, action) => {
         state.blocks = action.payload;
       });
+      builder.addCase(removeProperty, (state, action) => {
+        state.blocks = action.payload;
+      });
+      builder.addCase(switchElementType, (state, action) => {
+        state.blocks = action.payload;
+      });
       builder.addCase(actionTypes.EDIT_SCREEN_NAME, (state, action: EditScreenNamePayloadAction) => {
         if (action.snippet?.screenID) {
           const next = [...state.snippets];
           let finded = false;
-          state.snippets.forEach((item, index) => {
+          state.snippets.forEach((item: {screenID: string}, index: any) => {
             if (item.screenID === action.snippet.screenID) {
               next[index] = {
                 ...next[index],
@@ -476,6 +566,5 @@ export const {
   selectScreen,
   cloneBlock,
   setSnippet,
-  switchElementType
 } = layoutSlice.actions;
 export default layoutSlice.reducer;

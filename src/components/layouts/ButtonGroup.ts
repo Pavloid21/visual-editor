@@ -6,6 +6,14 @@ export const ButtonGroup = styled.div`
     border-right: none !important;
   }
 
+  & button:not(:first-child) {
+    border-radius: 4px 0px 0px 4px;
+    border-left: none !important;
+    &:hover {
+      border-color: var(--neo-gray);
+    }
+  }
+
   & button:last-child {
     border-radius: 0px 4px 4px 0px;
     border-left: none !important;

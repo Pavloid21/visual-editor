@@ -1,88 +1,52 @@
 import React, {useEffect, useState} from 'react';
-import styled from 'styled-components';
 import {useKeycloak} from '@react-keycloak/web';
 import {ButtonSelector, Loader} from 'components';
 import {v4} from 'uuid';
 import {Button} from 'components/controls';
 import {ReactComponent as Plus} from '../../assets/button_plus.svg';
-import {createProject, getProjectData, getProjectsList} from 'services/ApiService';
+import {BASE_URL, getProjectData, getProjectsList} from 'services/ApiService';
 import {Card} from 'containers/Card';
 import {useNavigate} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import {AxiosResponse} from 'axios';
 import {useModal} from 'utils';
 import {useForm} from 'react-hook-form';
-import Modal from './Modal';
+import Modal from './Modal/Modal';
 import {selectProject} from 'store/project.slice';
-import type {Project as TProject} from '../../store/types';
+import {Container, Content, H1, Header, P} from './Project.styled';
+import type {Project as TProject} from 'store/types';
+import {filesToDTO} from 'utils/files';
+import {head} from 'external/lodash';
+import {saveProjectForm} from 'store/project-form.slice';
+import Routes from 'routes/routes';
 
 export type Inputs = {
   form: {
     name: string;
-    icon: string;
+    icon: File[];
     description: string;
+    platform:
+      | (Record<string, any> & {
+          ios: boolean;
+          android: boolean;
+          aurora: boolean;
+        })
+      | string;
+    url: string;
   };
 };
 
-const Container = styled.div`
-  display: flex;
-  height: 100%;
-  width: 100%;
-  padding: 48px 36px;
-  flex-direction: column;
-  & > div {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-`;
-
-const H1 = styled.h1`
-  font-size: 40px;
-`;
-
-const P = styled.p`
-  color: var(--neo-secondary-gray);
-`;
-
-const Header = styled.div`
-  background-color: #f3f3f3;
-  border: 1px solid #e6e6e6;
-  border-radius: 4px 4px 0 0;
-  padding: 14px 16px;
-  display: flex;
-  justify-content: space-between;
-  & > section {
-    margin-bottom: 0;
-  }
-`;
-
-const Content = styled.div`
-  position: relative;
-  display: flex;
-  flex: 1 1 auto;
-  overflow-y: auto;
-  background: #fafafa;
-  border: 1px solid #e6e6e6;
-  border-radius: 0 0 4px 4px;
-  border-top: none;
-  flex-wrap: wrap;
-  gap: 32px;
-  padding: 32px;
-  height: calc(100vh - 300px);
-`;
-
-export const Project: React.FC<any> = () => {
+export const Project: React.FC<unknown> = () => {
   const {keycloak} = useKeycloak();
   const {name, preferred_username} = keycloak.idTokenParsed!;
   const [projects, setProjects] = useState<TProject[]>([]);
   const [loading, setLoading] = useState(false);
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal();
-  const formRef = React.createRef<HTMLFormElement>();
   const {
     getValues,
     resetField,
     handleSubmit,
+    setValue,
     control,
     formState: {
       errors: {form},
@@ -100,7 +64,15 @@ export const Project: React.FC<any> = () => {
       if (projects.data) {
         const promises: Promise<AxiosResponse>[] = projects.data.map((project: string) => getProjectData(project));
         Promise.allSettled(promises).then((data: PromiseSettledResult<any>[]) => {
-          setProjects(data.map((item: any) => item.value.data));
+          setProjects(
+            data.map((item: any) => {
+              const {data} = item.value;
+              return {
+                ...data,
+                icon: `${BASE_URL}projects/${data.id}/files/${data.icon}`,
+              };
+            })
+          );
           setLoading(false);
         });
       }
@@ -112,33 +84,41 @@ export const Project: React.FC<any> = () => {
   }, []);
 
   const handleProjectSelect = (project: TProject) => {
-    dispatch(selectProject({
-      ...project
-    }));
-    navigate(`/editor/${project.id}`);
+    dispatch(
+      selectProject({
+        ...project,
+      })
+    );
+    navigate(`${Routes.EDITOR}/${project.id}`);
   };
 
   const handleAddProject = () => {
     toggleModal();
   };
 
-  const handleSave = () => {
-    const {name, icon, description} = getValues().form;
+  const handleSave = async () => {
+    const {name, icon: icons, description, platform, url} = getValues().form;
     resetField('form.name');
     resetField('form.icon');
     resetField('form.description');
-    createProject(
-      JSON.stringify({
+    resetField('form.platform');
+    const requestIcons = await filesToDTO(icons);
+    dispatch(
+      saveProjectForm({
         id: v4(),
         name,
-        icon,
+        icon: head(requestIcons),
         description,
+        platform,
+        url,
       })
-    ).then(() => {
-      setProjects([]);
-      toggleModal();
-      getProjects();
-    });
+    );
+    navigate('/templates');
+  };
+
+  const refresh = () => {
+    setProjects([]);
+    getProjects();
   };
 
   return (
@@ -173,6 +153,7 @@ export const Project: React.FC<any> = () => {
                   const nextProject = projects.filter((item) => item.id !== id);
                   setProjects(nextProject);
                 }}
+                onChangeState={refresh}
                 onClick={(e) => {
                   e.stopPropagation();
                   handleProjectSelect(project);
@@ -184,11 +165,11 @@ export const Project: React.FC<any> = () => {
       </Container>
       <Modal
         control={control}
-        formRef={formRef}
         handleSave={handleSave}
         handleSubmit={handleSubmit}
         itemModalOpen={itemModalOpen}
         setItemModalOpen={setItemModalOpen}
+        setValue={setValue}
         form={form}
       />
     </>
