@@ -8,10 +8,13 @@ import {Division, Select} from './Inspector.styled';
 import {findInTree} from 'utils';
 import {
   addBottomBarItem,
-  addTopAppBarItem, changeBlockData,
+  addTopAppBarItem,
+  changeBlockData,
   changeUnits,
   removeBottomBarItem,
-  removeTopAppBarItem, switchElementType,
+  removeTopAppBarItem,
+  switchElementType,
+  removeProperty,
 } from 'store/layout.slice';
 import type {TInspector} from './types';
 import type {RootStore} from 'store/types';
@@ -21,24 +24,38 @@ const Inspector: React.FC<TInspector> = ({display}) => {
   const layout = useSelector((state: RootStore) => state.layout);
   const handleChangeBlockData = useCallback(
     (blockUuid: string, key: string, value: any, parentKey: string | undefined) => {
-      dispatch(changeBlockData({
-        blockUuid,
-        key,
-        parentKey,
-        value,
-      }));
+      dispatch(
+        changeBlockData({
+          blockUuid,
+          key,
+          parentKey,
+          value,
+        })
+      );
     },
     [dispatch]
   );
 
-  const handleChangeUnits = useCallback(
-    (blockUuid: string, key: string, value: string | undefined, parentKey: string) => {
-      dispatch(changeUnits({
+  const removeProp = useCallback((blockUuid: string, key: string, parentKey: string | undefined) => {
+    dispatch(
+      removeProperty({
         blockUuid,
         key,
         parentKey,
-        value,
-      }));
+      })
+    );
+  }, [dispatch]);
+
+  const handleChangeUnits = useCallback(
+    (blockUuid: string, key: string, value: string | undefined, parentKey: string) => {
+      dispatch(
+        changeUnits({
+          blockUuid,
+          key,
+          parentKey,
+          value,
+        })
+      );
     },
     [dispatch]
   );
@@ -81,6 +98,27 @@ const Inspector: React.FC<TInspector> = ({display}) => {
             </div>
           );
         case 'number':
+          if (config[el].relations) {
+            return Object.keys(config[el].relations).map((keyRelation) => {
+              if (config[el].relations[keyRelation].includes(endpoint[keyRelation])) {
+                return (
+                  <div className="form-group" key={`${parentKey}_${index}`}>
+                    <Input
+                      $isWide
+                      $clearable={false}
+                      label={config[el].name}
+                      type="number"
+                      placeholder={config[el].name}
+                      value={endpoint ? endpoint[el] : null}
+                      onChange={(e: any) => handleChangeBlockData(blockUuid, el, +e.target.value, parentKey)}
+                    />
+                  </div>
+                );
+              } else if (endpoint[el] !== undefined) {
+                removeProp(blockUuid, el, parentKey);
+              }
+            });
+          }
           return (
             <div className="form-group" key={`${parentKey}_${index}`}>
               <Input
@@ -124,9 +162,10 @@ const Inspector: React.FC<TInspector> = ({display}) => {
           return (
             <div className="form-group" key={`${parentKey}_${index}`}>
               <Select
+                async={config[el].action_types}
                 label={config[el].name}
                 onChange={(value) => handleChangeBlockData(blockUuid, el, value, parentKey)}
-                options={config[el].options}
+                options={config[el].options || []}
                 value={endpoint ? endpoint[el] : null}
                 clearable
               />
@@ -166,7 +205,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
       }
       if (endpoint && !Array.isArray(endpoint[el])) {
         return (
-          <section>
+          <section key={`section_${parentKey}_${index}`}>
             <Division style={{marginTop: '16px'}}>
               <span>{leadLetter(el)}</span>
             </Division>

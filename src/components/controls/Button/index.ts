@@ -19,8 +19,8 @@ export const Button = styled.button<React.HTMLProps<HTMLButtonElement>>`
   }
   &.secondary {
     background-color: #ffffff;
-    color: var(--main-color);
-    border: 1px solid var(--main-color);
+    color: var(--neo-secondary-gray);
+    border: 1px solid var(--neo-secondary-gray);
     &:hover {
       border: 1px solid var(--hover-color);
     }

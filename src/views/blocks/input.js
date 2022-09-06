@@ -3,40 +3,19 @@ import Wrapper from 'utils/wrapper';
 import {hexToRgb} from 'constants/utils';
 import passwordtextfield from 'assets/passwordtextfield.svg';
 import {
-  alignmentConfig, backgroundColor,
+  backgroundColor,
   borderColor,
   borderWidth,
   text, textColor, fontWeight, fontSize,
   padding, placeholder, placeholderColor,
   shadowConfigBuilder,
   shapeConfigBuilder,
-  size, sizeModifier,
+  size,
   textAlignment,
 } from 'views/configs';
 
 const Input = styled.div`
-  align-self: ${(props) => {
-    switch (props.alignment) {
-      case 'LEFT':
-        return 'flex-start';
-      case 'RIGHT':
-        return 'flex-end';
-      default:
-        return 'center';
-    }
-  }};
-  margin: ${(props) => {
-    switch (props.alignment) {
-      case 'CENTER':
-        return 'auto';
-      case 'LEFT':
-        return 'auto auto auto 0';
-      case 'RIGHT':
-        return 'auto 0 auto auto';
-      default:
-        return '0 0';
-    }
-  }};
+  align-self: center;
   color: ${(props) => props.textColor};
   background-color: ${(props) => props.backgroundColor};
   display: flex;
@@ -135,9 +114,10 @@ const block = {
   complex: [
     {label: 'Text', value: 'BASICTEXTFIELD'},
     {label: 'Password', value: 'PASSWORDTEXTFIELD'},
+    {label: 'Calendar', value: 'CALENDAR_TEXT_FIELD'}
   ],
   defaultData: {
-    placeholder: 'Логин',
+    placeholder: 'Login',
     placeholderColor: '#7F7F7F',
     text: 'neo',
     textColor: '#000000',
@@ -146,7 +126,7 @@ const block = {
     borderWidth: 1,
     fontSize: 16,
     size: {
-      width: '',
+      width: 100,
       height: 48,
     },
     shadow: {
@@ -170,8 +150,6 @@ const block = {
     },
   },
   config: {
-    sizeModifier,
-    alignment: alignmentConfig.horizontally,
     padding,
     placeholder,
     placeholderColor,

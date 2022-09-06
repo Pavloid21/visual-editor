@@ -18,7 +18,8 @@ import {
   corners,
   distribution,
   scroll,
-  sizeModifier,
+  borderColor,
+  borderWidth,
   spacing,
   padding,
   size,
@@ -41,6 +42,10 @@ const VStack = styled.div`
     switch (alignment) {
       case 'CENTER':
         return 'auto';
+      case 'TOP':
+        return '0 auto auto auto';
+      case 'BOTTOM':
+        return 'auto auto 0 auto';
       case 'LEFT':
         return 'auto auto auto 0';
       case 'RIGHT':
@@ -50,28 +55,25 @@ const VStack = styled.div`
     }
   }};
   width: ${(props) => {
-    if (['FULLWIDTH', 'FULLSIZE'].includes(props.sizeModifier)) {
-      return '100%';
-    } else if (!isNil(props.size?.width)) {
+    if (!isNil(props.size?.width)) {
       return props.size.width + 'px';
     } else if (!isNil(props.size?.widthInPercent)) {
       return props.size.widthInPercent + '%';
+    } else {
+      return '100%';
     }
-    return 'fit-content';
   }};
   height: ${(props) => {
-    if (['FULLHEIGHT', 'FULLSIZE'].includes(props.sizeModifier)) {
-      return '100%';
-    } else if (!isNil(props.size?.height)) {
+    if (!isNil(props.size?.height)) {
       return props.size.height + 'px';
     } else if (!isNil(props.size?.heightInPercent)) {
       return props.size.heightInPercent + '%';
     }
-    return 'fit-content';
+    return '100%';
   }};
-  background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
+  background-color: ${(props) => props.backgroundColor};
   display: flex;
-  justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : 'normal')};
+  justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
   align-items: ${(props) => {
     switch (props.alignment) {
       case 'LEFT':
@@ -88,6 +90,9 @@ const VStack = styled.div`
   padding-left: ${(props) => props.padding?.left}px;
   padding-right: ${(props) => props.padding?.right}px;
   box-sizing: border-box;
+  border-width: ${(props) => props.borderWidth}px;
+  border-style: solid;
+  border-color: ${(props) => props.borderColor};
   gap: ${(props) => props.spacing}px;
   border-radius: ${(props) => `
     ${props.corners?.topLeftRadius || 0}px
@@ -97,11 +102,9 @@ const VStack = styled.div`
   `};
   ${(props) => {
     if (props.shadow) {
-      return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${
-              props.shadow?.radius
-      }px rgba(${hexToRgb(props.shadow?.color).r}, ${hexToRgb(props.shadow?.color).g}, ${
-              hexToRgb(props.shadow?.color).b
-      }, ${props.shadow?.opacity});`;
+      return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${props.shadow?.radius
+        }px rgba(${hexToRgb(props.shadow?.color).r}, ${hexToRgb(props.shadow?.color).g}, ${hexToRgb(props.shadow?.color).b
+        }, ${props.shadow?.opacity});`;
     }
   }}
 `;
@@ -113,20 +116,6 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, 
       {...settingsUI}
       {...props}
       sizeModifier='FULLSIZE'
-      style={{
-        alignItems: (() => {
-          switch (props.alignment) {
-            case 'LEFT':
-              return 'self-start';
-            case 'RIGHT':
-              return 'self-end';
-            case 'FILL':
-              return 'stretch';
-            default:
-              return 'center';
-          }
-        })(),
-      }}
     >
       <VStack {...settingsUI} {...props} ref={drop} backgroundColor={backgroundColor} className="draggable">
         {listItems && renderHandlebars(listItems, 'document2').components}
@@ -196,16 +185,20 @@ const block = {
   description: 'A view that arranges its children.',
   previewImageUrl: vstack,
   category: 'Container',
+  defaultInteractiveOptions: {
+    action: {url: '',  target: ''},
+  },
   complex: [
     {label: 'Vertical', value: 'VSTACK'},
     {label: 'Horizontal', value: 'HSTACK'},
   ],
   defaultData: {
-    sizeModifier: 'FULLSIZE',
     backgroundColor: '#C6C6C6',
     distribution: '',
     spacing: 0,
     scroll: false,
+    borderColor: '#EFEFEF',
+    borderWidth: 1,
     padding: {
       top: '100',
       bottom: '100',
@@ -230,16 +223,35 @@ const block = {
   },
   listItems: [],
   config: {
-    sizeModifier,
     alignment: alignmentConfig.horizontally,
     backgroundColor,
     distribution,
     spacing,
     scroll,
+    borderColor,
+    borderWidth,
     size,
     padding,
     shadow: shadowConfigBuilder().withRadius.done(),
     corners,
+  },
+  interactive: {
+    action: {
+      url: {
+        type: 'select',
+        name: 'Action URL',
+        action_types: 'actions,data'
+      },
+      target: {type: 'string', name: 'Target'},
+      method: {
+        type: 'select',
+        name: 'Method',
+        options: [
+          {label: 'Get', value: 'get'},
+          {label: 'Post', value: 'post'},
+        ],
+      },
+    },
   },
 };
 

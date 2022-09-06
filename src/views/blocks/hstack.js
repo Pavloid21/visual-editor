@@ -14,12 +14,18 @@ import {
   backgroundColor,
   corners,
   distribution,
-  padding,
-  sizeModifier,
+  scroll,
+  borderColor,
+  borderWidth,
   spacing,
+  padding,
+  size,
+  shadowConfigBuilder,
 } from 'views/configs';
 import hstack from 'assets/hstack.svg';
 import {pushBlockInside} from 'store/layout.slice';
+import {isNil} from 'lodash';
+import {hexToRgb} from 'constants/utils';
 
 const HStack = styled.div`
   align-self: ${(props) => {
@@ -48,9 +54,23 @@ const HStack = styled.div`
         return '0 0';
     }
   }};
-  width: ${(props) =>
-    ['FULLWIDTH', 'FULLSIZE'].includes(props.sizeModifier) ? '100%' : 'fit-content'};
-  height: ${(props) => (['FULLHEIGHT', 'FULLSIZE'].includes(props.sizeModifier) ? '100%' : 'fit-content')};
+  width: ${(props) => {
+    if (!isNil(props.size?.width)) {
+      return props.size.width + 'px';
+    } else if (!isNil(props.size?.widthInPercent)) {
+      return props.size.widthInPercent + '%';
+    } else {
+      return 'fit-content';
+    }
+  }};
+  height: ${(props) => {
+    if (!isNil(props.size?.height)) {
+      return props.size.height + 'px';
+    } else if (!isNil(props.size?.heightInPercent)) {
+      return props.size.heightInPercent + '%';
+    }
+    return 'fit-content';
+  }};
   background-color: ${(props) => props.backgroundColor};
   display: flex;
   justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
@@ -61,14 +81,24 @@ const HStack = styled.div`
   padding-bottom: ${(props) => props.padding?.bottom}px;
   padding-left: ${(props) => props.padding?.left}px;
   padding-right: ${(props) => props.padding?.right}px;
+  border-width: ${(props) => props.borderWidth}px;
+  border-style: solid;
+  border-color: ${(props) => props.borderColor};
   gap: ${(props) => props.spacing}px;
   position: relative;
   border-radius: ${(props) => `
-    ${props.corners?.topLeftRadius}px
-    ${props.corners?.topRightRadius}px
-    ${props.corners?.bottomRightRadius}px
-    ${props.corners?.bottomLeftRadius}px
+    ${props.corners?.topLeftRadius || 0}px
+    ${props.corners?.topRightRadius || 0}px
+    ${props.corners?.bottomRightRadius || 0}px
+    ${props.corners?.bottomLeftRadius || 0}px
   `};
+  ${(props) => {
+    if (props.shadow) {
+      return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${props.shadow?.radius
+        }px rgba(${hexToRgb(props.shadow?.color).r}, ${hexToRgb(props.shadow?.color).g}, ${hexToRgb(props.shadow?.color).b
+        }, ${props.shadow?.opacity});`;
+    }
+  }}
 `;
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, settingsUI, ...props}) => {
@@ -143,15 +173,20 @@ const block = {
   description: 'A view that arranges its children in a horizontal line.',
   previewImageUrl: hstack,
   category: 'Container',
+  defaultInteractiveOptions: {
+    action: {url: '', target: ''},
+  },
   complex: [
     {label: 'Vertical', value: 'VSTACK'},
     {label: 'Horizontal', value: 'HSTACK'},
   ],
   defaultData: {
-    sizeModifier: 'FULLWIDTH',
     backgroundColor: '#C6C6C6',
-    distribution: 'SPACEBETWEEN',
-    spacing: 16,
+    distribution: '',
+    spacing: 0,
+    scroll: false,
+    borderColor: '#EFEFEF',
+    borderWidth: 1,
     padding: {
       top: '100',
       bottom: '100',
@@ -164,16 +199,47 @@ const block = {
       bottomLeftRadius: 0,
       bottomRightRadius: 0,
     },
+    shadow: {
+      color: '#000000',
+      opacity: 0,
+      offsetSize: {
+        width: 0,
+        height: 0,
+      },
+      radius: 8,
+    },
   },
   listItems: [],
   config: {
-    sizeModifier,
-    alignment: alignmentConfig.both,
+    alignment: alignmentConfig.vertically,
     backgroundColor,
     distribution,
     spacing,
+    scroll,
+    borderColor,
+    borderWidth,
+    size,
     padding,
+    shadow: shadowConfigBuilder().withRadius.done(),
     corners,
+  },
+  interactive: {
+    action: {
+      url: {
+        type: 'select',
+        name: 'Action URL',
+        action_types: 'actions,data'
+      },
+      target: {type: 'string', name: 'Target'},
+      method: {
+        type: 'select',
+        name: 'Method',
+        options: [
+          {label: 'Get', value: 'get'},
+          {label: 'Post', value: 'post'},
+        ],
+      },
+    },
   },
 };
 

@@ -15,11 +15,10 @@ const projectSlice = createSlice({
     selectProject: (state, action: PayloadAction<TProject>) => {
       return {
         ...state,
-        id: action.payload.id,
-        name: action.payload.name,
+        ...action.payload,
       };
-    }
-  }
+    },
+  },
 });
 
 export const {selectProject} = projectSlice.actions;

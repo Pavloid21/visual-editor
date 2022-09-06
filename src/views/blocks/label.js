@@ -4,11 +4,11 @@ import label from 'assets/label.svg';
 import Wrapper from 'utils/wrapper';
 import {hexToRgb} from 'constants/utils';
 import {
-  alignmentConfig, backgroundColor, fontSize,
+  backgroundColor, fontSize,
   fontWeight,
   padding,
   shadowConfigBuilder,
-  shapeConfigBuilder, size, sizeModifier, text,
+  shapeConfigBuilder, size, text,
   textAlignment, textColor,
 } from 'views/configs';
 
@@ -16,32 +16,7 @@ const Label = styledComponents.div`
   box-sizing: border-box;
   display: flex;
   width: fit-content;
-  align-self: ${(props) => {
-    switch (props.alignment) {
-      case 'LEFT':
-        return 'flex-start';
-      case 'RIGHT':
-        return 'flex-end';
-      default:
-        return 'center';
-    }
-  }};
-  margin: ${(props) => {
-    switch (props.alignment) {
-      case 'CENTER':
-        return 'auto';
-      case 'TOP':
-        return '0 auto auto auto';
-      case 'BOTTOM':
-        return 'auto auto 0 auto';
-      case 'LEFT':
-        return 'auto auto auto 0';
-      case 'RIGHT':
-        return 'auto 0 auto auto';
-      default:
-        return '0 0';
-    }
-  }};
+  align-self: center;
   ${({shape}) => {
     if (shape?.type === 'ALLCORNERSROUND') {
       return `border-radius: ${shape.radius}px;`;
@@ -129,7 +104,6 @@ const block = {
   previewImageUrl: label,
   category: 'Element',
   defaultData: {
-    sizeModifier: 'FULLWIDTH',
     text: 'Вход',
     backgroundColor: '#FFFFFF',
     textColor: '#000000',
@@ -160,8 +134,6 @@ const block = {
     },
   },
   config: {
-    sizeModifier,
-    alignment: alignmentConfig.both,
     text,
     textAlignment,
     backgroundColor,

@@ -1,9 +1,8 @@
 import React, {useRef, useState} from 'react';
-import styled from 'styled-components';
-import SideBarHeader from './SideBarHeader';
+import {SideBarHeader} from 'components';
 import {Inspector} from 'containers/Inspector';
 import Screen from 'containers/Screen';
-import {Button, Input} from './controls';
+import {Button, Input} from '../controls';
 import {ActionForm} from 'containers/ActionForm';
 import {useSelector, useDispatch} from 'react-redux';
 import {ReactComponent as Plus} from 'assets/plus.svg';
@@ -15,52 +14,7 @@ import {useOutsideAlerter} from 'utils';
 import {addAPI, editAPI, removeAPI} from 'store/api-settings.slice';
 import {setSelectedBlock} from 'store/layout.slice';
 import {RootStore} from 'store/types';
-
-const Container = styled.div`
-  min-width: 422px;
-  background-color: #ffffff;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  border-left: 1px solid var(--neo-gray);
-  height: calc(100vh - 60px);
-  & > div {
-    height: 100%;
-  }
-  @media (max-width: 1500px) {
-    min-width: 300px;
-  }
-`;
-
-const APIContainer = styled.div`
-  padding: 16px;
-  & div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #e6e6e6;
-    margin-bottom: 8px;
-  }
-`;
-
-const RowContainer = styled.section`
-  display: flex;
-  align-items: center;
-  gap: 17px;
-  & > svg {
-    align-self: end;
-    margin-bottom: 10px;
-  }
-  & input {
-    max-width: 160px;
-  }
-`;
-
-const APIRow = styled.section`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
+import {APIContainer, APIRow, Container, RowContainer} from './RightSideBar.styled';
 
 const RightSidebar: React.FC<any> = ({children, ...props}) => {
   const APIs = useSelector((state: RootStore) => state.api.list);
@@ -82,9 +36,7 @@ const RightSidebar: React.FC<any> = ({children, ...props}) => {
   });
 
   const wrapperRef = useRef(null);
-  useOutsideAlerter(wrapperRef, () =>
-    dispatch(setSelectedBlock(''))
-  );
+  useOutsideAlerter(wrapperRef, () => dispatch(setSelectedBlock('')));
 
   const watchFieldArray = watch('headers');
   const watchParamsArray = watch('params');
@@ -125,10 +77,12 @@ const RightSidebar: React.FC<any> = ({children, ...props}) => {
 
   const onSubmit = (data: any) => {
     if (isEditing && selected) {
-      dispatch(editAPI({
-        api: data,
-        index: selected,
-      }));
+      dispatch(
+        editAPI({
+          api: data,
+          index: selected,
+        })
+      );
     } else {
       dispatch(addAPI(data));
     }

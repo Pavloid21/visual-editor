@@ -4,11 +4,11 @@ import {hexToRgb} from 'constants/utils';
 import Wrapper from 'utils/wrapper';
 import image from 'assets/image.svg';
 import {
-  alignmentConfig, backgroundColor,
+  backgroundColor,
   borderColor, borderWidth,
   imageUrl, shadowConfigBuilder,
   shapeConfigBuilder,
-  size, sizeModifier,
+  size,
 } from 'views/configs';
 
 const Image = styled.img`
@@ -24,32 +24,7 @@ const Image = styled.img`
       props.shadow?.offsetSize?.height || props.shadow?.offsetSize?.heightInPercent
     }px 8px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b}, ${props.shadow?.opacity})`;
   }};
-  align-self: ${(props) => {
-    switch (props.alignment) {
-      case 'LEFT':
-        return 'flex-start';
-      case 'RIGHT':
-        return 'flex-end';
-      default:
-        return 'center';
-    }
-  }};
-  margin: ${(props) => {
-    switch (props.alignment) {
-      case 'CENTER':
-        return 'auto';
-      case 'TOP':
-        return '0 auto auto auto';
-      case 'BOTTOM':
-        return 'auto auto 0 auto';
-      case 'LEFT':
-        return 'auto auto auto 0';
-      case 'RIGHT':
-        return 'auto 0 auto auto';
-      default:
-        return '0 0';
-    }
-  }};
+  align-self: center;
   z-index: 90;
   width: ${(props) => {
     if (props.size?.width !== undefined) {
@@ -74,7 +49,7 @@ const Image = styled.img`
   }}
 `;
 
-const Component = ({settingsUI, sizeModifier, ...props}) => {
+const Component = ({settingsUI, ...props}) => {
   return (
     <Wrapper id={props.id} {...settingsUI} {...props}>
       <Image {...settingsUI} {...props} className="draggable" src={settingsUI.imageUrl || image} />
@@ -90,7 +65,6 @@ const block = {
   previewImageUrl: image,
   category: 'Controls',
   defaultData: {
-    sizeModifier: 'FULLWIDTH',
     backgroundColor: '#FFFFFF',
     borderWidth: 0,
     borderColor: '#000000',
@@ -115,8 +89,6 @@ const block = {
     },
   },
   config: {
-    sizeModifier,
-    alignment: alignmentConfig.both,
     imageUrl,
     backgroundColor,
     borderWidth,

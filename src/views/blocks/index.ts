@@ -17,6 +17,7 @@ import list from './list';
 import collection from './collection';
 import bottomsheet from './bottomsheet';
 import webview from './webview';
+import calendar_text_field from './calendarField';
 import {Blocks} from './types';
 
 const blocks: Blocks = {
@@ -39,6 +40,7 @@ const blocks: Blocks = {
   bottomsheet,
   webview,
   screen,
+  calendar_text_field
 };
 
 export const gallery: Record<string, any> = {

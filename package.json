@@ -34,6 +34,7 @@
     "handlebars": "4.7.7",
     "keycloak-js": "16.1.1",
     "lodash": "4.17.21",
+    "moment": "^2.29.4",
     "oauth2-popup-flow": "1.1.0",
     "prismjs": "1.20.0",
     "prop-types": "15.8.1",

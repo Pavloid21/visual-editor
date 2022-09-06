@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import switch_ic from 'assets/switch.svg';
 import Wrapper from 'utils/wrapper';
 import {
-  alignmentConfig,
   backgroundColor,
   isActive,
   thumbOnColor,
@@ -103,16 +102,30 @@ const block = {
     thumbOnColor: '#FA6621',
   },
   config: {
-    alignment: alignmentConfig.horizontally,
     backgroundColor,
     thumbOnColor,
     isActive,
   },
   defaultInteractiveOptions: {
-    field: 'field_name',
+    action: {url: '', target: ''},
   },
   interactive: {
-    field: {type: 'string', name: 'Field name'},
+    action: {
+      url: {
+        type: 'select',
+        name: 'Action URL',
+        action_types: 'actions,data'
+      },
+      target: {type: 'string', name: 'Target'},
+      method: {
+        type: 'select',
+        name: 'Method',
+        options: [
+          {label: 'Get', value: 'get'},
+          {label: 'Post', value: 'post'},
+        ],
+      },
+    },
   },
 };
 

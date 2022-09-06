@@ -11,55 +11,22 @@ import renderHandlebars from 'utils/renderHandlebars';
 import {ItemTypes} from 'constants/actionTypes';
 import screen from 'assets/screen.svg';
 import {
-  alignmentConfig,
   backgroundColor,
-  sizeModifier,
-  spacing
+  spacing,
+  size,
+  padding
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
+import {pageSize, shadowConfigBuilder, shapeConfigBuilder, startPage} from '../configs/index';
 
 const VStack = styled.div`
-  align-self: ${(props) => {
-    switch (props.alignment) {
-      case 'LEFT':
-        return 'flex-start';
-      case 'RIGHT':
-        return 'flex-end';
-      default:
-        return 'center';
-    }
-  }};
-  margin: ${(props) => {
-    switch (props.alignment) {
-      case 'CENTER':
-        return 'auto';
-      case 'TOP':
-        return '0 auto auto auto';
-      case 'BOTTOM':
-        return 'auto auto 0 auto';
-      case 'LEFT':
-        return 'auto auto auto 0';
-      case 'RIGHT':
-        return 'auto 0 auto auto';
-      default:
-        return '0 0';
-    }
-  }};
-  width: ${(props) => (['FULLWIDTH', 'FULLSIZE'].includes(props.sizeModifier) ? '100%' : 'fit-content')};
-  height: ${(props) => (['FULLHEIGHT', 'FULLSIZE'].includes(props.sizeModifier) ? '100%' : 'fit-content')};
+  align-self: center;
+  width: fit-content;
+  height: fit-content;
   background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
   display: flex;
   justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
-  align-items: ${(props) => {
-    switch (props.alignment) {
-      case 'LEFT':
-        return 'flex-start';
-      case 'RIGHT':
-        return 'flex-start';
-      default:
-        return 'center';
-    }
-  }};
+  align-items: center;
   flex-direction: column;
   padding-top: ${(props) => props.padding?.top || 5}px;
   padding-bottom: ${(props) => props.padding?.bottom || 5}px;
@@ -82,20 +49,7 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, 
       {...settingsUI}
       {...props}
       sizeModifier="FULLSIZE"
-      style={{
-        alignItems: (() => {
-          switch (props.alignment) {
-            case 'LEFT':
-              return 'self-start';
-            case 'RIGHT':
-              return 'self-end';
-            case 'FILL':
-              return 'stretch';
-            default:
-              return 'center';
-          }
-        })(),
-      }}
+      style={{alignItems: 'center'}}
     >
       <VStack {...settingsUI} {...props} ref={drop} backgroundColor={backgroundColor} className="draggable">
         {listItems && renderHandlebars(listItems, 'document2').components}
@@ -165,18 +119,51 @@ const block = {
   description: 'A view that arranges its children.',
   previewImageUrl: screen,
   category: 'Container',
+  defaultInteractiveOptions: {
+    id: 'Screen',
+    url: ''
+  },
   defaultData: {
     backgroundColor: '#C6C6C6',
     wrapContent: '',
     spacing: 0,
+    pageSize: {
+      type: 'number',
+      name: 'Page size',
+    },
+    startPage: {
+      type: 'number',
+      name: 'Start page',
+    },
+    shadow: {
+      offsetSize: {
+        width: 0,
+        height: 0,
+      },
+      radius: 8,
+    },
+    size: {
+      heightInPercent: 100,
+      widthInPercent: 100,
+    }
   },
   listItems: [],
   config: {
-    sizeModifier,
-    alignment: alignmentConfig.both,
     backgroundColor,
     spacing,
+    size,
+    padding,
+    startPage,
+    pageSize,
+    shape: shapeConfigBuilder().withAllCornersRound.withRadius.done(),
+    shadow: shadowConfigBuilder()
+      .withRadius
+      .done(),
   },
+  interactive: {
+    id: {type: 'string', name: 'Screen name'},
+    url: {type: 'string', name: 'URL'},
+  }
 };
 
 export default block;

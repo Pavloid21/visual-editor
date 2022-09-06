@@ -16,7 +16,6 @@ import {
   pageSize,
   shapeConfigBuilder,
   size,
-  sizeModifier,
   startPage
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
@@ -43,7 +42,6 @@ const List = styled.div`
   background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
   display: flex;
   padding: 4px 0;
-  align-items: ${(props) => props.alignment};
   flex-direction: column;
   box-sizing: border-box;
   overflow: auto;
@@ -140,7 +138,6 @@ const block = {
     dataSource: '',
   },
   defaultData: {
-    sizeModifier: 'FULLWIDTH',
     backgroundColor: '#C6C6C6',
     pageSize: 1,
   },
@@ -152,7 +149,6 @@ const block = {
     },
   },
   config: {
-    sizeModifier,
     startPage,
     pageSize,
     shape: shapeConfigBuilder()

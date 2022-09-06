@@ -6,7 +6,6 @@ import {observer} from '../../utils/observer';
 
 const WebView = styled.iframe`
   flex: 1 1 auto;
-  border: none;
 `;
 
 const Component = ({settingsUI, uuid, ...props}) => {
@@ -32,13 +31,14 @@ const Component = ({settingsUI, uuid, ...props}) => {
   }
 
   return (
-    <Wrapper id={props.id} {...settingsUI} style={{flex: 1}}>
+    <Wrapper id={props.id} {...settingsUI} sizeModifier={'FULLWIDTH'} style={{flex: 1}}>
       <WebView
         {...props}
         ref={contentRef}
         className="draggable"
         src={settingsUI.mainSiteUrl}
         sandbox="allow-scripts allow-same-origin"
+        frameborder="0"
       ></WebView>
     </Wrapper>
   );
