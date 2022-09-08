@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import bottombar from '../../assets/bottombar.svg';
 import Wrapper from '../../utils/wrapper';
+import {iconSelectedColor, iconUnselectedColor, showUnselectedText} from '../configs';
 
 const BottomBar = styled.div`
   background-color: ${(props) => props.backgroundColor};
@@ -16,7 +17,7 @@ const BottomBar = styled.div`
     position: relative;
     flex: 1 1 auto;
     justify-content: center;
-    color: ${(props) => props.bottomIconUnselectedColor};
+    color: ${(props) => props.iconUnselectedColor};
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -25,13 +26,13 @@ const BottomBar = styled.div`
       margin-bottom: 0;
     }
     & .item_icon {
-      background-color: ${(props) => props.bottomIconUnselectedColor};
+      background-color: ${(props) => props.iconUnselectedColor};
     }
   }
   & .active {
-    color: ${(props) => props.bottomIconSelectedColor};
+    color: ${(props) => props.iconSelectedColor};
     & div {
-      background-color: ${(props) => props.bottomIconSelectedColor};
+      background-color: ${(props) => props.iconSelectedColor};
     }
   }
 `;
@@ -80,8 +81,8 @@ const block = () => ({
   },
   defaultData: {
     backgroundColor: '#423649',
-    bottomIconSelectedColor: '#E9E8EA',
-    bottomIconUnselectedColor: '#A29CA6',
+    iconSelectedColor: '#E9E8EA',
+    iconUnselectedColor: '#A29CA6',
     navigationItems: [
       {
         screenName: 'Auth',
@@ -111,14 +112,9 @@ const block = () => ({
   },
   config: {
     backgroundColor: {type: 'color', name: 'Background color'},
-    bottomIconSelectedColor: {
-      type: 'color',
-      name: 'Bottom icon selected color',
-    },
-    bottomIconUnselectedColor: {
-      type: 'color',
-      name: 'Bottom icon unselected color',
-    },
+    iconSelectedColor,
+    iconUnselectedColor,
+    showUnselectedText,
     navigationItems: [
       {
         screenName: {type: 'string', name: 'Screen name'},

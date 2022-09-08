@@ -3,7 +3,7 @@ import {createAction, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import actionTypes from 'constants/actionTypes';
 import {getData} from 'utils/prepareModel';
 import blocks from 'views/blocks';
-import {get} from 'external/lodash';
+import {clone, cloneDeep, get} from 'external/lodash';
 import type {
   BlockItem,
   EditScreenNamePayloadAction,
@@ -50,7 +50,7 @@ export const findInTree = (tree: BlockItem[], uuid: string): BlockItem | null =>
   let result: BlockItem | null = null;
   for (const item of tree) {
     if (item.uuid === uuid) {
-      result = {...item};
+      result = item;
     }
     if (!result && item.listItems) {
       result = findInTree(item.listItems, uuid);
@@ -147,7 +147,7 @@ export const pushBlockInside = createAction('layout/pushBlockInside', (payload) 
       payload: null
     };
   }
-  const target = findInTree(state.blocks, payload.uuid);
+  const target = clone(findInTree(state.blocks, payload.uuid));
   const blockConfig = blocks[payload.blockId](blockState);
   const list = blockConfig.listItems;
   const obj = blockConfig.listItem;
@@ -235,14 +235,16 @@ export const changeBlockData = createAction('layout/changeBlockData', (payload: 
   const store = rootStore.getState();
   const {layout: state} = store;
 
-  const newBlocks = JSON.parse(JSON.stringify(state.blocks));
+  const newBlocks = cloneDeep({
+    blocks: state.blocks,
+    bottomBar: state.bottomBar,
+    topAppBar: state.topAppBar,
+  });
   const element: BlockItem =
-    findInTree(newBlocks, payload.blockUuid) ||
+    findInTree(newBlocks.blocks, payload.blockUuid) ||
     (payload.blockUuid === state.bottomBar?.uuid
-      ? {
-        ...state.bottomBar,
-      }
-      : {...state.topAppBar});
+      ? newBlocks.bottomBar
+      : newBlocks.topAppBar);
   if (payload.parentKey && Array.isArray(payload.parentKey)) {
     element.settingsUI[payload.parentKey[1]][payload.parentKey[0]][payload.key] = payload.value;
   } else if (payload.parentKey) {
@@ -275,7 +277,7 @@ export const changeBlockData = createAction('layout/changeBlockData', (payload: 
     }
   }
   return {
-    payload: [...newBlocks],
+    payload: newBlocks,
   };
 });
 
@@ -318,7 +320,7 @@ export const removeProperty = createAction('layout/removeProperty', (payload) =>
   } else {
     if (
       element.settingsUI[payload.key] !== undefined ||
-      blocks[element.blockId].config[payload.key]
+      blocks[element.blockId](blockStateUnsafeSelector(store)).config[payload.key]
     ) {
       delete element.settingsUI[payload.key];
     } else if (element.interactive) {
@@ -334,7 +336,8 @@ export const switchElementType = createAction('layout/switchElementType', (paylo
   const store = rootStore.getState();
   const {layout: state} = store;
 
-  const blocksArr = [...state.blocks];
+  const blocksArr = cloneDeep(state.blocks);
+  const block = blocks[payload.toLowerCase()](blockStateUnsafeSelector(store));
 
   const currentElement = findInTree(blocksArr, state.selectedBlockUuid);
 
@@ -347,12 +350,12 @@ export const switchElementType = createAction('layout/switchElementType', (paylo
 
     currentElement.interactive = {
       ...currentElement.interactive,
-      ...getData(blocks[payload.toLowerCase()].defaultInteractiveOptions),
+      ...getData(block.defaultInteractiveOptions),
     };
     currentElement.settingsUI = {
       ...currentElement.settingsUI,
-      placeholder: blocks[payload.toLowerCase()].defaultData.placeholder,
-      text: blocks[payload.toLowerCase()].defaultData.text
+      placeholder: block.defaultData.placeholder,
+      text: block.defaultData.text
     };
   }
   return {
@@ -512,7 +515,9 @@ const layoutSlice = createSlice({
         }
       });
       builder.addCase(changeBlockData, (state, action) => {
-        state.blocks = action.payload;
+        state.blocks = action.payload.blocks;
+        state.bottomBar = action.payload.bottomBar;
+        state.topAppBar = action.payload.topAppBar;
       });
       builder.addCase(pushBlock, (state, action) => {
         state.blocks = action.payload;
