@@ -47,7 +47,7 @@ const Component = ({settingsUI, ...props}) => {
   );
 };
 
-const block = {
+const block = () => ({
   Component,
   name: 'TOPAPPBAR',
   title: 'App bars: top',
@@ -77,6 +77,6 @@ const block = {
       title: {type: 'string', name: 'Title'},
     },
   },
-};
+});
 
 export default block;

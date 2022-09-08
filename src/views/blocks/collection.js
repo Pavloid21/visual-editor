@@ -11,33 +11,22 @@ import {observer} from 'utils/observer';
 import {ItemTypes} from 'constants/actionTypes';
 import {
   backgroundColor,
+  getSizeConfig,
   padding,
-  size,
   spacing,
   shapeConfigBuilder,
   metricStyle,
 } from 'views/configs';
 import collection from 'assets/collection.svg';
 import {pushBlockInside} from 'store/layout.slice';
+import {blockStateSafeSelector} from 'store/selectors';
+import store from 'store';
+import {getSizeStyle} from 'views/utils/styles/size';
 
 const Collection = styled.div`
   align-self: center;
-  width: ${(props) => {
-    if (props.size?.width !== undefined && props.size?.width !== 0) {
-      return props.size.width + 'px';
-  } else if (props.size?.widthInPercent !== undefined && props.size?.widthInPercent !== 0) {
-      return props.size.widthInPercent + '%';
-  }
-    return '100%';
-}};
-  height: ${(props) => {
-    if (props.size?.height !== undefined && props.size?.height !== 0) {
-      return props.size.height + 'px';
-  } else if (props.size?.heightInPercent !== undefined && props.size?.heightInPercent !== 0) {
-      return props.size.heightInPercent + '%';
-  }
-    return 'auto';
-}};
+  width: ${(props) => getSizeStyle('width', props)};
+  height: ${(props) => getSizeStyle('height', props)};
   background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
   display: flex;
   padding-top: ${(props) => props.padding?.top}px;
@@ -78,7 +67,13 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItem, s
       {...settingsUI}
       {...props}
     >
-      <Collection {...settingsUI} {...props} ref={drop} backgroundColor={backgroundColor} className="draggable">
+      <Collection
+        {...settingsUI}
+        {...props}
+        ref={drop}
+        backgroundColor={backgroundColor}
+        className="draggable"
+      >
         <div>{listItem && renderHandlebars([listItem], 'document2').components}</div>
       </Collection>
     </Wrapper>
@@ -95,25 +90,25 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
         dispatch(pushBlockInside({
           blockId: item.id,
           uuid,
-      }));
-    }
+        }));
+      }
       return {
         uuid,
         target: target.targetId,
-    };
-  },
+      };
+    },
     collect: (monitor) => ({
       isOver: monitor.isOver({shallow: true}),
       canDrop: monitor.canDrop(),
       target: monitor,
-  }),
-}));
+    }),
+  }));
 
   const isActive = canDrop && isOver;
   let backgroundColor = settingsUI.backgroundColor;
   if (isActive) {
     backgroundColor = '#f1f8ff';
-}
+  }
 
   const onSortEnd = ({oldIndex, newIndex, nodes}) => {
     const newOrder = arrayMoveImmutable(nodes, oldIndex, newIndex).map((item) => item.node.getAttribute('id'));
@@ -122,8 +117,8 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
       newOrder,
       parentID: nodes[0].node.parentNode.getAttribute('id'),
       event: 'sorted',
-  });
-};
+    });
+  };
 
   return (
     <SortableContainer
@@ -139,82 +134,86 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
   );
 };
 
-const block = {
-  Component,
-  name: 'COLLECTION',
-  title: 'Collection',
-  description:
-    'A container that presents rows of data arranged in a single column, optionally providing the ability to select one or more members.',
-  previewImageUrl: collection,
-  category: 'Container',
-  defaultInteractiveOptions: {
-    dataSource: {
-      url: '',
-      pageSize: 5,
-      startPage: 1
-  },
-},
-  defaultData: {
-    backgroundColor: '#C6C6C6',
-    spacing: 16,
-    size: {
-      height: 300,
-      width: '',
-  },
-    padding: {
-      left: 16,
-      top: 16,
-      right: 16,
-      bottom: 16,
-  },
-    collectionUiConfig: {
-      metricStyle: 'pointsAndItemsIn',
-      pointHeight: 121,
-      itemsInHorisontal: 2,
-      itemsInVertical: 1,
-      scrollDirection: 'vertical',
-  },
-},
-  listItem: null,
-  interactive: {
-    dataSource: {
-      url: {
-        type: 'string',
-        name: 'URL',
+const block = (state) => {
+  const blockState = state || blockStateSafeSelector(store.getState());
+
+  return ({
+    Component,
+    name: 'COLLECTION',
+    title: 'Collection',
+    description:
+      'A container that presents rows of data arranged in a single column, optionally providing the ability to select one or more members.',
+    previewImageUrl: collection,
+    category: 'Container',
+    defaultInteractiveOptions: {
+      dataSource: {
+        url: '',
+        pageSize: 5,
+        startPage: 1
+      },
     },
-      pageSize: {
-        type: 'number',
-        name: 'Page size',
+    defaultData: {
+      backgroundColor: '#C6C6C6',
+      spacing: 16,
+      size: {
+        height: 300,
+        width: '',
+      },
+      padding: {
+        left: 16,
+        top: 16,
+        right: 16,
+        bottom: 16,
+      },
+      collectionUiConfig: {
+        metricStyle: 'pointsAndItemsIn',
+        pointHeight: 121,
+        itemsInHorisontal: 2,
+        itemsInVertical: 1,
+        scrollDirection: 'vertical',
+      },
     },
-      startPage: {
-        type: 'number',
-        name: 'Start page',
+    listItem: null,
+    interactive: {
+      dataSource: {
+        url: {
+          type: 'string',
+          name: 'URL',
+        },
+        pageSize: {
+          type: 'number',
+          name: 'Page size',
+        },
+        startPage: {
+          type: 'number',
+          name: 'Start page',
+        },
+      },
     },
-  },
-},
-  config: {
-    backgroundColor,
-    spacing,
-    size,
-    padding,
-    shape: shapeConfigBuilder().withRadius.withAllCornersRound.withTopCornersRound.done(),
-    collectionUiConfig: {
-      cellBackgroundColor: {type: 'color', name: 'Cell background color'},
-      metricStyle,
-      scrollDirection: {
-        type: 'select', name: 'Scroll direction', options: [
-          {label: 'Vertical', value: 'vertical'},
-          {label: 'Horizontal', value: 'horizontal'}
-        ]
+    config: {
+      backgroundColor,
+      spacing,
+      size: getSizeConfig(blockState.deviceInfo.device),
+      padding,
+      shape: shapeConfigBuilder().withRadius.withAllCornersRound.withTopCornersRound.done(),
+      collectionUiConfig: {
+        cellBackgroundColor: {type: 'color', name: 'Cell background color'},
+        metricStyle,
+        scrollDirection: {
+          type: 'select', name: 'Scroll direction', options: [
+            {label: 'Vertical', value: 'vertical'},
+            {label: 'Horizontal', value: 'horizontal'}
+          ]
+        },
+        pointHeight: {type: 'number', name: 'Point height', relations: {metricStyle: ['pointsAndItemsIn', 'points']}},
+        pointWidth: {type: 'number', name: 'Point width', relations: {metricStyle: ['pointsAndItemsIn', 'points']}},
+        itemsInHorisontal: {type: 'number', name: 'Items in horizontal', relations: {metricStyle: ['pointsAndItemsIn', 'itemsInAndProportional', 'itemsIn']}},
+        itemsInVertical: {type: 'number', name: 'Items in vertical', relations: {metricStyle: ['pointsAndItemsIn', 'itemsInAndProportional', 'itemsIn']}},
+        widthToHeight: {type: 'number', name: 'Width to height', relations: {metricStyle: ['itemsInAndProportional']}},
+        heightToWidth: {type: 'number', name: 'Height to width', relations: {metricStyle: ['itemsInAndProportional']}},
+      },
     },
-      pointHeight: {type: 'number', name: 'Point height', relations: {metricStyle: ['pointsAndItemsIn', 'points']}},
-      pointWidth: {type: 'number', name: 'Point width', relations: {metricStyle: ['pointsAndItemsIn', 'points']}},
-      itemsInHorisontal: {type: 'number', name: 'Items in horizontal', relations: {metricStyle: ['pointsAndItemsIn', 'itemsInAndProportional', 'itemsIn']}},
-      itemsInVertical: {type: 'number', name: 'Items in vertical', relations: {metricStyle: ['pointsAndItemsIn', 'itemsInAndProportional', 'itemsIn']}},
-      widthToHeight: {type: 'number', name: 'Width to height', relations: {metricStyle: ['itemsInAndProportional']}},
-      heightToWidth: {type: 'number', name: 'Height to width', relations: {metricStyle: ['itemsInAndProportional']}},
-  },
-},
+  });
 };
 
 export default block;

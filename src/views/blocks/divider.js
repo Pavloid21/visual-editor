@@ -19,7 +19,7 @@ const Component = ({settingsUI, ...props}) => {
   );
 };
 
-const block = {
+const block = () => ({
   Component,
   name: 'DIVIDER',
   title: 'Divider',
@@ -37,6 +37,6 @@ const block = {
     size,
     backgroundColor
   },
-};
+});
 
 export default block;

@@ -1,3 +1,5 @@
+import {Device} from 'containers/MobileSelect/consts';
+
 export type Block = {
   Component: any;
   name: string;
@@ -15,25 +17,33 @@ export type Block = {
 
 type SimpleObject = {[key: string]: any};
 
+export type BlocksState = {
+  deviceInfo: {
+    device: Device,
+    model: string,
+    dpi: number
+  }
+}
+
 export interface Blocks extends SimpleObject {
-  hstack: Block;
-  card: Block;
-  vstack: Block;
-  basictextfield: Block;
-  passwordtextfield: Block;
-  label: Block;
-  button: Block;
-  image: Block;
-  bottombar: Block;
-  box: Block;
-  searchbar: Block;
-  switch: Block;
-  topappbar: Block;
-  divider: Block;
-  list: Block;
-  collection: Block;
-  bottomsheet: Block;
-  webview: Block;
-  screen: Block;
-  calendar_text_field: Block;
+  hstack: (state?: BlocksState) => Block;
+  card: (state?: BlocksState) => Block;
+  vstack: (state?: BlocksState) => Block;
+  basictextfield: (state?: BlocksState) => Block;
+  passwordtextfield: (state?: BlocksState) => Block;
+  label: (state?: BlocksState) => Block;
+  button: (state?: BlocksState) => Block;
+  image: (state?: BlocksState) => Block;
+  bottombar: (state?: BlocksState) => Block;
+  box: (state?: BlocksState) => Block;
+  searchbar: (state?: BlocksState) => Block;
+  switch: (state?: BlocksState) => Block;
+  topappbar: (state?: BlocksState) => Block;
+  divider: (state?: BlocksState) => Block;
+  list: (state?: BlocksState) => Block;
+  collection: (state?: BlocksState) => Block;
+  bottomsheet: (state?: BlocksState) => Block;
+  webview: (state?: BlocksState) => Block;
+  screen: (state?: BlocksState) => Block;
+  calendar_text_field: (state?: BlocksState) => Block;
 }

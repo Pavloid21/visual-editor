@@ -11,14 +11,19 @@ import {observer} from 'utils/observer';
 import renderHandlebars from 'utils/renderHandlebars';
 import {onSortMove} from 'utils/hooks';
 import {
-  backgroundColor, fontSize,
+  backgroundColor,
+  fontSize,
+  getSizeConfig,
   imageUrl,
   placeholder,
-  placeholderColor, size,
+  placeholderColor,
   text,
   textAlignment, textColor,
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
+import {blockStateSafeSelector} from 'store/selectors';
+import store from 'store';
+import {getSizeStyle} from 'views/utils/styles/size';
 
 const SearchBar = styled.div`
   display: flex;
@@ -33,30 +38,16 @@ const SearchBar = styled.div`
 
     color: ${(props) => props.textColor};
     background-color: ${(props) => props.backgroundColor};
-    height: ${(props) => props.size?.height}px;
-    width: ${(props) => (props.size?.width ? props.size.width + 'px' : '100%')};
+    height: ${(props) => getSizeStyle('height', props)};
+    width: ${(props) => getSizeStyle('width', props)};
     text-align: ${(props) => props.textAllignment || 'left'};
   }
 
   &::after {
     content: '';
     display: block;
-    width: ${(props) => {
-      if (props.size?.width !== undefined) {
-        return props.size.width + 'px';
-      } else if (props.size?.widthInPercent !== undefined) {
-        return props.size.widthInPercent + '%';
-      }
-      return '100%';
-    }};
-    height: ${(props) => {
-      if (props.size?.height !== undefined) {
-        return props.size.height + 'px';
-      } else if (props.size?.heightInPercent !== undefined) {
-        return props.size.heightInPercent + '%';
-      }
-      return 'auto';
-    }};
+    width: ${(props) => getSizeStyle('width', props)};
+    height: ${(props) => getSizeStyle('height', props)};
     position: absolute;
     top: 0;
     right: 0;
@@ -71,7 +62,12 @@ const SortableContainer = sortableContainer(
   ({drop, backgroundColor, listItems, text, placeholder, settingsUI, ...props}) => {
     return (
       <Wrapper id={props.id} {...settingsUI} {...props} style={{maxHeight: '100%'}}>
-        <SearchBar {...props.settingsUI} {...props} ref={drop} backgroundColor={backgroundColor}>
+        <SearchBar
+          {...props.settingsUI}
+          {...props}
+          ref={drop}
+          backgroundColor={backgroundColor}
+        >
           <input type="text" className="form-control draggable" placeholder={placeholder} value={text} />
           {listItems && renderHandlebars(listItems, 'document2').components}
         </SearchBar>
@@ -134,37 +130,41 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
   );
 };
 
-const block = {
-  Component,
-  name: 'SEARCHBAR',
-  title: 'Search',
-  description: 'Search allows users to quickly find app content.',
-  previewImageUrl: searchbar,
-  imgUrl: 'https://icons.getbootstrap.com/assets/icons/search.svg',
-  category: 'Controls',
-  defaultData: {
-    placeholder: 'Введите имя',
-    placeholderColor: '#7F7F7F',
-    imageUrl: 'https://icons.getbootstrap.com/assets/icons/search.svg',
-    text: 'neo',
-    textColor: '#000000',
-    backgroundColor: '#FFFFFF',
-    size: {
-      height: 48,
-      width: '',
+const block = (state) => {
+  const blockState = state || blockStateSafeSelector(store.getState());
+
+  return ({
+    Component,
+    name: 'SEARCHBAR',
+    title: 'Search',
+    description: 'Search allows users to quickly find app content.',
+    previewImageUrl: searchbar,
+    imgUrl: 'https://icons.getbootstrap.com/assets/icons/search.svg',
+    category: 'Controls',
+    defaultData: {
+      placeholder: 'Введите имя',
+      placeholderColor: '#7F7F7F',
+      imageUrl: 'https://icons.getbootstrap.com/assets/icons/search.svg',
+      text: 'neo',
+      textColor: '#000000',
+      backgroundColor: '#FFFFFF',
+      size: {
+        height: 48,
+        width: '',
+      },
     },
-  },
-  config: {
-    placeholder,
-    imageUrl,
-    placeholderColor,
-    text,
-    textAlignment,
-    textColor,
-    backgroundColor,
-    fontSize,
-    size,
-  },
+    config: {
+      placeholder,
+      imageUrl,
+      placeholderColor,
+      text,
+      textAlignment,
+      textColor,
+      backgroundColor,
+      fontSize,
+      size: getSizeConfig(blockState.deviceInfo.device),
+    },
+  });
 };
 
 export default block;

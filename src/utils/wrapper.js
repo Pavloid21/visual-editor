@@ -7,7 +7,7 @@ const Wrapper = styled.div`
   border-radius: 4px;
   border: 1px dashed var(--main-color);
   width: ${(props) => {
-    if (['FULLWIDTH', 'FULLSIZE'].includes(props.sizeModifier)) {
+    if ((props.size?.widthInPercent !== undefined) || ['FULLWIDTH', 'FULLSIZE'].includes(props.sizeModifier)) {
       return '100%';
     }
     if (props?.size?.width) {
@@ -19,7 +19,7 @@ const Wrapper = styled.div`
     return 'fit-content';
   }};
   height: ${(props) => {
-    if (['FULLHEIGHT', 'FULLSIZE'].includes(props.sizeModifier)) {
+    if ((props.size?.heightInPercent !== undefined) || ['FULLHEIGHT', 'FULLSIZE'].includes(props.sizeModifier)) {
       return '100%';
     }
     if (props?.size?.height) {

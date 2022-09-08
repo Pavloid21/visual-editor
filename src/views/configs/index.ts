@@ -3,6 +3,7 @@ import {AlignmentValues} from './alignment';
 export * from './alignment';
 export * from './shape';
 export * from './shadow';
+export * from './size';
 
 export const textAlignment = {
   type: 'select',
@@ -70,6 +71,16 @@ export const size = {
       {label: '%', value: '%'},
     ],
   },
+};
+
+export const sizeModifier = {
+  type: 'select',
+  name: 'Size modifier',
+  options: [
+    {label: 'Full width', value: 'FULLWIDTH'},
+    {label: 'Full height', value: 'FULLHEIGHT'},
+    {label: 'Full size', value: 'FULLSIZE'},
+  ],
 };
 
 export const startPage = {type: 'number', name: 'Start page'};

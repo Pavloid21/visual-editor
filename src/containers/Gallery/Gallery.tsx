@@ -49,7 +49,7 @@ const Gallery: React.FC<any> = (props) => {
 
   const allBlocks = (filteredBlocks?: Record<string, any>, viewMode = 'grid') => {
     return Object.keys(filteredBlocks || blocks).map((blockId: string) => {
-      const block = blocks[blockId];
+      const block = blocks[blockId]();
       return (
         <BlockPreview
           mode={viewMode}

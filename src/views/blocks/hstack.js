@@ -24,8 +24,8 @@ import {
 } from 'views/configs';
 import hstack from 'assets/hstack.svg';
 import {pushBlockInside} from 'store/layout.slice';
-import {isNil} from 'lodash';
 import {hexToRgb} from 'constants/utils';
+import {getSizeStyle} from '../utils/styles/size';
 
 const HStack = styled.div`
   align-self: ${(props) => {
@@ -54,23 +54,8 @@ const HStack = styled.div`
         return '0 0';
     }
   }};
-  width: ${(props) => {
-    if (!isNil(props.size?.width)) {
-      return props.size.width + 'px';
-    } else if (!isNil(props.size?.widthInPercent)) {
-      return props.size.widthInPercent + '%';
-    } else {
-      return 'fit-content';
-    }
-  }};
-  height: ${(props) => {
-    if (!isNil(props.size?.height)) {
-      return props.size.height + 'px';
-    } else if (!isNil(props.size?.heightInPercent)) {
-      return props.size.heightInPercent + '%';
-    }
-    return 'fit-content';
-  }};
+  width: ${(props) => getSizeStyle('width', props)};
+  height: ${(props) => getSizeStyle('height', props)};
   background-color: ${(props) => props.backgroundColor};
   display: flex;
   justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
@@ -166,7 +151,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
   );
 };
 
-const block = {
+const block = () => ({
   Component,
   name: 'HSTACK',
   title: 'HStack',
@@ -218,7 +203,7 @@ const block = {
     scroll,
     borderColor,
     borderWidth,
-    size,
+    size, // todo to new units
     padding,
     shadow: shadowConfigBuilder().withRadius.done(),
     corners,
@@ -241,6 +226,6 @@ const block = {
       },
     },
   },
-};
+});
 
 export default block;

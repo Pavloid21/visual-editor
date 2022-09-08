@@ -2,33 +2,25 @@ import styled from 'styled-components';
 import Wrapper from 'utils/wrapper';
 import passwordtextfield from 'assets/passwordtextfield.svg';
 import {
-  backgroundColor, fontSize,
+  backgroundColor,
+  fontSize,
+  getSizeConfig,
   placeholder,
-  placeholderColor, size,
+  placeholderColor,
   text,
-  textAlignment, textColor,
+  textAlignment,
+  textColor,
 } from 'views/configs';
+import {blockStateSafeSelector} from 'store/selectors';
+import store from 'store';
+import {getSizeStyle} from 'views/utils/styles/size';
 
 export const Container = styled.div`
   display: flex;
   align-self: center;
-  width: ${(props) => {
-    if (props.size?.width !== undefined) {
-      return props.size.width + 'px';
-    } else if (props.size?.widthInPercent !== undefined) {
-      return props.size.widthInPercent + '%';
-    }
-    return '100%';
-  }};
+  width: ${(props) => getSizeStyle('width', props)};
   & > input {
-    height: ${(props) => {
-      if (props.size?.height !== undefined) {
-        return props.size.height + 'px';
-      } else if (props.size?.heightInPercent !== undefined) {
-        return props.size.heightInPercent + '%';
-      }
-      return 'auto';
-    }};
+    height: ${(props) => getSizeStyle('height', props)};
     display: block;
     pointer-events: none;
     color: ${(props) => props.textColor};
@@ -44,55 +36,64 @@ export const Container = styled.div`
 
 const Component = ({settingsUI, ...props}) => {
   const {placeholder, text} = settingsUI;
+
   return (
     <Wrapper id={props.id} {...settingsUI} {...props}>
-      <Container className="draggable" {...props} {...settingsUI}>
+      <Container
+        className="draggable"
+        {...props}
+        {...settingsUI}
+      >
         <input {...props} type="password" className="form-control" placeholder={placeholder} value={text} />
       </Container>
     </Wrapper>
   );
 };
 
-const block = {
-  Component,
-  name: 'PASSWORDTEXTFIELD',
-  title: 'PasswordField',
-  description: 'A control into which the user securely enters private text.',
-  previewImageUrl: passwordtextfield,
-  category: 'Controls',
-  defaultInteractiveOptions: {
-    field: 'field_name',
-  },
-  complex: [
-    {label: 'Text', value: 'BASICTEXTFIELD'},
-    {label: 'Password', value: 'PASSWORDTEXTFIELD'},
-    {label: 'Calendar', value: 'CALENDAR_TEXT_FIELD'},
-  ],
-  defaultData: {
-    placeholder: 'Password',
-    placeholderColor: '#7F7F7F',
-    text: 'neo12345',
-    textColor: '#000000',
-    backgroundColor: '#FFFFFF',
-    fontSize: 16,
-    size: {
-      width: '',
-      height: '',
+const block = (state) => {
+  const blockState = state || blockStateSafeSelector(store.getState());
+
+  return ({
+    Component,
+    name: 'PASSWORDTEXTFIELD',
+    title: 'PasswordField',
+    description: 'A control into which the user securely enters private text.',
+    previewImageUrl: passwordtextfield,
+    category: 'Controls',
+    defaultInteractiveOptions: {
+      field: 'field_name',
     },
-  },
-  config: {
-    placeholder,
-    placeholderColor,
-    text,
-    textAlignment,
-    textColor,
-    backgroundColor,
-    fontSize,
-    size,
-  },
-  interactive: {
-    field: {type: 'string', name: 'Field name'},
-  },
+    complex: [
+      {label: 'Text', value: 'BASICTEXTFIELD'},
+      {label: 'Password', value: 'PASSWORDTEXTFIELD'},
+      {label: 'Calendar', value: 'CALENDAR_TEXT_FIELD'},
+    ],
+    defaultData: {
+      placeholder: 'Password',
+      placeholderColor: '#7F7F7F',
+      text: 'neo12345',
+      textColor: '#000000',
+      backgroundColor: '#FFFFFF',
+      fontSize: 16,
+      size: {
+        width: '',
+        height: '',
+      },
+    },
+    config: {
+      placeholder,
+      placeholderColor,
+      text,
+      textAlignment,
+      textColor,
+      backgroundColor,
+      fontSize,
+      size: getSizeConfig(blockState.deviceInfo.device),
+    },
+    interactive: {
+      field: {type: 'string', name: 'Field name'},
+    },
+  });
 };
 
 export default block;

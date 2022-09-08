@@ -90,7 +90,7 @@ const Component = ({settingsUI, ...props}) => {
   );
 };
 
-const block = {
+const block = () => ({
   Component,
   name: 'SWITCH',
   title: 'Switches',
@@ -127,6 +127,6 @@ const block = {
       },
     },
   },
-};
+});
 
 export default block;

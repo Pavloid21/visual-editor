@@ -10,9 +10,12 @@ import {
   padding, placeholder, placeholderColor,
   shadowConfigBuilder,
   shapeConfigBuilder,
-  size,
   textAlignment,
+  getSizeConfig,
 } from 'views/configs';
+import {blockStateSafeSelector} from 'store/selectors';
+import store from 'store';
+import {getSizeStyle} from 'views/utils/styles/size';
 
 const Input = styled.div`
   align-self: center;
@@ -22,22 +25,8 @@ const Input = styled.div`
   align-items: center;
   border: 1px solid var(--neo-gray);
   text-align: ${(props) => props.textAlignment};
-  width: ${(props) => {
-    if (props.size?.width !== undefined) {
-      return props.size.width + 'px';
-    } else if (props.size?.widthInPercent !== undefined) {
-      return props.size.widthInPercent + '%';
-    }
-    return '100%';
-  }};
-  height: ${(props) => {
-    if (props.size?.height !== undefined) {
-      return props.size.height + 'px';
-    } else if (props.size?.heightInPercent !== undefined) {
-      return props.size.heightInPercent + '%';
-    }
-    return 'auto';
-  }};
+  width: ${(props) => getSizeStyle('width', props)};
+  height: ${(props) => getSizeStyle('height', props)};
   padding-top: ${(props) => props.padding?.top}px;
   padding-bottom: ${(props) => props.padding?.bottom}px;
   padding-left: ${(props) => props.padding?.left}px;
@@ -93,7 +82,11 @@ const Input = styled.div`
 const Component = ({settingsUI, ...props}) => {
   return (
     <Wrapper id={props.id} {...settingsUI} {...props}>
-      <Input {...props} {...settingsUI} className="draggable">
+      <Input
+        {...props}
+        {...settingsUI}
+        className="draggable"
+      >
         {!settingsUI.text && settingsUI.placeholder && <span className="placeholder">{settingsUI.placeholder}</span>}
         {settingsUI.text && <span>{settingsUI.text}</span>}
       </Input>
@@ -101,75 +94,79 @@ const Component = ({settingsUI, ...props}) => {
   );
 };
 
-const block = {
-  Component,
-  name: 'BASICTEXTFIELD',
-  title: 'Input',
-  description: 'A control into which the user enters necessary value.',
-  previewImageUrl: passwordtextfield,
-  category: 'Controls',
-  defaultInteractiveOptions: {
-    field: 'field_name',
-  },
-  complex: [
-    {label: 'Text', value: 'BASICTEXTFIELD'},
-    {label: 'Password', value: 'PASSWORDTEXTFIELD'},
-    {label: 'Calendar', value: 'CALENDAR_TEXT_FIELD'}
-  ],
-  defaultData: {
-    placeholder: 'Login',
-    placeholderColor: '#7F7F7F',
-    text: 'neo',
-    textColor: '#000000',
-    backgroundColor: '#FFFFFF',
-    borderColor: '#EFEFEF',
-    borderWidth: 1,
-    fontSize: 16,
-    size: {
-      width: 100,
-      height: 48,
+const block = (state) => {
+  const blockState = state || blockStateSafeSelector(store.getState());
+
+  return ({
+    Component,
+    name: 'BASICTEXTFIELD',
+    title: 'Input',
+    description: 'A control into which the user enters necessary value.',
+    previewImageUrl: passwordtextfield,
+    category: 'Controls',
+    defaultInteractiveOptions: {
+      field: 'field_name',
     },
-    shadow: {
-      color: '#000000',
-      opacity: 0.3,
-      offsetSize: {
-        width: 0,
-        height: 0,
+    complex: [
+      {label: 'Text', value: 'BASICTEXTFIELD'},
+      {label: 'Password', value: 'PASSWORDTEXTFIELD'},
+      {label: 'Calendar', value: 'CALENDAR_TEXT_FIELD'}
+    ],
+    defaultData: {
+      placeholder: 'Login',
+      placeholderColor: '#7F7F7F',
+      text: 'neo',
+      textColor: '#000000',
+      backgroundColor: '#FFFFFF',
+      borderColor: '#EFEFEF',
+      borderWidth: 1,
+      fontSize: 16,
+      size: {
+        width: 100,
+        height: 48,
       },
-      radius: 8,
+      shadow: {
+        color: '#000000',
+        opacity: 0.3,
+        offsetSize: {
+          width: 0,
+          height: 0,
+        },
+        radius: 8,
+      },
+      padding: {
+        left: 12,
+        right: 12,
+        top: 4,
+        bottom: 4,
+      },
+      shape: {
+        type: 'ALLCORNERSROUND',
+        radius: '4',
+      },
     },
-    padding: {
-      left: 12,
-      right: 12,
-      top: 4,
-      bottom: 4,
+    config: {
+      padding,
+      placeholder,
+      placeholderColor,
+      text,
+      textAlignment,
+      textColor,
+      backgroundColor,
+      borderColor,
+      borderWidth,
+      fontSize,
+      size: getSizeConfig(blockState.deviceInfo.device),
+      fontWeight,
+      shadow: shadowConfigBuilder()
+        .withRadius
+        .done(),
+      shape: shapeConfigBuilder().withAllCornersRound.withRadius.done(),
     },
-    shape: {
-      type: 'ALLCORNERSROUND',
-      radius: '4',
+    interactive: {
+      field: {type: 'string', name: 'Field name'},
     },
-  },
-  config: {
-    padding,
-    placeholder,
-    placeholderColor,
-    text,
-    textAlignment,
-    textColor,
-    backgroundColor,
-    borderColor,
-    borderWidth,
-    fontSize,
-    size,
-    fontWeight,
-    shadow: shadowConfigBuilder()
-      .withRadius
-      .done(),
-    shape: shapeConfigBuilder().withAllCornersRound.withRadius.done()
-  },
-  interactive: {
-    field: {type: 'string', name: 'Field name'},
-  },
+  });
 };
 
 export default block;

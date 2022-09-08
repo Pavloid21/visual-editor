@@ -13,9 +13,11 @@ import {
   padding,
   shadowConfigBuilder,
   shapeConfigBuilder,
-  size,
-  text, textColor
+  text, textColor, getSizeConfig
 } from 'views/configs';
+import {blockStateSafeSelector} from 'store/selectors';
+import store from 'store';
+import {getSizeStyle} from 'views/utils/styles/size';
 
 const Button = styled.div`
   position: relative;
@@ -33,22 +35,8 @@ const Button = styled.div`
   border-width: ${(props) => props.borderWidth}px;
   border-style: solid;
   border-color: ${(props) => props.borderColor};
-  width: ${(props) => {
-    if (props.size?.width) {
-      return props.size.width + 'px';
-    } else if (props.size?.widthInPercent !== undefined) {
-      return props.size.widthInPercent + '%';
-    }
-    return 'fit-content';
-  }};
-  height: ${(props) => {
-    if (props.size?.height !== undefined) {
-      return props.size.height + 'px';
-    } else if (props.size?.heightInPercent !== undefined) {
-      return props.size.heightInPercent + '%';
-    }
-    return 'auto';
-  }};
+  width: ${(props) => getSizeStyle('width', props)};
+  height: ${(props) => getSizeStyle('height', props)};
   ${(props) => {
     if (props.shadow) {
       return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${
@@ -119,94 +107,98 @@ const Component = (props) => {
   );
 };
 
-const block = {
-  Component,
-  name: 'BUTTON',
-  title: 'Button',
-  description: 'Displays a button icon the user can click to initiate an action.',
-  previewImageUrl: button,
-  category: 'Controls',
-  defaultInteractiveOptions: {
-    action: {url: '', target: ''},
-  },
-  defaultData: {
-    text: 'Войти',
-    fontSize: '24',
-    textColor: '#000000',
-    backgroundColor: '#FFFFFF',
-    imageUrl: '',
-    borderColor: '#EFEFEF',
-    borderWidth: 1,
-    buttonTextPadding: {
-      top: 16,
-      right: 16,
-      bottom: 16,
-      left: 16,
+const block = (state) => {
+  const blockState = state || blockStateSafeSelector(store.getState());
+
+  return ({
+    Component,
+    name: 'BUTTON',
+    title: 'Button',
+    description: 'Displays a button icon the user can click to initiate an action.',
+    previewImageUrl: button,
+    category: 'Controls',
+    defaultInteractiveOptions: {
+      action: {url: '', target: ''},
     },
-    buttonImagePadding: {
-      top: 16,
-      right: 16,
-      bottom: 16,
-      left: 16,
-    },
-    shape: {
-      type: 'ALLCORNERSROUND',
-      radius: '4',
-    },
-    size: {
-      height: 48,
-      width: 230,
-    },
-    shadow: {
-      color: '#000000',
-      opacity: 0.3,
-      offsetSize: {
-        width: 0,
-        height: 0,
+    defaultData: {
+      text: 'Войти',
+      fontSize: '24',
+      textColor: '#000000',
+      backgroundColor: '#FFFFFF',
+      imageUrl: '',
+      borderColor: '#EFEFEF',
+      borderWidth: 1,
+      buttonTextPadding: {
+        top: 16,
+        right: 16,
+        bottom: 16,
+        left: 16,
       },
-      radius: 8,
-    },
-  },
-  config: {
-    text,
-    fontSize,
-    fontWeight,
-    textColor,
-    backgroundColor,
-    borderColor,
-    borderWidth,
-    textAlignment,
-    buttonTextPadding,
-    buttonImagePadding,
-    imageUrl,
-    shape: shapeConfigBuilder()
-      .withAllCornersRound
-      .withRadius
-      .done(),
-    size,
-    padding,
-    shadow: shadowConfigBuilder()
-      .withRadius
-      .done()
-  },
-  interactive: {
-    action: {
-      url: {
-        type: 'select',
-        name: 'Action URL',
-        action_types: 'actions,data'
+      buttonImagePadding: {
+        top: 16,
+        right: 16,
+        bottom: 16,
+        left: 16,
       },
-      target: {type: 'string', name: 'Target'},
-      method: {
-        type: 'select',
-        name: 'Method',
-        options: [
-          {label: 'Get', value: 'get'},
-          {label: 'Post', value: 'post'},
-        ],
+      shape: {
+        type: 'ALLCORNERSROUND',
+        radius: '4',
+      },
+      size: {
+        height: 48,
+        width: 230,
+      },
+      shadow: {
+        color: '#000000',
+        opacity: 0.3,
+        offsetSize: {
+          width: 0,
+          height: 0,
+        },
+        radius: 8,
       },
     },
-  },
+    interactive: {
+      action: {
+        url: {
+          type: 'select',
+          name: 'Action URL',
+          action_types: 'actions,data'
+        },
+        target: {type: 'string', name: 'Target'},
+        method: {
+          type: 'select',
+          name: 'Method',
+          options: [
+            {label: 'Get', value: 'get'},
+            {label: 'Post', value: 'post'},
+          ],
+        },
+      },
+    },
+    config: {
+      text,
+      fontSize,
+      fontWeight,
+      textColor,
+      backgroundColor,
+      borderColor,
+      borderWidth,
+      textAlignment,
+      buttonTextPadding,
+      buttonImagePadding,
+      imageUrl,
+      shape: shapeConfigBuilder()
+        .withAllCornersRound
+        .withRadius
+        .done(),
+      size: getSizeConfig(blockState.deviceInfo.device),
+      padding,
+      shadow: shadowConfigBuilder()
+        .withRadius
+        .done(),
+    },
+  });
 };
 
 export default block;

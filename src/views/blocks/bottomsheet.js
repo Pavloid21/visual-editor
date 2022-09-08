@@ -95,7 +95,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
   );
 };
 
-const block = {
+const block = () => ({
   Component,
   name: 'BOTTOMSHEET',
   title: 'BottomSheet',
@@ -139,6 +139,6 @@ const block = {
       },
     },
   },
-};
+});
 
 export default block;

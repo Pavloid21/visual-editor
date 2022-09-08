@@ -4,13 +4,19 @@ import label from 'assets/label.svg';
 import Wrapper from 'utils/wrapper';
 import {hexToRgb} from 'constants/utils';
 import {
-  backgroundColor, fontSize,
+  backgroundColor,
+  fontSize,
   fontWeight,
+  getSizeConfig,
   padding,
   shadowConfigBuilder,
-  shapeConfigBuilder, size, text,
+  shapeConfigBuilder,
+  text,
   textAlignment, textColor,
 } from 'views/configs';
+import {blockStateSafeSelector} from 'store/selectors';
+import store from 'store';
+import {getSizeStyle} from 'views/utils/styles/size';
 
 const Label = styledComponents.div`
   box-sizing: border-box;
@@ -34,22 +40,8 @@ const Label = styledComponents.div`
   }}
   & > span {
     display: block;
-    width: ${(props) => {
-      if (props.size?.width !== undefined) {
-        return props.size.width + 'px';
-      } else if (props.size?.widthInPercent !== undefined) {
-        return props.size.widthInPercent + '%';
-      }
-      return '100%';
-    }};
-    height: ${(props) => {
-      if (props.size?.height !== undefined) {
-        return props.size.height + 'px';
-      } else if (props.size?.heightInPercent !== undefined) {
-        return props.size.heightInPercent + '%';
-      }
-      return 'auto';
-    }};
+    width: ${(props) => getSizeStyle('width', props)};
+    height: ${(props) => getSizeStyle('height', props)};
     text-align: ${(props) => props.textAlignment};
     color: ${(props) => props.textColor};
     font-size: ${(props) => props.fontSize}px;
@@ -87,69 +79,78 @@ const Label = styledComponents.div`
 
 const Component = ({settingsUI, ...props}) => {
   const {text} = settingsUI;
+
   return (
     <Wrapper id={props.id} {...settingsUI} {...props}>
-      <Label {...props} {...settingsUI} className="draggable">
+      <Label
+        {...props}
+        {...settingsUI}
+        className="draggable"
+      >
         <span>{text}</span>
       </Label>
     </Wrapper>
   );
 };
 
-const block = {
-  Component,
-  name: 'LABEL',
-  title: 'Label',
-  description: 'A standard label for user interface items, consisting of an icon with a title.',
-  previewImageUrl: label,
-  category: 'Element',
-  defaultData: {
-    text: 'Вход',
-    backgroundColor: '#FFFFFF',
-    textColor: '#000000',
-    fontSize: 24,
-    shape: {
-      type: 'ALLCORNERSROUND',
-      radius: '0',
-    },
-    size: {
-      width: 100,
-      height: 48,
-    },
-    padding: {
-      top: 0,
-      bottom: 0,
-      left: 0,
-      right: 0,
-    },
-    fontWeight: 'REGULAR',
-    shadow: {
-      color: '#000000',
-      opacity: 0.3,
-      offsetSize: {
-        width: 0,
-        height: 0,
+const block = (state) => {
+  const blockState = state || blockStateSafeSelector(store.getState());
+
+  return ({
+    Component,
+    name: 'LABEL',
+    title: 'Label',
+    description: 'A standard label for user interface items, consisting of an icon with a title.',
+    previewImageUrl: label,
+    category: 'Element',
+    defaultData: {
+      text: 'Вход',
+      backgroundColor: '#FFFFFF',
+      textColor: '#000000',
+      fontSize: 24,
+      shape: {
+        type: 'ALLCORNERSROUND',
+        radius: '0',
       },
-      radius: 8,
+      size: {
+        width: 100,
+        height: 48,
+      },
+      padding: {
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+      },
+      fontWeight: 'REGULAR',
+      shadow: {
+        color: '#000000',
+        opacity: 0.3,
+        offsetSize: {
+          width: 0,
+          height: 0,
+        },
+        radius: 8,
+      },
     },
-  },
-  config: {
-    text,
-    textAlignment,
-    backgroundColor,
-    textColor,
-    fontSize,
-    fontWeight,
-    shape: shapeConfigBuilder()
-      .withAllCornersRound
-      .withRadius
-      .done(),
-    size,
-    padding,
-    shadow: shadowConfigBuilder()
-      .withRadius
-      .done()
-  },
+    config: {
+      text,
+      textAlignment,
+      backgroundColor,
+      textColor,
+      fontSize,
+      fontWeight,
+      shape: shapeConfigBuilder()
+        .withAllCornersRound
+        .withRadius
+        .done(),
+      size: getSizeConfig(blockState.deviceInfo.device),
+      padding,
+      shadow: shadowConfigBuilder()
+        .withRadius
+        .done(),
+    },
+  });
 };
 
 export default block;
