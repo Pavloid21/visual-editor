@@ -197,3 +197,20 @@ export const systemCalendar = {
     ]
   }
 };
+
+export const iconSelectedColor = {
+  type: 'color',
+    name: 'Bottom icon selected color',
+};
+export const iconUnselectedColor = {
+  type: 'color',
+    name: 'Bottom icon unselected color',
+};
+export const showUnselectedText = {
+  type: 'select',
+  name: 'Show unselected text',
+  options: [
+    {label: 'True', value: true},
+    {label: 'False', value: false},
+  ],
+};
