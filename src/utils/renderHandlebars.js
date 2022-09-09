@@ -33,7 +33,7 @@ function render(layoutBlocks, documentId, bottomBar, topAppBar) {
 
   if (layoutBlocks[0]) {
     layoutBlocks.forEach((layoutBlock) => {
-      const Component = blocks[layoutBlock.blockId.toLowerCase()]().Component;
+      const Component = blocks[layoutBlock.blockId.toLowerCase()]?.().Component;
       if (Component) {
         components.push(
           <SortableItem
