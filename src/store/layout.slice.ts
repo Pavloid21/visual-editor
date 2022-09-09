@@ -77,6 +77,38 @@ const removeFromList = (tree: any[], uuid: string) => {
   return result;
 };
 
+const createBlockByConfig = (blockId: string, config?: any): BlockItem => {
+  const blockConfig = config || blocks[blockId](blockStateUnsafeSelector(rootStore.getState()));
+
+  const {
+    listItem,
+    listItems,
+    defaultData,
+    defaultInteractiveOptions
+  } = blockConfig;
+
+  const block: BlockItem = {
+    blockId,
+    uuid: uuidv4(),
+    settingsUI: {
+      ...getData(defaultData),
+    },
+  };
+  if (defaultInteractiveOptions) {
+    block.interactive = {
+      ...getData(defaultInteractiveOptions),
+    };
+  }
+  if (listItems) {
+    block.listItems = listItems;
+  }
+  if (listItem !== undefined) {
+    block.listItem = listItem;
+  }
+
+  return block;
+};
+
 const cloneToList = (tree: any[], uuid: string) => {
   const result = [...tree];
   tree.forEach((item) => {
@@ -90,32 +122,16 @@ const cloneToList = (tree: any[], uuid: string) => {
   return result;
 };
 
-export const pushTopAppBar = createAction('layout/pushTopAppBar', (payload) => {
-  const blockConfig = blocks[payload](blockStateUnsafeSelector(rootStore.getState()));
-  const topAppBar = {
-    uuid: uuidv4(),
-    blockId: payload,
-    settingsUI: {
-      ...getData(blockConfig.defaultData),
-    },
-    interactive: {
-      ...getData(blockConfig.defaultInteractiveOptions),
-    },
-  };
+export const pushTopAppBar = createAction('layout/pushTopAppBar', (blockId) => {
+  const topAppBar = createBlockByConfig(blockId);
 
   return {
     payload: topAppBar,
   };
 });
 
-export const pushBottomBar = createAction('layout/pushBottomBar', (payload) => {
-  const bottomBar = {
-    uuid: uuidv4(),
-    blockId: payload,
-    settingsUI: {
-      ...getData(blocks[payload](blockStateUnsafeSelector(rootStore.getState())).defaultData),
-    },
-  };
+export const pushBottomBar = createAction('layout/pushBottomBar', (blockId) => {
+  const bottomBar = createBlockByConfig(blockId);
 
   return {
     payload: bottomBar,
@@ -138,52 +154,36 @@ export const addBottomBarItem = createAction('layout/addBottomBarItem', () => {
 });
 
 export const pushBlockInside = createAction('layout/pushBlockInside', (payload) => {
-  const store = rootStore.getState();
-  const {layout: state} = store;
-  const blockState = blockStateUnsafeSelector(store);
-
-  if (payload.blockId === 'bottombar' || payload.blockId === 'topappbar') {
+  if (['bottombar', 'topappbar'].includes(payload.blockId)) {
     return {
       payload: null
     };
   }
+
+  const store = rootStore.getState();
+  const {layout: state} = store;
+  const blockState = blockStateUnsafeSelector(store);
+  const newBlock = createBlockByConfig(payload.blockId);
+
+  // add block in target node
   const target = clone(findInTree(state.blocks, payload.uuid));
-  const blockConfig = blocks[payload.blockId](blockState);
-  const list = blockConfig.listItems;
-  const obj = blockConfig.listItem;
-  const newBloc: BlockItem = {
-    uuid: uuidv4(),
-    blockId: payload.blockId,
-    settingsUI: {
-      ...getData(blockConfig.defaultData),
-    },
-  };
-  if (blockConfig.defaultInteractiveOptions) {
-    newBloc.interactive = {
-      ...getData(blockConfig.defaultInteractiveOptions),
-    };
-  }
-  if (list) {
-    newBloc.listItems = list;
-  }
-  if (obj !== undefined) {
-    newBloc.listItem = obj;
-  }
+
   if (target) {
     if (blocks[target.blockId](blockState).listItems) {
       target.listItems = [
         ...(target.listItems || []),
         {
-          ...newBloc,
+          ...newBlock,
         },
       ];
     } else if (blocks[target.blockId](blockState).listItem !== undefined) {
       target.listItem = {
-        ...newBloc,
+        ...newBlock,
       };
     }
   }
 
+  // create next blocks model
   const nextBlocks = state.blocks.map((block) => {
     if (target && (block.uuid === payload.uuid)) {
       return target;
@@ -196,31 +196,12 @@ export const pushBlockInside = createAction('layout/pushBlockInside', (payload) 
   };
 });
 
-export const pushBlock = createAction('layout/pushBlock', (payload) => {
+export const pushBlock = createAction('layout/pushBlock', (blockId) => {
   const store = rootStore.getState();
   const {layout: state} = store;
 
-  const blockConfig = blocks[payload](blockStateUnsafeSelector(store));
-  const listItems = blockConfig.listItems;
-  const listItem = blockConfig.listItem;
-  const newBlock: BlockItem = {
-    uuid: uuidv4(),
-    blockId: payload,
-    settingsUI: {
-      ...getData(blockConfig.defaultData),
-    },
-  };
-  if (blockConfig.defaultInteractiveOptions) {
-    newBlock.interactive = {
-      ...getData(blockConfig.defaultInteractiveOptions),
-    };
-  }
-  if (listItems) {
-    newBlock.listItems = listItems;
-  }
-  if (listItem) {
-    newBlock.listItem = listItem;
-  }
+  // const blockConfig = blocks[blockId](blockStateUnsafeSelector(store));
+  const newBlock = createBlockByConfig(blockId);
   return {
     payload: [
       ...state.blocks,
