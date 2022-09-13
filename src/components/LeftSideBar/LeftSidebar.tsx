@@ -394,7 +394,7 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
                           {load?.load && load?.uuid === extendedNode.node.uuid ? (
                             <BounceLoader loading={true} size={24} color="#F44532" css={override} />
                           ) : (
-                            <Icon src={models[extendedNode.node?.title?.toLowerCase()]().previewImageUrl} />
+                            <Icon src={models[extendedNode.node?.title?.toLowerCase()]?.().previewImageUrl} />
                           )}
                           <span>{extendedNode.node.endpoint || extendedNode.node.title}</span>
                         </ScreenTitle>

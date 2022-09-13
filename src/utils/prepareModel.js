@@ -16,7 +16,7 @@ export function getData(defaultData) {
 }
 
 export const buildJSONitem = (block, mode) => {
-  if (block.settingsUI.checked) {
+  if (block.settingsUI?.checked) {
     delete block.settingsUI.checked;
   }
   const settingsUI = {};
