@@ -9,7 +9,7 @@ import {BASE_URL, getActionsList, getDataActionsList} from 'services/ApiService'
 
 export const Select = (props: ISelect) => {
   const {onChange, options, value, className, label, menuPlacement, styles, clearable} = props;
-  const [optionsList, setOptions] = useState(props.options);
+  const [optionsList, setOptions] = useState(options);
 
   const currentOption = options.find((e) => value === e.value);
   const projectId = window.location.pathname.split('/').pop();
@@ -40,6 +40,10 @@ export const Select = (props: ISelect) => {
       });
     }
   }, []);
+
+  useEffect(() => {
+    setOptions(options);
+  }, [options]);
 
   return (
     <WithLabel label={!!label}>
