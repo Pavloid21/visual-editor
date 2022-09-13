@@ -88,7 +88,7 @@ const VStack = styled.div`
   padding-right: ${(props) => props.padding?.right}px;
   box-sizing: border-box;
   border-width: ${(props) => props.borderWidth}px;
-  border-style: solid;
+  border-style: ${(props) => props.borderColor ? 'solid' : 'none'};
   border-color: ${(props) => props.borderColor};
   gap: ${(props) => props.spacing}px;
   border-radius: ${(props) => `
