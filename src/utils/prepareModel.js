@@ -21,12 +21,14 @@ export const buildJSONitem = (block, mode) => {
   }
   const settingsUI = {};
   const interactive = {};
-  Object.keys(block.settingsUI).forEach((key) => {
-    if (typeof block.settingsUI[key] === 'string') {
-      settingsUI[key] = `${block.settingsUI[key].replace(/{{|}}/g, '')}`;
-    }
-    settingsUI[key] = block.settingsUI[key];
-  });
+  if (block.settingsUI) {
+    Object.keys(block.settingsUI).forEach((key) => {
+      if (typeof block.settingsUI[key] === 'string') {
+        settingsUI[key] = `${block.settingsUI[key].replace(/{{|}}/g, '')}`;
+      }
+      settingsUI[key] = block.settingsUI[key];
+    });
+  }
   if (block.interactive) {
     Object.keys(block.interactive).forEach((key) => {
       if (typeof block.interactive[key] === 'string') {
