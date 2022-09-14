@@ -20,6 +20,7 @@ import type {TInspector} from './types';
 import type {RootStore} from 'store/types';
 import {blockStateUnsafeSelector} from 'store/selectors';
 import {getUnitOptionByDevice} from 'utils/units';
+import {get} from 'external/lodash';
 
 const Inspector: React.FC<TInspector> = ({display}) => {
   const dispatch = useDispatch();
@@ -182,7 +183,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
                 <input
                   type={'checkbox'}
                   className="form-check-input"
-                  checked={endpoint[el]}
+                  checked={get(endpoint, [el], false)}
                   onChange={(e: any) => handleChangeBlockData(blockUuid, el, e.target.checked, parentKey)}
                 />
                 {config[el].name}
@@ -228,7 +229,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
     (layout.bottomBar?.uuid === blockUuid && layout.bottomBar) ||
     (layout.topAppBar?.uuid === blockUuid && layout.topAppBar);
 
-  if (!block) return null;
+  if (!block || !blocks[block.blockId]) return null;
 
   /* @ts-ignore */
   const {config, interactive, complex, name} = blocks[block.blockId](blockState);
