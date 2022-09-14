@@ -19,13 +19,15 @@ import {
   borderWidth,
   spacing,
   padding,
-  size,
   shadowConfigBuilder,
+  getSizeConfig,
 } from 'views/configs';
 import hstack from 'assets/hstack.svg';
 import {pushBlockInside} from 'store/layout.slice';
 import {hexToRgb} from 'constants/utils';
 import {getSizeStyle} from '../utils/styles/size';
+import {blockStateSafeSelector} from 'store/selectors';
+import store from 'store';
 
 const HStack = styled.div`
   align-self: ${(props) => {
@@ -151,81 +153,85 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
   );
 };
 
-const block = () => ({
-  Component,
-  name: 'HSTACK',
-  title: 'HStack',
-  description: 'A view that arranges its children in a horizontal line.',
-  previewImageUrl: hstack,
-  category: 'Container',
-  defaultInteractiveOptions: {
-    action: {url: '', target: ''},
-  },
-  complex: [
-    {label: 'Vertical', value: 'VSTACK'},
-    {label: 'Horizontal', value: 'HSTACK'},
-  ],
-  defaultData: {
-    backgroundColor: '#C6C6C6',
-    distribution: '',
-    spacing: 0,
-    scroll: false,
-    borderColor: '#EFEFEF',
-    borderWidth: 1,
-    padding: {
-      top: '100',
-      bottom: '100',
-      left: '10',
-      right: '10',
+const block = (state) => {
+  const blockState = state || blockStateSafeSelector(store.getState());
+
+  return ({
+    Component,
+    name: 'HSTACK',
+    title: 'HStack',
+    description: 'A view that arranges its children in a horizontal line.',
+    previewImageUrl: hstack,
+    category: 'Container',
+    defaultInteractiveOptions: {
+      action: {url: '', target: ''},
     },
-    corners: {
-      topLeftRadius: 0,
-      topRightRadius: 0,
-      bottomLeftRadius: 0,
-      bottomRightRadius: 0,
-    },
-    shadow: {
-      color: '#000000',
-      opacity: 0,
-      offsetSize: {
-        width: 0,
-        height: 0,
+    complex: [
+      {label: 'Vertical', value: 'VSTACK'},
+      {label: 'Horizontal', value: 'HSTACK'},
+    ],
+    defaultData: {
+      backgroundColor: '#C6C6C6',
+      distribution: '',
+      spacing: 0,
+      scroll: false,
+      borderColor: '#EFEFEF',
+      borderWidth: 1,
+      padding: {
+        top: '100',
+        bottom: '100',
+        left: '10',
+        right: '10',
       },
-      radius: 8,
-    },
-  },
-  listItems: [],
-  config: {
-    alignment: alignmentConfig.vertically,
-    backgroundColor,
-    distribution,
-    spacing,
-    scroll,
-    borderColor,
-    borderWidth,
-    size, // todo to new units
-    padding,
-    shadow: shadowConfigBuilder().withRadius.done(),
-    corners,
-  },
-  interactive: {
-    action: {
-      url: {
-        type: 'select',
-        name: 'Action URL',
-        action_types: 'actions,data'
+      corners: {
+        topLeftRadius: 0,
+        topRightRadius: 0,
+        bottomLeftRadius: 0,
+        bottomRightRadius: 0,
       },
-      target: {type: 'string', name: 'Target'},
-      method: {
-        type: 'select',
-        name: 'Method',
-        options: [
-          {label: 'Get', value: 'get'},
-          {label: 'Post', value: 'post'},
-        ],
+      shadow: {
+        color: '#000000',
+        opacity: 0,
+        offsetSize: {
+          width: 0,
+          height: 0,
+        },
+        radius: 8,
       },
     },
-  },
-});
+    listItems: [],
+    config: {
+      alignment: alignmentConfig.vertically,
+      backgroundColor,
+      distribution,
+      spacing,
+      scroll,
+      borderColor,
+      borderWidth,
+      size: getSizeConfig(blockState.deviceInfo.device),
+      padding,
+      shadow: shadowConfigBuilder().withRadius.done(),
+      corners,
+    },
+    interactive: {
+      action: {
+        url: {
+          type: 'select',
+          name: 'Action URL',
+          action_types: 'actions,data',
+        },
+        target: {type: 'string', name: 'Target'},
+        method: {
+          type: 'select',
+          name: 'Method',
+          options: [
+            {label: 'Get', value: 'get'},
+            {label: 'Post', value: 'post'},
+          ],
+        },
+      },
+    },
+  });
+};
 
 export default block;
