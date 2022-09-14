@@ -322,11 +322,9 @@ export const switchElementType = createAction('layout/switchElementType', (paylo
 
   const currentElement = findInTree(blocksArr, state.selectedBlockUuid);
 
-  const isInput = payload === 'CALENDAR_TEXT_FIELD' ||
-    payload === 'PASSWORDTEXTFIELD' ||
-    payload === 'BASICTEXTFIELD';
+  const isInput = ['CALENDAR_TEXT_FIELD', 'PASSWORDTEXTFIELD', 'BASICTEXTFIELD'].includes(payload);
 
-  if (isInput && currentElement) {
+  if ((isInput && currentElement) || currentElement) {
     currentElement.blockId = payload.toLowerCase();
 
     currentElement.interactive = {
