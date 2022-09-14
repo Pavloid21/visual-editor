@@ -184,12 +184,19 @@ export const pushBlockInside = createAction('layout/pushBlockInside', (payload) 
   }
 
   // create next blocks model
-  const nextBlocks = state.blocks.map((block) => {
-    if (target && (block.uuid === payload.uuid)) {
-      return target;
-    }
-    return block;
-  });
+  const replaceTargetBlock = (blocks: BlockItem[]): BlockItem[] =>
+    blocks.map((block) => {
+      if (target && (block.uuid === payload.uuid)) {
+        return target;
+      } else if (block.listItems) {
+        return {
+          ...block,
+          listItems: replaceTargetBlock(block.listItems)
+        };
+      }
+      return block;
+    });
+  const nextBlocks = replaceTargetBlock(state.blocks);
 
   return {
     payload: nextBlocks
