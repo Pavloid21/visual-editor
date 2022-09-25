@@ -10,7 +10,7 @@ import {Collapse, Container, GalleryHeader, Wrapper} from './Gallery.styled';
 import {pushBlock, pushBlockInside, setSnippet} from 'store/layout.slice';
 import type {RootStore} from 'store/types';
 
-const Gallery: React.FC<any> = (props) => {
+const Gallery: React.FC<unknown> = () => {
   const dispatch = useDispatch();
   const output = useSelector((state: RootStore) => state.output.screen);
   const {selectedScreen, blocks: layout, topAppBar, bottomBar} = useSelector((state: RootStore) => state.layout);
@@ -46,6 +46,7 @@ const Gallery: React.FC<any> = (props) => {
   };
 
   const [viewMode, setMode] = useState('grid');
+  const [show, toggleComponents] = useState(true);
 
   const allBlocks = (filteredBlocks?: Record<string, any>, viewMode = 'grid') => {
     return Object.keys(filteredBlocks || blocks).map((blockId: string) => {
@@ -93,7 +94,7 @@ const Gallery: React.FC<any> = (props) => {
   };
 
   return (
-    <Wrapper show={props.show} className="gallery">
+    <Wrapper show={show}>
       <GalleryHeader>
         <span>Components</span>
         <div>
@@ -102,10 +103,10 @@ const Gallery: React.FC<any> = (props) => {
           ) : (
             <GridIcon className="icon" onClick={(e) => handleModeChange(e, 'grid')} />
           )}
-          <Collapse className="icon" collapse={props.show} onClick={() => props.toggleComponents(!props.show)} />
+          <Collapse className="icon" collapse={show} onClick={() => toggleComponents(!show)} />
         </div>
       </GalleryHeader>
-      {props.show && (
+      {show && (
         <Container mode={viewMode}>
           <Input placeholder="Filter components" onChange={handleFilterChange} />
           <div>{gallery}</div>

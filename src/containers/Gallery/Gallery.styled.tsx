@@ -29,7 +29,7 @@ export const Container = styled.div<{mode: string}>`
     column-gap: 18px;
     row-gap: 18px;`
         : ''}
-    ${(props) => (props.mode === 'list' ? `flex-direction: column;` : '')}
+    ${(props) => (props.mode === 'list' ? 'flex-direction: column;' : '')}
     padding-top: 10px;
     padding-bottom: 10px;
     @media (max-width: 1500px) {
@@ -53,5 +53,5 @@ export const Collapse = styled(CollapseIcon)<{collapse: boolean}>`
 `;
 
 export const Wrapper = styled.div<{show: boolean}>`
-  height: ${(props) => (props.show ? '50%' : 'auto')};
+  height: ${(props) => (props.show ? '50%' : '46px')};
 `;

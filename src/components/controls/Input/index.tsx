@@ -7,7 +7,6 @@ import {NeoInputProps} from './types';
 
 export const Container = styledComponents.section<TextAreaProps & NeoInputProps>`
   position: relative;
-  margin-bottom: 12px;
   & svg {
     position: absolute;
     right: 12px;

@@ -3,12 +3,11 @@ import React, {useState, useEffect, useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import actionTypes from 'constants/actionTypes';
 import {Gallery} from 'containers/Gallery';
-import {Actions, ButtonSelector, Modal, SideBarHeader, SideBarSubheader} from 'components';
+import {Actions, ButtonSelector, Modal, SideBarHeader} from 'components';
 import SortableTree from '@nosferatu500/react-sortable-tree';
 import FileExplorerTheme from '@nosferatu500/theme-file-explorer';
 import {ReactComponent as Copy} from 'assets/copy.svg';
 import {ReactComponent as Trash} from 'assets/trash.svg';
-import {ReactComponent as Plus} from 'assets/plus.svg';
 import models from 'views/blocks/index';
 import {v4} from 'uuid';
 import {getScreenesList, getScreenByName, getScreenTemplates, getTemplateData} from 'services/ApiService';
@@ -26,6 +25,7 @@ import type {RootStore} from 'store/types';
 import {Bar} from 'containers/Project/Modal/Modal.styled';
 import {ReactComponent as Close} from 'assets/close.svg';
 import {screenTemplates as defaultTemplates} from 'constants/screenTemplates';
+import {Subheader} from './Subheader';
 
 const LeftSidebar: React.FC<any> = ({children, ...props}) => {
   const {
@@ -46,7 +46,6 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
   const [activeTab, setActiveTab] = useState(0);
   const [availableScreenes, setScreenes] = useState<Record<string, any>[]>([]);
   const [treeData, setTree] = useState<Record<string, any>[]>([]);
-  const [show, toggleComponents] = useState(true);
   const [load, setLoadScreen] = useState<Record<string, any>>();
   const [templates, setScreenTemplates] = useState<Record<string, any>[]>([]);
   const [itemModalOpen, setItemModalOpen] = useModal();
@@ -343,26 +342,19 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
   }
 
   return (
-    <Container show={show}>
-      <div className="gallery">
+    <Container>
+      <div className="screen-list">
         <SideBarHeader title={projectName} left />
-        <SideBarSubheader>
-          <div>
-            <span
-              className={activeTab === 0 ? 'tab_active' : ''}
-              onClick={() => {
-                setActiveTab(0);
-                dispatch(setSelectAction(null));
-              }}
-            >
-              Screens
-            </span>
-            <span className={activeTab === 1 ? 'tab_active' : ''} onClick={() => setActiveTab(1)}>
-              Actions
-            </span>
-          </div>
-          <Plus className="icon" onClick={activeTab === 0 ? handleAddScreen : handleAddAction} />
-        </SideBarSubheader>
+        <Subheader
+          activeTab={activeTab}
+          handleAddAction={handleAddAction}
+          handleAddScreen={handleAddScreen}
+          handleClick={() => {
+            setActiveTab(0);
+            dispatch(setSelectAction(null));
+          }}
+          setActiveTab={setActiveTab}
+        />
         {activeTab === 0 && (
           <div
             style={{
@@ -426,7 +418,7 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
         )}
         {activeTab === 1 && <Actions />}
       </div>
-      <Gallery toggleComponents={toggleComponents} show={show} />
+      <Gallery />
       <Modal isActive={itemModalOpen} handleClose={() => setItemModalOpen(false)} style={{width: 'fit-content'}}>
         <Bar>
           <h3>Screens</h3>
