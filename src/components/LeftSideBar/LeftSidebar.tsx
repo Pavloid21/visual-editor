@@ -57,7 +57,7 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
   `;
   const dispatch = useDispatch();
 
-  const generatePromiseStack = (data: any[], parsed: boolean) => {
+  const generatePromiseStack = useCallback((data: any[], parsed: boolean) => {
     const screenesArr = data.map(async (screen: string) => {
       try {
         const response = await getScreenByName(screen, parsed, project);
@@ -72,7 +72,7 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
       }
     });
     return screenesArr;
-  };
+  }, [project]);
 
   useEffect(() => {
     setLoading(true);
@@ -325,17 +325,20 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
     [availableScreenes, bottomBar, selectedScreen, topAppBar]
   );
 
-  const handleDefaultTemplate = (snippet: any) => {
-    const layouts = [...availableScreenes];
-    const {newBlock, action, screenEndpoint} = buildLayout({
-      screen: snippet.screen,
-      object: snippet,
-    });
-    layouts.push({uuid: v4(), value: newBlock, action, screenEndpoint});
-    setScreenes(layouts);
-    setTree(layouts.map((layout) => prepareTree(layout, selectedScreen, topAppBar, bottomBar)));
-    setItemModalOpen(false);
-  };
+  const handleDefaultTemplate = useCallback(
+    (snippet: any) => {
+      const layouts = [...availableScreenes];
+      const {newBlock, action, screenEndpoint} = buildLayout({
+        screen: snippet.screen,
+        object: snippet,
+      });
+      layouts.push({uuid: v4(), value: newBlock, action, screenEndpoint});
+      setScreenes(layouts);
+      setTree(layouts.map((layout) => prepareTree(layout, selectedScreen, topAppBar, bottomBar)));
+      setItemModalOpen(false);
+    },
+    [availableScreenes, bottomBar, selectedScreen, setItemModalOpen, topAppBar]
+  );
 
   if (!props.display) {
     return null;
@@ -442,13 +445,15 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
           <div className="modal_columns">
             <div className="modal_col side">
               <h3>Templates</h3>
-              {templates.map((template) => (
-                <TemplateItem onClick={() => handleSelectTemplate(template)}>{template.title}</TemplateItem>
+              {templates.map((template, index) => (
+                <TemplateItem key={`template_${index}`} onClick={() => handleSelectTemplate(template)}>
+                  {template.title}
+                </TemplateItem>
               ))}
             </div>
             <div className="modal_col grid">
               {defaultTemplates.map(({img: Image, title, snippet}) => (
-                <DefaultTemplateWrapper onClick={() => handleDefaultTemplate(snippet)}>
+                <DefaultTemplateWrapper key={snippet.screen} onClick={() => handleDefaultTemplate(snippet)}>
                   <Image style={{filter: 'drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.1))'}} />
                   <span>{title}</span>
                 </DefaultTemplateWrapper>

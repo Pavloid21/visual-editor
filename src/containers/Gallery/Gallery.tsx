@@ -46,7 +46,7 @@ const Gallery: React.FC<unknown> = () => {
   };
 
   const [viewMode, setMode] = useState('grid');
-  const [show, toggleComponents] = useState(true);
+  const [show, toggleComponents] = useState<boolean>(true);
 
   const allBlocks = (filteredBlocks?: Record<string, any>, viewMode = 'grid') => {
     return Object.keys(filteredBlocks || blocks).map((blockId: string) => {

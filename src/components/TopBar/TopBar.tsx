@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {ReactComponent as Logo} from '../../assets/logo.svg';
 import {ReactComponent as HideLeft} from '../../assets/hide_left.svg';
 import {ReactComponent as HideRight} from '../../assets/hide_right.svg';
@@ -19,6 +19,7 @@ const TopBar = () => {
   const dispatch = useDispatch();
   const {keycloak} = useKeycloak();
   const location = useLocation();
+  const isEditorPath = location.pathname.indexOf('editor') >= 0;
   const snippets = useSelector((state: RootStore) => state.layout.snippets);
   const currentProject = useSelector((state: RootStore) => state.project);
   const {ref, isShow, setIsShow} = useOutside(false);
@@ -36,12 +37,15 @@ const TopBar = () => {
   const deletedScreens = useSelector((state: RootStore) => state.layout.deletedScreens);
   const editedScreens = useSelector((state: RootStore) => state.layout.editedScreens);
   const projectID = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
-  const handleHideLeft = () => {
+
+  const handleHideLeft = useCallback(() => {
     dispatch(toggleLeftBar());
-  };
-  const handleHideRight = () => {
+  }, [dispatch]);
+
+  const handleHideRight = useCallback(() => {
     dispatch(toggleRightBar());
-  };
+  }, [dispatch]);
+
   const handleSaveApplication: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.stopPropagation();
     const snippetsPromises: Promise<any>[] = snippets.filter((item) => {
@@ -63,7 +67,7 @@ const TopBar = () => {
     });
     await editProject(projectID, JSON.stringify({...currentProject, icon: undefined}));
     Promise.all([...snippetsPromises, ...deletedSnippetsPromises, ...actionsPromises, ...deletedActionsPromises]).then(
-      (result) => {
+      () => {
         Store.addNotification({
           ...successNotification,
           title: 'Success',
@@ -73,42 +77,47 @@ const TopBar = () => {
     );
     dispatch(changesSaved());
   };
-  const openMenu = () => {
+
+  const openMenu = useCallback(() => {
     setIsShow(true);
-  };
-  const handleLogOut = () => {
+  }, [setIsShow]);
+
+  const handleLogOut = useCallback(() => {
     keycloak.logout();
-  };
+  }, [keycloak]);
+
   return (
-    <Bar isHidden={keycloak.authenticated}>
-      <div>
-        <Logo className="icon" />
-        <VerticalDivider />
-        {location.pathname.indexOf('editor') >= 0 && <HideLeft className="icon" onClick={handleHideLeft} />}
-      </div>
-      <div>
+    <React.StrictMode>
+      <Bar isHidden={keycloak.authenticated}>
         <div>
-          {location.pathname.indexOf('editor') >= 0 && (
-            <>
-              <Button onClick={handleSaveApplication}>Save application</Button>
-              <HideRight className="icon" onClick={handleHideRight} />
-            </>
-          )}
+          <Logo className="icon" />
+          <VerticalDivider />
+          {isEditorPath && <HideLeft className="icon" onClick={handleHideLeft} />}
         </div>
-        <VerticalDivider />
-        <div className="user" onClick={openMenu}>
-          {keycloak?.idTokenParsed?.given_name[0]}
-          {keycloak?.idTokenParsed?.family_name[0]}
-          {isShow && (
-            <div className="account_menu" ref={ref}>
-              <span>{keycloak?.idTokenParsed?.given_name + ' ' + keycloak?.idTokenParsed?.family_name}</span>
-              <Button onClick={handleLogOut}>Logout</Button>
-            </div>
-          )}
+        <div>
+          <div>
+            {isEditorPath && (
+              <>
+                <Button onClick={handleSaveApplication}>Save application</Button>
+                <HideRight className="icon" onClick={handleHideRight} />
+              </>
+            )}
+          </div>
+          <VerticalDivider />
+          <div className="user" onClick={openMenu}>
+            {keycloak?.idTokenParsed?.given_name[0]}
+            {keycloak?.idTokenParsed?.family_name[0]}
+            {isShow && (
+              <div className="account_menu" ref={ref}>
+                <span>{keycloak?.idTokenParsed?.given_name + ' ' + keycloak?.idTokenParsed?.family_name}</span>
+                <Button onClick={handleLogOut}>Logout</Button>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-    </Bar>
+      </Bar>
+    </React.StrictMode>
   );
 };
 
-export default TopBar;
+export default React.memo(TopBar);

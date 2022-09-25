@@ -45,8 +45,8 @@ const App: React.FC<unknown> = () => {
     const handleMessage = (data: Record<string, any>) => {
       if (data.event) {
         if (data.blockId && data.event === 'click') {
-          handleChangeActiveTab(0);
-          handleSetSelectedBlock(data.blockId);
+          dispatch(setActiveTab(0));
+          dispatch(setSelectedBlock(data.blockId));
         } else if (data.newOrder && data.event === 'sorted') {
           handleReorderLayout(data.newOrder, data.parentID, layout.blocks);
         }
@@ -64,16 +64,8 @@ const App: React.FC<unknown> = () => {
     });
   }, [location, dispatch]);
 
-  const handleChangeActiveTab = (index: number) => {
-    dispatch(setActiveTab(index));
-  };
-
   const handleChangePreviewMode = (mode: number) => {
     dispatch(setPreviewMode(mode));
-  };
-
-  const handleSetSelectedBlock = (blockUuid: string) => {
-    dispatch(setSelectedBlock(blockUuid));
   };
 
   const handleReorderLayout = (newOrder: string[], parentID: string, blocksLayout: BlockItem[]) => {
