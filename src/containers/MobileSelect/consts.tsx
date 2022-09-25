@@ -19,7 +19,7 @@ import {ReactComponent as TimeAndroid} from 'assets/mockups/time_android.svg';
 import {ReactComponent as RightSideAndroid} from 'assets/mockups/right_side_android.svg';
 import {useSelector} from 'react-redux';
 import {hexToRgb, setContrast} from 'constants/utils';
-import type {IButton} from 'components/ButtonSelector/types';
+import type {TButton} from 'components/ButtonSelector/types';
 import type {IOption} from 'components/controls/Select/types';
 import type {RootStore} from 'store/types';
 
@@ -28,7 +28,7 @@ export enum Device {
   ANDROID = 'ANDROID',
 }
 
-export const buttons: IButton[] = [
+export const buttons: TButton[] = [
   {title: 'iOS', key: Device.IOS, uuid: v4()},
   {title: 'Android', key: Device.ANDROID, uuid: v4()},
 ];
