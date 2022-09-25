@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Container = styled.div<{show?: boolean}>`
+export const Container = styled.div`
   min-width: 422px;
   background-color: #ffffff;
   overflow: hidden;
