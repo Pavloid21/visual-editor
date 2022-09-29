@@ -1,5 +1,5 @@
 import styled, {StyledComponent} from 'styled-components';
-import {Container} from 'components/controls/Input';
+import {Container} from 'components/controls';
 
 export const WithLabel: StyledComponent<'section', any, Record<string, unknown>, any> = styled(Container)`
   margin-bottom: 0;

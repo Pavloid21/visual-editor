@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import SelectBase from 'react-select';
 import {ISelect} from './types';
-import {Label} from '../Input';
+import {Label} from 'components/controls';
 import {WithLabel} from './WithLabel';
 import {DropdownIndicator} from './Dropdown';
 import {baseStyleSelect} from './style';

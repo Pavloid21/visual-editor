@@ -129,7 +129,9 @@ const RightSidebar: React.FC<any> = ({children, ...props}) => {
                 <Controller
                   name="varName"
                   control={control}
-                  render={({field}) => <Input type="text" label="Endpoint name" $clearable $isWide {...field} />}
+                  render={({field}) => (
+                    <Input type="text" label="Endpoint name" $clearable $isWide {...field} />
+                  )}
                 />
                 <Controller
                   name="url"

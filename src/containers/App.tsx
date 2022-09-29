@@ -4,7 +4,7 @@ import {Routes, Route, Navigate, useLocation} from 'react-router-dom';
 import {default as AppRoutes} from 'routes/routes';
 import {renderHandlebars, observer, findInTree} from 'utils';
 import {LeftSidebar, TopBar, RightSidebar, HighlightedElement, Loader} from 'components';
-import Preview from './Preview';
+import {Preview} from './Preview';
 import actionTypes from 'constants/actionTypes';
 import GlobalStyles from 'constants/theme';
 import {Login} from './Login';
@@ -44,6 +44,7 @@ const App: React.FC<unknown> = () => {
   useEffect(() => {
     const handleMessage = (data: Record<string, any>) => {
       if (data.event) {
+        console.log('data', data);
         if (data.blockId && data.event === 'click') {
           dispatch(setActiveTab(0));
           dispatch(setSelectedBlock(data.blockId));

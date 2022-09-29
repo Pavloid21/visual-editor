@@ -1,7 +1,7 @@
 import React, {useRef, useState} from 'react';
 import {ReactComponent as Import} from 'assets/import.svg';
 import {ReactComponent as Remove} from 'assets/circle_cross.svg';
-import {Label} from '../Input';
+import {Label} from 'components/controls';
 import {Container} from './FileInput.styled';
 import {FileInputProps} from './types';
 
