@@ -22,7 +22,7 @@ import {TSortableList} from './types';
 
 const SortableItem = SortableElement((props: any) => <>{props.children}</>);
 
-const SortableList = SortableContainer<TSortableList>(({drop, backgroundColor, list}: TSortableList) => {
+const SortableList = SortableContainer(({drop, backgroundColor, list}: TSortableList) => {
   const bottomBar = useSelector((state: RootStore) => state.layout.bottomBar);
   return (
     <Container backgroundColor={backgroundColor} ref={drop}>
@@ -123,7 +123,7 @@ export const Preview = (props: any) => {
     <>
       {layout.editedScreens.length && (
         <Beforeunload
-          onBeforeunload={(event) => {
+          onBeforeunload={(event: Event) => {
             event.preventDefault();
             return;
           }}
