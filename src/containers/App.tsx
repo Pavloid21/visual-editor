@@ -24,7 +24,6 @@ const App: React.FC<unknown> = () => {
   const bottomBar = useSelector((state: RootStore) => state.layout.bottomBar);
   const topAppBar = useSelector((state: RootStore) => state.layout.topAppBar);
   const config = useSelector((state: RootStore) => state.config);
-  const barState = useSelector((state: RootStore) => state.sideBar);
   const dispatch = useDispatch();
   const {initialized, keycloak} = useKeycloak();
   const setHeaderAuthorizationToken = () => {
@@ -139,13 +138,13 @@ const App: React.FC<unknown> = () => {
             path={`${AppRoutes.EDITOR}/:project`}
             element={
               <RequireAuth>
-                <LeftSidebar display={barState.left} />
+                <LeftSidebar />
                 <Preview
                   components={components}
                   onChangePreviewMode={handleChangePreviewMode}
                   previewMode={previewMode}
                 />
-                <RightSidebar display={barState.right} />
+                <RightSidebar />
               </RequireAuth>
             }
           />

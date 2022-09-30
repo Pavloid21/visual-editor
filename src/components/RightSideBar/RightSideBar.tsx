@@ -16,10 +16,11 @@ import {setSelectedBlock} from 'store/layout.slice';
 import {RootStore} from 'store/types';
 import {APIContainer, APIRow, Container, RowContainer} from './RightSideBar.styled';
 
-const RightSidebar: React.FC<any> = ({children, ...props}) => {
+const RightSidebar: React.FC<unknown> = () => {
   const APIs = useSelector((state: RootStore) => state.api.list);
   const activeTab = useSelector((state: RootStore) => state.config.activeTab);
   const {selectedBlockUuid: selectedBlock, selectedScreen} = useSelector((state: RootStore) => state.layout);
+  const barState = useSelector((state: RootStore) => state.sideBar);
   const selectedAction = useSelector((state: RootStore) => state.actions.selected);
   const [showForm, setAPIFormShow] = useState(false);
   const [isEditing, setEditing] = useState(false);
@@ -101,7 +102,7 @@ const RightSidebar: React.FC<any> = ({children, ...props}) => {
     setEditing(true);
   };
 
-  if (!props.display) {
+  if (!barState.right) {
     return null;
   }
 

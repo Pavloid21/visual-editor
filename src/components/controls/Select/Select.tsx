@@ -7,7 +7,7 @@ import {DropdownIndicator} from './Dropdown';
 import {baseStyleSelect} from './style';
 import {BASE_URL, getActionsList, getDataActionsList} from 'services/ApiService';
 
-export const Select = (props: ISelect) => {
+export const Select = React.memo((props: ISelect) => {
   const {onChange, options, value, className, label, menuPlacement, styles, clearable} = props;
   const [optionsList, setOptions] = useState(options);
 
@@ -66,4 +66,4 @@ export const Select = (props: ISelect) => {
       />
     </WithLabel>
   );
-};
+});

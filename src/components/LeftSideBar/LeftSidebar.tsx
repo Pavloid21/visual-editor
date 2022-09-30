@@ -27,7 +27,7 @@ import {ReactComponent as Close} from 'assets/close.svg';
 import {screenTemplates as defaultTemplates} from 'constants/screenTemplates';
 import {Subheader} from './Subheader';
 
-const LeftSidebar: React.FC<any> = ({children, ...props}) => {
+const LeftSidebar: React.FC<unknown> = () => {
   const {
     topAppBar,
     bottomBar,
@@ -36,6 +36,7 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
     blocks: layout,
   } = useSelector((state: RootStore) => state.layout);
   const [loading, setLoading] = useState(false);
+  const barState = useSelector((state: RootStore) => state.sideBar);
   const api = useSelector((state: RootStore) => state.api);
   const output = useSelector((state: RootStore) => state.output.screen);
   const currentSnippet = useSelector(
@@ -340,7 +341,7 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
     [availableScreenes, bottomBar, selectedScreen, setItemModalOpen, topAppBar]
   );
 
-  if (!props.display) {
+  if (!barState.left) {
     return null;
   }
 

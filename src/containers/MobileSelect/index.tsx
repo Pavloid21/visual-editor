@@ -8,8 +8,10 @@ import {ButtonSelector, Select} from './styled';
 
 const MobileSelect: React.FC<unknown> = () => {
   const dispatch = useDispatch();
-  const phoneType = useSelector((state: RootStore) => state.editorMode.model);
-  const device = useSelector((state: RootStore) => state.editorMode.device);
+  const {phoneType, device} = useSelector((state: RootStore) => ({
+    phoneType: state.editorMode.model,
+    device: state.editorMode.device,
+  }));
 
   const handleChangePlatform = (key: Device) => {
     dispatch(setDevice(key));
