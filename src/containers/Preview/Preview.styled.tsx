@@ -1,3 +1,4 @@
+import React from 'react';
 import {SideBar} from 'store/types';
 import styled from 'styled-components';
 
@@ -24,7 +25,7 @@ export const Bar = styled.div<{barState: SideBar}>`
   }
 `;
 
-export const ServiceBar = styled.div<{barState: SideBar}>`
+export const ServiceBar = React.memo(styled.div<{barState: SideBar}>`
   height: 42px;
   background: var(--background);
   position: absolute;
@@ -45,7 +46,7 @@ export const ServiceBar = styled.div<{barState: SideBar}>`
     margin-left: ${(props) => (props.barState.left ? '299px' : '0px')};
     margin-right: ${(props) => (props.barState.right ? '300px' : '0px')};
   }
-`;
+`);
 
 export const Container = styled.div<{backgroundColor: string}>`
   height: 100%;

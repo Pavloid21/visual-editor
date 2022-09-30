@@ -46,37 +46,43 @@ const TopBar = () => {
     dispatch(toggleRightBar());
   }, [dispatch]);
 
-  const handleSaveApplication: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
-    event.stopPropagation();
-    const snippetsPromises: Promise<any>[] = snippets.filter((item) => {
-      if (editedScreens.includes(item.screenID) && !deletedScreens.includes(item.screenID)) {
-        return saveScreen(projectID, item.endpoint, `${item.logic.replace(/return$/g, '')}${item.snippet}`);
-      }
-    });
-    const deletedSnippetsPromises: Promise<any>[] = snippets.filter((item) => {
-      if (deletedScreens.includes(item.screenID)) {
-        return deleteScreen(projectID, item.endpoint);
-      }
-    });
+  const handleSaveApplication: React.MouseEventHandler<HTMLButtonElement> = useCallback(
+    async (event) => {
+      event.stopPropagation();
+      const snippetsPromises: Promise<any>[] = snippets.filter((item) => {
+        if (editedScreens.includes(item.screenID) && !deletedScreens.includes(item.screenID)) {
+          return saveScreen(projectID, item.endpoint, `${item.logic.replace(/return$/g, '')}${item.snippet}`);
+        }
+      });
+      const deletedSnippetsPromises: Promise<any>[] = snippets.filter((item) => {
+        if (deletedScreens.includes(item.screenID)) {
+          return deleteScreen(projectID, item.endpoint);
+        }
+      });
 
-    const actionsPromises: Promise<any>[] = actions.map((item) => {
-      return saveAction(projectID, item.type, item.action, item.object);
-    });
-    const deletedActionsPromises: Promise<any>[] = deletedActions.map((item) => {
-      return deleteAction(projectID, item.type, item.action);
-    });
-    await editProject(projectID, JSON.stringify({...currentProject, icon: undefined}));
-    Promise.all([...snippetsPromises, ...deletedSnippetsPromises, ...actionsPromises, ...deletedActionsPromises]).then(
-      () => {
+      const actionsPromises: Promise<any>[] = actions.map((item) => {
+        return saveAction(projectID, item.type, item.action, item.object);
+      });
+      const deletedActionsPromises: Promise<any>[] = deletedActions.map((item) => {
+        return deleteAction(projectID, item.type, item.action);
+      });
+      await editProject(projectID, JSON.stringify({...currentProject, icon: undefined}));
+      Promise.all([
+        ...snippetsPromises,
+        ...deletedSnippetsPromises,
+        ...actionsPromises,
+        ...deletedActionsPromises,
+      ]).then(() => {
         Store.addNotification({
           ...successNotification,
           title: 'Success',
           message: 'All your changes is saved.',
         });
-      }
-    );
-    dispatch(changesSaved());
-  };
+      });
+      dispatch(changesSaved());
+    },
+    [dispatch]
+  );
 
   const openMenu = useCallback(() => {
     setIsShow(true);

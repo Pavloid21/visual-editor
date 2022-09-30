@@ -466,4 +466,4 @@ const LeftSidebar: React.FC<any> = ({children, ...props}) => {
   );
 };
 
-export default LeftSidebar;
+export default React.memo(LeftSidebar);

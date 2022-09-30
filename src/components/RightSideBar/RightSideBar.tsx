@@ -223,4 +223,4 @@ const RightSidebar: React.FC<any> = ({children, ...props}) => {
   );
 };
 
-export default RightSidebar;
+export default React.memo(RightSidebar);
