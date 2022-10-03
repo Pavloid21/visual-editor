@@ -279,7 +279,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
           </Button>
         </div>
       )}
-      {block.settingsUI.topAppBarItems && (
+      {block.settingsUI?.topAppBarItems && (
         <div>
           <Division>
             <span>App bar items</span>

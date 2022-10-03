@@ -1,4 +1,5 @@
-export {traverse, prepareTree, buildLayout, findInTree} from './traverser';
+export {traverse, prepareTree, buildLayout} from './traverser';
+export {findInTree} from './blocks';
 export {useModal, onSortMove, useOutside, useOutsideAlerter} from './hooks';
 export {observer} from './observer';
 export {snippet, getData, buildJSONitem, prepareJSON, walker} from './prepareModel';
