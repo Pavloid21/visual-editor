@@ -12,6 +12,7 @@ import type {
 import {blockStateUnsafeSelector} from './selectors';
 import rootStore from 'store';
 import {getKeyByUnit} from 'utils/units';
+import {getEnrichedBlockConfig} from 'utils/blocks';
 
 type ChangeUnitsPayloadAction = {
   blockUuid: string;
@@ -50,7 +51,7 @@ export const findInTree = (tree: BlockItem[], uuid: string): BlockItem | null =>
   let result: BlockItem | null = null;
   for (const item of tree) {
     if (item.uuid === uuid) {
-      result = item;
+      result = getEnrichedBlockConfig(item);
     }
     if (!result && item.listItems) {
       result = findInTree(item.listItems, uuid);
