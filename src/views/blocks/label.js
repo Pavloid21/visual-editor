@@ -104,33 +104,14 @@ const block = (state) => {
     previewImageUrl: label,
     category: 'Element',
     defaultData: {
-      text: 'Вход',
-      backgroundColor: '#FFFFFF',
+      text: 'Label',
       textColor: '#000000',
-      fontSize: 24,
-      shape: {
-        type: 'ALLCORNERSROUND',
-        radius: '0',
-      },
-      size: {
-        width: 100,
-        height: 48,
-      },
+      fontSize: 14,
       padding: {
         top: 0,
         bottom: 0,
         left: 0,
         right: 0,
-      },
-      fontWeight: 'REGULAR',
-      shadow: {
-        color: '#000000',
-        opacity: 0.3,
-        offsetSize: {
-          width: 0,
-          height: 0,
-        },
-        radius: 8,
       },
     },
     config: {
