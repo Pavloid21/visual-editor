@@ -4,15 +4,17 @@ import actionTypes from 'constants/actionTypes';
 import {getData} from 'utils/prepareModel';
 import blocks from 'views/blocks';
 import {clone, cloneDeep, get} from 'external/lodash';
-import type {
-  BlockItem,
-  EditScreenNamePayloadAction,
-  Layout
-} from './types';
+import type {BlockItem, EditScreenNamePayloadAction, Layout} from './types';
 import {blockStateUnsafeSelector} from './selectors';
 import rootStore from 'store';
 import {getKeyByUnit} from 'utils/units';
-import {getEnrichedBlockConfig} from 'utils/blocks';
+import {
+  cloneToList,
+  createBlockByConfig,
+  findInTree,
+  getEnrichedBlockConfig,
+  removeFromList
+} from 'utils/blocks';
 
 type ChangeUnitsPayloadAction = {
   blockUuid: string;
@@ -45,82 +47,6 @@ const initialState: Layout = {
   editedScreens: [],
   deletedScreens: [],
   snippets: [],
-};
-
-export const findInTree = (tree: BlockItem[], uuid: string): BlockItem | null => {
-  let result: BlockItem | null = null;
-  for (const item of tree) {
-    if (item.uuid === uuid) {
-      result = getEnrichedBlockConfig(item);
-    }
-    if (!result && item.listItems) {
-      result = findInTree(item.listItems, uuid);
-    }
-    if (!result && item.listItem) {
-      result = findInTree([item.listItem], uuid);
-    }
-  }
-
-  return result;
-};
-
-const removeFromList = (tree: any[], uuid: string) => {
-  const result = [...tree];
-  tree.forEach((item, index) => {
-    if (item.uuid === uuid) {
-      result.splice(index, 1);
-    } else if (item.listItems) {
-      item.listItems = removeFromList(item.listItems, uuid);
-    } else if (item.listItem) {
-      item.listItem = removeFromList([item.listItem], uuid)[0];
-    }
-  });
-  return result;
-};
-
-const createBlockByConfig = (blockId: string, config?: any): BlockItem => {
-  const blockConfig = config || blocks[blockId](blockStateUnsafeSelector(rootStore.getState()));
-
-  const {
-    listItem,
-    listItems,
-    defaultData,
-    defaultInteractiveOptions
-  } = blockConfig;
-
-  const block: BlockItem = {
-    blockId,
-    uuid: uuidv4(),
-    settingsUI: {
-      ...getData(defaultData),
-    },
-  };
-  if (defaultInteractiveOptions) {
-    block.interactive = {
-      ...getData(defaultInteractiveOptions),
-    };
-  }
-  if (listItems) {
-    block.listItems = listItems;
-  }
-  if (listItem !== undefined) {
-    block.listItem = listItem;
-  }
-
-  return block;
-};
-
-const cloneToList = (tree: any[], uuid: string) => {
-  const result = [...tree];
-  tree.forEach((item) => {
-    if (item.uuid === uuid) {
-      const newItem = {...item, uuid: uuidv4()};
-      result.push(newItem);
-    } else if (item.listItems) {
-      item.listItems = cloneToList(item.listItems, uuid);
-    }
-  });
-  return result;
 };
 
 export const pushTopAppBar = createAction('layout/pushTopAppBar', (blockId) => {
@@ -230,7 +156,7 @@ export const changeBlockData = createAction('layout/changeBlockData', (payload: 
     topAppBar: state.topAppBar,
   });
   const element: BlockItem =
-    findInTree(newBlocks.blocks, payload.blockUuid) ||
+    getEnrichedBlockConfig(findInTree(newBlocks.blocks, payload.blockUuid)) ||
     (payload.blockUuid === state.bottomBar?.uuid
       ? newBlocks.bottomBar
       : newBlocks.topAppBar);
