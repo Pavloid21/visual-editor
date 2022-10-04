@@ -58,22 +58,25 @@ const LeftSidebar: React.FC<unknown> = () => {
   `;
   const dispatch = useDispatch();
 
-  const generatePromiseStack = useCallback((data: any[], parsed: boolean) => {
-    const screenesArr = data.map(async (screen: string) => {
-      try {
-        const response = await getScreenByName(screen, parsed, project);
-        return {
-          screen,
-          object: response.data,
-          logic: response.data,
-          project,
-        };
-      } catch (e) {
-        console.log('e :>> ', e);
-      }
-    });
-    return screenesArr;
-  }, [project]);
+  const generatePromiseStack = useCallback(
+    (data: any[], parsed: boolean) => {
+      const screenesArr = data.map(async (screen: string) => {
+        try {
+          const response = await getScreenByName(screen, parsed, project);
+          return {
+            screen,
+            object: response.data,
+            logic: response.data,
+            project,
+          };
+        } catch (e) {
+          console.log('e :>> ', e);
+        }
+      });
+      return screenesArr;
+    },
+    [project]
+  );
 
   useEffect(() => {
     setLoading(true);
@@ -83,6 +86,7 @@ const LeftSidebar: React.FC<unknown> = () => {
           const layouts: Record<string, any>[] = [];
           resolves.forEach((result) => {
             if (result.status === 'fulfilled' && result.value?.object.screen) {
+              console.log('result.value', result.value);
               const {newBlock, action, screenEndpoint} = buildLayout(result.value);
               layouts.push({
                 uuid: v4(),
@@ -170,6 +174,27 @@ const LeftSidebar: React.FC<unknown> = () => {
     }
   }, [output]);
 
+  const updateScreenList = (script: any, screenLayout: Record<string, any>, screenPositionInList: number) => {
+    const rawData = {
+      screen,
+      logic: JSON.parse('{' + script.data?.match(/(?<=return.{).*$/gs)[0]),
+      object: JSON.parse('{' + script.data?.match(/(?<=return.{).*$/gs)[0]),
+      project,
+    };
+    const {newBlock, action, screenEndpoint} = buildLayout(rawData);
+    const newScreenData = {
+      uuid: screenLayout.uuid,
+      value: newBlock,
+      action,
+      screenEndpoint,
+      logic: rawData.logic[0],
+      project,
+    };
+    const nextList = [...availableScreenes];
+    nextList[screenPositionInList] = newScreenData;
+    return nextList;
+  };
+
   const handleItemClick = async (event: React.MouseEvent, item: Record<string, any>) => {
     event.stopPropagation();
     const uuid = item.node.subtitle;
@@ -177,7 +202,14 @@ const LeftSidebar: React.FC<unknown> = () => {
       setLoadScreen({uuid: item.node.uuid, load: true});
       const script = await getScreenByName(item.node.endpoint, false, project);
       setLoadScreen({uuid: item.node.uuid, load: false});
-      const screenLayout = availableScreenes.filter((screen) => screen.uuid === item.node.uuid)[0];
+      let screenPositionInList = 0;
+      const screenLayout = availableScreenes.filter((screen, index) => {
+        if (screen.uuid === item.node.uuid) {
+          screenPositionInList = index;
+          return true;
+        }
+      })[0];
+      const nextList = updateScreenList(script, screenLayout, screenPositionInList);
       dispatch(setActiveTabAction(5));
       dispatch(
         selectScreen({
@@ -204,7 +236,7 @@ const LeftSidebar: React.FC<unknown> = () => {
           ),
         },
       });
-      dispatch(setLayout(screenLayout.action));
+      dispatch(setLayout(nextList[screenPositionInList].action));
     } else {
       observer.broadcast({blockId: uuid, event: 'click'});
     }
