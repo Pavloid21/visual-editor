@@ -1,96 +1,28 @@
-import React, {ReactNode, useEffect} from 'react';
+import {ReactNode, useEffect} from 'react';
 import {useDrop} from 'react-dnd';
 import {useDispatch, useSelector} from 'react-redux';
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 import {ItemTypes} from 'constants/actionTypes';
 import {arrayMoveImmutable} from 'array-move';
 import {observer, onSortMove} from 'utils';
-import PhoneContainer from './PhoneContainer';
-import styled from 'styled-components';
-import {Code} from './Code';
+import PhoneContainer from '../PhoneContainer';
+import {Code} from '../Code';
 import {ReactComponent as Screen} from 'assets/screen.svg';
 import {ReactComponent as Json} from 'assets/json.svg';
 import {ReactComponent as Reference} from 'assets/preview.svg';
 import {ReactComponent as Save} from 'assets/save.svg';
-import MobileSelect from './MobileSelect';
+import MobileSelect from '../MobileSelect';
 import clsx from 'clsx';
-import ZoomSelect from './ZoomSelect';
+import ZoomSelect from '../ZoomSelect';
 import {Beforeunload} from 'react-beforeunload';
 import {setEditorMode} from 'store/editor-mode.slice';
 import type {RootStore} from 'store/types';
-
-const Bar = styled.div<any>`
-  height: 60px;
-  background: var(--background);
-  position: absolute;
-  left: 0;
-  right: 0;
-  margin-left: ${(props) => (props.barState.left ? '421px' : '0px')};
-  margin-right: ${(props) => (props.barState.right ? '422px' : '0px')};
-  padding: 10px 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  & .mode_selector {
-    gap: 16px;
-    margin-left: auto;
-    display: flex;
-  }
-  @media (max-width: 1500px) {
-    margin-left: ${(props) => (props.barState.left ? '299px' : '0px')};
-    margin-right: ${(props) => (props.barState.right ? '300px' : '0px')};
-  }
-`;
-
-const ServiceBar = styled.div<any>`
-  height: 42px;
-  background: var(--background);
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  padding: 0 25px;
-  margin-left: ${(props) => (props.barState?.left ? '421px' : '0px')};
-  margin-right: ${(props) => (props.barState?.right ? '422px' : '0px')};
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  & .mode_selector {
-    gap: 16px;
-    display: flex;
-  }
-  @media (max-width: 1500px) {
-    margin-left: ${(props) => (props.barState.left ? '299px' : '0px')};
-    margin-right: ${(props) => (props.barState.right ? '300px' : '0px')};
-  }
-`;
-
-const Container = styled.div<any>`
-  height: 100%;
-  background-color: ${(props) => props.backgroundColor};
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  & > *:not(:last-child) {
-    overflow-y: auto;
-  }
-  & > :first-child {
-    overflow: initial;
-    max-height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-`;
-
-interface ISortableList {
-  backgroundColor: string;
-  drop: React.Ref<any>;
-  list: ReactNode[];
-}
+import {Bar, Container, ServiceBar} from './Preview.styled';
+import {TSortableList} from './types';
 
 const SortableItem = SortableElement((props: any) => <>{props.children}</>);
 
-const SortableList = SortableContainer<ISortableList>(({drop, backgroundColor, list}: ISortableList) => {
+const SortableList = SortableContainer(({drop, backgroundColor, list}: TSortableList) => {
   const bottomBar = useSelector((state: RootStore) => state.layout.bottomBar);
   return (
     <Container backgroundColor={backgroundColor} ref={drop}>
@@ -98,7 +30,11 @@ const SortableList = SortableContainer<ISortableList>(({drop, backgroundColor, l
         {list.map((child: ReactNode, index: number) => {
           if (index !== list.length - 1) {
             // @ts-ignore
-            return <SortableItem key={`_${index}`} index={index}>{child}</SortableItem>;
+            return (
+              <SortableItem key={`_${index}`} index={index}>
+                {child}
+              </SortableItem>
+            );
           }
           return null;
         })}
@@ -109,7 +45,7 @@ const SortableList = SortableContainer<ISortableList>(({drop, backgroundColor, l
   );
 });
 
-const Preview = (props: any) => {
+export const Preview = (props: any) => {
   const selectedScreen = useSelector((state: RootStore) => state.layout.selectedScreen);
   const [{canDrop, isOver}, drop] = useDrop(
     () => ({
@@ -187,7 +123,7 @@ const Preview = (props: any) => {
     <>
       {layout.editedScreens.length && (
         <Beforeunload
-          onBeforeunload={(event) => {
+          onBeforeunload={(event: Event) => {
             event.preventDefault();
             return;
           }}
@@ -242,5 +178,3 @@ const Preview = (props: any) => {
     </>
   );
 };
-
-export default Preview;

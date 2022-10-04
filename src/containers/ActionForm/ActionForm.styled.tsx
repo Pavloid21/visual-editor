@@ -5,7 +5,7 @@ export const Container = styled.div`
   max-width: 422px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 12px;
   height: calc(100% - 60px);
   & > .buttons {
     display: flex;

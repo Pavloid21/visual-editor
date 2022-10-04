@@ -4,7 +4,7 @@ import {Routes, Route, Navigate, useLocation} from 'react-router-dom';
 import {default as AppRoutes} from 'routes/routes';
 import {renderHandlebars, observer, findInTree} from 'utils';
 import {LeftSidebar, TopBar, RightSidebar, HighlightedElement, Loader} from 'components';
-import Preview from './Preview';
+import {Preview} from './Preview';
 import actionTypes from 'constants/actionTypes';
 import GlobalStyles from 'constants/theme';
 import {Login} from './Login';
@@ -24,7 +24,6 @@ const App: React.FC<unknown> = () => {
   const bottomBar = useSelector((state: RootStore) => state.layout.bottomBar);
   const topAppBar = useSelector((state: RootStore) => state.layout.topAppBar);
   const config = useSelector((state: RootStore) => state.config);
-  const barState = useSelector((state: RootStore) => state.sideBar);
   const dispatch = useDispatch();
   const {initialized, keycloak} = useKeycloak();
   const setHeaderAuthorizationToken = () => {
@@ -44,9 +43,10 @@ const App: React.FC<unknown> = () => {
   useEffect(() => {
     const handleMessage = (data: Record<string, any>) => {
       if (data.event) {
+        console.log('data', data);
         if (data.blockId && data.event === 'click') {
-          handleChangeActiveTab(0);
-          handleSetSelectedBlock(data.blockId);
+          dispatch(setActiveTab(0));
+          dispatch(setSelectedBlock(data.blockId));
         } else if (data.newOrder && data.event === 'sorted') {
           handleReorderLayout(data.newOrder, data.parentID, layout.blocks);
         }
@@ -64,16 +64,8 @@ const App: React.FC<unknown> = () => {
     });
   }, [location, dispatch]);
 
-  const handleChangeActiveTab = (index: number) => {
-    dispatch(setActiveTab(index));
-  };
-
   const handleChangePreviewMode = (mode: number) => {
     dispatch(setPreviewMode(mode));
-  };
-
-  const handleSetSelectedBlock = (blockUuid: string) => {
-    dispatch(setSelectedBlock(blockUuid));
   };
 
   const handleReorderLayout = (newOrder: string[], parentID: string, blocksLayout: BlockItem[]) => {
@@ -146,13 +138,13 @@ const App: React.FC<unknown> = () => {
             path={`${AppRoutes.EDITOR}/:project`}
             element={
               <RequireAuth>
-                <LeftSidebar display={barState.left} />
+                <LeftSidebar />
                 <Preview
                   components={components}
                   onChangePreviewMode={handleChangePreviewMode}
                   previewMode={previewMode}
                 />
-                <RightSidebar display={barState.right} />
+                <RightSidebar />
               </RequireAuth>
             }
           />

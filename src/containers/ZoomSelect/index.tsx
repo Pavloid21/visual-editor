@@ -6,13 +6,7 @@ import {ReactComponent as PlusIcon} from 'assets/zoom_plus.svg';
 import {setZoom} from 'store/editor-mode.slice';
 import {SelectCreatable} from 'components/controls';
 import {FlexContainer as FlexContainerBase} from 'components/layouts';
-import {
-  createOption,
-  formatCreateLabel,
-  isValidNewOption,
-  onInputChange,
-  transformValue,
-} from './utils';
+import {createOption, formatCreateLabel, isValidNewOption, onInputChange, transformValue} from './utils';
 import type {Zoom} from './types';
 import {options as defaultOptions} from './consts';
 
@@ -37,7 +31,7 @@ const ZoomSelect = () => {
     dispatch(setZoom(e));
   };
 
-  const mappedZoomValue = options.map(o => o.value);
+  const mappedZoomValue = options.map((o) => o.value);
 
   const onCreateOption = (value: string) => {
     const zoomValue = transformValue(value);
@@ -48,15 +42,15 @@ const ZoomSelect = () => {
   };
 
   const handleDecrementZoom = () => {
-    const currentIndex = mappedZoomValue.findIndex(z => z === zoom);
-    if(currentIndex > 0) {
+    const currentIndex = mappedZoomValue.findIndex((z) => z === zoom);
+    if (currentIndex > 0) {
       dispatch(setZoom(mappedZoomValue[currentIndex - 1] as Zoom));
     }
   };
 
   const handleIncrementZoom = () => {
-    const currentIndex = mappedZoomValue.findIndex(z => z === zoom);
-    if(currentIndex < mappedZoomValue.length - 1) {
+    const currentIndex = mappedZoomValue.findIndex((z) => z === zoom);
+    if (currentIndex < mappedZoomValue.length - 1) {
       console.log(currentIndex, mappedZoomValue);
       dispatch(setZoom(mappedZoomValue[currentIndex + 1] as Zoom));
     }
@@ -64,7 +58,7 @@ const ZoomSelect = () => {
 
   return (
     <FlexContainer>
-      <MinusIcon className='icon' onClick={handleDecrementZoom}/>
+      <MinusIcon className="icon" onClick={handleDecrementZoom} />
       <SelectCreatable
         options={options}
         onChange={handleChangeZoom}
@@ -95,13 +89,13 @@ const ZoomSelect = () => {
           }),
           container: (props) => ({
             ...props,
-            minWidth: '90px'
-          })
+            minWidth: '90px',
+          }),
         }}
       />
-      <PlusIcon className='icon' onClick={handleIncrementZoom}/>
+      <PlusIcon className="icon" onClick={handleIncrementZoom} />
     </FlexContainer>
   );
 };
 
-export default ZoomSelect;
+export default React.memo(ZoomSelect);

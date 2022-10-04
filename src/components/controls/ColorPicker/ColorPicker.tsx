@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {Label} from '../Input';
+import {Label} from 'components/controls';
 import {Container, Wrapper} from './ColorPicker.styled';
 
 const ColorPicker: React.FC<any> = ({value, onChange, ...rest}) => {

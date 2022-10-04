@@ -1,4 +1,7 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
+import {Select as SelectBase} from 'components/controls';
+import {ButtonSelector as ButtonSelectorBase} from 'components';
+import {Container} from 'components/layouts';
 
 const ButtonGroup = styled.div`
   & button:not(:last-child) {
@@ -16,4 +19,15 @@ const ButtonGroup = styled.div`
   }
 `;
 
-export {ButtonGroup}
+const Select = styled(SelectBase)`
+  margin-left: 16px;
+  min-width: 200px;
+`;
+
+const ButtonSelector = styled(ButtonSelectorBase)`
+  ${Container.className} {
+    margin-bottom: 0px;
+  }
+`;
+
+export {ButtonGroup, Select, ButtonSelector};

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Container = styled.div<{show: boolean}>`
+export const Container = styled.div`
   min-width: 422px;
   background-color: #ffffff;
   overflow: hidden;
@@ -10,8 +10,8 @@ export const Container = styled.div<{show: boolean}>`
   border-right: 1px solid var(--neo-gray);
   height: calc(100vh - 60px);
   z-index: 1;
-  & > .gallery {
-    ${(props) => (props.show ? 'height: 50%;' : '')}
+  & > .screen-list {
+    flex: 1;
   }
   & > div {
     overflow: hidden;

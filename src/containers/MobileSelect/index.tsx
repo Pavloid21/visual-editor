@@ -1,35 +1,24 @@
-import {Container, FlexContainer} from 'components/layouts';
+import {FlexContainer} from 'components/layouts';
 import React from 'react';
-import styled from 'styled-components';
-import {ButtonSelector as ButtonSelectorBase} from 'components';
 import {buttons, optionsByDevice, Device} from './consts';
 import {useDispatch, useSelector} from 'react-redux';
-import {Select as SelectBase} from 'components/controls';
 import {setDevice, setModelDevice} from 'store/editor-mode.slice';
+import {RootStore} from 'store/types';
+import {ButtonSelector, Select} from './styled';
 
-const ButtonSelector = styled(ButtonSelectorBase)`
-  ${Container.className} {
-    margin-bottom: 0px;
-  }
-`;
-
-const Select = styled(SelectBase)`
-  margin-left: 16px;
-  min-width: 200px;
-`;
-
-const MobileSelect = () => {
+const MobileSelect: React.FC<unknown> = () => {
   const dispatch = useDispatch();
-  const phoneType = useSelector((state: any) => state.editorMode.model);
-  const device = useSelector((state: any) => state.editorMode.device);
-  // TODO типизировать стейт
+  const {phoneType, device} = useSelector((state: RootStore) => ({
+    phoneType: state.editorMode.model,
+    device: state.editorMode.device,
+  }));
 
   const handleChangePlatform = (key: Device) => {
     dispatch(setDevice(key));
   };
 
-  const handleChangeMobile = (e: any) => {
-    dispatch(setModelDevice(e));
+  const handleChangeMobile = (value: string | undefined) => {
+    value && dispatch(setModelDevice(value));
   };
 
   return (

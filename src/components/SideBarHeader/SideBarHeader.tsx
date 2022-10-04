@@ -20,7 +20,7 @@ import {filesToDTO} from 'utils/files';
 import {head} from 'external/lodash';
 import Routes from 'routes/routes';
 
-export const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
+export const SideBarHeader: React.FC<SideBarHeaderProps> = React.memo((props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal();
@@ -159,8 +159,8 @@ export const SideBarHeader: React.FC<SideBarHeaderProps> = (props) => {
       </CustomModal>
     </Header>
   );
-};
+});
 
-export const SideBarSubheader = (props: React.HTMLProps<any>) => {
+export const SideBarSubheader = React.memo((props: React.HTMLProps<any>) => {
   return <Subheader>{props.children}</Subheader>;
-};
+});

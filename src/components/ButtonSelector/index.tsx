@@ -1,17 +1,16 @@
 import React from 'react';
 import {Button, Label} from 'components/controls';
 import {ButtonGroup, Container} from 'components/layouts';
-import {IButtonSelector} from './types';
+import type {TButtonSelector} from './types';
 
-const ButtonSelector: React.FC<IButtonSelector> = (props) => {
-  const {label, buttons, value} = props;
+const ButtonSelector: React.FC<TButtonSelector> = ({onChange, buttons, label, value, className}) => {
   return (
-    <Container className={props.className}>
+    <Container className={className}>
       {label && <Label>{label}</Label>}
       <ButtonGroup>
         {buttons.map(({title, key, uuid}) => {
           return (
-            <Button key={uuid} className={`sm ${key !== value && 'transparent'}`} onClick={() => props.onChange(key)}>
+            <Button key={uuid} className={`sm ${key !== value && 'transparent'}`} onClick={() => onChange(key)}>
               {title}
             </Button>
           );
