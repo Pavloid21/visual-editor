@@ -1,7 +1,6 @@
 import actionTypes from 'constants/actionTypes';
 import {AnyAction} from 'redux';
 import {v4} from 'uuid';
-import type {BlockItem} from 'store/types';
 
 export const traverse = function (tree: Record<string, any>[]) {
   return tree.map((item) => {
@@ -112,21 +111,4 @@ export const buildLayout = ({screen, object}: Record<string, any>) => {
     };
   }
   return {newBlock, action, screenEndpoint: screen};
-};
-
-export const findInTree = (tree: BlockItem[], uuid: string): BlockItem | null => {
-  let result: BlockItem | null = null;
-  for (const item of tree) {
-    if (item.uuid === uuid) {
-      result = item;
-    }
-    if (!result && item.listItems) {
-      result = findInTree(item.listItems, uuid);
-    }
-    if (!result && item.listItem) {
-      result = findInTree([item.listItem], uuid);
-    }
-  }
-
-  return result;
 };
