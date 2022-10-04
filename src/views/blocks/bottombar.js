@@ -76,33 +76,30 @@ const block = () => ({
   description: 'Bottom navigation bars allow movement between primary destinations in an app.',
   previewImageUrl: bottombar,
   category: 'Container',
-  defaultInteractiveOptions: {
-    action: {url: 'nextScreenName', fields: ['field1', 'field2']},
-  },
   defaultData: {
     backgroundColor: '#423649',
     iconSelectedColor: '#E9E8EA',
     iconUnselectedColor: '#A29CA6',
+    textSelectedColor: '#E9E8EA',
+    textUnselectedColor: '#A29CA6',
     navigationItems: [
       {
-        screenName: 'Auth',
-        iconUrl: 'https://icons.getbootstrap.com/assets/icons/box-arrow-in-right.svg',
+        screenName: 'Main',
+        iconUrl: 'icons/material/action/ic_home_48px',
         action: {
           url: '',
-          target: '',
         },
       },
       {
         screenName: 'Contacts',
-        iconUrl: 'https://icons.getbootstrap.com/assets/icons/person-lines-fill.svg',
+        iconUrl: 'icons/material/social/ic_people_48px',
         action: {
           url: '',
-          target: '',
         },
       },
       {
-        screenName: 'Settings',
-        iconUrl: 'https://icons.getbootstrap.com/assets/icons/gear.svg',
+        screenName: 'Profile',
+        iconUrl: 'icons/material/action/ic_account_circle_48px',
         action: {
           url: '',
           target: '',
@@ -114,6 +111,8 @@ const block = () => ({
     backgroundColor: {type: 'color', name: 'Background color'},
     iconSelectedColor,
     iconUnselectedColor,
+    textSelectedColor,
+    textUnselectedColor,
     showUnselectedText,
     navigationItems: [
       {
