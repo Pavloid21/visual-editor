@@ -22,9 +22,20 @@ const Image = styled.img`
   border-style: solid;
   box-shadow: ${(props) => {
     const RGB = hexToRgb(props.shadow?.color);
-    return `${props.shadow?.offsetSize?.width || props.shadow?.offsetSize?.widthInPercent}px ${
-      props.shadow?.offsetSize?.height || props.shadow?.offsetSize?.heightInPercent
-    }px 8px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b}, ${props.shadow?.opacity})`;
+    return `${props.shadow?.offsetSize?.width || props.shadow?.offsetSize?.widthInPercent}px ${props.shadow?.offsetSize?.height || props.shadow?.offsetSize?.heightInPercent
+      }px 8px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b}, ${props.shadow?.opacity})`;
+  }};
+  object-fit: ${(props) => {
+    switch (props.imageAlignment) {
+      case 'ASPECT_FIT':
+        return 'contain';
+      case 'ASPECT_FILL':
+        return 'cover';
+      case 'SCALE_TO_FILL':
+        return 'fill';
+      default:
+        return 'initial';
+    }
   }};
   align-self: center;
   z-index: 90;
@@ -85,6 +96,15 @@ const block = (state) => {
       },
     },
     config: {
+      imageAlignment: {
+        type: 'select',
+        name: 'Image alignment',
+        options: [
+          {label: 'Aspect fit', value: 'ASPECT_FIT'},
+          {label: 'Aspect fill', value: 'ASPECT_FILL'},
+          {label: 'Scale to fill', value: 'SCALE_TO_FILL'},
+        ],
+      },
       imageUrl,
       backgroundColor,
       borderWidth,
