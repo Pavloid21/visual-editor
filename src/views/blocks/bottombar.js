@@ -111,8 +111,6 @@ const block = () => ({
     backgroundColor: {type: 'color', name: 'Background color'},
     iconSelectedColor,
     iconUnselectedColor,
-    textSelectedColor,
-    textUnselectedColor,
     showUnselectedText,
     navigationItems: [
       {
