@@ -15,6 +15,7 @@ import {
   removeTopAppBarItem,
   switchElementType,
   removeProperty,
+  addTopAppBarButton,
 } from 'store/layout.slice';
 import type {TInspector} from './types';
 import type {RootStore} from 'store/types';
@@ -40,15 +41,18 @@ const Inspector: React.FC<TInspector> = ({display}) => {
     [dispatch]
   );
 
-  const removeProp = useCallback((blockUuid: string, key: string, parentKey: string | undefined) => {
-    dispatch(
-      removeProperty({
-        blockUuid,
-        key,
-        parentKey,
-      })
-    );
-  }, [dispatch]);
+  const removeProp = useCallback(
+    (blockUuid: string, key: string, parentKey: string | undefined) => {
+      dispatch(
+        removeProperty({
+          blockUuid,
+          key,
+          parentKey,
+        })
+      );
+    },
+    [dispatch]
+  );
 
   const handleChangeUnits = useCallback(
     (blockUuid: string, key: string, value: string | undefined, parentKey: string) => {
@@ -159,7 +163,10 @@ const Inspector: React.FC<TInspector> = ({display}) => {
                   handleChangeUnits(blockUuid, el, value, parentKey);
                 },
                 options: config[el].options,
-                value: endpoint && endpoint[el] === undefined ? '%' : getUnitOptionByDevice(blockState.deviceInfo.device).value,
+                value:
+                  endpoint && endpoint[el] === undefined
+                    ? '%'
+                    : getUnitOptionByDevice(blockState.deviceInfo.device).value,
               }}
             />
           );
@@ -233,13 +240,17 @@ const Inspector: React.FC<TInspector> = ({display}) => {
 
   /* @ts-ignore */
   const {config, interactive, complex, name} = blocks[block.blockId](blockState);
-
+  console.log('block.settingsUI', block);
+  console.log('config', config);
   return (
     <div
       style={{
         padding: '8px 16px',
         overflowY: 'auto',
         height: 'calc(100% - 60px)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px',
       }}
     >
       {interactive && parseConfig(interactive, blockUuid, block.interactive)}
@@ -308,6 +319,41 @@ const Inspector: React.FC<TInspector> = ({display}) => {
           <Button
             onClick={() => {
               dispatch(addTopAppBarItem());
+            }}
+          >
+            Add item
+          </Button>
+        </div>
+      )}
+      {block.interactive.rightButtons && (
+        <div>
+          <Division>
+            <span>Right buttons</span>
+          </Division>
+          {block.interactive.rightButtons.map((element: any, index: number) => {
+            return (
+              <div key={`navItem_${element.uuid}`}>
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                  <Division>
+                    <span>Button {index + 1}</span>
+                    <Trash
+                      className="icon"
+                      onClick={(e) => {
+                        dispatch(removeTopAppBarItem(index));
+                      }}
+                    />
+                  </Division>
+                </div>
+                {parseConfig(interactive.rightButtons[0], blockUuid, block.interactive.rightButtons[index], [
+                  index,
+                  'rightButtons',
+                ])}
+              </div>
+            );
+          })}
+          <Button
+            onClick={() => {
+              dispatch(addTopAppBarButton());
             }}
           >
             Add item

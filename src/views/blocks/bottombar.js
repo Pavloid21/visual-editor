@@ -122,7 +122,6 @@ const block = () => ({
             name: 'Action URL',
             action_types: 'data'
           },
-          target: {type: 'string', name: 'Target'},
           method: {
             type: 'select',
             name: 'Method',

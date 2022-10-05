@@ -80,6 +80,21 @@ export const addBottomBarItem = createAction('layout/addBottomBarItem', () => {
   };
 });
 
+export const addTopAppBarButton = createAction('layout/addTopAppBarButton', () => {
+  const store = rootStore.getState();
+  const {layout: state} = store;
+  const extendedItems = [...get(state, 'topAppBar.interactive.rightButtons', [])];
+  console.log('state', extendedItems);
+  extendedItems.push({
+    ...blocks.topappbar(blockStateUnsafeSelector(store)).defaultInteractiveOptions.rightButtons[0],
+    uuid: uuidv4(),
+  });
+
+  return {
+    payload: extendedItems,
+  };
+});
+
 export const pushBlockInside = createAction('layout/pushBlockInside', (payload) => {
   if (['bottombar', 'topappbar'].includes(payload.blockId)) {
     return {
@@ -277,198 +292,201 @@ export const switchElementType = createAction('layout/switchElementType', (paylo
 });
 
 const layoutSlice = createSlice({
-    name: 'layout',
-    initialState,
-    reducers: {
-      changesSaved: (state) => {
-        state.editedScreens = [];
-        state.deletedScreens = [];
-      },
-      addTopAppBarItem: (state) => {
-        const nextItems = [...get(state, 'topAppBar.settingsUI.topAppBarItems', [])];
-        nextItems.push({
-          ...blocks.topappbar().defaultData.topAppBarItems[0],
-          uuid: uuidv4(),
-        });
-        const abar = {...state.topAppBar};
-        abar.settingsUI.topAppBarItems = nextItems;
-        state.topAppBar = {...abar};
-      },
-      removeBottomBarItem: (state, action: PayloadAction<number>) => {
-        const newBarItems = [...state.bottomBar.settingsUI.navigationItems];
-        newBarItems.splice(action.payload, 1);
-        const newBottomBar = {...state.bottomBar};
-        newBottomBar.settingsUI.navigationItems = newBarItems;
-        state.bottomBar = {...newBottomBar};
-      },
-      removeTopAppBarItem: (state, action: PayloadAction<number>) => {
-        const newAppBarItems = [...state.topAppBar.settingsUI.topAppBarItems];
-        newAppBarItems.splice(action.payload, 1);
-        const newAppBar = {...state.topAppBar};
-        newAppBar.settingsUI.topAppBarItems = newAppBarItems;
-        state.topAppBar = {...newAppBar};
-      },
-      setSelectedBlock: (state, action: PayloadAction<string>) => {
-        state.selectedBlockUuid = action.payload;
-      },
-      reOrderLayout: (state, action: PayloadAction<BlockItem[]>) => {
-        state.blocks = [...action.payload];
-      },
-      replaceElement: (state, action: PayloadAction<BlockItem>) => { // todo не работало, надо починить
-        // const blocksRef = [...state.blocks];
-        // let parentElement = findInTree(state.blocks, action.payload.uuid);
-        // parentElement = action.payload;
-        // state.blocks = state.blocks;
-        // return {
-        //   ...state,
-        //   blocks: state.blocks,
-        // };
-      },
-      changeUnits: (state, action: PayloadAction<ChangeUnitsPayloadAction>) => {
-        const newBlocksSet = JSON.parse(JSON.stringify(state.blocks));
-        const targetElement: BlockItem =
-          findInTree(newBlocksSet, action.payload.blockUuid) ||
-          (action.payload.blockUuid === state.bottomBar?.uuid
-            ? {
+  name: 'layout',
+  initialState,
+  reducers: {
+    changesSaved: (state) => {
+      state.editedScreens = [];
+      state.deletedScreens = [];
+    },
+    addTopAppBarItem: (state) => {
+      const nextItems = [...get(state, 'topAppBar.settingsUI.topAppBarItems', [])];
+      nextItems.push({
+        ...blocks.topappbar().defaultData.topAppBarItems[0],
+        uuid: uuidv4(),
+      });
+      const abar = {...state.topAppBar};
+      abar.settingsUI.topAppBarItems = nextItems;
+      state.topAppBar = {...abar};
+    },
+    removeBottomBarItem: (state, action: PayloadAction<number>) => {
+      const newBarItems = [...state.bottomBar.settingsUI.navigationItems];
+      newBarItems.splice(action.payload, 1);
+      const newBottomBar = {...state.bottomBar};
+      newBottomBar.settingsUI.navigationItems = newBarItems;
+      state.bottomBar = {...newBottomBar};
+    },
+    removeTopAppBarItem: (state, action: PayloadAction<number>) => {
+      const newAppBarItems = [...state.topAppBar.settingsUI.topAppBarItems];
+      newAppBarItems.splice(action.payload, 1);
+      const newAppBar = {...state.topAppBar};
+      newAppBar.settingsUI.topAppBarItems = newAppBarItems;
+      state.topAppBar = {...newAppBar};
+    },
+    setSelectedBlock: (state, action: PayloadAction<string>) => {
+      state.selectedBlockUuid = action.payload;
+    },
+    reOrderLayout: (state, action: PayloadAction<BlockItem[]>) => {
+      state.blocks = [...action.payload];
+    },
+    replaceElement: (state, action: PayloadAction<BlockItem>) => {
+      // todo не работало, надо починить
+      // const blocksRef = [...state.blocks];
+      // let parentElement = findInTree(state.blocks, action.payload.uuid);
+      // parentElement = action.payload;
+      // state.blocks = state.blocks;
+      // return {
+      //   ...state,
+      //   blocks: state.blocks,
+      // };
+    },
+    changeUnits: (state, action: PayloadAction<ChangeUnitsPayloadAction>) => {
+      const newBlocksSet = JSON.parse(JSON.stringify(state.blocks));
+      const targetElement: BlockItem =
+        findInTree(newBlocksSet, action.payload.blockUuid) ||
+        (action.payload.blockUuid === state.bottomBar?.uuid
+          ? {
               ...state.bottomBar,
             }
-            : {...state.topAppBar});
-        if (action.payload.parentKey && !Array.isArray(action.payload.parentKey)) {
-          let test = targetElement.settingsUI[action.payload.parentKey];
-          if (!test) {
-            test = targetElement.settingsUI.shadow[action.payload.parentKey];
-          }
-          let val = null;
-          if (test) {
-            val = test[action.payload.key] || test[action.payload.key + 'InPercent'] || null;
-            delete test[action.payload.key];
-            delete test[action.payload.key + 'InPercent'];
-            test[getKeyByUnit(action.payload.value, action.payload.key)] = val;
-          } else {
-            targetElement.settingsUI[action.payload.parentKey] = {
-              [getKeyByUnit(action.payload.value, action.payload.key)]: val
-            };
-          }
+          : {...state.topAppBar});
+      if (action.payload.parentKey && !Array.isArray(action.payload.parentKey)) {
+        let test = targetElement.settingsUI[action.payload.parentKey];
+        if (!test) {
+          test = targetElement.settingsUI.shadow[action.payload.parentKey];
         }
-        return {
-          ...state,
-          blocks: [...newBlocksSet],
-        };
-      },
-      deleteBlock: (state, action: PayloadAction<string>) => {
-        state.blocks = removeFromList(state.blocks, action.payload);
-        if (action.payload === state.bottomBar?.uuid) {
-          delete state.bottomBar;
+        let val = null;
+        if (test) {
+          val = test[action.payload.key] || test[action.payload.key + 'InPercent'] || null;
+          delete test[action.payload.key];
+          delete test[action.payload.key + 'InPercent'];
+          test[getKeyByUnit(action.payload.value, action.payload.key)] = val;
+        } else {
+          targetElement.settingsUI[action.payload.parentKey] = {
+            [getKeyByUnit(action.payload.value, action.payload.key)]: val,
+          };
         }
-        if (action.payload === state.topAppBar?.uuid) {
-          delete state.topAppBar;
-        }
+      }
+      return {
+        ...state,
+        blocks: [...newBlocksSet],
+      };
+    },
+    deleteBlock: (state, action: PayloadAction<string>) => {
+      state.blocks = removeFromList(state.blocks, action.payload);
+      if (action.payload === state.bottomBar?.uuid) {
+        delete state.bottomBar;
+      }
+      if (action.payload === state.topAppBar?.uuid) {
+        delete state.topAppBar;
+      }
 
-        state.selectedBlockUuid = '';
-      },
-      setLayout: (state, action: SetLayoutPayloadAction) => {
+      state.selectedBlockUuid = '';
+    },
+    setLayout: (state, action: SetLayoutPayloadAction) => {
+      return {
+        ...state,
+        blocks: [...action.payload.layout],
+        bottomBar: action.payload.bottomBar,
+        topAppBar: action.payload.topAppBar,
+      };
+    },
+    selectScreen: (state, action: SelectScreenPayloadAction) => {
+      let nextScreenState = {...state};
+      if (action.payload.delete) {
+        nextScreenState.deletedScreens = Array.from(new Set([...state.deletedScreens, action.payload.screen]));
+        nextScreenState.editedScreens = nextScreenState.editedScreens.filter(
+          (screen: any) => screen !== action.payload.screen
+        );
+      } else {
+        nextScreenState = {
+          ...state,
+          selectedScreen: action.payload.screen,
+          editedScreens: Array.from(new Set([...state.editedScreens, action.payload.screen])),
+        };
+      }
+      return nextScreenState;
+    },
+    cloneBlock: (state, action: PayloadAction<string>) => {
+      const withClone = cloneToList(state.blocks, action.payload);
+      if (action.payload === state.bottomBar?.uuid) {
+        delete state.bottomBar;
+      }
+      if (action.payload === state.topAppBar?.uuid) {
+        delete state.topAppBar;
+      }
+      state.blocks = withClone;
+      state.selectedBlockUuid = '';
+    },
+    setSnippet: (state, action: SetSnippetPayloadAction) => {
+      const snippetsRef = [...state.snippets];
+      const snippetRef = snippetsRef.filter((item) => item.screenID === action.payload.selectedScreen)[0];
+      if (snippetRef) {
+        snippetRef.snippet = action.payload.snippet;
+        state.snippets = snippetsRef;
+      }
+      return state;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(actionTypes.ERASE, () => initialState);
+    builder.addCase(pushTopAppBar, (state, action) => {
+      state.topAppBar = action.payload;
+    });
+    builder.addCase(pushBottomBar, (state, action) => {
+      state.bottomBar = action.payload;
+    });
+    builder.addCase(addBottomBarItem, (state, action) => {
+      state.bottomBar.settingsUI.navigationItems = action.payload;
+    });
+    builder.addCase(addTopAppBarButton, (state, action) => {
+      state.topAppBar.rightButtons = action.payload;
+    });
+    builder.addCase(pushBlockInside, (state, action) => {
+      if (action.payload) {
+        state.blocks = action.payload;
+      }
+    });
+    builder.addCase(changeBlockData, (state, action) => {
+      state.blocks = action.payload.blocks;
+      state.bottomBar = action.payload.bottomBar;
+      state.topAppBar = action.payload.topAppBar;
+    });
+    builder.addCase(pushBlock, (state, action) => {
+      state.blocks = action.payload;
+    });
+    builder.addCase(removeProperty, (state, action) => {
+      state.blocks = action.payload;
+    });
+    builder.addCase(switchElementType, (state, action) => {
+      state.blocks = action.payload;
+    });
+    builder.addCase(actionTypes.EDIT_SCREEN_NAME, (state, action: EditScreenNamePayloadAction) => {
+      if (action.snippet?.screenID) {
+        const next = [...state.snippets];
+        let finded = false;
+        state.snippets.forEach((item: {screenID: string}, index: any) => {
+          if (item.screenID === action.snippet.screenID) {
+            next[index] = {
+              ...next[index],
+              endpoint: action.snippet.endpoint,
+              snippet: action.snippet.snippet,
+            };
+            finded = true;
+          }
+        });
+        if (!finded) {
+          next.push(action.snippet);
+        }
         return {
           ...state,
-          blocks: [...action.payload.layout],
-          bottomBar: action.payload.bottomBar,
-          topAppBar: action.payload.topAppBar,
+          snippets: [...next],
         };
-      },
-      selectScreen: (state, action: SelectScreenPayloadAction) => {
-        let nextScreenState = {...state};
-        if (action.payload.delete) {
-          nextScreenState.deletedScreens = Array.from(new Set([...state.deletedScreens, action.payload.screen]));
-          nextScreenState.editedScreens = nextScreenState.editedScreens.filter(
-            (screen: any) => screen !== action.payload.screen
-          );
-        } else {
-          nextScreenState = {
-            ...state,
-            selectedScreen: action.payload.screen,
-            editedScreens: Array.from(new Set([...state.editedScreens, action.payload.screen])),
-          };
-        }
-        return nextScreenState;
-      },
-      cloneBlock: (state, action: PayloadAction<string>) => {
-        const withClone = cloneToList(state.blocks, action.payload);
-        if (action.payload === state.bottomBar?.uuid) {
-          delete state.bottomBar;
-        }
-        if (action.payload === state.topAppBar?.uuid) {
-          delete state.topAppBar;
-        }
-        state.blocks = withClone;
-        state.selectedBlockUuid = '';
-      },
-      setSnippet: (state, action: SetSnippetPayloadAction) => {
-        const snippetsRef = [...state.snippets];
-        const snippetRef = snippetsRef.filter((item) => item.screenID === action.payload.selectedScreen)[0];
-        if (snippetRef) {
-          snippetRef.snippet = action.payload.snippet;
-          state.snippets = snippetsRef;
-        }
+      } else {
         return state;
-      },
-    },
-    extraReducers: (builder) => {
-      builder.addCase(actionTypes.ERASE, () => initialState);
-      builder.addCase(pushTopAppBar, (state, action) => {
-        state.topAppBar = action.payload;
-      });
-      builder.addCase(pushBottomBar, (state, action) => {
-        state.bottomBar = action.payload;
-      });
-      builder.addCase(addBottomBarItem, (state, action) => {
-        state.bottomBar.settingsUI.navigationItems = action.payload;
-      });
-      builder.addCase(pushBlockInside, (state, action) => {
-        if (action.payload) {
-          state.blocks = action.payload;
-        }
-      });
-      builder.addCase(changeBlockData, (state, action) => {
-        state.blocks = action.payload.blocks;
-        state.bottomBar = action.payload.bottomBar;
-        state.topAppBar = action.payload.topAppBar;
-      });
-      builder.addCase(pushBlock, (state, action) => {
-        state.blocks = action.payload;
-      });
-      builder.addCase(removeProperty, (state, action) => {
-        state.blocks = action.payload;
-      });
-      builder.addCase(switchElementType, (state, action) => {
-        state.blocks = action.payload;
-      });
-      builder.addCase(actionTypes.EDIT_SCREEN_NAME, (state, action: EditScreenNamePayloadAction) => {
-        if (action.snippet?.screenID) {
-          const next = [...state.snippets];
-          let finded = false;
-          state.snippets.forEach((item: {screenID: string}, index: any) => {
-            if (item.screenID === action.snippet.screenID) {
-              next[index] = {
-                ...next[index],
-                endpoint: action.snippet.endpoint,
-                snippet: action.snippet.snippet,
-              };
-              finded = true;
-            }
-          });
-          if (!finded) {
-            next.push(action.snippet);
-          }
-          return {
-            ...state,
-            snippets: [...next],
-          };
-        } else {
-          return state;
-        }
-      });
-    },
-  })
-;
+      }
+    });
+  },
+});
 
 export const {
   changesSaved,

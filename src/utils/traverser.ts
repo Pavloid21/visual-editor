@@ -106,6 +106,7 @@ export const buildLayout = ({screen, object}: Record<string, any>) => {
         ...object.topAppBar.settingsUI,
       },
       interactive: {
+        rightButtons: [...object.topAppBar.rightButtons || []],
         appBarItems: {...object.topAppBar.appBarItems},
       },
     };

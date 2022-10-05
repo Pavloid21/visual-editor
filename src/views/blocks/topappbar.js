@@ -59,6 +59,13 @@ const block = () => ({
     appBarItems: {
       title: 'Title',
     },
+    rightButtons: [
+      {
+        title: 'Button',
+        iconUrl: '',
+        tintColor: '#000000'
+      }
+    ],
   },
   defaultData: {
     backgroundColor: '#423649',
@@ -73,9 +80,31 @@ const block = () => ({
     backgroundColor,
   },
   interactive: {
+    action: {
+      url: {
+        type: 'select',
+        name: 'Action URL',
+        action_types: 'actions,data'
+      },
+      method: {
+        type: 'select',
+        name: 'Method',
+        options: [
+          {label: 'Get', value: 'get'},
+          {label: 'Post', value: 'post'},
+        ],
+      },
+    },
     appBarItems: {
       title: {type: 'string', name: 'Title'},
     },
+    rightButtons: [
+      {
+        title: {type: 'string', name: 'Title'},
+        iconUrl: {type: 'string', name: 'Image'},
+        tintColor: {type: 'color', name: 'Tint color'}
+      },
+    ],
   },
 });
 
