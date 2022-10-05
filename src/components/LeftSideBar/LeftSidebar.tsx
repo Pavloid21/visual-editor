@@ -86,7 +86,6 @@ const LeftSidebar: React.FC<unknown> = () => {
           const layouts: Record<string, any>[] = [];
           resolves.forEach((result) => {
             if (result.status === 'fulfilled' && result.value?.object.screen) {
-              console.log('result.value', result.value);
               const {newBlock, action, screenEndpoint} = buildLayout(result.value);
               layouts.push({
                 uuid: v4(),
@@ -174,11 +173,16 @@ const LeftSidebar: React.FC<unknown> = () => {
     }
   }, [output]);
 
+  const parseRuturnStatement = (script: any) => {
+    const func = eval(`(() => {${'return {' + script.data?.match(/(?<=^return.{).*$/gms)[0]}})`);
+    return func();
+  };
+
   const updateScreenList = (script: any, screenLayout: Record<string, any>, screenPositionInList: number) => {
     const rawData = {
       screen,
-      logic: JSON.parse('{' + script.data?.match(/(?<=return.{).*$/gs)[0]),
-      object: JSON.parse('{' + script.data?.match(/(?<=return.{).*$/gs)[0]),
+      logic: parseRuturnStatement(script),
+      object: parseRuturnStatement(script),
       project,
     };
     const {newBlock, action, screenEndpoint} = buildLayout(rawData);
