@@ -14,7 +14,7 @@ import card from 'assets/card.svg';
 import {
   backgroundColor, corners, elevation, getSizeConfig,
   padding, shadowConfigBuilder,
-  shapeConfigBuilder,
+  shapeConfigBuilder, interactive
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
 import {blockStateSafeSelector} from 'store/selectors';
@@ -177,23 +177,7 @@ const block = (state) => {
         height: getSizeConfig(blockState.deviceInfo.device).height,
       },
     },
-    interactive: {
-      action: {
-        url: {
-          type: 'select',
-          name: 'Action URL',
-          action_types: 'actions,data'
-        },
-        method: {
-          type: 'select',
-          name: 'Method',
-          options: [
-            {label: 'Get', value: 'get'},
-            {label: 'Post', value: 'post'},
-          ],
-        },
-      },
-    },
+    interactive,
   });
 };
 

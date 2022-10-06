@@ -134,14 +134,38 @@ export const interactive = {
     url: {
       type: 'select',
       name: 'Action URL',
+      action_types: 'actions,data'
     },
-    target: {type: 'select', name: 'Target', options: []},
     method: {
       type: 'select',
       name: 'Method',
       options: [
         {label: 'Get', value: 'get'},
         {label: 'Post', value: 'post'},
+      ],
+    },
+    clearAppSettings: {
+      type: 'select',
+      name: 'Logout',
+      options: [
+        {label: 'True', value: true},
+        {label: 'False', value: false},
+      ],
+    },
+    triggresBottomSheet: {
+      type: 'select',
+      name: 'Open bottom sheet',
+      options: [
+        {label: 'True', value: true},
+        {label: 'False', value: false},
+      ],
+    },
+    closeBottomSheet: {
+      type: 'select',
+      name: 'Close bottom sheet',
+      options: [
+        {label: 'True', value: true},
+        {label: 'False', value: false},
       ],
     },
   },
