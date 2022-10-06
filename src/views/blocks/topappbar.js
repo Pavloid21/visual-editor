@@ -55,7 +55,6 @@ const block = () => ({
   previewImageUrl: topappbar,
   category: 'Container',
   defaultInteractiveOptions: {
-    action: {url: 'nextScreenName', target: ''},
     appBarItems: {
       title: 'Title',
     },
