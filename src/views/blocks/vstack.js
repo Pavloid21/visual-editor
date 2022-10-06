@@ -32,12 +32,14 @@ import {getSizeStyle} from 'views/utils/styles/size';
 const VStack = styled.div`
   align-self: ${({alignment}) => {
     switch (alignment) {
+      case 'CENTER':
+        return 'center';
       case 'LEFT':
         return 'flex-start';
       case 'RIGHT':
         return 'flex-end';
       default:
-        return 'center';
+        return 'flex-start';
     }
   }};
   margin: ${({alignment}) => {
@@ -53,7 +55,7 @@ const VStack = styled.div`
       case 'RIGHT':
         return 'auto 0 auto auto';
       default:
-        return '0 0';
+        return 'auto auto auto 0';
     }
   }};
   width: ${(props) => {
@@ -73,12 +75,14 @@ const VStack = styled.div`
   justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
   align-items: ${(props) => {
     switch (props.alignment) {
+      case 'CENTER':
+        return 'center';
       case 'LEFT':
         return 'flex-start';
       case 'RIGHT':
         return 'flex-end';
       default:
-        return 'center';
+        return 'flex-start';
     }
   }};
   flex-direction: column;
@@ -199,17 +203,21 @@ const block = (state) => {
       {label: 'Horizontal', value: 'HSTACK'},
     ],
     defaultData: {
-      backgroundColor: '#C6C6C6',
+      size: {
+        heightInPercent: 50,
+        widthInPercent: 100,
+      },
+      backgroundColor: '#e3e3e3',
       distribution: '',
       spacing: 0,
       scroll: false,
-      borderColor: '#EFEFEF',
-      borderWidth: 1,
+      borderColor: '#e3e3e3',
+      borderWidth: 0,
       padding: {
-        top: '100',
-        bottom: '100',
-        left: '10',
-        right: '10',
+        top: '0',
+        bottom: '0',
+        left: '0',
+        right: '0',
       },
       shadow: {
         color: '#000000',
@@ -218,7 +226,7 @@ const block = (state) => {
           width: 0,
           height: 0,
         },
-        radius: 8,
+        radius: 0,
       },
     },
     listItems: [],
