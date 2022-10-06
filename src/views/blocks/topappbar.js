@@ -55,7 +55,6 @@ const block = () => ({
   previewImageUrl: topappbar,
   category: 'Container',
   defaultInteractiveOptions: {
-    action: {url: 'nextScreenName', target: ''},
     appBarItems: {
       title: 'Title',
     },
@@ -80,21 +79,6 @@ const block = () => ({
     backgroundColor,
   },
   interactive: {
-    action: {
-      url: {
-        type: 'select',
-        name: 'Action URL',
-        action_types: 'actions,data'
-      },
-      method: {
-        type: 'select',
-        name: 'Method',
-        options: [
-          {label: 'Get', value: 'get'},
-          {label: 'Post', value: 'post'},
-        ],
-      },
-    },
     appBarItems: {
       title: {type: 'string', name: 'Title'},
     },
