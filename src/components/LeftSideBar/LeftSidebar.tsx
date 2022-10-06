@@ -26,6 +26,7 @@ import {Bar} from 'containers/Project/Modal/Modal.styled';
 import {ReactComponent as Close} from 'assets/close.svg';
 import {screenTemplates as defaultTemplates} from 'constants/screenTemplates';
 import {Subheader} from './Subheader';
+import {setScreens} from 'store/screens.slice';
 
 const LeftSidebar: React.FC<unknown> = () => {
   const {
@@ -38,7 +39,7 @@ const LeftSidebar: React.FC<unknown> = () => {
   const [loading, setLoading] = useState(false);
   const barState = useSelector((state: RootStore) => state.sideBar);
   const api = useSelector((state: RootStore) => state.api);
-  const output = useSelector((state: RootStore) => state.output.screen);
+  const {screen: output, navigationSettings} = useSelector((state: RootStore) => state.output);
   const currentSnippet = useSelector(
     (state: RootStore) => state.layout.snippets.filter((snippetData) => snippetData.screenID === selectedScreen)[0]
   );
@@ -98,6 +99,7 @@ const LeftSidebar: React.FC<unknown> = () => {
             }
           });
           setScreenes(layouts);
+          dispatch(setScreens(data.map((item: string) => ({label: item, value: `screen/${item}`}))));
           setTree(layouts.map((layout) => prepareTree(layout, selectedScreen, topAppBar, bottomBar)));
           setLoading(false);
         })
@@ -146,6 +148,7 @@ const LeftSidebar: React.FC<unknown> = () => {
       const constants = snippet(
         {
           screen: output,
+          navigationSettings,
           listItems: layout,
         },
         api,
@@ -224,6 +227,7 @@ const LeftSidebar: React.FC<unknown> = () => {
       dispatch({
         type: actionTypes.EDIT_SCREEN_NAME,
         screen: item.node.screen,
+        navigationSettings: item.node.navigationSettings,
         snippet: {
           screenID: item.node.uuid,
           endpoint: item.node.endpoint,

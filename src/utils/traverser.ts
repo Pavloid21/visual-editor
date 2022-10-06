@@ -46,7 +46,7 @@ export const prepareTree = (
   treeData: Record<string, any>,
   selectedScreen: string,
   topAppBar: Record<string, any>,
-  bottomBar: Record<string, any>
+  bottomBar: Record<string, any>,
 ) => {
   const root = {...treeData.value};
   root.subtitle = 'screen';
@@ -81,6 +81,7 @@ export const buildLayout = ({screen, object}: Record<string, any>) => {
   const tree = object.listItems;
   const newBlock: Record<string, any> = {
     screen: object.screen,
+    navigationSettings: object.navigationSettings,
     listItems: [],
   };
   newBlock.listItems = tree?.length ? traverse(tree) : [];

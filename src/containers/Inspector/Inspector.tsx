@@ -8,14 +8,13 @@ import {Division, Select} from './Inspector.styled';
 import {findInTree} from 'utils';
 import {
   addBottomBarItem,
-  addTopAppBarItem,
   changeBlockData,
   changeUnits,
   removeBottomBarItem,
-  removeTopAppBarItem,
   switchElementType,
   removeProperty,
   addTopAppBarButton,
+  removeTopAppBarButton,
 } from 'store/layout.slice';
 import type {TInspector} from './types';
 import type {RootStore} from 'store/types';
@@ -160,7 +159,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
               }
               select={{
                 onChange: (value) => {
-                  handleChangeUnits(blockUuid, el, value, parentKey);
+                  handleChangeUnits(blockUuid, el, value?.toString(), parentKey);
                 },
                 options: config[el].options,
                 value:
@@ -240,8 +239,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
 
   /* @ts-ignore */
   const {config, interactive, complex, name} = blocks[block.blockId](blockState);
-  console.log('block.settingsUI', block);
-  console.log('config', config);
+
   return (
     <div
       style={{
@@ -290,56 +288,21 @@ const Inspector: React.FC<TInspector> = ({display}) => {
           </Button>
         </div>
       )}
-      {block.settingsUI?.topAppBarItems && (
-        <div>
-          <Division>
-            <span>App bar items</span>
-          </Division>
-          {block.settingsUI.topAppBarItems.map((element: any, index: number) => {
-            return (
-              <div key={`navItem_${index}`}>
-                <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                  <Division>
-                    <span>Button {index + 1}</span>
-                    <Trash
-                      className="icon"
-                      onClick={(e) => {
-                        dispatch(removeTopAppBarItem(index));
-                      }}
-                    />
-                  </Division>
-                </div>
-                {parseConfig(config.topAppBarItems[0], blockUuid, block.settingsUI.topAppBarItems[index], [
-                  index,
-                  'topAppBarItems',
-                ])}
-              </div>
-            );
-          })}
-          <Button
-            onClick={() => {
-              dispatch(addTopAppBarItem());
-            }}
-          >
-            Add item
-          </Button>
-        </div>
-      )}
-      {block.interactive.rightButtons && (
+      {block.interactive?.rightButtons && (
         <div>
           <Division>
             <span>Right buttons</span>
           </Division>
           {block.interactive.rightButtons.map((element: any, index: number) => {
             return (
-              <div key={`navItem_${element.uuid}`}>
+              <div key={`appBarButton_${element.uuid}`}>
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                   <Division>
                     <span>Button {index + 1}</span>
                     <Trash
                       className="icon"
-                      onClick={(e) => {
-                        dispatch(removeTopAppBarItem(index));
+                      onClick={() => {
+                        dispatch(removeTopAppBarButton(index));
                       }}
                     />
                   </Division>

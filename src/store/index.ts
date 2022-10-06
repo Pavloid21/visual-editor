@@ -10,6 +10,7 @@ import outputReducer from './output.slice';
 import projectReducer from './project.slice';
 import sideBarReducer from './side-bar.slice';
 import projectFormReducer from './project-form.slice';
+import screensReducer from './screens.slice';
 
 const rootReducer = combineReducers({
   actions: actionsReducer,
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   project: projectReducer,
   sideBar: sideBarReducer,
   projectForm: projectFormReducer,
+  screenList: screensReducer
 });
 
 const store = configureStore({

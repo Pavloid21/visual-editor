@@ -4,6 +4,7 @@ import store from './index';
 
 export type EditScreenNamePayloadAction = Action<string> & {
   screen: string;
+  navigationSettings: any;
   snippet: {
     snippet: string;
     endpoint: string;
@@ -116,6 +117,7 @@ export type Config = {
 export type Output = {
   screen: string;
   logic: string;
+  navigationSettings: any;
 };
 
 export type SideBar = {
@@ -130,6 +132,11 @@ export type EditorMode = {
   zoom: Zoom;
   dpi: number;
 };
+
+export type TScreenListOption = {
+  label: string;
+  value: string;
+}
 
 export type RootStore = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

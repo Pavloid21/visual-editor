@@ -1,6 +1,6 @@
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {Input, Label} from 'components/controls';
+import {Input, Label, Select} from 'components/controls';
 import actionTypes from 'constants/actionTypes';
 import styled from 'styled-components';
 import Editor from 'react-simple-code-editor';
@@ -37,12 +37,14 @@ const EditorWrapper = styled.div<any>`
 `;
 
 const Screen: React.FC<any> = (props) => {
-  const screenName = useSelector((state: RootStore) => state.output.screen);
+  const {screen: screenName, navigationSettings} = useSelector((state: RootStore) => state.output);
   const logic = useSelector((state: RootStore) => state.output.logic);
   const selectedScreen = useSelector((state: RootStore) => state.layout.selectedScreen);
   const layout = useSelector((state: RootStore) => state.layout);
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal();
   const dispatch = useDispatch();
+  const screenOptions = useSelector((state: RootStore) => state.screenList);
+
   return props.display ? (
     <Container>
       <div className="form-group">
@@ -57,6 +59,7 @@ const Screen: React.FC<any> = (props) => {
             dispatch({
               type: actionTypes.EDIT_SCREEN_NAME,
               screen: e.target.value,
+              navigationSettings: navigationSettings,
               snippet: {
                 screenID: selectedScreen.uuid,
                 endpoint: e.target.value.replace(/\s/g, '_'),
@@ -95,6 +98,90 @@ const Screen: React.FC<any> = (props) => {
             />
           </EditorWrapper>
         </>
+        <Select
+          value={navigationSettings?.saveScreen}
+          label="Save screen"
+          onChange={(value) => {
+            dispatch({
+              type: actionTypes.EDIT_SCREEN_NAME,
+              screen: screenName,
+              navigationSettings: {
+                saveScreen: value,
+              },
+              snippet: {
+                screenID: selectedScreen.uuid,
+                endpoint: screenName.replace(/\s/g, '_'),
+                snippet: snippet({
+                  screen: screenName,
+                  listItems: layout,
+                }),
+              },
+            });
+          }}
+          options={[
+            {
+              label: 'True',
+              value: true,
+            },
+            {
+              label: 'False',
+              value: false,
+            },
+          ]}
+        />
+        <Select
+          value={navigationSettings?.showBottomBar}
+          label="Show bottom bar"
+          onChange={(value) => {
+            dispatch({
+              type: actionTypes.EDIT_SCREEN_NAME,
+              screen: screenName,
+              navigationSettings: {
+                showBottomBar: value,
+              },
+              snippet: {
+                screenID: selectedScreen.uuid,
+                endpoint: screenName.replace(/\s/g, '_'),
+                snippet: snippet({
+                  screen: screenName,
+                  listItems: layout,
+                }),
+              },
+            });
+          }}
+          options={[
+            {
+              label: 'True',
+              value: true,
+            },
+            {
+              label: 'False',
+              value: false,
+            },
+          ]}
+        />
+        <Select
+          value={navigationSettings?.updateUrlBottomBar}
+          label="Bottom bar"
+          onChange={(value) => {
+            dispatch({
+              type: actionTypes.EDIT_SCREEN_NAME,
+              screen: screenName,
+              navigationSettings: {
+                updateUrlBottomBar: value,
+              },
+              snippet: {
+                screenID: selectedScreen.uuid,
+                endpoint: screenName.replace(/\s/g, '_'),
+                snippet: snippet({
+                  screen: screenName,
+                  listItems: layout,
+                }),
+              },
+            });
+          }}
+          options={screenOptions}
+        />
       </div>
       <Modal isActive={itemModalOpen} handleClose={() => setItemModalOpen(false)} padding="16px">
         <EditorWrapper icon={fullScreenIcon}>

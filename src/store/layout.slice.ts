@@ -84,7 +84,6 @@ export const addTopAppBarButton = createAction('layout/addTopAppBarButton', () =
   const store = rootStore.getState();
   const {layout: state} = store;
   const extendedItems = [...get(state, 'topAppBar.interactive.rightButtons', [])];
-  console.log('state', extendedItems);
   extendedItems.push({
     ...blocks.topappbar(blockStateUnsafeSelector(store)).defaultInteractiveOptions.rightButtons[0],
     uuid: uuidv4(),
@@ -316,6 +315,13 @@ const layoutSlice = createSlice({
       newBottomBar.settingsUI.navigationItems = newBarItems;
       state.bottomBar = {...newBottomBar};
     },
+    removeTopAppBarButton: (state, action: PayloadAction<number>) => {
+      const newBarItems = [...state.topAppBar.interactive.rightButtons];
+      newBarItems.splice(action.payload, 1);
+      const newTopAppBar = {...state.topAppBar};
+      newTopAppBar.interactive.rightButtons = newBarItems;
+      state.topAppBar = {...newTopAppBar};
+    },
     removeTopAppBarItem: (state, action: PayloadAction<number>) => {
       const newAppBarItems = [...state.topAppBar.settingsUI.topAppBarItems];
       newAppBarItems.splice(action.payload, 1);
@@ -419,7 +425,7 @@ const layoutSlice = createSlice({
     },
     setSnippet: (state, action: SetSnippetPayloadAction) => {
       const snippetsRef = [...state.snippets];
-      const snippetRef = snippetsRef.filter((item) => item.screenID === action.payload.selectedScreen)[0];
+      const snippetRef = snippetsRef.find((item) => item.screenID === action.payload.selectedScreen);
       if (snippetRef) {
         snippetRef.snippet = action.payload.snippet;
         state.snippets = snippetsRef;
@@ -439,7 +445,7 @@ const layoutSlice = createSlice({
       state.bottomBar.settingsUI.navigationItems = action.payload;
     });
     builder.addCase(addTopAppBarButton, (state, action) => {
-      state.topAppBar.rightButtons = action.payload;
+      state.topAppBar.interactive.rightButtons = action.payload;
     });
     builder.addCase(pushBlockInside, (state, action) => {
       if (action.payload) {
@@ -493,6 +499,7 @@ export const {
   addTopAppBarItem,
   removeBottomBarItem,
   removeTopAppBarItem,
+  removeTopAppBarButton,
   setSelectedBlock,
   reOrderLayout,
   replaceElement,

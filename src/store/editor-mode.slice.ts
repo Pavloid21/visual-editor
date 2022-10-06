@@ -6,9 +6,9 @@ import type {EditorMode} from './types';
 const initialState: EditorMode = {
   mode: 'editor',
   device: Device.IOS,
-  model: optionsByDevice[Device.IOS][0].value,
+  model: optionsByDevice[Device.IOS][0].value.toString(),
   zoom: Zoom['100%'],
-  dpi: optionByDeviceModelKey[optionsByDevice[Device.IOS][0].value].dpi
+  dpi: optionByDeviceModelKey[optionsByDevice[Device.IOS][0].value.toString()].dpi
 };
 
 const editorModeSlice = createSlice({
@@ -19,7 +19,7 @@ const editorModeSlice = createSlice({
       state.mode = action.payload;
     },
     setDevice: (state, action: PayloadAction<Device>) => {
-      const model = optionsByDevice[action.payload][0].value;
+      const model = optionsByDevice[action.payload][0].value.toString();
 
       state.device = action.payload;
       state.model = model;
