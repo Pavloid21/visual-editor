@@ -177,7 +177,14 @@ const LeftSidebar: React.FC<unknown> = () => {
   }, [output]);
 
   const parseRuturnStatement = (script: any) => {
-    const func = eval(`(() => {${'return {' + script.data?.match(/(?<=^return.{).*$/gms)[0]}})`);
+    const func = eval(
+      `(() => {${
+        'return {' +
+        script.data
+          ?.replace(' ', '')
+          .match(/(?<=^return.{).*$/gms)[0]
+      }})`
+    );
     return func();
   };
 
