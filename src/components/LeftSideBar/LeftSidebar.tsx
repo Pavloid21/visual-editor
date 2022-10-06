@@ -210,7 +210,6 @@ const LeftSidebar: React.FC<unknown> = () => {
     const uuid = item.node.subtitle;
     if (uuid === 'screen') {
       setLoadScreen({uuid: item.node.uuid, load: true});
-      console.log('item', item);
       const script = await getScreenByName(item.node.endpoint, false, project);
       setLoadScreen({uuid: item.node.uuid, load: false});
       let screenPositionInList = 0;
@@ -357,7 +356,6 @@ const LeftSidebar: React.FC<unknown> = () => {
       const {snippets} = template;
       const screenName = Object.keys(snippets.screens)[0];
       const code: string = snippets.screens[screenName].replace(/return/g, '');
-      console.log('first', code);
       const layouts = [...availableScreenes];
       const {newBlock, action, screenEndpoint} = buildLayout({
         screen: screenName,
