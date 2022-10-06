@@ -21,6 +21,7 @@ import {
   padding,
   shadowConfigBuilder,
   getSizeConfig,
+  interactive
 } from 'views/configs';
 import hstack from 'assets/hstack.svg';
 import {pushBlockInside} from 'store/layout.slice';
@@ -213,23 +214,7 @@ const block = (state) => {
       shadow: shadowConfigBuilder().withRadius.done(),
       corners,
     },
-    interactive: {
-      action: {
-        url: {
-          type: 'select',
-          name: 'Action URL',
-          action_types: 'actions,data',
-        },
-        method: {
-          type: 'select',
-          name: 'Method',
-          options: [
-            {label: 'Get', value: 'get'},
-            {label: 'Post', value: 'post'},
-          ],
-        },
-      },
-    },
+    interactive,
   });
 };
 

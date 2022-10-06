@@ -13,7 +13,7 @@ import {
   padding,
   shadowConfigBuilder,
   shapeConfigBuilder,
-  text, textColor, getSizeConfig
+  text, textColor, getSizeConfig, interactive
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
@@ -157,23 +157,7 @@ const block = (state) => {
         radius: 8,
       },
     },
-    interactive: {
-      action: {
-        url: {
-          type: 'select',
-          name: 'Action URL',
-          action_types: 'actions,data'
-        },
-        method: {
-          type: 'select',
-          name: 'Method',
-          options: [
-            {label: 'Get', value: 'get'},
-            {label: 'Post', value: 'post'},
-          ],
-        },
-      },
-    },
+    interactive,
     config: {
       text,
       fontSize,
