@@ -13,13 +13,14 @@ const Code: React.FC<any> = (props) => {
   const dispatch = useDispatch();
   const api = useSelector((state: RootStore) => state.api);
   const {bottomBar, blocks, selectedScreen, topAppBar, snippets} = useSelector((state: RootStore) => state.layout);
-  const initial = useSelector((state: RootStore) => state.output);
+  const {screen, navigationSettings, logic} = useSelector((state: RootStore) => state.output);
 
   useEffect(() => {
     if (api) {
       const constants = snippet(
         {
-          screen: initial.screen,
+          screen: screen,
+          navigationSettings,
           listItems: blocks,
         },
         api,
@@ -29,19 +30,20 @@ const Code: React.FC<any> = (props) => {
         'code'
       );
       dispatch(saveCode(constants));
-      dispatch(setSnippet({
-        snippet: constants,
-        selectedScreen,
-      }));
+      dispatch(
+        setSnippet({
+          snippet: constants,
+          selectedScreen,
+        })
+      );
     }
-  }, [api, initial, blocks, bottomBar, topAppBar, code]);
+  }, [api, blocks, bottomBar, topAppBar, code, screen, navigationSettings, logic]);
 
   return (
     <Container {...props}>
       <EditorWrapper>
         <SyntaxHighlighter language="javascript" style={atomOneLight} showLineNumbers wrapLongLines>
-          {initial.logic +
-            snippets.filter((item) => item.screenID === selectedScreen)[0]?.snippet.replace(/"{{|}}"/g, '')}
+          {logic + snippets.filter((item) => item.screenID === selectedScreen)[0]?.snippet.replace(/"{{|}}"/g, '')}
         </SyntaxHighlighter>
       </EditorWrapper>
     </Container>

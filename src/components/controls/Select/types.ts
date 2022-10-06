@@ -3,12 +3,12 @@ import {Options} from 'react-select/dist/declarations/src/types';
 
 export interface IOption {
   label: string;
-  value: string;
+  value: string | boolean;
 }
 
 interface IBaseSelect {
   options: IOption[];
-  onChange(value: string | undefined): void;
+  onChange(value: string | boolean | undefined, event?: any): void;
   value: string;
   styles?: StylesConfig<IOption, false, GroupBase<IOption>>;
   menuPlacement?: MenuPlacement | undefined;

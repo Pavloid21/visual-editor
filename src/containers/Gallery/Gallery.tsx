@@ -32,7 +32,7 @@ const Gallery: React.FC<unknown> = () => {
       snippet: constants,
       selectedScreen,
     }));
-  }, [layout]);
+  }, [layout, topAppBar, bottomBar]);
 
   const handlePushBlock = (blockId: string) => {
     dispatch(pushBlock(blockId));
