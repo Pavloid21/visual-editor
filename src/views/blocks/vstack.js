@@ -51,11 +51,11 @@ const VStack = styled.div`
       case 'BOTTOM':
         return 'auto auto 0 auto';
       case 'LEFT':
-        return 'auto auto auto 0';
+        return '0 0';
       case 'RIGHT':
-        return 'auto 0 auto auto';
+        return '0 0';
       default:
-        return 'auto auto auto 0';
+        return '0 0';
     }
   }};
   width: ${(props) => {
