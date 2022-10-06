@@ -182,24 +182,27 @@ const LeftSidebar: React.FC<unknown> = () => {
   };
 
   const updateScreenList = (script: any, screenLayout: Record<string, any>, screenPositionInList: number) => {
-    const rawData = {
-      screen,
-      logic: parseRuturnStatement(script),
-      object: parseRuturnStatement(script),
-      project,
-    };
-    const {newBlock, action, screenEndpoint} = buildLayout(rawData);
-    const newScreenData = {
-      uuid: screenLayout.uuid,
-      value: newBlock,
-      action,
-      screenEndpoint,
-      logic: rawData.logic[0],
-      project,
-    };
-    const nextList = [...availableScreenes];
-    nextList[screenPositionInList] = newScreenData;
-    return nextList;
+    if (script.data) {
+      const rawData = {
+        screen,
+        logic: parseRuturnStatement(script),
+        object: parseRuturnStatement(script),
+        project,
+      };
+      const {newBlock, action, screenEndpoint} = buildLayout(rawData);
+      const newScreenData = {
+        uuid: screenLayout.uuid,
+        value: newBlock,
+        action,
+        screenEndpoint,
+        logic: rawData.logic[0],
+        project,
+      };
+      const nextList = [...availableScreenes];
+      nextList[screenPositionInList] = newScreenData;
+      return nextList;
+    }
+    return availableScreenes;
   };
 
   const handleItemClick = async (event: React.MouseEvent, item: Record<string, any>) => {
@@ -207,6 +210,7 @@ const LeftSidebar: React.FC<unknown> = () => {
     const uuid = item.node.subtitle;
     if (uuid === 'screen') {
       setLoadScreen({uuid: item.node.uuid, load: true});
+      console.log('item', item);
       const script = await getScreenByName(item.node.endpoint, false, project);
       setLoadScreen({uuid: item.node.uuid, load: false});
       let screenPositionInList = 0;
@@ -353,6 +357,7 @@ const LeftSidebar: React.FC<unknown> = () => {
       const {snippets} = template;
       const screenName = Object.keys(snippets.screens)[0];
       const code: string = snippets.screens[screenName].replace(/return/g, '');
+      console.log('first', code);
       const layouts = [...availableScreenes];
       const {newBlock, action, screenEndpoint} = buildLayout({
         screen: screenName,
