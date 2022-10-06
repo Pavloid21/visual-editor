@@ -43,7 +43,7 @@ const VStack = styled.div`
   margin: ${({alignment}) => {
     switch (alignment) {
       case 'CENTER':
-        return 'auto';
+        return '0 0';
       case 'TOP':
         return '0 auto auto auto';
       case 'BOTTOM':
@@ -210,12 +210,6 @@ const block = (state) => {
         bottom: '100',
         left: '10',
         right: '10',
-      },
-      corners: {
-        topLeftRadius: 0,
-        topRightRadius: 0,
-        bottomLeftRadius: 0,
-        bottomRightRadius: 0,
       },
       shadow: {
         color: '#000000',
