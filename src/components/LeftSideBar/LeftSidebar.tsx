@@ -99,7 +99,7 @@ const LeftSidebar: React.FC<unknown> = () => {
             }
           });
           setScreenes(layouts);
-          dispatch(setScreens(data.map((item: string) => ({label: item, value: `screen/${item}`}))));
+          dispatch(setScreens(data.map((item: string) => ({label: item, value: `screens/${item}`}))));
           setTree(layouts.map((layout) => prepareTree(layout, selectedScreen, topAppBar, bottomBar)));
           setLoading(false);
         })
