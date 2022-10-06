@@ -105,7 +105,7 @@ const block = (state) => {
     previewImageUrl: passwordtextfield,
     category: 'Controls',
     defaultInteractiveOptions: {
-      field: 'field_name',
+      field: '',
     },
     complex: [
       {label: 'Text', value: 'BASICTEXTFIELD'},
@@ -113,30 +113,30 @@ const block = (state) => {
       {label: 'Calendar', value: 'CALENDAR_TEXT_FIELD'}
     ],
     defaultData: {
-      placeholder: 'Login',
+      placeholder: 'Placeholder',
       placeholderColor: '#7F7F7F',
-      text: 'neo',
+      text: '',
       textColor: '#000000',
       backgroundColor: '#FFFFFF',
       borderColor: '#EFEFEF',
       borderWidth: 1,
       fontSize: 16,
       size: {
-        width: 100,
+        width: 280,
         height: 48,
       },
       shadow: {
         color: '#000000',
-        opacity: 0.3,
+        opacity: 0,
         offsetSize: {
           width: 0,
           height: 0,
         },
-        radius: 8,
+        radius: 0,
       },
       padding: {
         left: 12,
-        right: 12,
+        right: 16,
         top: 4,
         bottom: 4,
       },
