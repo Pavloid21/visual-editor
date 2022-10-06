@@ -4,7 +4,7 @@ import blocks from 'views/blocks';
 import {ReactComponent as Trash} from 'assets/trash.svg';
 import {leadLetter} from 'constants/utils';
 import {Button, Input, UnitsInput, ColorPicker} from 'components/controls';
-import {Division, Select} from './Inspector.styled';
+import {Division, GroupedFields, Select} from './Inspector.styled';
 import {findInTree} from 'utils';
 import {
   addBottomBarItem,
@@ -216,12 +216,12 @@ const Inspector: React.FC<TInspector> = ({display}) => {
       }
       if (endpoint && !Array.isArray(endpoint[el])) {
         return (
-          <section key={`section_${parentKey}_${index}`}>
+          <GroupedFields key={`section_${parentKey}_${index}`}>
             <Division style={{marginTop: '16px'}}>
               <span>{leadLetter(el)}</span>
             </Division>
             {parseConfig(config[el], blockUuid, endpoint[el], el)}
-          </section>
+          </GroupedFields>
         );
       }
     });

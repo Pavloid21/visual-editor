@@ -44,17 +44,18 @@ const Collection = styled.div`
 }}
   ${(props) => {
     if (props.collectionUiConfig?.scrollDirection === 'vertical') {
-      return 'overflow-y: scroll;';
+      return 'overflow-y: scroll; overflow-x: hidden;';
   }
     if (props.collectionUiConfig?.scrollDirection === 'horizontal') {
-      return 'overflow-x: scroll;';
+      return 'overflow-x: scroll; overflow-y: hidden;';
   }
 }}
   & > div {
     display: grid;
     grid-template-columns: repeat(${(props) => props.collectionUiConfig?.itemsInHorisontal}, ${(props) => +props.collectionUiConfig?.pointWidth > 0 ? props.collectionUiConfig?.pointWidth + 'px' : '1fr'});
     grid-template-rows: repeat(${(props) => props.collectionUiConfig?.itemsInVertical}, ${(props) => +props.collectionUiConfig?.pointHeight > 0 ? +props.collectionUiConfig?.pointHeight + 'px' : '1fr'});
-    overflow: hidden;
+    overflow-x: inherit;
+    overflow-y: inherit;
     grid-gap: ${(props) => props.spacing}px;
     background-color: ${(props) => props.collectionUiConfig?.cellBackgroundColor || 'transparent'};
 }
