@@ -8,9 +8,6 @@ import {NeoInputProps} from '../Input/types';
 const Wrapper = styled.div`
   & > div {
     display: flex;
-    & > section {
-      margin-bottom: 12px;
-    }
     & > section:first-child {
       width: 100%;
     }

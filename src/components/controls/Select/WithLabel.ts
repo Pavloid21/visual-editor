@@ -9,7 +9,6 @@ export const WithLabel: StyledComponent<'section', any, Record<string, unknown>,
   ${(props: any) => {
   if (props.label) {
     return `
-      margin-bottom: 12px;
       [class$='control'] {
         border-color: var(--neo-gray) !important;
         font-size: 14px;
