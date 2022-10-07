@@ -14,13 +14,14 @@ const TopAppBar = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
-  font-size: 16px;
+  font-size: 17px;
   justify-content: space-between;
   box-sizing: border-box;
   border: 0px dashed blue;
   & label {
     margin: 0;
     width: 100%;
+    text-align: ${(props) => (props.blockState.deviceInfo.device === Device.ANDROID ? 'left' : 'center')};
     font-size: ${(props) => props.fontSize}px;
     color: ${(props) => props.titleColor
     || (props.blockState.deviceInfo.device === Device.ANDROID ? '#FFFFFF' : '#0000FF')};
@@ -65,12 +66,6 @@ const block = () => ({
   },
   defaultData: {
     backgroundColor: '#423649',
-    padding: {
-      top: 8,
-      bottom: 8,
-      left: 16,
-      right: 16,
-    },
   },
   config: {
     backgroundColor,
