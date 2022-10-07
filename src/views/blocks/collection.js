@@ -16,6 +16,7 @@ import {
   spacing,
   shapeConfigBuilder,
   metricStyle,
+  dataSourceSettings,
 } from 'views/configs';
 import collection from 'assets/collection.svg';
 import {pushBlockInside} from 'store/layout.slice';
@@ -147,18 +148,16 @@ const block = (state) => {
     previewImageUrl: collection,
     category: 'Container',
     defaultInteractiveOptions: {
-      dataSource: {
-        url: '',
-        pageSize: 5,
-        startPage: 1
-      },
+      dataSource: '',
+      startPage: 0,
+      pageSize: 20,
     },
     defaultData: {
-      backgroundColor: '#C6C6C6',
+      backgroundColor: '',
       spacing: 16,
       size: {
-        height: 300,
-        width: '',
+        heightInPercent: 50,
+        widthInPercent: 100,
       },
       padding: {
         left: 16,
@@ -176,20 +175,7 @@ const block = (state) => {
     },
     listItem: null,
     interactive: {
-      dataSource: {
-        url: {
-          type: 'string',
-          name: 'URL',
-        },
-        pageSize: {
-          type: 'number',
-          name: 'Page size',
-        },
-        startPage: {
-          type: 'number',
-          name: 'Start page',
-        },
-      },
+    dataSourceSettings
     },
     config: {
       backgroundColor,
