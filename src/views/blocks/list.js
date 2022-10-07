@@ -15,6 +15,7 @@ import {
   backgroundColor,
   getSizeConfig,
   shapeConfigBuilder,
+  pageSize,
   dataSourceSettings
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
