@@ -4,6 +4,7 @@ import Wrapper from 'utils/wrapper';
 import invertColor from 'utils/invertColor';
 import topappbar from 'assets/topappbar.svg';
 import {backgroundColor} from 'views/configs';
+import {Device} from 'containers/MobileSelect/consts';
 
 const TopAppBar = styled.div`
   padding: 16px;
@@ -21,6 +22,8 @@ const TopAppBar = styled.div`
     margin: 0;
     width: 100%;
     font-size: ${(props) => props.fontSize}px;
+    color: ${(props) => props.titleColor
+    || props.blockState.deviceInfo.device === Device.ANDROID ? '#FFFFFF' : '#0000FF'};
   }
   & div {
     position: relative;
@@ -36,16 +39,13 @@ const TopAppBar = styled.div`
   }
 `;
 
-const Component = ({settingsUI, ...props}) => {
-  const {appBarItems} = props.interactive;
-  return (
-    <Wrapper id={props.id} style={{padding: 0, width: '100%'}} sizeModifier='FULLWIDTH'>
-      <TopAppBar {...settingsUI} {...props}>
-        <label>{appBarItems?.title}</label>
-      </TopAppBar>
-    </Wrapper>
-  );
-};
+const Component = ({settingsUI, ...props}) => (
+  <Wrapper id={props.id} style={{padding: 0, width: '100%'}} sizeModifier='FULLWIDTH'>
+    <TopAppBar {...settingsUI} {...props}>
+      <label>{settingsUI?.title}</label>
+    </TopAppBar>
+  </Wrapper>
+);
 
 const block = () => ({
   Component,
@@ -55,13 +55,12 @@ const block = () => ({
   previewImageUrl: topappbar,
   category: 'Container',
   defaultInteractiveOptions: {
-    appBarItems: {},
     rightButtons: [
       {
         title: 'Button',
         iconUrl: '',
-        tintColor: '#000000'
-      }
+        tintColor: '#000000',
+      },
     ],
   },
   defaultData: {
@@ -75,16 +74,15 @@ const block = () => ({
   },
   config: {
     backgroundColor,
+    title: {type: 'string', name: 'Title'},
+    titleColor: {type: 'color', name: 'Title color'},
   },
   interactive: {
-    appBarItems: {
-      title: {type: 'string', name: 'Title'},
-    },
     rightButtons: [
       {
         title: {type: 'string', name: 'Title'},
         iconUrl: {type: 'string', name: 'Image'},
-        tintColor: {type: 'color', name: 'Tint color'}
+        tintColor: {type: 'color', name: 'Tint color'},
       },
     ],
   },
