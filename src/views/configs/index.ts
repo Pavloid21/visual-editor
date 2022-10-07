@@ -224,11 +224,19 @@ export const systemCalendar = {
 
 export const iconSelectedColor = {
   type: 'color',
-    name: 'Bottom icon selected color',
+    name: 'Icon selected color',
 };
 export const iconUnselectedColor = {
   type: 'color',
-    name: 'Bottom icon unselected color',
+    name: 'Icon unselected color',
+};
+export const textSelectedColor = {
+  type: 'color',
+    name: 'Text selected color',
+};
+export const textUnselectedColor = {
+  type: 'color',
+    name: 'Text unselected color',
 };
 export const showUnselectedText = {
   type: 'select',
