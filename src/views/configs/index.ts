@@ -169,7 +169,7 @@ export const interactive = {
     },
   },
 };
-export const DataSource = {
+export const dataSourceSettings = {
   action: {
     url: {
       type: 'select',
