@@ -29,8 +29,8 @@ const SortableList = SortableContainer(({drop, backgroundColor, list}: TSortable
       <div style={{flex: bottomBar ? 1 : 'none'}}>
         {list.map((child: ReactNode, index: number) => {
           if (index !== list.length - 1) {
-            // @ts-ignore
             return (
+              // @ts-ignore
               <SortableItem key={`_${index}`} index={index}>
                 {child}
               </SortableItem>

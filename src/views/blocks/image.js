@@ -6,7 +6,7 @@ import image from 'assets/image.svg';
 import {
   backgroundColor,
   borderColor, borderWidth, getSizeConfig,
-  imageUrl, shadowConfigBuilder,
+  imageUrl, interactive, shadowConfigBuilder,
   shapeConfigBuilder,
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
@@ -95,6 +95,10 @@ const block = (state) => {
         radius: 8,
       },
     },
+    defaultInteractiveOptions: {
+      action: {url: '', target: ''},
+    },
+    interactive,
     config: {
       imageAlignment: {
         type: 'select',
