@@ -5,7 +5,7 @@ import {Label} from 'components/controls';
 import {WithLabel} from './WithLabel';
 import {DropdownIndicator} from './Dropdown';
 import {baseStyleSelect} from './style';
-import {BASE_URL, getActionsList, getDataActionsList, getScreensActionsList} from 'services/ApiService';
+import {BASE_URL, getActionsList, getDataActionsList, getScreenesList} from 'services/ApiService';
 
 export const Select = React.memo((props: ISelect) => {
   const {onChange, options, value, className, label, menuPlacement, styles, clearable} = props;
@@ -21,7 +21,7 @@ export const Select = React.memo((props: ISelect) => {
     let screens = {data: []};
     if (actionTypes.split(',')?.includes('actions')) actions = await getActionsList(projectId!);
     if (actionTypes.split(',')?.includes('data')) data = await getDataActionsList(projectId!);
-    if (actionTypes.split(',')?.includes('screens')) screens = await getScreensActionsList(projectId!);
+    if (actionTypes.split(',')?.includes('screens')) screens = await getScreenesList(projectId!);
     options = [
       ...actions.data.map((action: string) => ({
         label: action,
