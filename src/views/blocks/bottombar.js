@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import bottombar from '../../assets/bottombar.svg';
 import Wrapper from '../../utils/wrapper';
-import {iconSelectedColor, iconUnselectedColor, showUnselectedText} from '../configs';
+import {iconSelectedColor, iconUnselectedColor, textSelectedColor, textUnselectedColor, showUnselectedText} from '../configs';
 
 const BottomBar = styled.div`
   background-color: ${(props) => props.backgroundColor};
