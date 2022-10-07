@@ -23,7 +23,7 @@ const TopAppBar = styled.div`
     width: 100%;
     font-size: ${(props) => props.fontSize}px;
     color: ${(props) => props.titleColor
-    || props.blockState.deviceInfo.device === Device.ANDROID ? '#FFFFFF' : '#0000FF'};
+    || (props.blockState.deviceInfo.device === Device.ANDROID ? '#FFFFFF' : '#0000FF')};
   }
   & div {
     position: relative;
