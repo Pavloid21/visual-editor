@@ -23,11 +23,12 @@ export const Select = React.memo((props: ISelect) => {
     options = [
       ...actions.data.map((action: string) => ({
         label: action,
-        value: `${BASE_URL}projects/${projectId}/admin/actions/${action}`,
+      //  value: `${BASE_URL}projects/${projectId}/admin/actions/${action}`,
+      value: `actions/${action}`,
       })),
       ...data.data.map((action: string) => ({
         label: action,
-        value: `${BASE_URL}projects/${projectId}/admin/actions/${action}`,
+        value: `data/${action}`,
       })),
     ];
     return options;
