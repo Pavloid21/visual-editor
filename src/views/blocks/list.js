@@ -14,9 +14,8 @@ import lists from 'assets/lists.svg';
 import {
   backgroundColor,
   getSizeConfig,
-  pageSize,
   shapeConfigBuilder,
-  startPage
+  dataSourceSettings
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
 import {blockStateSafeSelector} from 'store/selectors';
@@ -46,7 +45,7 @@ const SortableContainer = sortableContainer(({
   backgroundColor,
   listItem,
   settingsUI,
-  pageSize = 1,
+ // pageSize = 1,
   ...props
 }) => {
   const listItems = listItem
@@ -140,15 +139,10 @@ const block = (state) => {
       pageSize: 1,
     },
     listItem: null,
-    interactive: {
-      dataSource: {
-        type: 'string',
-        name: 'Data Source',
-      },
-    },
+    dataSourceSettings,
     config: {
-      startPage,
-      pageSize,
+     // startPage,
+     // pageSize,
       shape: shapeConfigBuilder()
         .withRadius
         .withAllCornersRound
