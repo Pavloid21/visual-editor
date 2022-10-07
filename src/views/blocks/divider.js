@@ -2,7 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import Wrapper from 'utils/wrapper';
 import divider from 'assets/divider.svg';
-import {backgroundColor, size} from 'views/configs';
+import store from 'store';
+import {backgroundColor, getSizeConfig} from 'views/configs';
+import {blockStateSafeSelector} from 'store/selectors';
 
 const HR = styled.hr`
   align-self: center;
@@ -19,24 +21,28 @@ const Component = ({settingsUI, ...props}) => {
   );
 };
 
-const block = () => ({
-  Component,
-  name: 'DIVIDER',
-  title: 'Divider',
-  description: 'A visual element that can be used to separate other content.',
-  previewImageUrl: divider,
-  category: 'Element',
-  defaultData: {
-    size: {
-      height: 3,
-      widthInPercent: 100,
+const block = (state) => {
+  const blockState = state || blockStateSafeSelector(store.getState());
+
+  return ({
+    Component,
+    name: 'DIVIDER',
+    title: 'Divider',
+    description: 'A visual element that can be used to separate other content.',
+    previewImageUrl: divider,
+    category: 'Element',
+    defaultData: {
+      size: {
+        height: 3,
+        widthInPercent: 100,
+      },
+      backgroundColor: '#000000',
     },
-    backgroundColor: '#000000'
-  },
-  config: {
-    size,
-    backgroundColor
-  },
-});
+    config: {
+      size: getSizeConfig(blockState.deviceInfo.device),
+      backgroundColor,
+    },
+  });
+};
 
 export default block;
