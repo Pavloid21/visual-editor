@@ -24,6 +24,7 @@ const BottomBar = styled.div`
     gap: 4px;
     & label {
       margin-bottom: 0;
+      color: ${(props) => props.textSelectedColor};
     }
     & .item_icon {
       background-color: ${(props) => props.iconUnselectedColor};
@@ -111,6 +112,8 @@ const block = () => ({
     backgroundColor: {type: 'color', name: 'Background color'},
     iconSelectedColor,
     iconUnselectedColor,
+    textSelectedColor,
+    textUnselectedColor,
     showUnselectedText,
     navigationItems: [
       {
