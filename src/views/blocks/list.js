@@ -15,7 +15,6 @@ import {
   backgroundColor,
   getSizeConfig,
   shapeConfigBuilder,
-  pageSize,
   dataSourceSettings
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
@@ -134,18 +133,21 @@ const block = (state) => {
     category: 'Container',
     defaultInteractiveOptions: {
       dataSource: '',
-      pageSize: 1,
+      startPage: 0,
+      pageSize: 20,
     },
     defaultData: {
-      backgroundColor: '#C6C6C6',
+      backgroundColor: '',
+      size: {
+        heightInPercent: 50,
+        widthInPercent: 100,
+      },
     },
     listItem: null,
     interactive: {
     dataSourceSettings
   },
     config: {
-     // startPage,
-     // pageSize,
       shape: shapeConfigBuilder()
         .withRadius
         .withAllCornersRound
