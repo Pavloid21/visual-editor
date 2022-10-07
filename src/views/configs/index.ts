@@ -170,12 +170,10 @@ export const interactive = {
   },
 };
 export const dataSourceSettings = {
-  action: {
-    url: {
-      type: 'select',
-      name: 'Data source',
-      action_types: 'data'
-    },
+  dataSource: {
+    type: 'select',
+    name: 'Data source',
+    action_types: 'data'
   },
   startPage: {
     type: 'number', 
