@@ -9,7 +9,7 @@ const BottomBar = styled.div`
   padding: 16px 0 16px 0;
   bottom: 0;
   margin-top: auto;
- // width: 100%;
+  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
