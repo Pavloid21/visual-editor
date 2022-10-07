@@ -21,7 +21,7 @@ export const Select = React.memo((props: ISelect) => {
     let screens = {data: []};
     if (actionTypes.split(',')?.includes('actions')) actions = await getActionsList(projectId!);
     if (actionTypes.split(',')?.includes('data')) data = await getDataActionsList(projectId!);
-    if (actionTypes.split(',')?.includes('screens')) data = await getScreensActionsList(projectId!);
+    if (actionTypes.split(',')?.includes('screens')) screens = await getScreensActionsList(projectId!);
     options = [
       ...actions.data.map((action: string) => ({
         label: action,
