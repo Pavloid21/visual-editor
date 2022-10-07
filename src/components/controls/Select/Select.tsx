@@ -27,13 +27,13 @@ export const Select = React.memo((props: ISelect) => {
         label: action,
       value: `actions/${action}`,
       })),
-      ...data.data.map((action: string) => ({
+      ...data.data.map((data: string) => ({
         label: data,
-        value: `data/${action}`,
+        value: `data/${data}`,
       })),
-      ...screens.data.map((action: string) => ({
+      ...screens.data.map((screen: string) => ({
         label: screen,
-        value: `screens/${action}`,
+        value: `screens/${screen}`,
       })),
     ];
     return options;
