@@ -17,7 +17,7 @@ const TopAppBar = styled.div`
   font-size: 16px;
   justify-content: space-between;
   box-sizing: border-box;
-  border: 1px dashed blue;
+  border: 0px dashed blue;
   & label {
     margin: 0;
     width: 100%;
