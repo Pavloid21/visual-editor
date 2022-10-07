@@ -39,7 +39,7 @@ const TopAppBar = styled.div`
 const Component = ({settingsUI, ...props}) => {
   const {appBarItems} = props.interactive;
   return (
-    <Wrapper id={props.id} style={{padding: 0}} sizeModifier='FULLWIDTH'>
+    <Wrapper id={props.id} style={{padding: 0, width: '100%'}} sizeModifier='FULLWIDTH'>
       <TopAppBar {...settingsUI} {...props}>
         <label>{appBarItems?.title}</label>
       </TopAppBar>
@@ -55,9 +55,7 @@ const block = () => ({
   previewImageUrl: topappbar,
   category: 'Container',
   defaultInteractiveOptions: {
-    appBarItems: {
-      title: 'Title',
-    },
+    appBarItems: {},
     rightButtons: [
       {
         title: 'Button',
