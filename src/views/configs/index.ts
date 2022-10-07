@@ -170,6 +170,15 @@ export const interactive = {
     },
   },
 };
+export const interactiveDataSource = {
+  action: {
+    url: {
+      type: 'select',
+      name: 'Data source',
+      action_types: 'data'
+    },
+  },
+};
 export const metricStyle = {
   type: 'select',
   name: 'Metric style',
