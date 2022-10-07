@@ -45,7 +45,7 @@ const SortableContainer = sortableContainer(({
   backgroundColor,
   listItem,
   settingsUI,
- // pageSize = 1,
+  pageSize = 1,
   ...props
 }) => {
   const listItems = listItem
@@ -133,13 +133,15 @@ const block = (state) => {
     category: 'Container',
     defaultInteractiveOptions: {
       dataSource: '',
+      pageSize: 1,
     },
     defaultData: {
       backgroundColor: '#C6C6C6',
-      pageSize: 1,
     },
     listItem: null,
-    dataSourceSettings,
+    interactive: {
+    dataSourceSettings
+  },
     config: {
      // startPage,
      // pageSize,
