@@ -82,9 +82,8 @@ export const sizeModifier = {
     {label: 'Full size', value: 'FULLSIZE'},
   ],
 };
-
-export const startPage = {type: 'number', name: 'Start page'};
-export const pageSize = {type: 'number', name: 'Page size'};
+export const startPage = {type: 'number', name: 'startPage'};
+export const pageSize = {type: 'number', name: 'pageSize'};
 export const backgroundColor = {type: 'color', name: 'Background color'};
 export const text = {type: 'string', name: 'Text'};
 export const fontSize = {type: 'number', name: 'Font size'};
@@ -170,13 +169,21 @@ export const interactive = {
     },
   },
 };
-export const interactiveDataSource = {
+export const DataSource = {
   action: {
     url: {
       type: 'select',
       name: 'Data source',
       action_types: 'data'
     },
+  },
+  startPage: {
+    type: 'number', 
+    name: 'Start page'
+  },
+  pageSize: {
+    type: 'number', 
+    name: 'Page size'
   },
 };
 export const metricStyle = {
