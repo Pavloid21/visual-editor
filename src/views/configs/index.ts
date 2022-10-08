@@ -167,6 +167,42 @@ export const interactive = {
         {label: 'False', value: false},
       ],
     },
+    confirmationDialog: {
+      title: {
+        type: 'string',
+        name: 'Title'
+      },
+      message: {
+        type: 'string',
+        name: 'Message'
+      },
+      confirmText: {
+        type: 'string',
+        name: 'Confirm text'
+      },
+      cancelledText: {
+        type: 'string',
+        name: 'Cancelled text'
+      },
+    },
+    callEmailMessengersHolder: {
+      phoneNumber: {
+        type: 'string',
+        name: 'Phone number'
+      },
+      emailAddress: {
+        type: 'string',
+        name: 'Email address'
+      },
+      packageName: {
+        type: 'string',
+        name: 'Package name'
+      },
+      urlApiMessenger: {
+        type: 'string',
+        name: 'Api messenger'
+      },
+    },
   },
 };
 export const dataSourceSettings = {
