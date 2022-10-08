@@ -1,6 +1,6 @@
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {Input, Label, Select} from 'components/controls';
+import {ColorPicker, Input, Label, Select} from 'components/controls';
 import actionTypes from 'constants/actionTypes';
 import styled from 'styled-components';
 import Editor from 'react-simple-code-editor';
@@ -14,6 +14,11 @@ import type {RootStore} from 'store/types';
 
 const Container = styled.div`
   padding: 14px;
+  & > .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
 `;
 
 const EditorWrapper = styled.div<any>`
@@ -37,7 +42,7 @@ const EditorWrapper = styled.div<any>`
 `;
 
 const Screen: React.FC<any> = (props) => {
-  const {screen: screenName, navigationSettings} = useSelector((state: RootStore) => state.output);
+  const {screen: screenName, navigationSettings, settingsUI} = useSelector((state: RootStore) => state.output);
   const logic = useSelector((state: RootStore) => state.output.logic);
   const selectedScreen = useSelector((state: RootStore) => state.layout.selectedScreen);
   const layout = useSelector((state: RootStore) => state.layout);
@@ -98,6 +103,159 @@ const Screen: React.FC<any> = (props) => {
             />
           </EditorWrapper>
         </>
+        <Select
+          value={settingsUI?.isBottomSheet}
+          label="Bottom sheet"
+          onChange={(value) => {
+            dispatch({
+              type: actionTypes.EDIT_SCREEN_NAME,
+              screen: screenName,
+              settingsUI: {
+                isBottomSheet: value,
+              },
+              snippet: {
+                screenID: selectedScreen.uuid,
+                endpoint: screenName.replace(/\s/g, '_'),
+                snippet: snippet({
+                  screen: screenName,
+                  listItems: layout,
+                }),
+              },
+            });
+          }}
+          options={[
+            {
+              label: 'True',
+              value: true,
+            },
+            {
+              label: 'False',
+              value: false,
+            },
+          ]}
+        />
+        {settingsUI?.isBottomSheet && (
+          <>
+            <Input
+              $isWide
+              $clearable={false}
+              label="Height"
+              type="number"
+              placeholder="Height"
+              value={settingsUI.bottomSheetSettings?.heightInPercent}
+              max={100}
+              min={0}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement> & React.ChangeEvent<HTMLInputElement>) =>
+                dispatch({
+                  type: actionTypes.EDIT_SCREEN_NAME,
+                  screen: screenName,
+                  navigationSettings: navigationSettings,
+                  settingsUI: {
+                    bottomSheetSettings: {
+                      ...settingsUI.bottomSheetSettings,
+                      heightInPercent: +e.target.value,
+                    },
+                  },
+                  snippet: {
+                    screenID: selectedScreen.uuid,
+                    endpoint: e.target.value.replace(/\s/g, '_'),
+                    snippet: snippet({
+                      screen: e.target.value,
+                      listItems: layout,
+                    }),
+                  },
+                })
+              }
+            />
+            <Input
+              $isWide
+              $clearable={false}
+              label="Scrim color alpha"
+              type="number"
+              placeholder="Scrim color alpha"
+              value={settingsUI.bottomSheetSettings?.scrimColorAlpha}
+              max={1}
+              min={0}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement> & React.ChangeEvent<HTMLInputElement>) =>
+                dispatch({
+                  type: actionTypes.EDIT_SCREEN_NAME,
+                  screen: screenName,
+                  navigationSettings: navigationSettings,
+                  settingsUI: {
+                    bottomSheetSettings: {
+                      ...settingsUI.bottomSheetSettings,
+                      scrimColorAlpha: +e.target.value,
+                    },
+                  },
+                  snippet: {
+                    screenID: selectedScreen.uuid,
+                    endpoint: e.target.value.replace(/\s/g, '_'),
+                    snippet: snippet({
+                      screen: e.target.value,
+                      listItems: layout,
+                    }),
+                  },
+                })
+              }
+            />
+            <ColorPicker
+              debounceTimeout={500}
+              label="Background color"
+              $isWide
+              placeholder="Background color"
+              value={settingsUI.bottomSheetSettings?.sheetBackgroundColor}
+              onChange={(e: any) =>
+                dispatch({
+                  type: actionTypes.EDIT_SCREEN_NAME,
+                  screen: screenName,
+                  navigationSettings: navigationSettings,
+                  settingsUI: {
+                    bottomSheetSettings: {
+                      ...settingsUI.bottomSheetSettings,
+                      sheetBackgroundColor: e.target.value,
+                    },
+                  },
+                  snippet: {
+                    screenID: selectedScreen.uuid,
+                    endpoint: e.target.value.replace(/\s/g, '_'),
+                    snippet: snippet({
+                      screen: e.target.value,
+                      listItems: layout,
+                    }),
+                  },
+                })
+              }
+            />
+            <ColorPicker
+              debounceTimeout={500}
+              label="Scrim color"
+              $isWide
+              placeholder="Scrim color"
+              value={settingsUI.bottomSheetSettings?.scrimColor}
+              onChange={(e: any) =>
+                dispatch({
+                  type: actionTypes.EDIT_SCREEN_NAME,
+                  screen: screenName,
+                  navigationSettings: navigationSettings,
+                  settingsUI: {
+                    bottomSheetSettings: {
+                      ...settingsUI.bottomSheetSettings,
+                      scrimColor: e.target.value,
+                    },
+                  },
+                  snippet: {
+                    screenID: selectedScreen.uuid,
+                    endpoint: e.target.value.replace(/\s/g, '_'),
+                    snippet: snippet({
+                      screen: e.target.value,
+                      listItems: layout,
+                    }),
+                  },
+                })
+              }
+            />
+          </>
+        )}
         <Select
           value={navigationSettings?.saveScreen}
           label="Save screen"
