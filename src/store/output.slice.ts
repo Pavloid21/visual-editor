@@ -6,6 +6,7 @@ const initialState: Output = {
   screen: 'screen name',
   logic: '',
   navigationSettings: undefined,
+  settingsUI: undefined,
 };
 
 const outputSlice = createSlice({
@@ -26,6 +27,9 @@ const outputSlice = createSlice({
       }
       if (action.navigationSettings) {
         nextState.navigationSettings = {...nextState.navigationSettings, ...action.navigationSettings};
+      }
+      if (action.settingsUI) {
+        nextState.settingsUI = {...nextState.settingsUI, ...action.settingsUI};
       }
       return nextState;
     });
