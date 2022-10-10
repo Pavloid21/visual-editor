@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import Wrapper from 'utils/wrapper';
 import invertColor from 'utils/invertColor';
 import topappbar from 'assets/topappbar.svg';
 import {backgroundColor} from 'views/configs';
 import {Device} from 'containers/MobileSelect/consts';
+import {setCorrectImageUrl} from 'utils';
+import {useSelector} from 'react-redux';
 
 const TopAppBar = styled.div`
   padding: 16px;
@@ -16,6 +18,7 @@ const TopAppBar = styled.div`
   flex-direction: row;
   font-size: 17px;
   justify-content: space-between;
+  align-items: center;
   box-sizing: border-box;
   border: 0px dashed blue;
   & label {
@@ -40,13 +43,27 @@ const TopAppBar = styled.div`
   }
 `;
 
-const Component = ({settingsUI, ...props}) => (
+const Component = ({settingsUI, ...props}) => {
+  const [checkIcon, setCheckIcon] = useState({isIcon: false, url: ''});
+  const {id} = useSelector(state => state.project);
+
+  useEffect(() => {
+    if(props.interactive.rightButtons.length) {
+      setCheckIcon({isIcon: true, url: props.interactive.rightButtons[0].iconUrl});
+    }
+
+    return () => setCheckIcon({isIcon: false, url: ''});
+  }, [props.interactive.rightButtons.length]);
+
+  return (
   <Wrapper id={props.id} style={{padding: 0, width: '100%'}} sizeModifier='FULLWIDTH'>
     <TopAppBar {...settingsUI} {...props}>
       <label>{settingsUI?.title}</label>
+      {checkIcon.isIcon && <img src={setCorrectImageUrl(checkIcon.url, id)} />}
     </TopAppBar>
   </Wrapper>
-);
+  );
+};
 
 const block = () => ({
   Component,
