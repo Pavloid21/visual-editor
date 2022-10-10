@@ -98,16 +98,16 @@ const Button = styled.div`
   }
 `;
 
-const Component = (props) => {
-  const {text, imageUrl} = props.settingsUI;
+const Component = ({settingsUI, ...props}) => {
+  const {text} = settingsUI.text;
   const {id} = useSelector(state => state.project);
   const getCorrectImageUrl = setCorrectImageUrl(settingsUI.imageUrl, id);
 
   return (
-    <Wrapper id={props.id} {...props.settingsUI}>
-      <Button className="draggable" {...props.settingsUI} {...props}>
+    <Wrapper id={props.id} {...settingsUI}>
+      <Button className="draggable" {...settingsUI} {...props}>
         <span>{text}</span>
-        {imageUrl && <img src={getCorrectImageUrl} />}
+        {getCorrectImageUrl && <img src={getCorrectImageUrl} />}
       </Button>
     </Wrapper>
   );
