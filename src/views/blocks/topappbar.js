@@ -11,7 +11,7 @@ import {useSelector} from 'react-redux';
 const TopAppBar = styled.div`
   padding: 16px;
   color: ${(props) => invertColor(props.backgroundColor, true)};
-  background-color: ${(props) => props.backgroundColor};
+  background-color: ${(props) => props.backgroundColor || '#FFFFFF00'};
   z-index: 2;
   width: 100%;
   display: flex;
@@ -38,7 +38,7 @@ const TopAppBar = styled.div`
     flex-direction: column;
     gap: 4px;
     & .item_icon {
-      background-color: ${(props) => props.textColor || 'black'};
+      background-color: ${(props) => props.textColor || (props.blockState.deviceInfo.device === Device.ANDROID ? '#FFFFFF' : '#0000FF')};
     }
   }
 `;
