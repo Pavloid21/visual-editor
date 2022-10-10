@@ -59,7 +59,7 @@ const HStack = styled.div`
   }};
   width: ${(props) => getSizeStyle('width', props)};
   height: ${(props) => getSizeStyle('height', props)};
-  background-color: ${(props) => props.backgroundColor};
+  background-color: ${(props) => props.backgroundColor || '#FFFFFF00'};
   display: flex;
   justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
   text-align: ${(props) => props.alignment};
@@ -71,7 +71,7 @@ const HStack = styled.div`
   padding-right: ${(props) => props.padding?.right}px;
   border-width: ${(props) => props.borderWidth}px;
   border-style: solid;
-  border-color: ${(props) => props.borderColor};
+  border-color: ${(props) => props.borderColor || '#FFFFFF00'};
   gap: ${(props) => props.spacing}px;
   position: relative;
   border-radius: ${(props) => `
