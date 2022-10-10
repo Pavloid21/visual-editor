@@ -89,7 +89,6 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
   const isActive = canDrop && isOver;
   let backgroundColor = settingsUI.backgroundColor;
   if (isActive) {
-    console.log('isActive', isActive);
     backgroundColor = '#f1f8ff';
   }
 

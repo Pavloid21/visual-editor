@@ -51,7 +51,6 @@ const ZoomSelect = () => {
   const handleIncrementZoom = () => {
     const currentIndex = mappedZoomValue.findIndex((z) => z === zoom);
     if (currentIndex < mappedZoomValue.length - 1) {
-      console.log(currentIndex, mappedZoomValue);
       dispatch(setZoom(mappedZoomValue[currentIndex + 1] as Zoom));
     }
   };

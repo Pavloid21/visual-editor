@@ -85,6 +85,12 @@ export default createGlobalStyle`
     color: #333333 !important;
   }
 
+  .actions_tab {
+    .tab_active {
+      border-bottom: 2px solid #333333;
+    }
+  }
+
   pre {
     background: none !important;
   }

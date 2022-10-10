@@ -8,7 +8,7 @@ export const Bar = styled.div<{barState: SideBar}>`
   position: absolute;
   left: 0;
   right: 0;
-  margin-left: ${(props) => (props.barState.left ? '421px' : '0px')};
+  margin-left: ${(props) => (props.barState.left ? '457px' : '0px')};
   margin-right: ${(props) => (props.barState.right ? '422px' : '0px')};
   padding: 10px 16px;
   display: flex;
@@ -20,7 +20,7 @@ export const Bar = styled.div<{barState: SideBar}>`
     display: flex;
   }
   @media (max-width: 1500px) {
-    margin-left: ${(props) => (props.barState.left ? '299px' : '0px')};
+    margin-left: ${(props) => (props.barState.left ? '335px' : '0px')};
     margin-right: ${(props) => (props.barState.right ? '300px' : '0px')};
   }
 `;
