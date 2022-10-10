@@ -12,6 +12,8 @@ import {
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
 import {getSizeStyle} from 'views/utils/styles/size';
+import {useSelector} from 'react-redux';
+import {setCorrectImageUrl} from 'utils';
 
 const Image = styled.img`
   display: flex;
@@ -49,13 +51,16 @@ const Image = styled.img`
 `;
 
 const Component = ({settingsUI, ...props}) => {
+  const {id} = useSelector(state => state.project);
+  const getCorrectImageUrl = setCorrectImageUrl(settingsUI.imageUrl, id);
+
   return (
     <Wrapper id={props.id} {...settingsUI} {...props}>
       <Image
         {...settingsUI}
         {...props}
         className="draggable"
-        src={settingsUI.imageUrl || image}
+        src={getCorrectImageUrl}
       />
     </Wrapper>
   );
