@@ -18,6 +18,9 @@ import {
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
 import {getSizeStyle} from 'views/utils/styles/size';
+import {useSelector} from 'react-redux';
+import {setCorrectImageUrl} from 'utils';
+
 
 const Button = styled.div`
   position: relative;
@@ -97,11 +100,14 @@ const Button = styled.div`
 
 const Component = (props) => {
   const {text, imageUrl} = props.settingsUI;
+  const {id} = useSelector(state => state.project);
+  const getCorrectImageUrl = setCorrectImageUrl(settingsUI.imageUrl, id);
+
   return (
     <Wrapper id={props.id} {...props.settingsUI}>
       <Button className="draggable" {...props.settingsUI} {...props}>
         <span>{text}</span>
-        {imageUrl && <img src={imageUrl} />}
+        {imageUrl && <img src={getCorrectImageUrl} />}
       </Button>
     </Wrapper>
   );
