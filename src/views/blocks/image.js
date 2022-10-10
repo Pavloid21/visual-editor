@@ -18,9 +18,9 @@ import {setCorrectImageUrl} from 'utils';
 const Image = styled.img`
   display: flex;
   box-sizing: border-box;
-  background-color: ${(props) => props.backgroundColor || '#FFFFFF'};
+  background-color: ${(props) => props.backgroundColor || '#FFFFFF00'};
   border-width: ${(props) => props.borderWidth}px;
-  border-color: ${(props) => props.borderColor};
+  border-color: ${(props) => props.borderColor || '#FFFFFF00'};
   border-style: solid;
   box-shadow: ${(props) => {
     const RGB = hexToRgb(props.shadow?.color);
