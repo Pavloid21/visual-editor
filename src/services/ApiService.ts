@@ -45,105 +45,105 @@ export const callApi = async (
 
 export const getProjectsList = async () => {
   const url = API.defaults.baseURL + 'projects';
-  return await callApi(url, null, 'GET');
+  return callApi(url, null, 'GET');
 };
 
 export const getProjectData = async (projectId: string) => {
   const url = API.defaults.baseURL + `projects/${projectId}`;
-  return await callApi(url, null, 'GET');
+  return callApi(url, null, 'GET');
 };
 
 export const getScreenesList = async (projectId?: string) => {
   const url = API.defaults.baseURL + `projects/${projectId}/admin/screens`;
-  return await callApi(url, null, 'GET');
+  return callApi(url, null, 'GET');
 };
 
 export const getScreenByName = async (screenName: string, parsed: boolean, projectId?: string) => {
   const url = API.defaults.baseURL + `projects/${projectId}/admin/screens/${screenName}${parsed ? '?view=parsed' : ''}`;
-  return await callApi(url, null, 'GET');
+  return callApi(url, null, 'GET');
 };
 
 export const saveScreen = async (projectId: string, endpoint: string, payload: string) => {
   const url = API.defaults.baseURL + `projects/${projectId}/admin/screens/${endpoint}`;
-  return await callApi(url, payload, 'PUT', undefined, undefined, {
+  return callApi(url, payload, 'PUT', undefined, undefined, {
     'Content-Type': 'application/javascript',
   });
 };
 
 export const deleteScreen = async (projectId: string, endpoint: string) => {
   const url = API.defaults.baseURL + `projects/${projectId}/admin/screens/${endpoint}`;
-  return await callApi(url, null, 'DELETE');
+  return callApi(url, null, 'DELETE');
 };
 
 export const getActionsList = async (projectId: string) => {
   const url = API.defaults.baseURL + `projects/${projectId}/admin/actions/`;
-  return await callApi(url, null, 'GET');
+  return callApi(url, null, 'GET');
 };
 
 export const getDataActionsList = async (projectId: string) => {
   const url = API.defaults.baseURL + `projects/${projectId}/admin/data/`;
-  return await callApi(url, null, 'GET');
+  return callApi(url, null, 'GET');
 };
 
 export const getActionByName = async (projectId: string, actionName: string) => {
   const url = API.defaults.baseURL + `projects/${projectId}/admin/actions/${actionName}`;
-  return await callApi(url, null, 'GET');
+  return callApi(url, null, 'GET');
 };
 
 export const getDataActionByName = async (projectId: string, actionName: string) => {
   const url = API.defaults.baseURL + `projects/${projectId}/admin/data/${actionName}`;
-  return await callApi(url, null, 'GET');
+  return callApi(url, null, 'GET');
 };
 
 export const saveAction = async (projectId: string, actionType: string, endpoint: string, payload: string) => {
   const url = API.defaults.baseURL + `projects/${projectId}/admin/${actionType}/${endpoint}`;
-  return await callApi(url, payload, 'PUT', undefined, undefined, {
+  return callApi(url, payload, 'PUT', undefined, undefined, {
     'Content-Type': 'application/javascript',
   });
 };
 
 export const deleteAction = async (projectId: string, actionType: string, endpoint: string) => {
   const url = API.defaults.baseURL + `projects/${projectId}/admin/${actionType}/${endpoint}`;
-  return await callApi(url, null, 'DELETE');
+  return callApi(url, null, 'DELETE');
 };
 
 export const createProject = async (payload: string) => {
   const url = API.defaults.baseURL + 'projects/';
-  return await callApi(url, payload, 'POST', undefined, undefined, {
+  return callApi(url, payload, 'POST', undefined, undefined, {
     'Content-Type': 'application/json',
   });
 };
 
 export const editProject = async (projectId: string, payload: string) => {
   const url = API.defaults.baseURL + 'projects/' + projectId;
-  return await callApi(url, payload, 'PUT', undefined, undefined, {
+  return callApi(url, payload, 'PUT', undefined, undefined, {
     'Content-Type': 'application/json',
   });
 };
 
 export const deleteProject = async (projectId: string) => {
   const url = API.defaults.baseURL + `projects/${projectId}`;
-  return await callApi(url, null, 'DELETE');
+  return callApi(url, null, 'DELETE');
 };
 
 export const getTemplates = async () => {
   const url = API.defaults.baseURL + 'templates';
-  return await callApi(url, null, 'GET');
+  return callApi(url, null, 'GET');
 };
 
 export const getScreenTemplates = async () => {
   const url = API.defaults.baseURL + 'templates?screens=true';
-  return await callApi(url, null, 'GET');
+  return callApi(url, null, 'GET');
 };
 
 export const getTemplateData = async (templateId: string, params?: string) => {
   const url = API.defaults.baseURL + `templates/${templateId}${params ? '?' + params : ''}`;
-  return await callApi(url, null, 'GET');
+  return callApi(url, null, 'GET');
 };
 
 export const applyTemplate = async (templateId: string, payload: string) => {
   const url = API.defaults.baseURL + `templates/${templateId}/extraction`;
-  return await callApi(url, payload, 'POST', undefined, undefined, {
+  return callApi(url, payload, 'POST', undefined, undefined, {
     'Content-Type': 'application/json',
   });
 };
