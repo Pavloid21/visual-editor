@@ -105,6 +105,7 @@ const block = (state) => {
     },
     interactive,
     config: {
+      iconTintColor: {type: 'color', name: 'Icon color'},
       imageAlignment: {
         type: 'select',
         name: 'Image alignment',
