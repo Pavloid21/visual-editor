@@ -79,7 +79,7 @@ function goThrough(array: any, uuid: string, extendedFields: any) {
   for (const index in arr) {
     if (arr[index].uuid === uuid) {
       arr[index].interactive.action.fields = extendedFields;
-    } else {
+    } else if (arr[index].listItems) {
       arr[index].listItems = goThrough(arr[index].listItems, uuid, extendedFields);
     }
   }
@@ -128,22 +128,30 @@ export const changeKeyActionField = createAction('layout/changeKeyActionField', 
   const {layout: state} = store;
   const targetBlock = findInTree(state.blocks, uuid);
 
-  let extendedFields = {...get(targetBlock, 'interactive.action.fields', {})};
+  const extendedFields = {...get(targetBlock, 'interactive.action.fields', {})};
+  let fields: Record<string, string> = {};
   const targetFieldKey = Object.keys(extendedFields)[n];
+  const order = Object.keys(extendedFields);
   if (isValue) {
-    extendedFields[targetFieldKey] = nextValue;
+    fields = {
+      ...extendedFields,
+      [targetFieldKey]: nextValue
+    };
   } else {
     const value = extendedFields[targetFieldKey];
     delete extendedFields[targetFieldKey];
-    extendedFields = {
-      ...extendedFields,
-      [nextValue]: value
-    };
+    order.forEach((key: string, index: number) => {
+      if (index !== n) {
+        fields[key] = extendedFields[key]; 
+      } else {
+        fields[nextValue] = value;
+      }
+    });
   }
 
   let extendedItems = [...get(state, 'blocks', [])];
 
-  extendedItems = goThrough(extendedItems, uuid, extendedFields);
+  extendedItems = goThrough(extendedItems, uuid, fields);
 
   return {
     payload: extendedItems,
