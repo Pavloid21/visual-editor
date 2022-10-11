@@ -99,7 +99,7 @@ const Button = styled.div`
 `;
 
 const Component = ({settingsUI, ...props}) => {
-  const {text} = settingsUI.text;
+  const {text} = settingsUI;
   const {id} = useSelector(state => state.project);
   const getCorrectImageUrl = setCorrectImageUrl(settingsUI.imageUrl, id);
 
