@@ -3,6 +3,7 @@ import {ReactComponent as Plus} from 'assets/plus.svg';
 import React, {memo} from 'react';
 import {Search} from '../../SideBarHeader/SideBarHeader.styled';
 import {Input} from '../../controls';
+import FilterAction from '../../Actions/FilterAction';
 
 type TSideBarSubheaderActions = {
   handleClick: React.MouseEventHandler;
@@ -17,6 +18,7 @@ const SubheaderActions: React.FC<TSideBarSubheaderActions> = memo(({
   setActiveTab,
   handleAddAction,
 }) => {
+  console.log(activeTab);
   return (
     <>
       <SideBarSubheader>
@@ -39,6 +41,7 @@ const SubheaderActions: React.FC<TSideBarSubheaderActions> = memo(({
           placeholder="Action name"
         />
       </Search>
+      {activeTab === 0 && <FilterAction />}
     </>
   );
 });

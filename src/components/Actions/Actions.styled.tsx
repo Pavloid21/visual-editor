@@ -33,3 +33,20 @@ export const Container = styled.div`
     }
   }
 `;
+
+export const FilterActionContainer = styled.div`
+  display: flex;
+  padding: 0 0 0 16px;
+
+  & div {
+    display: flex;
+    align-items: center;
+    margin: 0 12px 0 0;
+  }
+
+  & label {
+    font-size: 12px;
+    line-height: 16px;
+    margin: 0 0 0 10px;
+  }
+`;

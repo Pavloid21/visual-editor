@@ -134,7 +134,8 @@ export type EditorMode = {
 };
 
 export type LeftBarMenu = {
-  activeTab: string
+  activeTab: string,
+  filterAction: number
 }
 
 export type TScreenListOption = {
