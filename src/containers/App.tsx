@@ -43,7 +43,6 @@ const App: React.FC<unknown> = () => {
   useEffect(() => {
     const handleMessage = (data: Record<string, any>) => {
       if (data.event) {
-        console.log('data', data);
         if (data.blockId && data.event === 'click') {
           dispatch(setActiveTab(0));
           dispatch(setSelectedBlock(data.blockId));

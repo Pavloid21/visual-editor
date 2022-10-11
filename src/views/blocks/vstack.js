@@ -197,7 +197,7 @@ const block = (state) => {
     previewImageUrl: vstack,
     category: 'Container',
     defaultInteractiveOptions: {
-      action: {url: '',  target: ''},
+      action: {url: '',  target: '', fields: {}},
     },
     complex: [
       {label: 'Vertical', value: 'VSTACK'},
@@ -231,6 +231,7 @@ const block = (state) => {
       },
     },
     listItems: [],
+    interactive,
     config: {
       alignment: alignmentConfig.horizontally,
       backgroundColor,
@@ -244,7 +245,6 @@ const block = (state) => {
       shadow: shadowConfigBuilder().withRadius.done(),
       corners,
     },
-    interactive,
   });
 };
 

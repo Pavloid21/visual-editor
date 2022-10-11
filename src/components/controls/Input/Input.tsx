@@ -6,7 +6,7 @@ import {TextAreaProps} from 'rc-textarea';
 
 export const NeoInput = React.forwardRef(
   ({label, $clearable, $extraText, $textarea, ...props}: TextAreaProps & NeoInputProps, ref?: React.Ref<any>) => (
-    <Container {...props}>
+    <Container {...props} label={label}>
       {label && <Label>{label}</Label>}
       {$textarea ? (
         <StyledNeoTextArea autoSize={{minRows: 2, maxRows: 8}} ref={ref} {...props} />
