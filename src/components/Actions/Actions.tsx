@@ -3,12 +3,11 @@ import {useSelector, useDispatch} from 'react-redux';
 import {orderBy} from 'external/lodash';
 import {ReactComponent as CodeIcon} from 'assets/code.svg';
 import {ReactComponent as DataIcon} from 'assets/folder-upload.svg';
-import {ReactComponent as Trash} from 'assets/trash.svg';
 import {ReactComponent as ActionDots} from 'assets/left-sidebar-menu/actionDots.svg';
 import {ReactComponent as ActionObject} from 'assets/left-sidebar-menu/actionObject.svg';
 import {getActionsList, getActionByName, getDataActionsList, getDataActionByName} from 'services/ApiService';
 import {ActionImage, Container} from './Actions.styled';
-import {deleteAction, setActions, setSelectAction} from 'store/actions.slice';
+import {setActions, setSelectAction} from 'store/actions.slice';
 import {ActionItem, ActionTypes, RootStore} from 'store/types';
 
 const Actions: React.FC<unknown> = () => {
@@ -79,10 +78,6 @@ const Actions: React.FC<unknown> = () => {
 
   const handleSelectSnippet = (action: ActionItem | null) => {
     dispatch(setSelectAction(action));
-  };
-
-  const handleDeleteSnippet = (action: ActionItem | null) => {
-    dispatch(deleteAction(action));
   };
 
   return (

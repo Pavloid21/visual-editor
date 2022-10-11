@@ -1,27 +1,21 @@
 import {SideBarSubheader} from 'components';
 import {ReactComponent as Plus} from 'assets/plus.svg';
-import React, {memo} from 'react';
-import {Input} from '../../controls';
-import {Search} from '../../SideBarHeader/SideBarHeader.styled';
+import React from 'react';
+import {Input} from 'components/controls';
+import {Search} from 'components/SideBarHeader/SideBarHeader.styled';
 
 type TSideBarSubheaderScreens = {
-  handleClick: React.MouseEventHandler;
-  activeTab: number;
   handleAddScreen: () => void;
-  handleAddAction: () => void;
 };
 
-const SubheaderScreens: React.FC<TSideBarSubheaderScreens> = memo(({
-  handleClick,
-  activeTab,
+const SubheaderScreens: React.FC<TSideBarSubheaderScreens> = ({
   handleAddScreen,
-  handleAddAction,
 }) => {
   return (
     <>
       <SideBarSubheader>
         <div>
-          <span className={activeTab === 0 ? 'tab_active' : ''} onClick={handleClick}>
+          <span className='tab_active'>
             Screens
           </span>
         </div>
@@ -35,6 +29,6 @@ const SubheaderScreens: React.FC<TSideBarSubheaderScreens> = memo(({
       </Search>
     </>
   );
-});
+};
 
 export default SubheaderScreens;

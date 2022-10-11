@@ -1,27 +1,27 @@
 import React, {SetStateAction} from 'react';
-import Loader from '../Loader';
+import Loader from 'components/Loader';
 import SortableTree from '@nosferatu500/react-sortable-tree';
 import FileExplorerTheme from '@nosferatu500/theme-file-explorer';
-import {Icon, ScreenTitle} from '../LeftSideBar/LeftSideBar.styled';
+import {Icon, ScreenTitle} from 'components/LeftSideBar/LeftSideBar.styled';
 import {BounceLoader} from 'react-spinners';
-import models from '../../views/blocks';
-import {ReactComponent as Copy} from '../../assets/copy.svg';
-import {ReactComponent as Trash} from '../../assets/trash.svg';
+import models from 'views/blocks';
+import {ReactComponent as Copy} from 'assets/copy.svg';
+import {ReactComponent as Trash} from 'assets/trash.svg';
 import {useSelector} from 'react-redux';
-import {RootStore} from '../../store/types';
+import {RootStore} from 'store/types';
 import {css} from '@emotion/react';
-import {Container} from './Screens.styled';
+import {Container} from 'components/Screens/Screens.styled';
 
 type ScreensProps = {
   loading: boolean,
   treeData: Record<string, any>[],
   setTree: (treeData: SetStateAction<Record<string, any>[]>) => void,
   handleItemClick: (event: React.MouseEvent, extendedNode: Record<string, any>) => void,
-  load: undefined | Record<string, any>,
+  load: undefined | {uuid: string, load: boolean},
   handleCloneScreen: (event: React.MouseEvent, uuid: string) => void,
-  handleCloneBlock: (subtitle: any) => void,
+  handleCloneBlock: (blockUuid: string) => void,
   handleDeleteScreen: (event: React.MouseEvent, node: {uuid: string, endpoint: string, screen: string}) => void,
-  handleDeleteBlock: (node: any) => void
+  handleDeleteBlock: (blockUuid: string) => void
 }
 
 const Screens: React.FC<ScreensProps> = ({

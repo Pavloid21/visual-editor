@@ -16,7 +16,7 @@ import {
   SideBarContent,
   TemplateItem,
 } from './LeftSideBar.styled';
-import {addAction, setSelectAction} from 'store/actions.slice';
+import {addAction} from 'store/actions.slice';
 import {setActiveTab as setActiveTabAction} from 'store/config.slice';
 import {saveCode} from 'store/code.slice';
 import {cloneBlock, deleteBlock, selectScreen, setLayout, setSelectedBlock, setSnippet} from 'store/layout.slice';
@@ -25,8 +25,8 @@ import {Bar} from 'containers/Project/Modal/Modal.styled';
 import {ReactComponent as Close} from 'assets/close.svg';
 import {screenTemplates as defaultTemplates} from 'constants/screenTemplates';
 import {setScreens} from 'store/screens.slice';
-import {Screens} from '../Screens';
-import {SubheaderScreens, SubheaderActions} from './Subheader';
+import {Screens} from 'components/Screens';
+import {SubheaderScreens, SubheaderActions} from 'components/LeftSideBar/Subheader';
 
 const LeftSidebar: React.FC<unknown> = () => {
   const {
@@ -49,7 +49,7 @@ const LeftSidebar: React.FC<unknown> = () => {
   const [activeTabActions, setActiveTabActions] = useState(0);
   const [availableScreenes, setScreenes] = useState<Record<string, any>[]>([]);
   const [treeData, setTree] = useState<Record<string, any>[]>([]);
-  const [load, setLoadScreen] = useState<Record<string, any>>();
+  const [load, setLoadScreen] = useState<{uuid: string, load: boolean}>();
   const [templates, setScreenTemplates] = useState<Record<string, any>[]>([]);
   const [itemModalOpen, setItemModalOpen] = useModal();
 
@@ -393,22 +393,12 @@ const LeftSidebar: React.FC<unknown> = () => {
           <div className="screen-list" style={{flex: 1}}>
             {activeTabMenu === 'screen' &&
               <SubheaderScreens
-                activeTab={activeTabScreens}
-                handleAddAction={handleAddAction}
                 handleAddScreen={handleAddScreen}
-                handleClick={() => {
-                  // setActiveTab(0);
-                  // dispatch(setSelectAction(null));
-                }}
               />}
             {activeTabMenu === 'action' &&
               <SubheaderActions
                 activeTab={activeTabActions}
                 handleAddAction={handleAddAction}
-                handleClick={() => {
-                  // setActiveTab(0);
-                  // dispatch(setSelectAction(null));
-                }}
                 setActiveTab={setActiveTabActions}
               />}
             {activeTabMenu === 'screen' && activeTabScreens === 0 &&

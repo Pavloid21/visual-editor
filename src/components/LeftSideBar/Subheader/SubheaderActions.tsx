@@ -1,35 +1,37 @@
 import {SideBarSubheader} from 'components';
 import {ReactComponent as Plus} from 'assets/plus.svg';
-import React, {memo} from 'react';
-import {Search} from '../../SideBarHeader/SideBarHeader.styled';
-import {Input} from '../../controls';
-import FilterAction from '../../Actions/FilterAction';
+import React from 'react';
+import {Search} from 'components/SideBarHeader/SideBarHeader.styled';
+import {Input} from 'components/controls';
+import FilterAction from 'components/Actions/FilterAction';
 
 type TSideBarSubheaderActions = {
-  handleClick: React.MouseEventHandler;
   activeTab: number;
   setActiveTab: React.Dispatch<React.SetStateAction<number>>;
   handleAddAction: () => void;
 };
 
-const SubheaderActions: React.FC<TSideBarSubheaderActions> = memo(({
-  handleClick,
+const SubheaderActions: React.FC<TSideBarSubheaderActions> = ({
   activeTab,
   setActiveTab,
   handleAddAction,
 }) => {
-  console.log(activeTab);
+  const setClassTabs = (index: number) => activeTab === index ? 'tab_active' : '';
+
   return (
     <>
       <SideBarSubheader>
-        <div className="actions_tab">
-          <span className={activeTab === 0 ? 'tab_active' : ''} onClick={() => setActiveTab(0)}>
+        <div className="actions_tab" onClick={(event) => {
+          const activeTab = +((event.target as HTMLDivElement)?.dataset?.tabId || 0);
+          setActiveTab(activeTab);
+        }}>
+          <span data-tab-id={0} className={setClassTabs(0)}>
             Actions
           </span>
-          <span className={activeTab === 1 ? 'tab_active' : ''} onClick={() => setActiveTab(1)}>
+          <span data-tab-id={1} className={setClassTabs(1)}>
             Cron Tasks
           </span>
-          <span className={activeTab === 2 ? 'tab_active' : ''} onClick={() => setActiveTab(2)}>
+          <span data-tab-id={2} className={setClassTabs(2)}>
             Push
           </span>
         </div>
@@ -44,6 +46,6 @@ const SubheaderActions: React.FC<TSideBarSubheaderActions> = memo(({
       {activeTab === 0 && <FilterAction />}
     </>
   );
-});
+};
 
 export default SubheaderActions;

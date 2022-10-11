@@ -67,6 +67,14 @@ export default createGlobalStyle`
     }
   }
 
+  .left-bar-image {
+    &.active {
+      & path {
+        fill: var(--main-color);
+      };
+    }
+  }
+
   .rst__tree {
     font-size: 16px;
     line-height: 20px;
