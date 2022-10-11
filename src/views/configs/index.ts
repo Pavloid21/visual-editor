@@ -82,9 +82,8 @@ export const sizeModifier = {
     {label: 'Full size', value: 'FULLSIZE'},
   ],
 };
-
-export const startPage = {type: 'number', name: 'Start page'};
-export const pageSize = {type: 'number', name: 'Page size'};
+export const startPage = {type: 'number', name: 'startPage'};
+export const pageSize = {type: 'number', name: 'pageSize'};
 export const backgroundColor = {type: 'color', name: 'Background color'};
 export const text = {type: 'string', name: 'Text'};
 export const fontSize = {type: 'number', name: 'Font size'};
@@ -134,8 +133,8 @@ export const interactive = {
     url: {
       type: 'select',
       name: 'Action URL',
+      action_types: 'actions,screens'
     },
-    target: {type: 'select', name: 'Target', options: []},
     method: {
       type: 'select',
       name: 'Method',
@@ -144,6 +143,81 @@ export const interactive = {
         {label: 'Post', value: 'post'},
       ],
     },
+    clearAppSettings: {
+      type: 'select',
+      name: 'Logout',
+      options: [
+        {label: 'True', value: true},
+        {label: 'False', value: false},
+      ],
+    },
+    triggresBottomSheet: {
+      type: 'select',
+      name: 'Open bottom sheet',
+      options: [
+        {label: 'True', value: true},
+        {label: 'False', value: false},
+      ],
+    },
+    closeBottomSheet: {
+      type: 'select',
+      name: 'Close bottom sheet',
+      options: [
+        {label: 'True', value: true},
+        {label: 'False', value: false},
+      ],
+    },
+    confirmationDialog: {
+      title: {
+        type: 'string',
+        name: 'Title'
+      },
+      message: {
+        type: 'string',
+        name: 'Message'
+      },
+      confirmText: {
+        type: 'string',
+        name: 'Confirm text'
+      },
+      cancelledText: {
+        type: 'string',
+        name: 'Cancelled text'
+      },
+    },
+    callEmailMessengersHolder: {
+      phoneNumber: {
+        type: 'string',
+        name: 'Phone number'
+      },
+      emailAddress: {
+        type: 'string',
+        name: 'Email address'
+      },
+      packageName: {
+        type: 'string',
+        name: 'Package name'
+      },
+      urlApiMessenger: {
+        type: 'string',
+        name: 'Api messenger'
+      },
+    },
+  },
+};
+export const dataSourceSettings = {
+  dataSource: {
+    type: 'select',
+    name: 'Data source',
+    action_types: 'data'
+  },
+  startPage: {
+    type: 'number', 
+    name: 'Start page'
+  },
+  pageSize: {
+    type: 'number', 
+    name: 'Page size'
   },
 };
 export const metricStyle = {
@@ -200,11 +274,19 @@ export const systemCalendar = {
 
 export const iconSelectedColor = {
   type: 'color',
-    name: 'Bottom icon selected color',
+    name: 'Icon selected color',
 };
 export const iconUnselectedColor = {
   type: 'color',
-    name: 'Bottom icon unselected color',
+    name: 'Icon unselected color',
+};
+export const textSelectedColor = {
+  type: 'color',
+    name: 'Text selected color',
+};
+export const textUnselectedColor = {
+  type: 'color',
+    name: 'Text unselected color',
 };
 export const showUnselectedText = {
   type: 'select',

@@ -20,7 +20,7 @@ import {getSizeStyle} from 'views/utils/styles/size';
 const Input = styled.div`
   align-self: center;
   color: ${(props) => props.textColor};
-  background-color: ${(props) => props.backgroundColor};
+  background-color: ${(props) => props.backgroundColor || '#FFFFFF00'};
   display: flex;
   align-items: center;
   border: 1px solid var(--neo-gray);
@@ -46,7 +46,7 @@ const Input = styled.div`
     }
   }}
   border-width: ${(props) => props.borderWidth}px;
-  border-color: ${(props) => props.borderColor};
+  border-color: ${(props) => props.borderColor || '#FFFFFF00'};
   & > span {
     font-size: ${(props) => props.fontSize}px;
     font-weight: ${(props) => {
@@ -105,7 +105,7 @@ const block = (state) => {
     previewImageUrl: passwordtextfield,
     category: 'Controls',
     defaultInteractiveOptions: {
-      field: 'field_name',
+      field: '',
     },
     complex: [
       {label: 'Text', value: 'BASICTEXTFIELD'},
@@ -113,30 +113,30 @@ const block = (state) => {
       {label: 'Calendar', value: 'CALENDAR_TEXT_FIELD'}
     ],
     defaultData: {
-      placeholder: 'Login',
+      placeholder: 'Placeholder',
       placeholderColor: '#7F7F7F',
-      text: 'neo',
+      text: '',
       textColor: '#000000',
       backgroundColor: '#FFFFFF',
       borderColor: '#EFEFEF',
       borderWidth: 1,
       fontSize: 16,
       size: {
-        width: 100,
+        width: 280,
         height: 48,
       },
       shadow: {
         color: '#000000',
-        opacity: 0.3,
+        opacity: 0,
         offsetSize: {
           width: 0,
           height: 0,
         },
-        radius: 8,
+        radius: 0,
       },
       padding: {
         left: 12,
-        right: 12,
+        right: 16,
         top: 4,
         bottom: 4,
       },

@@ -14,9 +14,8 @@ import lists from 'assets/lists.svg';
 import {
   backgroundColor,
   getSizeConfig,
-  pageSize,
   shapeConfigBuilder,
-  startPage
+  dataSourceSettings
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
 import {blockStateSafeSelector} from 'store/selectors';
@@ -134,21 +133,21 @@ const block = (state) => {
     category: 'Container',
     defaultInteractiveOptions: {
       dataSource: '',
+      startPage: 0,
+      pageSize: 20,
     },
     defaultData: {
-      backgroundColor: '#C6C6C6',
-      pageSize: 1,
+      backgroundColor: '',
+      size: {
+        heightInPercent: 50,
+        widthInPercent: 100,
+      },
     },
     listItem: null,
     interactive: {
-      dataSource: {
-        type: 'string',
-        name: 'Data Source',
-      },
-    },
+    dataSourceSettings
+  },
     config: {
-      startPage,
-      pageSize,
       shape: shapeConfigBuilder()
         .withRadius
         .withAllCornersRound

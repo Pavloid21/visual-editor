@@ -65,6 +65,7 @@ export const StyledNeoInput = styled(Input)<NeoInputProps>`
   `}
 `;
 
+// @ts-ignore
 export const StyledNeoTextArea = styled(TextArea)<TextAreaProps & NeoInputProps>`
   background: #ffffff;
   width: ${(props) => (props.$isWide ? '100%' : 'auto')};

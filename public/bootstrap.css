@@ -2271,10 +2271,6 @@ textarea.form-control {
   height: auto;
 }
 
-.form-group {
-  margin-bottom: 1rem;
-}
-
 .form-text {
   display: block;
   margin-top: 0.25rem;

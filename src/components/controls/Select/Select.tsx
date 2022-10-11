@@ -5,7 +5,7 @@ import {Label} from 'components/controls';
 import {WithLabel} from './WithLabel';
 import {DropdownIndicator} from './Dropdown';
 import {baseStyleSelect} from './style';
-import {BASE_URL, getActionsList, getDataActionsList} from 'services/ApiService';
+import {BASE_URL, getActionsList, getDataActionsList, getScreenesList} from 'services/ApiService';
 
 export const Select = React.memo((props: ISelect) => {
   const {onChange, options, value, className, label, menuPlacement, styles, clearable} = props;
@@ -18,16 +18,22 @@ export const Select = React.memo((props: ISelect) => {
     let options =[];
     let actions = {data: []};
     let data = {data: []};
+    let screens = {data: []};
     if (actionTypes.split(',')?.includes('actions')) actions = await getActionsList(projectId!);
     if (actionTypes.split(',')?.includes('data')) data = await getDataActionsList(projectId!);
+    if (actionTypes.split(',')?.includes('screens')) screens = await getScreenesList(projectId!);
     options = [
       ...actions.data.map((action: string) => ({
         label: action,
-        value: `${BASE_URL}projects/${projectId}/admin/actions/${action}`,
+      value: `actions/${action}`,
       })),
-      ...data.data.map((action: string) => ({
-        label: action,
-        value: `${BASE_URL}projects/${projectId}/admin/actions/${action}`,
+      ...data.data.map((data: string) => ({
+        label: data,
+        value: `data/${data}`,
+      })),
+      ...screens.data.map((screen: string) => ({
+        label: screen,
+        value: `screens/${screen}`,
       })),
     ];
     return options;

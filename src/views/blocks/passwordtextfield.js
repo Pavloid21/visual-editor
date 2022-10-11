@@ -23,13 +23,13 @@ export const Container = styled.div`
     height: ${(props) => getSizeStyle('height', props)};
     display: block;
     pointer-events: none;
-    color: ${(props) => props.textColor};
-    background-color: ${(props) => props.backgroundColor};
+    color: ${(props) => props.textColor || '#FFFFFF00'};
+    background-color: ${(props) => props.backgroundColor || '#FFFFFF00'};
     box-sizing: border-box;
     text-align: ${(props) => props.textAlignment};
     font-size: ${(props) => props.fontSize}px;
     & ::placeholder {
-      color: ${(props) => props.placeholderColor};
+      color: ${(props) => props.placeholderColor || '#FFFFFF00'};
     }
   }
 `;
@@ -61,7 +61,7 @@ const block = (state) => {
     previewImageUrl: passwordtextfield,
     category: 'Controls',
     defaultInteractiveOptions: {
-      field: 'field_name',
+      field: '',
     },
     complex: [
       {label: 'Text', value: 'BASICTEXTFIELD'},
@@ -71,13 +71,34 @@ const block = (state) => {
     defaultData: {
       placeholder: 'Password',
       placeholderColor: '#7F7F7F',
-      text: 'neo12345',
+      text: '',
       textColor: '#000000',
       backgroundColor: '#FFFFFF',
+      borderColor: '#EFEFEF',
+      borderWidth: 1,
       fontSize: 16,
       size: {
-        width: '',
-        height: '',
+        width: 280,
+        height: 48,
+      },
+      shadow: {
+        color: '#000000',
+        opacity: 0,
+        offsetSize: {
+          width: 0,
+          height: 0,
+        },
+        radius: 0,
+      },
+      padding: {
+        left: 12,
+        right: 16,
+        top: 4,
+        bottom: 4,
+      },
+      shape: {
+        type: 'ALLCORNERSROUND',
+        radius: '4',
       },
     },
     config: {

@@ -21,6 +21,7 @@ import {
   padding,
   shadowConfigBuilder,
   getSizeConfig,
+  interactive
 } from 'views/configs';
 import hstack from 'assets/hstack.svg';
 import {pushBlockInside} from 'store/layout.slice';
@@ -58,7 +59,7 @@ const HStack = styled.div`
   }};
   width: ${(props) => getSizeStyle('width', props)};
   height: ${(props) => getSizeStyle('height', props)};
-  background-color: ${(props) => props.backgroundColor};
+  background-color: ${(props) => props.backgroundColor || '#FFFFFF00'};
   display: flex;
   justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
   text-align: ${(props) => props.alignment};
@@ -70,7 +71,7 @@ const HStack = styled.div`
   padding-right: ${(props) => props.padding?.right}px;
   border-width: ${(props) => props.borderWidth}px;
   border-style: solid;
-  border-color: ${(props) => props.borderColor};
+  border-color: ${(props) => props.borderColor || '#FFFFFF00'};
   gap: ${(props) => props.spacing}px;
   position: relative;
   border-radius: ${(props) => `
@@ -213,23 +214,7 @@ const block = (state) => {
       shadow: shadowConfigBuilder().withRadius.done(),
       corners,
     },
-    interactive: {
-      action: {
-        url: {
-          type: 'select',
-          name: 'Action URL',
-          action_types: 'actions,data',
-        },
-        method: {
-          type: 'select',
-          name: 'Method',
-          options: [
-            {label: 'Get', value: 'get'},
-            {label: 'Post', value: 'post'},
-          ],
-        },
-      },
-    },
+    interactive,
   });
 };
 

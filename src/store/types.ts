@@ -5,6 +5,7 @@ import store from './index';
 export type EditScreenNamePayloadAction = Action<string> & {
   screen: string;
   navigationSettings: any;
+  settingsUI: any;
   snippet: {
     snippet: string;
     endpoint: string;
@@ -118,6 +119,7 @@ export type Output = {
   screen: string;
   logic: string;
   navigationSettings: any;
+  settingsUI: any;
 };
 
 export type SideBar = {

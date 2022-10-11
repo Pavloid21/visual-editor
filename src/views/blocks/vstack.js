@@ -23,6 +23,7 @@ import {
   padding,
   shadowConfigBuilder,
   getSizeConfig,
+  interactive
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
 import {blockStateSafeSelector} from 'store/selectors';
@@ -32,26 +33,28 @@ import {getSizeStyle} from 'views/utils/styles/size';
 const VStack = styled.div`
   align-self: ${({alignment}) => {
     switch (alignment) {
+      case 'CENTER':
+        return 'center';
       case 'LEFT':
         return 'flex-start';
       case 'RIGHT':
         return 'flex-end';
       default:
-        return 'center';
+        return 'flex-start';
     }
   }};
   margin: ${({alignment}) => {
     switch (alignment) {
       case 'CENTER':
-        return 'auto';
+        return '0 0';
       case 'TOP':
         return '0 auto auto auto';
       case 'BOTTOM':
         return 'auto auto 0 auto';
       case 'LEFT':
-        return 'auto auto auto 0';
+        return '0 0';
       case 'RIGHT':
-        return 'auto 0 auto auto';
+        return '0 0';
       default:
         return '0 0';
     }
@@ -68,17 +71,19 @@ const VStack = styled.div`
     }
     return getSizeStyle('height', props);
   }};
-  background-color: ${(props) => props.backgroundColor};
+  background-color: ${(props) => props.backgroundColor || '#FFFFFF00'};
   display: flex;
   justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
   align-items: ${(props) => {
     switch (props.alignment) {
+      case 'CENTER':
+        return 'center';
       case 'LEFT':
         return 'flex-start';
       case 'RIGHT':
         return 'flex-end';
       default:
-        return 'center';
+        return 'flex-start';
     }
   }};
   flex-direction: column;
@@ -89,7 +94,7 @@ const VStack = styled.div`
   box-sizing: border-box;
   border-width: ${(props) => props.borderWidth}px;
   border-style: ${(props) => props.borderColor ? 'solid' : 'none'};
-  border-color: ${(props) => props.borderColor};
+  border-color: ${(props) => props.borderColor || '#FFFFFF00'};
   gap: ${(props) => props.spacing}px;
   border-radius: ${(props) => `
     ${props.corners?.topLeftRadius || 0}px
@@ -199,23 +204,21 @@ const block = (state) => {
       {label: 'Horizontal', value: 'HSTACK'},
     ],
     defaultData: {
-      backgroundColor: '#C6C6C6',
+      size: {
+        heightInPercent: 50,
+        widthInPercent: 100,
+      },
+      backgroundColor: '#e3e3e3',
       distribution: '',
       spacing: 0,
       scroll: false,
-      borderColor: '#EFEFEF',
-      borderWidth: 1,
+      borderColor: '#e3e3e3',
+      borderWidth: 0,
       padding: {
-        top: '100',
-        bottom: '100',
-        left: '10',
-        right: '10',
-      },
-      corners: {
-        topLeftRadius: 0,
-        topRightRadius: 0,
-        bottomLeftRadius: 0,
-        bottomRightRadius: 0,
+        top: '0',
+        bottom: '0',
+        left: '0',
+        right: '0',
       },
       shadow: {
         color: '#000000',
@@ -224,7 +227,7 @@ const block = (state) => {
           width: 0,
           height: 0,
         },
-        radius: 8,
+        radius: 0,
       },
     },
     listItems: [],
@@ -241,23 +244,7 @@ const block = (state) => {
       shadow: shadowConfigBuilder().withRadius.done(),
       corners,
     },
-    interactive: {
-      action: {
-        url: {
-          type: 'select',
-          name: 'Action URL',
-          action_types: 'actions,data'
-        },
-        method: {
-          type: 'select',
-          name: 'Method',
-          options: [
-            {label: 'Get', value: 'get'},
-            {label: 'Post', value: 'post'},
-          ],
-        },
-      },
-    },
+    interactive,
   });
 };
 

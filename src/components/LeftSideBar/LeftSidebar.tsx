@@ -39,7 +39,7 @@ const LeftSidebar: React.FC<unknown> = () => {
   const [loading, setLoading] = useState(false);
   const barState = useSelector((state: RootStore) => state.sideBar);
   const api = useSelector((state: RootStore) => state.api);
-  const {screen: output, navigationSettings} = useSelector((state: RootStore) => state.output);
+  const {screen: output, navigationSettings, settingsUI} = useSelector((state: RootStore) => state.output);
   const currentSnippet = useSelector(
     (state: RootStore) => state.layout.snippets.filter((snippetData) => snippetData.screenID === selectedScreen)[0]
   );
@@ -95,7 +95,7 @@ const LeftSidebar: React.FC<unknown> = () => {
             }
           });
           setScreenes(layouts);
-          dispatch(setScreens(data.map((item: string) => ({label: item, value: `screen/${item}`}))));
+          dispatch(setScreens(data.map((item: string) => ({label: item, value: `screens/${item}`}))));
           setTree(layouts.map((layout) => prepareTree(layout, selectedScreen, topAppBar, bottomBar)));
           setLoading(false);
         })
@@ -145,6 +145,7 @@ const LeftSidebar: React.FC<unknown> = () => {
         {
           screen: output,
           navigationSettings,
+          settingsUI,
           listItems: layout,
         },
         api,
@@ -173,7 +174,9 @@ const LeftSidebar: React.FC<unknown> = () => {
   }, [output]);
 
   const parseRuturnStatement = (script: any) => {
-    const func = eval(`(() => {${'return {' + script.data?.match(/(?<=^return.{).*$/gms)[0]}})`);
+    const string: string = script.data.indexOf(' ') === 0 ? `${script.data}`.replace(' ', '') : script.data;
+    //@ts-ignore
+    const func = eval(`(() => {return {${string.match(/(?<=^return.{).*$/gms)[0]}})`);
     return func();
   };
 
@@ -227,6 +230,7 @@ const LeftSidebar: React.FC<unknown> = () => {
         type: actionTypes.EDIT_SCREEN_NAME,
         screen: item.node.screen,
         navigationSettings: item.node.navigationSettings,
+        settingsUI: item.node.settingsUI,
         snippet: {
           screenID: item.node.uuid,
           endpoint: item.node.endpoint,

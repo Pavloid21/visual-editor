@@ -6,7 +6,7 @@ import {useModal} from 'utils';
 import {ReactComponent as ArrowBack} from 'assets/arrow_back.svg';
 import {ReactComponent as Settings} from 'assets/settings.svg';
 import {ReactComponent as Warning} from 'assets/warning.svg';
-import {editProject, getProjectData} from 'services/ApiService';
+import {BASE_URL, editProject, getProjectData} from 'services/ApiService';
 import Modal from 'containers/Project/Modal/Modal';
 import {useDispatch, useSelector} from 'react-redux';
 import {Modal as CustomModal} from '../Modal';
@@ -19,6 +19,7 @@ import {Header, Subheader, WarningWrapper} from './SideBarHeader.styled';
 import {filesToDTO} from 'utils/files';
 import {head} from 'external/lodash';
 import Routes from 'routes/routes';
+import {selectProject} from 'store/project.slice';
 
 export const SideBarHeader: React.FC<SideBarHeaderProps> = React.memo((props) => {
   const navigate = useNavigate();
@@ -50,6 +51,7 @@ export const SideBarHeader: React.FC<SideBarHeaderProps> = React.memo((props) =>
   useEffect(() => {
     getProjectData(projectId).then((project) => {
       setProject(project.data);
+
       setValue('form', {
         name: project.data.name,
         description: project.data.description,
@@ -57,8 +59,18 @@ export const SideBarHeader: React.FC<SideBarHeaderProps> = React.memo((props) =>
         platform: JSON.stringify(project.data.platform),
         url: project.data.url,
       });
+
+      dispatch(
+        selectProject({
+          id: project.data.id,
+          name: project.data.name,
+          description: project.data.description,
+          icon: `${BASE_URL}projects/${project.data.id}/files/${project.data.icon}`,
+        })
+      );
     });
-  }, [itemModalOpen]);
+    
+  }, [itemModalOpen, dispatch]);
 
   useBackListener(() => {
     if (layout.editedScreens.length || layout.deletedScreens.length) {

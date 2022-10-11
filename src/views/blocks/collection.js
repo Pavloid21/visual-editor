@@ -16,6 +16,7 @@ import {
   spacing,
   shapeConfigBuilder,
   metricStyle,
+  dataSourceSettings,
 } from 'views/configs';
 import collection from 'assets/collection.svg';
 import {pushBlockInside} from 'store/layout.slice';
@@ -44,17 +45,18 @@ const Collection = styled.div`
 }}
   ${(props) => {
     if (props.collectionUiConfig?.scrollDirection === 'vertical') {
-      return 'overflow-y: scroll;';
+      return 'overflow-y: scroll; overflow-x: hidden;';
   }
     if (props.collectionUiConfig?.scrollDirection === 'horizontal') {
-      return 'overflow-x: scroll;';
+      return 'overflow-x: scroll; overflow-y: hidden;';
   }
 }}
   & > div {
     display: grid;
     grid-template-columns: repeat(${(props) => props.collectionUiConfig?.itemsInHorisontal}, ${(props) => +props.collectionUiConfig?.pointWidth > 0 ? props.collectionUiConfig?.pointWidth + 'px' : '1fr'});
     grid-template-rows: repeat(${(props) => props.collectionUiConfig?.itemsInVertical}, ${(props) => +props.collectionUiConfig?.pointHeight > 0 ? +props.collectionUiConfig?.pointHeight + 'px' : '1fr'});
-    overflow: hidden;
+    overflow-x: inherit;
+    overflow-y: inherit;
     grid-gap: ${(props) => props.spacing}px;
     background-color: ${(props) => props.collectionUiConfig?.cellBackgroundColor || 'transparent'};
 }
@@ -146,18 +148,16 @@ const block = (state) => {
     previewImageUrl: collection,
     category: 'Container',
     defaultInteractiveOptions: {
-      dataSource: {
-        url: '',
-        pageSize: 5,
-        startPage: 1
-      },
+      dataSource: '',
+      startPage: 0,
+      pageSize: 20,
     },
     defaultData: {
-      backgroundColor: '#C6C6C6',
+      backgroundColor: '',
       spacing: 16,
       size: {
-        height: 300,
-        width: '',
+        heightInPercent: 50,
+        widthInPercent: 100,
       },
       padding: {
         left: 16,
@@ -175,20 +175,7 @@ const block = (state) => {
     },
     listItem: null,
     interactive: {
-      dataSource: {
-        url: {
-          type: 'string',
-          name: 'URL',
-        },
-        pageSize: {
-          type: 'number',
-          name: 'Page size',
-        },
-        startPage: {
-          type: 'number',
-          name: 'Start page',
-        },
-      },
+    dataSourceSettings
     },
     config: {
       backgroundColor,

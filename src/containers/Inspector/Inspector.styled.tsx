@@ -26,3 +26,9 @@ export const Select = styled(SelectBase)`
     }
   }
 `;
+
+export const GroupedFields = styled.section`
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+`;

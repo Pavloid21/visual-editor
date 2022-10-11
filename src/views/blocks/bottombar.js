@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import bottombar from '../../assets/bottombar.svg';
 import Wrapper from '../../utils/wrapper';
-import {iconSelectedColor, iconUnselectedColor, showUnselectedText} from '../configs';
+import {iconSelectedColor, iconUnselectedColor, textSelectedColor, textUnselectedColor, showUnselectedText} from '../configs';
 
 const BottomBar = styled.div`
   background-color: ${(props) => props.backgroundColor};
@@ -24,6 +24,7 @@ const BottomBar = styled.div`
     gap: 4px;
     & label {
       margin-bottom: 0;
+      color: ${(props) => props.textSelectedColor || '#FFFFFF00'};
     }
     & .item_icon {
       background-color: ${(props) => props.iconUnselectedColor};
@@ -111,6 +112,8 @@ const block = () => ({
     backgroundColor: {type: 'color', name: 'Background color'},
     iconSelectedColor,
     iconUnselectedColor,
+    textSelectedColor,
+    textUnselectedColor,
     showUnselectedText,
     navigationItems: [
       {

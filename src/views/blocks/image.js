@@ -6,19 +6,21 @@ import image from 'assets/image.svg';
 import {
   backgroundColor,
   borderColor, borderWidth, getSizeConfig,
-  imageUrl, shadowConfigBuilder,
+  imageUrl, interactive, shadowConfigBuilder,
   shapeConfigBuilder,
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
 import {getSizeStyle} from 'views/utils/styles/size';
+import {useSelector} from 'react-redux';
+import {setCorrectImageUrl} from 'utils';
 
 const Image = styled.img`
   display: flex;
   box-sizing: border-box;
-  background-color: ${(props) => props.backgroundColor || '#FFFFFF'};
+  background-color: ${(props) => props.backgroundColor || '#FFFFFF00'};
   border-width: ${(props) => props.borderWidth}px;
-  border-color: ${(props) => props.borderColor};
+  border-color: ${(props) => props.borderColor || '#FFFFFF00'};
   border-style: solid;
   box-shadow: ${(props) => {
     const RGB = hexToRgb(props.shadow?.color);
@@ -49,13 +51,16 @@ const Image = styled.img`
 `;
 
 const Component = ({settingsUI, ...props}) => {
+  const {id} = useSelector(state => state.project);
+  const getCorrectImageUrl = setCorrectImageUrl(settingsUI.imageUrl, id);
+
   return (
     <Wrapper id={props.id} {...settingsUI} {...props}>
       <Image
         {...settingsUI}
         {...props}
         className="draggable"
-        src={settingsUI.imageUrl || image}
+        src={getCorrectImageUrl}
       />
     </Wrapper>
   );
@@ -95,7 +100,12 @@ const block = (state) => {
         radius: 8,
       },
     },
+    defaultInteractiveOptions: {
+      action: {url: '', target: ''},
+    },
+    interactive,
     config: {
+      iconTintColor: {type: 'color', name: 'Icon color'},
       imageAlignment: {
         type: 'select',
         name: 'Image alignment',

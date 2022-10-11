@@ -13,7 +13,7 @@ const Code: React.FC<any> = (props) => {
   const dispatch = useDispatch();
   const api = useSelector((state: RootStore) => state.api);
   const {bottomBar, blocks, selectedScreen, topAppBar, snippets} = useSelector((state: RootStore) => state.layout);
-  const {screen, navigationSettings, logic} = useSelector((state: RootStore) => state.output);
+  const {screen, navigationSettings, settingsUI, logic} = useSelector((state: RootStore) => state.output);
 
   useEffect(() => {
     if (api) {
@@ -21,6 +21,7 @@ const Code: React.FC<any> = (props) => {
         {
           screen: screen,
           navigationSettings,
+          settingsUI,
           listItems: blocks,
         },
         api,
@@ -37,7 +38,7 @@ const Code: React.FC<any> = (props) => {
         })
       );
     }
-  }, [api, blocks, bottomBar, topAppBar, code, screen, navigationSettings, logic]);
+  }, [api, blocks, bottomBar, topAppBar, code, screen, navigationSettings, settingsUI, logic]);
 
   return (
     <Container {...props}>

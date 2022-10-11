@@ -60,7 +60,7 @@ export const gallery: Record<string, any> = {
   collection,
   bottomsheet,
   webview,
-  screen,
+  // screen,
 };
 
 export default blocks;

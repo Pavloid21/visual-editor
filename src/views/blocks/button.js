@@ -13,11 +13,14 @@ import {
   padding,
   shadowConfigBuilder,
   shapeConfigBuilder,
-  text, textColor, getSizeConfig
+  text, textColor, getSizeConfig, interactive
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
 import {getSizeStyle} from 'views/utils/styles/size';
+import {useSelector} from 'react-redux';
+import {setCorrectImageUrl} from 'utils';
+
 
 const Button = styled.div`
   position: relative;
@@ -28,13 +31,13 @@ const Button = styled.div`
   box-sizing: border-box;
   font-size: ${(props) => props.fontSize}px;
   color: ${(props) => props.textColor};
-  background-color: ${(props) => props.backgroundColor};
+  background-color: ${(props) => props.backgroundColor || '#FFFFFF00'};
   align-items: center;
   display: flex;
   justify-content: space-between;
   border-width: ${(props) => props.borderWidth}px;
   border-style: solid;
-  border-color: ${(props) => props.borderColor};
+  border-color: ${(props) => props.borderColor || '#FFFFFF00'};
   width: ${(props) => getSizeStyle('width', props)};
   height: ${(props) => getSizeStyle('height', props)};
   ${(props) => {
@@ -95,13 +98,16 @@ const Button = styled.div`
   }
 `;
 
-const Component = (props) => {
-  const {text, imageUrl} = props.settingsUI;
+const Component = ({settingsUI, ...props}) => {
+  const {text} = settingsUI;
+  const {id} = useSelector(state => state.project);
+  const getCorrectImageUrl = setCorrectImageUrl(settingsUI.imageUrl, id);
+
   return (
-    <Wrapper id={props.id} {...props.settingsUI}>
-      <Button className="draggable" {...props.settingsUI} {...props}>
+    <Wrapper id={props.id} {...settingsUI}>
+      <Button className="draggable" {...settingsUI} {...props}>
         <span>{text}</span>
-        {imageUrl && <img src={imageUrl} />}
+        {getCorrectImageUrl && <img src={getCorrectImageUrl} />}
       </Button>
     </Wrapper>
   );
@@ -157,23 +163,7 @@ const block = (state) => {
         radius: 8,
       },
     },
-    interactive: {
-      action: {
-        url: {
-          type: 'select',
-          name: 'Action URL',
-          action_types: 'actions,data'
-        },
-        method: {
-          type: 'select',
-          name: 'Method',
-          options: [
-            {label: 'Get', value: 'get'},
-            {label: 'Post', value: 'post'},
-          ],
-        },
-      },
-    },
+    interactive,
     config: {
       text,
       fontSize,

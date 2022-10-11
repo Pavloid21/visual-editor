@@ -29,10 +29,11 @@ const block = () => ({
   previewImageUrl: passwordtextfield,
   category: 'Controls',
   defaultInteractiveOptions: {
-    field: 'field_name',
+    field: '',
     systemCalendar: {
       systemDialog: 'CALENDAR',
-      timeFormat: 'DD.MM.YYYY'
+      timeFormat: 'DD.MM.YYYY',
+      editFieldEnabled: false
     }
   },
   complex: [
@@ -41,16 +42,37 @@ const block = () => ({
     {label: 'Calendar', value: 'CALENDAR_TEXT_FIELD'},
   ],
   defaultData: {
-    placeholder: 'Fill in the date',
+    placeholder: 'Select date',
     placeholderColor: '#7F7F7F',
-    text: '21.12.1990',
+    text: '',
     textColor: '#000000',
     backgroundColor: '#FFFFFF',
-    fontSize: 16,
-    size: {
-      width: '',
-      height: '',
-    },
+      borderColor: '#EFEFEF',
+      borderWidth: 1,
+      fontSize: 16,
+      size: {
+        width: 280,
+        height: 48,
+      },
+      shadow: {
+        color: '#000000',
+        opacity: 0,
+        offsetSize: {
+          width: 0,
+          height: 0,
+        },
+        radius: 0,
+      },
+      padding: {
+        left: 12,
+        right: 16,
+        top: 4,
+        bottom: 4,
+      },
+      shape: {
+        type: 'ALLCORNERSROUND',
+        radius: '4',
+      },
   },
   config: {
     placeholder,

@@ -82,6 +82,7 @@ export const buildLayout = ({screen, object}: Record<string, any>) => {
   const newBlock: Record<string, any> = {
     screen: object.screen,
     navigationSettings: object.navigationSettings,
+    settingsUI: object.settingsUI,
     listItems: [],
   };
   newBlock.listItems = tree?.length ? traverse(tree) : [];

@@ -43,9 +43,9 @@ const Label = styledComponents.div`
     width: ${(props) => getSizeStyle('width', props)};
     height: ${(props) => getSizeStyle('height', props)};
     text-align: ${(props) => props.textAlignment};
-    color: ${(props) => props.textColor};
+    color: ${(props) => props.textColor || '#FFFFFF00'};
     font-size: ${(props) => props.fontSize}px;
-    background-color: ${(props) => props.backgroundColor || 'transparent'};
+    background-color: ${(props) => props.backgroundColor || '#FFFFFF00'};
     font-weight: ${(props) => {
       switch (props.fontWeight) {
         case 'THIN':
