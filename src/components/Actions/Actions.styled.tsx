@@ -12,6 +12,7 @@ export const Container = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding-right: 16px;
     & > div {
       display: flex;
       align-items: center;
@@ -49,4 +50,10 @@ export const FilterActionContainer = styled.div`
     line-height: 16px;
     margin: 0 0 0 10px;
   }
+`;
+
+export const ActionImage = styled.div`
+  width: 50px;
+  display: flex;
+  justify-content: space-between;
 `;

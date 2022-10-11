@@ -4,8 +4,10 @@ import {orderBy} from 'external/lodash';
 import {ReactComponent as CodeIcon} from 'assets/code.svg';
 import {ReactComponent as DataIcon} from 'assets/folder-upload.svg';
 import {ReactComponent as Trash} from 'assets/trash.svg';
+import {ReactComponent as ActionDots} from 'assets/left-sidebar-menu/actionDots.svg';
+import {ReactComponent as ActionObject} from 'assets/left-sidebar-menu/actionObject.svg';
 import {getActionsList, getActionByName, getDataActionsList, getDataActionByName} from 'services/ApiService';
-import {Container} from './Actions.styled';
+import {ActionImage, Container} from './Actions.styled';
 import {deleteAction, setActions, setSelectAction} from 'store/actions.slice';
 import {ActionItem, ActionTypes, RootStore} from 'store/types';
 
@@ -100,12 +102,10 @@ const Actions: React.FC<unknown> = () => {
                 {action.type === ActionTypes.action ? <CodeIcon /> : <DataIcon />}
                 <span>{action.action}</span>
               </div>
-              <Trash
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDeleteSnippet(action);
-                }}
-              />
+              <ActionImage>
+                <ActionObject />
+                <ActionDots />
+              </ActionImage>
             </div>
           );
         })}
