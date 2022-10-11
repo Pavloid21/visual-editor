@@ -71,7 +71,7 @@ const VStack = styled.div`
     }
     return getSizeStyle('height', props);
   }};
-  background-color: ${(props) => props.backgroundColor};
+  background-color: ${(props) => props.backgroundColor || '#FFFFFF00'};
   display: flex;
   justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
   align-items: ${(props) => {
@@ -94,7 +94,7 @@ const VStack = styled.div`
   box-sizing: border-box;
   border-width: ${(props) => props.borderWidth}px;
   border-style: ${(props) => props.borderColor ? 'solid' : 'none'};
-  border-color: ${(props) => props.borderColor};
+  border-color: ${(props) => props.borderColor || '#FFFFFF00'};
   gap: ${(props) => props.spacing}px;
   border-radius: ${(props) => `
     ${props.corners?.topLeftRadius || 0}px

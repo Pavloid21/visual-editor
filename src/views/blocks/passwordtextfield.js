@@ -23,13 +23,13 @@ export const Container = styled.div`
     height: ${(props) => getSizeStyle('height', props)};
     display: block;
     pointer-events: none;
-    color: ${(props) => props.textColor};
-    background-color: ${(props) => props.backgroundColor};
+    color: ${(props) => props.textColor || '#FFFFFF00'};
+    background-color: ${(props) => props.backgroundColor || '#FFFFFF00'};
     box-sizing: border-box;
     text-align: ${(props) => props.textAlignment};
     font-size: ${(props) => props.fontSize}px;
     & ::placeholder {
-      color: ${(props) => props.placeholderColor};
+      color: ${(props) => props.placeholderColor || '#FFFFFF00'};
     }
   }
 `;

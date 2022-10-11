@@ -20,7 +20,7 @@ import {getSizeStyle} from 'views/utils/styles/size';
 const Input = styled.div`
   align-self: center;
   color: ${(props) => props.textColor};
-  background-color: ${(props) => props.backgroundColor};
+  background-color: ${(props) => props.backgroundColor || '#FFFFFF00'};
   display: flex;
   align-items: center;
   border: 1px solid var(--neo-gray);
@@ -46,7 +46,7 @@ const Input = styled.div`
     }
   }}
   border-width: ${(props) => props.borderWidth}px;
-  border-color: ${(props) => props.borderColor};
+  border-color: ${(props) => props.borderColor || '#FFFFFF00'};
   & > span {
     font-size: ${(props) => props.fontSize}px;
     font-weight: ${(props) => {

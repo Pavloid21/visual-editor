@@ -8,7 +8,7 @@ import {blockStateSafeSelector} from 'store/selectors';
 
 const HR = styled.hr`
   align-self: center;
-  background-color: ${(props) => props.backgroundColor};
+  background-color: ${(props) => props.backgroundColor || '#FFFFFF00'};
   height: 100%;
   width: 100%;
 `;
