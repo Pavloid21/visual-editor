@@ -165,7 +165,7 @@ const block = (state) => {
     previewImageUrl: hstack,
     category: 'Container',
     defaultInteractiveOptions: {
-      action: {url: '', target: ''},
+      action: {url: '', target: '', fields: {}},
     },
     complex: [
       {label: 'Vertical', value: 'VSTACK'},

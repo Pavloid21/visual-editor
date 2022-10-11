@@ -6,6 +6,7 @@ import {
   backgroundColor,
   isActive,
   thumbOnColor,
+  interactive,
 } from 'views/configs';
 
 const Switch = styled.div`
@@ -107,25 +108,9 @@ const block = () => ({
     isActive,
   },
   defaultInteractiveOptions: {
-    action: {url: '', target: ''},
+    action: {url: '', target: '', fields: {}},
   },
-  interactive: {
-    action: {
-      url: {
-        type: 'select',
-        name: 'Action URL',
-        action_types: 'actions,data'
-      },
-      method: {
-        type: 'select',
-        name: 'Method',
-        options: [
-          {label: 'Get', value: 'get'},
-          {label: 'Post', value: 'post'},
-        ],
-      },
-    },
-  },
+  interactive,
 });
 
 export default block;

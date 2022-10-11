@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 import {Select as SelectBase} from 'components/controls';
 
-export const Division = styled.div`
+export const Division = styled.div<{withoutBorder?: boolean}>`
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #e6e6e6;
+  border-bottom: ${(props) => (props.withoutBorder ? 'none' : '1px solid #e6e6e6')};
   margin-bottom: 8px;
 `;
 
@@ -28,7 +28,7 @@ export const Select = styled(SelectBase)`
 `;
 
 export const GroupedFields = styled.section`
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 `;
