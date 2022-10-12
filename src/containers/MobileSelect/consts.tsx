@@ -19,6 +19,7 @@ import {ReactComponent as TimeAndroid} from 'assets/mockups/time_android.svg';
 import {ReactComponent as RightSideAndroid} from 'assets/mockups/right_side_android.svg';
 import {useSelector} from 'react-redux';
 import {hexToRgb, setContrast} from 'constants/utils';
+import {normalizeHEX} from 'utils/color';
 import type {TButton} from 'components/ButtonSelector/types';
 import type {IOption} from 'components/controls/Select/types';
 import type {RootStore} from 'store/types';
@@ -188,7 +189,7 @@ const StatusBar = styled.div<any>`
     const appBar = useSelector((state: RootStore) => state.layout.topAppBar);
     return `background-color: ${appBar?.settingsUI.backgroundColor};
             & > svg > g {
-              fill: ${setContrast(hexToRgb(appBar?.settingsUI.backgroundColor || '#FFFFFF'))};
+              fill: ${setContrast(hexToRgb(normalizeHEX(appBar?.settingsUI.backgroundColor) || '#FFFFFF'))};
             }`;
   }}
 `;
