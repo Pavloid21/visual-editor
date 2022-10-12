@@ -59,20 +59,20 @@ const HStack = styled.div`
   }};
   width: ${(props) => getSizeStyle('width', props)};
   height: ${(props) => getSizeStyle('height', props)};
-  background-color: ${(props) => props.backgroundColor || '#FFFFFF00'};
+  background-color: ${(props) => props.backgroundColor || 'transparent'};
   display: flex;
   justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
   text-align: ${(props) => props.alignment};
   flex-direction: row;
   align-items: center;
-  padding-top: ${(props) => props.padding?.top}px;
-  padding-bottom: ${(props) => props.padding?.bottom}px;
-  padding-left: ${(props) => props.padding?.left}px;
-  padding-right: ${(props) => props.padding?.right}px;
-  border-width: ${(props) => props.borderWidth}px;
+  padding-top: ${(props) => props.padding?.top || 0}px;
+  padding-bottom: ${(props) => props.padding?.bottom || 0}px;
+  padding-left: ${(props) => props.padding?.left || 0}px;
+  padding-right: ${(props) => props.padding?.right || 0}px;
+  border-width: ${(props) => props.borderWidth || 0}px;
   border-style: solid;
-  border-color: ${(props) => props.borderColor || '#FFFFFF00'};
-  gap: ${(props) => props.spacing}px;
+  border-color: ${(props) => props.borderColor || 'transparent'};
+  gap: ${(props) => props.spacing || 0}px;
   position: relative;
   border-radius: ${(props) => `
     ${props.corners?.topLeftRadius || 0}px
