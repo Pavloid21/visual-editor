@@ -29,15 +29,15 @@ const Button = styled.div`
   padding-left: ${(props) => props.padding?.left}px;
   padding-right: ${(props) => props.padding?.right}px;
   box-sizing: border-box;
-  font-size: ${(props) => props.fontSize}px;
-  color: ${(props) => props.textColor};
-  background-color: ${(props) => props.backgroundColor || '#FFFFFF00'};
+  font-size: ${(props) => props.fontSize || 12}px;
+  color: ${(props) => props.textColor || 'transparent'};
+  background-color: ${(props) => props.backgroundColor || 'transparent'};
   align-items: center;
   display: flex;
   justify-content: space-between;
-  border-width: ${(props) => props.borderWidth}px;
+  border-width: ${(props) => props.borderWidth  || 0}px;
   border-style: solid;
-  border-color: ${(props) => props.borderColor || '#FFFFFF00'};
+  border-color: ${(props) => props.borderColor || 'transparent'};
   width: ${(props) => getSizeStyle('width', props)};
   height: ${(props) => getSizeStyle('height', props)};
   ${(props) => {
