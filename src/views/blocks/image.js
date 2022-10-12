@@ -7,7 +7,7 @@ import {
   backgroundColor,
   borderColor, borderWidth, getSizeConfig,
   imageUrl, interactive, shadowConfigBuilder,
-  shapeConfigBuilder,
+  shapeConfigBuilder, padding,
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
@@ -18,9 +18,13 @@ import {setCorrectImageUrl} from 'utils';
 const Image = styled.img`
   display: flex;
   box-sizing: border-box;
-  background-color: ${(props) => props.backgroundColor || '#FFFFFF00'};
-  border-width: ${(props) => props.borderWidth}px;
-  border-color: ${(props) => props.borderColor || '#FFFFFF00'};
+  background-color: ${(props) => props.backgroundColor || 'transparent'};
+  padding-top: ${(props) => props.padding?.top || 0}px;
+  padding-bottom: ${(props) => props.padding?.bottom || 0}px;
+  padding-left: ${(props) => props.padding?.left || 0}px;
+  padding-right: ${(props) => props.padding?.right || 0}px;
+  border-width: ${(props) => props.borderWidth  || 0}px;
+  border-color: ${(props) => props.borderColor || 'transparent'};
   border-style: solid;
   box-shadow: ${(props) => {
     const RGB = hexToRgb(props.shadow?.color);
@@ -36,7 +40,7 @@ const Image = styled.img`
       case 'SCALE_TO_FILL':
         return 'fill';
       default:
-        return 'initial';
+        return 'contain';
     }
   }};
   align-self: center;
@@ -117,6 +121,7 @@ const block = (state) => {
       },
       imageUrl,
       backgroundColor,
+      padding,
       borderWidth,
       borderColor,
       size: getSizeConfig(blockState.deviceInfo.device),
