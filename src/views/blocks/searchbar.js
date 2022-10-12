@@ -33,11 +33,13 @@ const SearchBar = styled.div`
   & > input {
     pointer-events: none;
     &::placeholder {
-      color: ${(props) => props.placeholderColor || '#FFFFFF00'};
+      color: ${(props) => props.placeholderColor || 'transparent'};
+      font-size: 12px;
+      font-weight: 400;
     }
 
     color: ${(props) => props.textColor};
-    background-color: ${(props) => props.backgroundColor || '#FFFFFF00'};
+    background-color: ${(props) => props.backgroundColor || 'transparent'};
     height: ${(props) => getSizeStyle('height', props)};
     width: ${(props) => getSizeStyle('width', props)};
     text-align: ${(props) => props.textAllignment || 'left'};
@@ -53,7 +55,8 @@ const SearchBar = styled.div`
     right: 0;
     mask: url(${(props) => props.imageUrl}) no-repeat center;
     background-position: center;
-    background-color: ${(props) => props.textColor || '#FFFFFF00'};
+    background-color: ${(props) => props.textColor || 'transparent'};
+    font-size: 12px;
     background-size: cover;
   }
 `;
