@@ -19,18 +19,18 @@ import {getSizeStyle} from 'views/utils/styles/size';
 
 const Input = styled.div`
   align-self: center;
-  color: ${(props) => props.textColor};
-  background-color: ${(props) => props.backgroundColor || '#FFFFFF00'};
+  color: ${(props) => props.textColor || 'transparent'};
+  background-color: ${(props) => props.backgroundColor || 'transparent'};
   display: flex;
   align-items: center;
   border: 1px solid var(--neo-gray);
   text-align: ${(props) => props.textAlignment};
   width: ${(props) => getSizeStyle('width', props)};
   height: ${(props) => getSizeStyle('height', props)};
-  padding-top: ${(props) => props.padding?.top}px;
-  padding-bottom: ${(props) => props.padding?.bottom}px;
-  padding-left: ${(props) => props.padding?.left}px;
-  padding-right: ${(props) => props.padding?.right}px;
+  padding-top: ${(props) => props.padding?.top || 0}px;
+  padding-bottom: ${(props) => props.padding?.bottom || 0}px;
+  padding-left: ${(props) => props.padding?.left || 0}px;
+  padding-right: ${(props) => props.padding?.right || 0}px;
   ${(props) => {
     if (props.shadow) {
       return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${
@@ -45,10 +45,10 @@ const Input = styled.div`
       return `border-radius: ${props.shape.radius}px;`;
     }
   }}
-  border-width: ${(props) => props.borderWidth}px;
-  border-color: ${(props) => props.borderColor || '#FFFFFF00'};
+  border-width: ${(props) => props.borderWidth || 0}px;
+  border-color: ${(props) => props.borderColor || 'transparent'};
   & > span {
-    font-size: ${(props) => props.fontSize}px;
+    font-size: ${(props) => props.fontSize || 12}px;
     font-weight: ${(props) => {
       switch (props.fontWeight) {
         case 'THIN':
@@ -75,7 +75,9 @@ const Input = styled.div`
     }};
   }
   & > .placeholder {
-    color: ${(props) => props.placeholderColor};
+    color: ${(props) => props.placeholderColor || 'transparent'};
+    font-size: 12px;
+    font-weight: 400;
   }
 `;
 
