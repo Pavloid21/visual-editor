@@ -24,10 +24,10 @@ import {setCorrectImageUrl} from 'utils';
 
 const Button = styled.div`
   position: relative;
-  padding-top: ${(props) => props.padding?.top}px;
-  padding-bottom: ${(props) => props.padding?.bottom}px;
-  padding-left: ${(props) => props.padding?.left}px;
-  padding-right: ${(props) => props.padding?.right}px;
+  padding-top: ${(props) => props.padding?.top || 0}px;
+  padding-bottom: ${(props) => props.padding?.bottom || 0}px;
+  padding-left: ${(props) => props.padding?.left || 0}px;
+  padding-right: ${(props) => props.padding?.right || 0}px;
   box-sizing: border-box;
   font-size: ${(props) => props.fontSize || 12}px;
   color: ${(props) => props.textColor || 'transparent'};
@@ -84,7 +84,7 @@ const Button = styled.div`
     }};
     overflow: hidden;
     text-overflow: ellipsis;
-    text-align: ${(props) => props.textAlignment};
+    text-align: ${(props) => props.textAlignment || 'left'};
     padding-top: ${(props) => props.buttonTextPadding?.top || 0}px;
     padding-left: ${(props) => props.buttonTextPadding?.left || 0}px;
     padding-right: ${(props) => props.buttonTextPadding?.right || 0}px;
