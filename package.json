@@ -100,6 +100,11 @@
     "@types/react-syntax-highlighter": "13.5.2",
     "@types/styled-components": "5.1.24",
     "@types/uuid": "8.3.4",
+    "@typescript-eslint/eslint-plugin": "5.40.0",
+    "@typescript-eslint/parser": "5.40.0",
+    "eslint": "8.22.0",
+    "eslint-plugin-react": "7.31.10",
+    "eslint-plugin-react-hooks": "4.6.0",
     "react-error-overlay": "6.0.9"
   }
 }

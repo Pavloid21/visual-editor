@@ -15,7 +15,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {v4} from 'uuid';
 import {Container, EditorWrapper} from './ActionForm.styled';
 import {setActions, setSelectAction} from 'store/actions.slice';
-import type {ActionItem, RootStore} from 'store/types';
+import {ActionItem, RootStore, ActionTypes} from 'store/types';
 
 const ActionForm: React.FC<{action: ActionItem}> = ({action}) => {
   const dispatch = useDispatch();
@@ -32,7 +32,7 @@ const ActionForm: React.FC<{action: ActionItem}> = ({action}) => {
     const {actionName, code, type} = getValues();
     const nextActions = [...snippets.actions];
     const nextData = [...snippets.data];
-    const key = action.type === 'action' ? 'actions' : 'data';
+    const key = action.type === ActionTypes.action ? 'actions' : 'data';
     snippets[key].forEach((item, index) => {
       const ref = type === 'data' ? nextData : nextActions;
       if (item.action === actionName) {
@@ -91,8 +91,8 @@ const ActionForm: React.FC<{action: ActionItem}> = ({action}) => {
             <ButtonSelector
               label="Action type"
               buttons={[
-                {title: 'Data usage', key: 'data', uuid: v4()},
-                {title: 'Custom action', key: 'action', uuid: v4()},
+                {title: 'Data usage', key: ActionTypes.data, uuid: v4()},
+                {title: 'Custom action', key: ActionTypes.action, uuid: v4()},
               ]}
               {...field}
             />
