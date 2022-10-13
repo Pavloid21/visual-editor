@@ -7,6 +7,7 @@ import {
   isActive,
   thumbOnColor,
   interactive,
+  padding,
 } from 'views/configs';
 
 const Switch = styled.div`
@@ -17,6 +18,10 @@ const Switch = styled.div`
   margin-bottom: 0;
   z-index: 0;
   width: fit-content;
+  padding-top: ${(props) => props.padding?.top || 0}px;
+  padding-bottom: ${(props) => props.padding?.bottom || 0}px;
+  padding-left: ${(props) => props.padding?.left || 0}px;
+  padding-right: ${(props) => props.padding?.right || 0}px;
   & input:checked + span::before {
     background-color: ${(props) => props.thumbOnColor || 'transparent'};
   }
@@ -106,6 +111,7 @@ const block = () => ({
     backgroundColor,
     thumbOnColor,
     isActive,
+    padding,
   },
   defaultInteractiveOptions: {
     action: {url: '', fields: {}},
