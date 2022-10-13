@@ -8,6 +8,7 @@ import {baseStyleSelect} from './style';
 import {getActionsList, getDataActionsList, getScreenesList} from 'services/ApiService';
 import {Indicator, Item, TabsContainer} from './Select.styled';
 import {AnimateSharedLayout} from 'framer-motion';
+import {ActionTypes} from 'store/types';
 
 export const Select = React.memo((props: ISelect) => {
   const {onChange, options, value, className, label, menuPlacement, styles, clearable} = props;
@@ -31,14 +32,14 @@ export const Select = React.memo((props: ISelect) => {
         if (value.indexOf('screen') === 0) {
           return filteredMenu.find((option) => option.actionType === 'screen')?.actionType;
         }
-        if (value.indexOf('action') === 0) {
+        if (value.indexOf(ActionTypes.action) === 0) {
           return filteredMenu.find((option) => option.actionType === 'action')?.actionType;
         }
-        if (value.indexOf('data') === 0) {
+        if (value.indexOf(ActionTypes.data) === 0) {
           return filteredMenu.find((option) => option.actionType === 'data')?.actionType;
         }
+        return 'other';
       }
-      return 'other';
     },
     [filteredMenu, props.async]
   );

@@ -11,7 +11,7 @@ import {useSelector} from 'react-redux';
 const TopAppBar = styled.div`
   padding: 16px;
   color: ${(props) => invertColor(props.backgroundColor, true)};
-  background-color: ${(props) => props.backgroundColor || '#FFFFFF00'};
+  background-color: ${(props) => props.backgroundColor || 'transparent'};
   z-index: 2;
   width: 100%;
   display: flex;
@@ -25,7 +25,7 @@ const TopAppBar = styled.div`
     margin: 0;
     width: 100%;
     text-align: ${(props) => (props.blockState.deviceInfo.device === Device.ANDROID ? 'left' : 'center')};
-    font-size: ${(props) => props.fontSize}px;
+    font-size: 17px;
     color: ${(props) => props.titleColor
     || (props.blockState.deviceInfo.device === Device.ANDROID ? '#FFFFFF' : '#0000FF')};
   }
