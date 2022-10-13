@@ -24,7 +24,7 @@ const Input = styled.div`
   display: flex;
   align-items: center;
   border: 1px solid var(--neo-gray);
-  text-align: ${(props) => props.textAlignment};
+  text-align: ${(props) => props.textAlignment || 'left'};
   width: ${(props) => getSizeStyle('width', props)};
   height: ${(props) => getSizeStyle('height', props)};
   padding-top: ${(props) => props.padding?.top || 0}px;
