@@ -231,7 +231,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
                 <span>{leadLetter(el)}</span>
                 <Plus className="icon" onClick={() => dispatch(addActionField(block.uuid))} />
               </Division>
-              {Object.keys(block.interactive[parentKey][el]).map((key: any, index: number) => {
+              {block.interactive[parentKey] && Object.keys(block.interactive[parentKey][el] || {}).map((key: any, index: number) => {
                 const item = block.interactive[parentKey][el][key];
                 return (
                   <Division key={`object_item_${index}`} style={{alignItems: 'end', gap: '12px'}} withoutBorder>
@@ -267,7 +267,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
             <Division style={{marginTop: '16px'}}>
               <span>{leadLetter(el)}</span>
             </Division>
-            {parseConfig(config[el], blockUuid, endpoint[el], el)}
+            {config[el] && parseConfig(config[el], blockUuid, endpoint[el], el)}
           </GroupedFields>
         );
       }
