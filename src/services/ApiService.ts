@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {ActionTypes} from 'store/types';
 
 type OptionsType = {
   url: string;
@@ -96,7 +97,8 @@ export const getDataActionByName = async (projectId: string, actionName: string)
 };
 
 export const saveAction = async (projectId: string, actionType: string, endpoint: string, payload: string) => {
-  const url = API.defaults.baseURL + `projects/${projectId}/admin/${actionType}/${endpoint}`;
+  const keyType = actionType === ActionTypes.action ? 'actions' : actionType;
+  const url = API.defaults.baseURL + `projects/${projectId}/admin/${keyType}/${endpoint}`;
   return callApi(url, payload, 'PUT', undefined, undefined, {
     'Content-Type': 'application/javascript',
   });

@@ -30,10 +30,10 @@ export const SaveAppWrapper: React.FC<unknown> = () => {
       });
 
       const actionsPromises: Promise<any>[] = actions.map((item) => {
-        return saveAction(projectID, item.type!, item.action, item.object);
+        return saveAction(projectID, item.type, item.action, item.object);
       });
       const deletedActionsPromises: Promise<any>[] = deletedActions.map((item) => {
-        return deleteAction(projectID, item.type!, item.action);
+        return deleteAction(projectID, item.type, item.action);
       });
       await editProject(projectID, JSON.stringify({...currentProject, icon: undefined}));
       Promise.all([

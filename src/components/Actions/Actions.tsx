@@ -17,7 +17,7 @@ const Actions: React.FC<unknown> = () => {
         ...state.actions.actions.map((item) => ({...item, type: ActionTypes.action})),
         ...state.actions.data.map((item) => ({...item, type: ActionTypes.data})),
       ],
-      'action',
+      ActionTypes.action,
       'asc'
     )
   );

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import SelectBase from 'react-select';
 import {ISelect} from './types';
 import {Input, Label} from 'components/controls';
@@ -8,6 +8,7 @@ import {baseStyleSelect} from './style';
 import {getActionsList, getDataActionsList, getScreenesList} from 'services/ApiService';
 import {Indicator, Item, TabsContainer} from './Select.styled';
 import {AnimateSharedLayout} from 'framer-motion';
+import {ActionTypes} from 'store/types';
 
 export const Select = React.memo((props: ISelect) => {
   const {onChange, options, value, className, label, menuPlacement, styles, clearable} = props;
@@ -20,10 +21,10 @@ export const Select = React.memo((props: ISelect) => {
         if (value.indexOf('screen') === 0) {
           return menus[0];
         }
-        if (value.indexOf('action') === 0) {
+        if (value.indexOf(ActionTypes.action) === 0) {
           return menus[1];
         }
-        if (value.indexOf('data') === 0) {
+        if (value.indexOf(ActionTypes.data) === 0) {
           return menus[2];
         }
       }
