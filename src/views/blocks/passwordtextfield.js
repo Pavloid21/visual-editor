@@ -26,7 +26,7 @@ export const Container = styled.div`
     color: ${(props) => props.textColor || 'transparent'};
     background-color: ${(props) => props.backgroundColor || 'transparent'};
     box-sizing: border-box;
-    text-align: ${(props) => props.textAlignment};
+    text-align: ${(props) => props.textAlignment || 'left'};
     font-size: ${(props) => props.fontSize || 12}px;
     & ::placeholder {
       color: ${(props) => props.placeholderColor || 'transparent'};
