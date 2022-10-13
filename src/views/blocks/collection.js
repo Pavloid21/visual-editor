@@ -175,7 +175,7 @@ const block = (state) => {
     },
     listItem: null,
     interactive: {
-    dataSourceSettings
+      dataSource: dataSourceSettings.dataSource,
     },
     config: {
       backgroundColor,

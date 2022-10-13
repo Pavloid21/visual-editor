@@ -78,6 +78,11 @@ function goThrough(array: any, uuid: string, extendedFields: any) {
   const arr = JSON.parse(JSON.stringify(array));
   for (const index in arr) {
     if (arr[index].uuid === uuid) {
+      arr[index].interactive.action = {
+        fields: {},
+        url: '',
+        ...arr[index].interactive.action,
+      };
       arr[index].interactive.action.fields = extendedFields;
     } else if (arr[index].listItems) {
       arr[index].listItems = goThrough(arr[index].listItems, uuid, extendedFields);
@@ -111,7 +116,7 @@ export const removeActionField = createAction('layout/removeActionField', (uuid:
   const {layout: state} = store;
   const targetBlock = findInTree(state.blocks, uuid);
 
-  const extendedFields = {...get(targetBlock, 'interactive.action.fields', [])};
+  const extendedFields = {...get(targetBlock, 'interactive.action.fields', {})};
   delete extendedFields[key];
 
   let extendedItems = [...get(state, 'blocks', [])];
@@ -123,40 +128,43 @@ export const removeActionField = createAction('layout/removeActionField', (uuid:
   };
 });
 
-export const changeKeyActionField = createAction('layout/changeKeyActionField', (uuid: string, n: number, nextValue: string, isValue = false) => {
-  const store = rootStore.getState();
-  const {layout: state} = store;
-  const targetBlock = findInTree(state.blocks, uuid);
+export const changeKeyActionField = createAction(
+  'layout/changeKeyActionField',
+  (uuid: string, n: number, nextValue: string, isValue = false) => {
+    const store = rootStore.getState();
+    const {layout: state} = store;
+    const targetBlock = findInTree(state.blocks, uuid);
 
-  const extendedFields = {...get(targetBlock, 'interactive.action.fields', {})};
-  let fields: Record<string, string> = {};
-  const targetFieldKey = Object.keys(extendedFields)[n];
-  const order = Object.keys(extendedFields);
-  if (isValue) {
-    fields = {
-      ...extendedFields,
-      [targetFieldKey]: nextValue
+    const extendedFields = {...get(targetBlock, 'interactive.action.fields', {})};
+    let fields: Record<string, string> = {};
+    const targetFieldKey = Object.keys(extendedFields)[n];
+    const order = Object.keys(extendedFields);
+    if (isValue) {
+      fields = {
+        ...extendedFields,
+        [targetFieldKey]: nextValue,
+      };
+    } else {
+      const value = extendedFields[targetFieldKey];
+      delete extendedFields[targetFieldKey];
+      order.forEach((key: string, index: number) => {
+        if (index !== n) {
+          fields[key] = extendedFields[key];
+        } else {
+          fields[nextValue] = value;
+        }
+      });
+    }
+
+    let extendedItems = [...get(state, 'blocks', [])];
+
+    extendedItems = goThrough(extendedItems, uuid, fields);
+
+    return {
+      payload: extendedItems,
     };
-  } else {
-    const value = extendedFields[targetFieldKey];
-    delete extendedFields[targetFieldKey];
-    order.forEach((key: string, index: number) => {
-      if (index !== n) {
-        fields[key] = extendedFields[key]; 
-      } else {
-        fields[nextValue] = value;
-      }
-    });
   }
-
-  let extendedItems = [...get(state, 'blocks', [])];
-
-  extendedItems = goThrough(extendedItems, uuid, fields);
-
-  return {
-    payload: extendedItems,
-  };
-});
+);
 
 export const addTopAppBarButton = createAction('layout/addTopAppBarButton', () => {
   const store = rootStore.getState();

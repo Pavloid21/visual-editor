@@ -133,7 +133,7 @@ export const interactive = {
     url: {
       type: 'select',
       name: 'Action URL',
-      action_types: 'actions,screens',
+      action_types: 'actions,screens,data,other',
     },
     method: {
       type: 'select',
