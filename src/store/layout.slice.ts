@@ -251,7 +251,7 @@ export const changeBlockData = createAction('layout/changeBlockData', (payload: 
     getEnrichedBlockConfig(findInTree(newBlocks.blocks, payload.blockUuid)) ||
     (payload.blockUuid === state.bottomBar?.uuid ? newBlocks.bottomBar : newBlocks.topAppBar);
   if (payload.parentKey && Array.isArray(payload.parentKey)) {
-    element.settingsUI[payload.parentKey[1]][payload.parentKey[0]][payload.key] = payload.value;
+    element.interactive.rightButtons[0].tintColor = payload.value;
   } else if (payload.parentKey) {
     const findDataBlock = (data: any, parentKey: string, key: string) => {
       let ref: any = null;

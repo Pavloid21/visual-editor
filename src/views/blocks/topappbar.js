@@ -7,6 +7,7 @@ import {backgroundColor} from 'views/configs';
 import {Device} from 'containers/MobileSelect/consts';
 import {setCorrectImageUrl} from 'utils';
 import {useSelector} from 'react-redux';
+import {CustomSvg} from 'components/CustomSvg';
 
 const TopAppBar = styled.div`
   padding: 16px;
@@ -44,12 +45,18 @@ const TopAppBar = styled.div`
 `;
 
 const Component = ({settingsUI, ...props}) => {
-  const [checkIcon, setCheckIcon] = useState({isIcon: false, url: ''});
+  const [checkIcon, setCheckIcon] = useState({isIcon: false, url: '', colorSvg: ''});
   const {id} = useSelector(state => state.project);
 
   useEffect(() => {
     if(props.interactive.rightButtons.length) {
-      setCheckIcon({isIcon: true, url: props.interactive.rightButtons[0].iconUrl});
+      const {iconUrl, tintColor} = props.interactive.rightButtons[0];
+
+      setCheckIcon({
+        isIcon: true,
+        url: iconUrl,
+        colorSvg: tintColor
+      });
     }
 
     return () => setCheckIcon({isIcon: false, url: ''});
@@ -59,7 +66,11 @@ const Component = ({settingsUI, ...props}) => {
   <Wrapper id={props.id} style={{padding: 0, width: '100%'}} sizeModifier='FULLWIDTH'>
     <TopAppBar {...settingsUI} {...props}>
       <label>{settingsUI?.title}</label>
-      {checkIcon.isIcon && <img src={setCorrectImageUrl(checkIcon.url, id)} />}
+        {checkIcon.colorSvg ? (
+          <CustomSvg fill={checkIcon.colorSvg} src={setCorrectImageUrl(checkIcon.url, id)} />
+          ) : (
+            <img src={setCorrectImageUrl(checkIcon.url, id)} />
+          )}
     </TopAppBar>
   </Wrapper>
   );

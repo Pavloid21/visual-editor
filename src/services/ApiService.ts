@@ -6,7 +6,7 @@ type OptionsType = {
   headers: any;
   credentials: string;
   data: string | null;
-  responseType: 'blob' | 'json';
+  responseType?: 'blob' | 'json' | 'text';
   params: any;
 };
 
@@ -20,7 +20,7 @@ export const callApi = async (
   url: string,
   data: any,
   method: 'POST' | 'GET' | 'PUT' | 'DELETE',
-  responseType?: 'blob',
+  responseType?: 'blob' | 'text' | 'json',
   params?: any,
   headers?: any
 ): Promise<any> => {
@@ -30,7 +30,7 @@ export const callApi = async (
     headers: {...API.defaults.headers, ...headers},
     credentials: 'include',
     data: data || null,
-    responseType: responseType ? 'blob' : 'json',
+    responseType,
     params: params || null,
   };
   try {
@@ -146,4 +146,8 @@ export const applyTemplate = async (templateId: string, payload: string) => {
   return callApi(url, payload, 'POST', undefined, undefined, {
     'Content-Type': 'application/json',
   });
+};
+
+export const getSrcImageSvg = async (src: string) => {
+  return callApi(src, null, 'GET', 'text');
 };
