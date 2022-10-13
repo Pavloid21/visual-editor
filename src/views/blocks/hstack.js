@@ -54,7 +54,7 @@ const HStack = styled.div`
       case 'RIGHT':
         return 'auto 0 auto auto';
       default:
-        return '0 0';
+        return '0 auto auto auto';
     }
   }};
   width: ${(props) => getSizeStyle('width', props)};
