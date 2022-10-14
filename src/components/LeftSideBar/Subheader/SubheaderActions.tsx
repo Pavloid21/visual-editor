@@ -1,6 +1,6 @@
 import {SideBarSubheader} from 'components';
 import {ReactComponent as Plus} from 'assets/plus.svg';
-import React from 'react';
+import React, {ChangeEvent, MouseEventHandler} from 'react';
 import {Search} from 'components/SideBarHeader/SideBarHeader.styled';
 import {Input} from 'components/controls';
 import FilterAction from 'components/Actions/FilterAction';
@@ -16,22 +16,24 @@ const SubheaderActions: React.FC<TSideBarSubheaderActions> = ({
   setActiveTab,
   handleAddAction,
 }) => {
-  const setClassTabs = (index: number) => activeTab === index ? 'tab_active' : '';
+  const getClassTabById = (index: number) => activeTab === index ? 'tab_active' : '';
+
+  const handlerClickAction = (event: React.MouseEvent<HTMLDivElement>) => {
+    const activeTab = +((event.target as HTMLDivElement)?.dataset?.tabId || 0);
+    setActiveTab(activeTab);
+  };
 
   return (
     <>
       <SideBarSubheader>
-        <div className="actions_tab" onClick={(event) => {
-          const activeTab = +((event.target as HTMLDivElement)?.dataset?.tabId || 0);
-          setActiveTab(activeTab);
-        }}>
-          <span data-tab-id={0} className={setClassTabs(0)}>
+        <div className="actions_tab" onClick={handlerClickAction}>
+          <span data-tab-id={0} className={getClassTabById(0)}>
             Actions
           </span>
-          <span data-tab-id={1} className={setClassTabs(1)}>
+          <span data-tab-id={1} className={getClassTabById(1)}>
             Cron Tasks
           </span>
-          <span data-tab-id={2} className={setClassTabs(2)}>
+          <span data-tab-id={2} className={getClassTabById(2)}>
             Push
           </span>
         </div>
