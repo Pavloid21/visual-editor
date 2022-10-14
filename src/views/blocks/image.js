@@ -13,7 +13,8 @@ import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
 import {getSizeStyle} from 'views/utils/styles/size';
 import {useSelector} from 'react-redux';
-import {setCorrectImageUrl} from 'utils';
+import {setCorrectImageUrl, getFieldValue} from 'utils';
+import {CustomSvg} from 'components/CustomSvg';
 
 const Image = styled.img`
   display: flex;
@@ -57,15 +58,20 @@ const Image = styled.img`
 const Component = ({settingsUI, ...props}) => {
   const {id} = useSelector(state => state.project);
   const getCorrectImageUrl = setCorrectImageUrl(settingsUI.imageUrl, id);
+  const getExtension = getFieldValue(settingsUI.imageUrl);
 
   return (
     <Wrapper id={props.id} {...settingsUI} {...props}>
-      <Image
+      {getExtension === 'icons' ? (
+        <CustomSvg fill={settingsUI.iconTintColor} src={getCorrectImageUrl} />
+      ): (
+        <Image
         {...settingsUI}
         {...props}
         className="draggable"
         src={getCorrectImageUrl}
       />
+      )}
     </Wrapper>
   );
 };

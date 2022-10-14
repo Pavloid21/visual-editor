@@ -59,7 +59,7 @@ const Component = ({settingsUI, ...props}) => {
       });
     }
 
-    return () => setCheckIcon({isIcon: false, url: ''});
+    return () => setCheckIcon({isIcon: false, url: '', colorSvg: ''});
   }, [props.interactive.rightButtons.length]);
 
   return (
