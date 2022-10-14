@@ -64,13 +64,13 @@ const Component = ({settingsUI, ...props}) => {
     <Wrapper id={props.id} {...settingsUI} {...props}>
       {getExtension === 'icons' ? (
         <CustomSvg fill={settingsUI.iconTintColor} src={getCorrectImageUrl} />
-      ): (
+      ) : (
         <Image
-        {...settingsUI}
-        {...props}
-        className="draggable"
-        src={getCorrectImageUrl}
-      />
+          {...settingsUI}
+          {...props}
+          className="draggable"
+          src={getCorrectImageUrl}
+        />
       )}
     </Wrapper>
   );

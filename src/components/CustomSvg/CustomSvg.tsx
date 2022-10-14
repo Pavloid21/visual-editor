@@ -10,6 +10,11 @@ interface ICustomSvg {
 const CustomSvg = ({src, fill}: ICustomSvg) => {
   const [svgTemplate, setSvgTemplate] = useState<string>('');
   const [isLoader, setIsLoader] = useState<boolean>(false);
+  const [sizeSvg, setSizeSvg] = useState<string>(`${40 * 1.25}px`);
+
+  if(src === undefined) {
+    setSizeSvg('');
+  }
 
   useEffect(() => {
     getSrcImageSvg(src).then((res) => {
@@ -20,7 +25,12 @@ const CustomSvg = ({src, fill}: ICustomSvg) => {
 
   if(isLoader && svgTemplate) {
     return (
-      <CustomSvgStyled dangerouslySetInnerHTML={{__html: svgTemplate}} fill={fill} />
+      <CustomSvgStyled
+        dangerouslySetInnerHTML={{__html: svgTemplate}}
+        fill={fill}
+        width={sizeSvg}
+        height={sizeSvg}
+      />
     );
   }
   return null;
