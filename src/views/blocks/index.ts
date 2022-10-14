@@ -15,7 +15,6 @@ import topappbar from './topappbar';
 import divider from './divider';
 import list from './list';
 import collection from './collection';
-import bottomsheet from './bottomsheet';
 import webview from './webview';
 import calendar_text_field from './calendarField';
 import {Blocks} from './types';
@@ -37,7 +36,6 @@ const blocks: Blocks = {
   divider,
   list,
   collection,
-  bottomsheet,
   webview,
   screen,
   calendar_text_field
@@ -58,7 +56,6 @@ export const gallery: Record<string, any> = {
   divider,
   list,
   collection,
-  bottomsheet,
   webview,
   // screen,
 };
