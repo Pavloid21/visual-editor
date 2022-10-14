@@ -20,7 +20,7 @@ import {addAction} from 'store/actions.slice';
 import {setActiveTab as setActiveTabAction} from 'store/config.slice';
 import {saveCode} from 'store/code.slice';
 import {cloneBlock, deleteBlock, selectScreen, setLayout, setSelectedBlock, setSnippet} from 'store/layout.slice';
-import type {RootStore} from 'store/types';
+import {RootStore, ActionTypes} from 'store/types';
 import {Bar} from 'containers/Project/Modal/Modal.styled';
 import {ReactComponent as Close} from 'assets/close.svg';
 import {screenTemplates as defaultTemplates} from 'constants/screenTemplates';
@@ -325,6 +325,7 @@ const LeftSidebar: React.FC<unknown> = () => {
     const added = {
       action: 'new_action',
       object: '',
+      type: ActionTypes.action
     };
     dispatch(addAction(added));
   }, [dispatch]);

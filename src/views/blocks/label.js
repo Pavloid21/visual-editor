@@ -42,10 +42,10 @@ const Label = styledComponents.div`
     display: block;
     width: ${(props) => getSizeStyle('width', props)};
     height: ${(props) => getSizeStyle('height', props)};
-    text-align: ${(props) => props.textAlignment};
-    color: ${(props) => props.textColor || '#FFFFFF00'};
-    font-size: ${(props) => props.fontSize}px;
-    background-color: ${(props) => props.backgroundColor || '#FFFFFF00'};
+    text-align: ${(props) => props.textAlignment || 'left'};
+    color: ${(props) => props.textColor || 'transparent'};
+    font-size: ${(props) => props.fontSize || 12}px;
+    background-color: ${(props) => props.backgroundColor || 'transparent'};
     font-weight: ${(props) => {
       switch (props.fontWeight) {
         case 'THIN':
@@ -70,10 +70,10 @@ const Label = styledComponents.div`
           return 400;
       }
     }};
-    padding-top: ${(props) => props.padding?.top}px;
-    padding-bottom: ${(props) => props.padding?.bottom}px;
-    padding-left: ${(props) => props.padding?.left}px;
-    padding-right: ${(props) => props.padding?.right}px;
+    padding-top: ${(props) => props.padding?.top || 0}px;
+    padding-bottom: ${(props) => props.padding?.bottom || 0}px;
+    padding-left: ${(props) => props.padding?.left || 0}px;
+    padding-right: ${(props) => props.padding?.right || 0}px;
   }
 `;
 

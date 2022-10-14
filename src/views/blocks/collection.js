@@ -30,10 +30,10 @@ const Collection = styled.div`
   height: ${(props) => getSizeStyle('height', props)};
   background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
   display: flex;
-  padding-top: ${(props) => props.padding?.top}px;
-  padding-bottom: ${(props) => props.padding?.bottom}px;
-  padding-left: ${(props) => props.padding?.left}px;
-  padding-right: ${(props) => props.padding?.right}px;
+  padding-top: ${(props) => props.padding?.top || 0}px;
+  padding-bottom: ${(props) => props.padding?.bottom || 0}px;
+  padding-left: ${(props) => props.padding?.left || 0}px;
+  padding-right: ${(props) => props.padding?.right || 0}px;
   flex-direction: column;
   box-sizing: border-box;
   ${(props) => {
@@ -57,7 +57,7 @@ const Collection = styled.div`
     grid-template-rows: repeat(${(props) => props.collectionUiConfig?.itemsInVertical}, ${(props) => +props.collectionUiConfig?.pointHeight > 0 ? +props.collectionUiConfig?.pointHeight + 'px' : '1fr'});
     overflow-x: inherit;
     overflow-y: inherit;
-    grid-gap: ${(props) => props.spacing}px;
+    grid-gap: ${(props) => props.spacing || 0}px;
     background-color: ${(props) => props.collectionUiConfig?.cellBackgroundColor || 'transparent'};
 }
 `;
@@ -175,7 +175,7 @@ const block = (state) => {
     },
     listItem: null,
     interactive: {
-    dataSourceSettings
+      dataSource: dataSourceSettings.dataSource,
     },
     config: {
       backgroundColor,

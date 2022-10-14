@@ -133,7 +133,7 @@ export const interactive = {
     url: {
       type: 'select',
       name: 'Action URL',
-      action_types: 'actions,screens'
+      action_types: 'actions,screens,data,other',
     },
     method: {
       type: 'select',
@@ -142,6 +142,14 @@ export const interactive = {
         {label: 'Get', value: 'get'},
         {label: 'Post', value: 'post'},
       ],
+    },
+    fields: {
+      type: 'object',
+      properties: {
+        key: {type: 'string', name: 'Key'},
+        value: {type: 'string', name: 'Value'},
+      }
+
     },
     clearAppSettings: {
       type: 'select',
@@ -170,37 +178,37 @@ export const interactive = {
     confirmationDialog: {
       title: {
         type: 'string',
-        name: 'Title'
+        name: 'Title',
       },
       message: {
         type: 'string',
-        name: 'Message'
+        name: 'Message',
       },
       confirmText: {
         type: 'string',
-        name: 'Confirm text'
+        name: 'Confirm text',
       },
       cancelledText: {
         type: 'string',
-        name: 'Cancelled text'
+        name: 'Cancelled text',
       },
     },
     callEmailMessengersHolder: {
       phoneNumber: {
         type: 'string',
-        name: 'Phone number'
+        name: 'Phone number',
       },
       emailAddress: {
         type: 'string',
-        name: 'Email address'
+        name: 'Email address',
       },
       packageName: {
         type: 'string',
-        name: 'Package name'
+        name: 'Package name',
       },
       urlApiMessenger: {
         type: 'string',
-        name: 'Api messenger'
+        name: 'Api messenger',
       },
     },
   },
@@ -209,15 +217,15 @@ export const dataSourceSettings = {
   dataSource: {
     type: 'select',
     name: 'Data source',
-    action_types: 'data'
+    action_types: 'data',
   },
   startPage: {
-    type: 'number', 
-    name: 'Start page'
+    type: 'number',
+    name: 'Start page',
   },
   pageSize: {
-    type: 'number', 
-    name: 'Page size'
+    type: 'number',
+    name: 'Page size',
   },
 };
 export const metricStyle = {
@@ -256,7 +264,7 @@ export const systemCalendar = {
       {label: 'Calendar with time', value: 'CALENDAR_WITH_SELECTING_TIME '},
       {label: 'Calendar', value: 'CALENDAR'},
       {label: 'Wheel calendar', value: 'WHEEL_CALENDAR'},
-    ]
+    ],
   },
   timeFormat: {
     type: 'select',
@@ -268,25 +276,25 @@ export const systemCalendar = {
       {label: 'DD.MM.YYYY HH:mm', value: 'DD.MM.YYYY HH:mm'},
       {label: 'DD-MM-YYYY HH:mm', value: 'DD-MM-YYYY HH:mm'},
       {label: 'DD/MM/YYYY HH:mm', value: 'DD/MM/YYYY HH:mm'},
-    ]
-  }
+    ],
+  },
 };
 
 export const iconSelectedColor = {
   type: 'color',
-    name: 'Icon selected color',
+  name: 'Icon selected color',
 };
 export const iconUnselectedColor = {
   type: 'color',
-    name: 'Icon unselected color',
+  name: 'Icon unselected color',
 };
 export const textSelectedColor = {
   type: 'color',
-    name: 'Text selected color',
+  name: 'Text selected color',
 };
 export const textUnselectedColor = {
   type: 'color',
-    name: 'Text unselected color',
+  name: 'Text unselected color',
 };
 export const showUnselectedText = {
   type: 'select',

@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import actionTypes from 'constants/actionTypes';
-import type {ActionItem, Actions} from './types';
+import {ActionItem, Actions, ActionTypes} from './types';
 
 const initialState: Actions = {
   actions: [],
@@ -32,7 +32,7 @@ const actionsSlice = createSlice({
     },
     deleteAction: (state, action: PayloadAction<ActionItem | null>) => {
       let removed: ActionItem[] = [];
-      if (action.payload?.type === 'action') {
+      if (action.payload?.type === ActionTypes.action) {
         const actions = [...state.actions];
         state.actions.forEach((item, index) => {
           if (item.action === action.payload?.action) {
@@ -40,7 +40,7 @@ const actionsSlice = createSlice({
           }
         });
         state.deleted.actions = removed;
-      } else if (action.payload?.type === 'data') {
+      } else if (action.payload?.type === ActionTypes.data) {
         const data = [...state.data];
         state.data.forEach((item, index) => {
           if (item.action === action.payload?.action) {

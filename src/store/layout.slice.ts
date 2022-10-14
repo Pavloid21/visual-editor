@@ -8,13 +8,7 @@ import type {BlockItem, EditScreenNamePayloadAction, Layout} from './types';
 import {blockStateUnsafeSelector} from './selectors';
 import rootStore from 'store';
 import {getKeyByUnit} from 'utils/units';
-import {
-  cloneToList,
-  createBlockByConfig,
-  findInTree,
-  getEnrichedBlockConfig,
-  removeFromList
-} from 'utils/blocks';
+import {cloneToList, createBlockByConfig, findInTree, getEnrichedBlockConfig, removeFromList} from 'utils/blocks';
 
 type ChangeUnitsPayloadAction = {
   blockUuid: string;
@@ -80,6 +74,98 @@ export const addBottomBarItem = createAction('layout/addBottomBarItem', () => {
   };
 });
 
+function goThrough(array: any, uuid: string, extendedFields: any) {
+  const arr = JSON.parse(JSON.stringify(array));
+  for (const index in arr) {
+    if (arr[index].uuid === uuid) {
+      arr[index].interactive.action = {
+        fields: {},
+        url: '',
+        ...arr[index].interactive.action,
+      };
+      arr[index].interactive.action.fields = extendedFields;
+    } else if (arr[index].listItems) {
+      arr[index].listItems = goThrough(arr[index].listItems, uuid, extendedFields);
+    }
+  }
+  return arr;
+}
+
+export const addActionField = createAction('layout/addActionField', (uuid: string) => {
+  const store = rootStore.getState();
+  const {layout: state} = store;
+  const targetBlock = findInTree(state.blocks, uuid);
+
+  let extendedFields = {...get(targetBlock, 'interactive.action.fields', {})};
+  extendedFields = {
+    ...extendedFields,
+    key: 'value',
+  };
+
+  let extendedItems = [...get(state, 'blocks', [])];
+
+  extendedItems = goThrough(extendedItems, uuid, extendedFields);
+
+  return {
+    payload: extendedItems,
+  };
+});
+
+export const removeActionField = createAction('layout/removeActionField', (uuid: string, key: string) => {
+  const store = rootStore.getState();
+  const {layout: state} = store;
+  const targetBlock = findInTree(state.blocks, uuid);
+
+  const extendedFields = {...get(targetBlock, 'interactive.action.fields', {})};
+  delete extendedFields[key];
+
+  let extendedItems = [...get(state, 'blocks', [])];
+
+  extendedItems = goThrough(extendedItems, uuid, extendedFields);
+
+  return {
+    payload: extendedItems,
+  };
+});
+
+export const changeKeyActionField = createAction(
+  'layout/changeKeyActionField',
+  (uuid: string, n: number, nextValue: string, isValue = false) => {
+    const store = rootStore.getState();
+    const {layout: state} = store;
+    const targetBlock = findInTree(state.blocks, uuid);
+
+    const extendedFields = {...get(targetBlock, 'interactive.action.fields', {})};
+    let fields: Record<string, string> = {};
+    const targetFieldKey = Object.keys(extendedFields)[n];
+    const order = Object.keys(extendedFields);
+    if (isValue) {
+      fields = {
+        ...extendedFields,
+        [targetFieldKey]: nextValue,
+      };
+    } else {
+      const value = extendedFields[targetFieldKey];
+      delete extendedFields[targetFieldKey];
+      order.forEach((key: string, index: number) => {
+        if (index !== n) {
+          fields[key] = extendedFields[key];
+        } else {
+          fields[nextValue] = value;
+        }
+      });
+    }
+
+    let extendedItems = [...get(state, 'blocks', [])];
+
+    extendedItems = goThrough(extendedItems, uuid, fields);
+
+    return {
+      payload: extendedItems,
+    };
+  }
+);
+
 export const addTopAppBarButton = createAction('layout/addTopAppBarButton', () => {
   const store = rootStore.getState();
   const {layout: state} = store;
@@ -97,7 +183,7 @@ export const addTopAppBarButton = createAction('layout/addTopAppBarButton', () =
 export const pushBlockInside = createAction('layout/pushBlockInside', (payload) => {
   if (['bottombar', 'topappbar'].includes(payload.blockId)) {
     return {
-      payload: null
+      payload: null,
     };
   }
 
@@ -127,12 +213,12 @@ export const pushBlockInside = createAction('layout/pushBlockInside', (payload) 
   // create next blocks model
   const replaceTargetBlock = (blocks: BlockItem[]): BlockItem[] =>
     blocks.map((block) => {
-      if (target && (block.uuid === payload.uuid)) {
+      if (target && block.uuid === payload.uuid) {
         return target;
       } else if (block.listItems) {
         return {
           ...block,
-          listItems: replaceTargetBlock(block.listItems)
+          listItems: replaceTargetBlock(block.listItems),
         };
       }
       return block;
@@ -140,7 +226,7 @@ export const pushBlockInside = createAction('layout/pushBlockInside', (payload) 
   const nextBlocks = replaceTargetBlock(state.blocks);
 
   return {
-    payload: nextBlocks
+    payload: nextBlocks,
   };
 });
 
@@ -171,11 +257,9 @@ export const changeBlockData = createAction('layout/changeBlockData', (payload: 
   });
   const element: BlockItem =
     getEnrichedBlockConfig(findInTree(newBlocks.blocks, payload.blockUuid)) ||
-    (payload.blockUuid === state.bottomBar?.uuid
-      ? newBlocks.bottomBar
-      : newBlocks.topAppBar);
+    (payload.blockUuid === state.bottomBar?.uuid ? newBlocks.bottomBar : newBlocks.topAppBar);
   if (payload.parentKey && Array.isArray(payload.parentKey)) {
-    element.settingsUI[payload.parentKey[1]][payload.parentKey[0]][payload.key] = payload.value;
+    element.interactive.rightButtons[0].tintColor = payload.value;
   } else if (payload.parentKey) {
     const findDataBlock = (data: any, parentKey: string, key: string) => {
       let ref: any = null;
@@ -191,7 +275,7 @@ export const changeBlockData = createAction('layout/changeBlockData', (payload: 
     const valueKeeper = findDataBlock(
       {settingsUI: element.settingsUI, interactive: element.interactive},
       payload.parentKey,
-      payload.key,
+      payload.key
     );
     if (valueKeeper) {
       valueKeeper[payload.key] = payload.value;
@@ -199,7 +283,10 @@ export const changeBlockData = createAction('layout/changeBlockData', (payload: 
       element.settingsUI[payload.parentKey] = {[payload.key]: payload.value};
     }
   } else {
-    if (element.settingsUI[payload.key] !== undefined || blocks[element.blockId](blockStateUnsafeSelector(store)).config[payload.key]) {
+    if (
+      element.settingsUI[payload.key] !== undefined ||
+      blocks[element.blockId](blockStateUnsafeSelector(store)).config[payload.key]
+    ) {
       element.settingsUI[payload.key] = payload.value;
     } else if (element.interactive) {
       element.interactive[payload.key] = payload.value;
@@ -219,8 +306,8 @@ export const removeProperty = createAction('layout/removeProperty', (payload) =>
     findInTree(newBlocks, payload.blockUuid) ||
     (payload.blockUuid === state.bottomBar?.uuid
       ? {
-        ...state.bottomBar,
-      }
+          ...state.bottomBar,
+        }
       : {...state.topAppBar});
   if (payload.parentKey && Array.isArray(payload.parentKey)) {
     delete element.settingsUI[payload.parentKey[1]][payload.parentKey[0]][payload.key];
@@ -282,7 +369,7 @@ export const switchElementType = createAction('layout/switchElementType', (paylo
     currentElement.settingsUI = {
       ...currentElement.settingsUI,
       placeholder: block.defaultData.placeholder,
-      text: block.defaultData.text
+      text: block.defaultData.text,
     };
   }
   return {
@@ -446,6 +533,15 @@ const layoutSlice = createSlice({
     });
     builder.addCase(addTopAppBarButton, (state, action) => {
       state.topAppBar.interactive.rightButtons = action.payload;
+    });
+    builder.addCase(addActionField, (state, action) => {
+      state.blocks = action.payload;
+    });
+    builder.addCase(removeActionField, (state, action) => {
+      state.blocks = action.payload;
+    });
+    builder.addCase(changeKeyActionField, (state, action) => {
+      state.blocks = action.payload;
     });
     builder.addCase(pushBlockInside, (state, action) => {
       if (action.payload) {

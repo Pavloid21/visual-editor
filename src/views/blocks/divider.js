@@ -2,15 +2,20 @@ import React from 'react';
 import styled from 'styled-components';
 import Wrapper from 'utils/wrapper';
 import divider from 'assets/divider.svg';
+import {getSizeStyle} from '../utils/styles/size';
 import store from 'store';
-import {backgroundColor, getSizeConfig} from 'views/configs';
+import {backgroundColor, padding, getSizeConfig} from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
 
 const HR = styled.hr`
   align-self: center;
-  background-color: ${(props) => props.backgroundColor || '#FFFFFF00'};
-  height: 100%;
-  width: 100%;
+  background-color: ${(props) => props.backgroundColor || 'transparent'};
+  height: ${(props) => getSizeStyle('height', props)};
+  width: ${(props) => getSizeStyle('width', props)};
+  padding-top: ${(props) => props.padding?.top || 0}px;
+  padding-bottom: ${(props) => props.padding?.bottom || 0}px;
+  padding-left: ${(props) => props.padding?.left || 0}px;
+  padding-right: ${(props) => props.padding?.right || 0}px;
 `;
 
 const Component = ({settingsUI, ...props}) => {
@@ -41,6 +46,7 @@ const block = (state) => {
     config: {
       size: getSizeConfig(blockState.deviceInfo.device),
       backgroundColor,
+      padding,
     },
   });
 };

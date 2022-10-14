@@ -7,20 +7,25 @@ import {
   backgroundColor,
   borderColor, borderWidth, getSizeConfig,
   imageUrl, interactive, shadowConfigBuilder,
-  shapeConfigBuilder,
+  shapeConfigBuilder, padding,
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
 import {getSizeStyle} from 'views/utils/styles/size';
 import {useSelector} from 'react-redux';
-import {setCorrectImageUrl} from 'utils';
+import {setCorrectImageUrl, getFieldValue} from 'utils';
+import {CustomSvg} from 'components/CustomSvg';
 
 const Image = styled.img`
   display: flex;
   box-sizing: border-box;
-  background-color: ${(props) => props.backgroundColor || '#FFFFFF00'};
-  border-width: ${(props) => props.borderWidth}px;
-  border-color: ${(props) => props.borderColor || '#FFFFFF00'};
+  background-color: ${(props) => props.backgroundColor || 'transparent'};
+  padding-top: ${(props) => props.padding?.top || 0}px;
+  padding-bottom: ${(props) => props.padding?.bottom || 0}px;
+  padding-left: ${(props) => props.padding?.left || 0}px;
+  padding-right: ${(props) => props.padding?.right || 0}px;
+  border-width: ${(props) => props.borderWidth  || 0}px;
+  border-color: ${(props) => props.borderColor || 'transparent'};
   border-style: solid;
   box-shadow: ${(props) => {
     const RGB = hexToRgb(props.shadow?.color);
@@ -36,7 +41,7 @@ const Image = styled.img`
       case 'SCALE_TO_FILL':
         return 'fill';
       default:
-        return 'initial';
+        return 'contain';
     }
   }};
   align-self: center;
@@ -53,15 +58,20 @@ const Image = styled.img`
 const Component = ({settingsUI, ...props}) => {
   const {id} = useSelector(state => state.project);
   const getCorrectImageUrl = setCorrectImageUrl(settingsUI.imageUrl, id);
+  const getExtension = getFieldValue(settingsUI.imageUrl);
 
   return (
     <Wrapper id={props.id} {...settingsUI} {...props}>
-      <Image
-        {...settingsUI}
-        {...props}
-        className="draggable"
-        src={getCorrectImageUrl}
-      />
+      {getExtension === 'icons' ? (
+        <CustomSvg fill={settingsUI.iconTintColor} src={getCorrectImageUrl} />
+      ) : (
+        <Image
+          {...settingsUI}
+          {...props}
+          className="draggable"
+          src={getCorrectImageUrl}
+        />
+      )}
     </Wrapper>
   );
 };
@@ -101,7 +111,7 @@ const block = (state) => {
       },
     },
     defaultInteractiveOptions: {
-      action: {url: '', target: ''},
+      action: {url: '', target: '', fields: {}},
     },
     interactive,
     config: {
@@ -117,6 +127,7 @@ const block = (state) => {
       },
       imageUrl,
       backgroundColor,
+      padding,
       borderWidth,
       borderColor,
       size: getSizeConfig(blockState.deviceInfo.device),

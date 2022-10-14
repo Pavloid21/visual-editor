@@ -127,7 +127,7 @@ const block = (state) => {
     previewImageUrl: card,
     category: 'Element',
     defaultInteractiveOptions: {
-      action: {url: '', target: ''},
+      action: {url: '', target: '', fields: {}},
     },
     defaultData: {
       elevation: 3,

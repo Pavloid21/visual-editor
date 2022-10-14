@@ -71,7 +71,7 @@ const VStack = styled.div`
     }
     return getSizeStyle('height', props);
   }};
-  background-color: ${(props) => props.backgroundColor || '#FFFFFF00'};
+  background-color: ${(props) => props.backgroundColor || 'transparent'};
   display: flex;
   justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
   align-items: ${(props) => {
@@ -87,15 +87,15 @@ const VStack = styled.div`
     }
   }};
   flex-direction: column;
-  padding-top: ${(props) => props.padding?.top}px;
-  padding-bottom: ${(props) => props.padding?.bottom}px;
-  padding-left: ${(props) => props.padding?.left}px;
-  padding-right: ${(props) => props.padding?.right}px;
+  padding-top: ${(props) => props.padding?.top || 0}px;
+  padding-bottom: ${(props) => props.padding?.bottom || 0}px;
+  padding-left: ${(props) => props.padding?.left || 0}px;
+  padding-right: ${(props) => props.padding?.right || 0}px;
   box-sizing: border-box;
-  border-width: ${(props) => props.borderWidth}px;
+  border-width: ${(props) => props.borderWidth || 0}px;
   border-style: ${(props) => props.borderColor ? 'solid' : 'none'};
-  border-color: ${(props) => props.borderColor || '#FFFFFF00'};
-  gap: ${(props) => props.spacing}px;
+  border-color: ${(props) => props.borderColor || 'transparent'};
+  gap: ${(props) => props.spacing || 0}px;
   border-radius: ${(props) => `
     ${props.corners?.topLeftRadius || 0}px
     ${props.corners?.topRightRadius || 0}px
@@ -197,7 +197,7 @@ const block = (state) => {
     previewImageUrl: vstack,
     category: 'Container',
     defaultInteractiveOptions: {
-      action: {url: '',  target: ''},
+      action: {url: '',  target: '', fields: {}},
     },
     complex: [
       {label: 'Vertical', value: 'VSTACK'},
@@ -231,6 +231,7 @@ const block = (state) => {
       },
     },
     listItems: [],
+    interactive,
     config: {
       alignment: alignmentConfig.horizontally,
       backgroundColor,
@@ -244,7 +245,6 @@ const block = (state) => {
       shadow: shadowConfigBuilder().withRadius.done(),
       corners,
     },
-    interactive,
   });
 };
 

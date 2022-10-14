@@ -8,3 +8,4 @@ export {default as head} from 'lodash/head';
 export {default as capitalize} from 'lodash/capitalize';
 export {default as cloneDeep} from 'lodash/cloneDeep';
 export {default as clone} from 'lodash/clone';
+export {default as debounce} from 'lodash/debounce';

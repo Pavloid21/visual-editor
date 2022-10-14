@@ -3,12 +3,12 @@ import TextArea, {TextAreaProps} from 'rc-textarea';
 import styled from 'styled-components';
 import {NeoInputProps} from './types';
 
-export const Container = styled.section<TextAreaProps & NeoInputProps>`
+export const Container = styled.section<TextAreaProps & NeoInputProps & {label?: string}>`
   position: relative;
   & svg {
     position: absolute;
     right: 12px;
-    top: 38px;
+    top: ${(props) => (props.label ? '38px' : '10px')};
     &:hover {
       cursor: pointer;
     }

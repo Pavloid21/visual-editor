@@ -34,7 +34,7 @@ export type ActionItem = {
   action: string;
   object: string;
   selected?: boolean;
-  type?: ActionTypes;
+  type: ActionTypes;
 };
 
 export type API = {

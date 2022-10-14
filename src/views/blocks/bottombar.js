@@ -5,7 +5,7 @@ import Wrapper from '../../utils/wrapper';
 import {iconSelectedColor, iconUnselectedColor, textSelectedColor, textUnselectedColor, showUnselectedText} from '../configs';
 
 const BottomBar = styled.div`
-  background-color: ${(props) => props.backgroundColor};
+  background-color: ${(props) => props.backgroundColor || 'transparent'};
   padding: 16px 0 16px 0;
   bottom: 0;
   margin-top: auto;
@@ -24,7 +24,7 @@ const BottomBar = styled.div`
     gap: 4px;
     & label {
       margin-bottom: 0;
-      color: ${(props) => props.textSelectedColor || '#FFFFFF00'};
+      color: ${(props) => props.textSelectedColor || 'transparent'};
     }
     & .item_icon {
       background-color: ${(props) => props.iconUnselectedColor};

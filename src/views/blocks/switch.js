@@ -6,6 +6,8 @@ import {
   backgroundColor,
   isActive,
   thumbOnColor,
+  interactive,
+  padding,
 } from 'views/configs';
 
 const Switch = styled.div`
@@ -16,11 +18,15 @@ const Switch = styled.div`
   margin-bottom: 0;
   z-index: 0;
   width: fit-content;
+  padding-top: ${(props) => props.padding?.top || 0}px;
+  padding-bottom: ${(props) => props.padding?.bottom || 0}px;
+  padding-left: ${(props) => props.padding?.left || 0}px;
+  padding-right: ${(props) => props.padding?.right || 0}px;
   & input:checked + span::before {
-    background-color: ${(props) => props.thumbOnColor};
+    background-color: ${(props) => props.thumbOnColor || 'transparent'};
   }
   & input:checked + span::after {
-    background-color: ${(props) => props.thumbOnColor};
+    background-color: ${(props) => props.thumbOnColor || 'transparent'};
     transform: translateX(16px);
   }
   & input {
@@ -35,14 +41,14 @@ const Switch = styled.div`
     border-radius: 50%;
     width: 40px;
     height: 40px;
-    background-color: ${(props) => props.backgroundColor};
+    background-color: ${(props) => props.backgroundColor || 'transparent'};
     outline: none;
     opacity: 0;
     transform: scale(1);
     transition: opacity 0.3s 0.1s, transform 0.2s 0.1s;
     &:checked {
       right: -10px;
-      background-color: ${(props) => props.thumbOnColor};
+      background-color: ${(props) => props.thumbOnColor || 'transparent'};
     }
   }
   & span {
@@ -61,7 +67,7 @@ const Switch = styled.div`
       height: 14px;
       vertical-align: top;
       transition: background-color 0.2s, opacity 0.2s;
-      background-color: ${(props) => props.backgroundColor}
+      background-color: ${(props) => props.backgroundColor || 'transparent'}
     }
     &::after {
       content: "";
@@ -105,27 +111,12 @@ const block = () => ({
     backgroundColor,
     thumbOnColor,
     isActive,
+    padding,
   },
   defaultInteractiveOptions: {
-    action: {url: '', target: ''},
+    action: {url: '', fields: {}},
   },
-  interactive: {
-    action: {
-      url: {
-        type: 'select',
-        name: 'Action URL',
-        action_types: 'actions,data'
-      },
-      method: {
-        type: 'select',
-        name: 'Method',
-        options: [
-          {label: 'Get', value: 'get'},
-          {label: 'Post', value: 'post'},
-        ],
-      },
-    },
-  },
+  interactive,
 });
 
 export default block;

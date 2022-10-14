@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {ActionTypes} from 'store/types';
 
 type OptionsType = {
   url: string;
@@ -6,7 +7,7 @@ type OptionsType = {
   headers: any;
   credentials: string;
   data: string | null;
-  responseType: 'blob' | 'json';
+  responseType?: 'blob' | 'json' | 'text';
   params: any;
 };
 
@@ -20,7 +21,7 @@ export const callApi = async (
   url: string,
   data: any,
   method: 'POST' | 'GET' | 'PUT' | 'DELETE',
-  responseType?: 'blob',
+  responseType?: 'blob' | 'text' | 'json',
   params?: any,
   headers?: any
 ): Promise<any> => {
@@ -30,7 +31,7 @@ export const callApi = async (
     headers: {...API.defaults.headers, ...headers},
     credentials: 'include',
     data: data || null,
-    responseType: responseType ? 'blob' : 'json',
+    responseType,
     params: params || null,
   };
   try {
@@ -96,7 +97,8 @@ export const getDataActionByName = async (projectId: string, actionName: string)
 };
 
 export const saveAction = async (projectId: string, actionType: string, endpoint: string, payload: string) => {
-  const url = API.defaults.baseURL + `projects/${projectId}/admin/${actionType}/${endpoint}`;
+  const keyType = actionType === ActionTypes.action ? 'actions' : actionType;
+  const url = API.defaults.baseURL + `projects/${projectId}/admin/${keyType}/${endpoint}`;
   return callApi(url, payload, 'PUT', undefined, undefined, {
     'Content-Type': 'application/javascript',
   });
@@ -146,4 +148,8 @@ export const applyTemplate = async (templateId: string, payload: string) => {
   return callApi(url, payload, 'POST', undefined, undefined, {
     'Content-Type': 'application/json',
   });
+};
+
+export const getSrcImageSvg = async (src: string) => {
+  return callApi(src, null, 'GET', 'text');
 };

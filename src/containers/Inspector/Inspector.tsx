@@ -3,8 +3,9 @@ import {useSelector, useDispatch} from 'react-redux';
 import blocks from 'views/blocks';
 import {ReactComponent as Trash} from 'assets/trash.svg';
 import {leadLetter} from 'constants/utils';
-import {Button, Input, UnitsInput, ColorPicker} from 'components/controls';
+import {Input, UnitsInput, ColorPicker} from 'components/controls';
 import {Division, GroupedFields, Select} from './Inspector.styled';
+import {ReactComponent as Plus} from 'assets/plus.svg';
 import {findInTree} from 'utils';
 import {
   addBottomBarItem,
@@ -15,6 +16,9 @@ import {
   removeProperty,
   addTopAppBarButton,
   removeTopAppBarButton,
+  addActionField,
+  removeActionField,
+  changeKeyActionField,
 } from 'store/layout.slice';
 import type {TInspector} from './types';
 import type {RootStore} from 'store/types';
@@ -70,6 +74,13 @@ const Inspector: React.FC<TInspector> = ({display}) => {
   const handleChangeElemType = useCallback(
     (blockId: string) => {
       dispatch(switchElementType(blockId));
+    },
+    [dispatch]
+  );
+
+  const handleChangeKeyActionField = useCallback(
+    (uuid, index, value, isValue = false) => {
+      dispatch(changeKeyActionField(uuid, index, value, isValue));
     },
     [dispatch]
   );
@@ -213,6 +224,42 @@ const Inspector: React.FC<TInspector> = ({display}) => {
               />
             </div>
           );
+        case 'object':
+          return (
+            <GroupedFields key={`section_${parentKey}_${index}`}>
+              <Division style={{marginTop: '16px'}}>
+                <span>{leadLetter(el)}</span>
+                <Plus className="icon" onClick={() => dispatch(addActionField(block.uuid))} />
+              </Division>
+              {block.interactive[parentKey] && Object.keys(block.interactive[parentKey][el] || {}).map((key: any, index: number) => {
+                const item = block.interactive[parentKey][el][key];
+                return (
+                  <Division key={`object_item_${index}`} style={{alignItems: 'end', gap: '12px'}} withoutBorder>
+                    <Input
+                      $clearable
+                      $isWide
+                      label="Key"
+                      value={key}
+                      onChange={(e) => {
+                        e.stopPropagation();
+                        handleChangeKeyActionField(block.uuid, index, e.target.value);
+                      }}
+                    />
+                    <Input $clearable $isWide label="Value" value={item} onChange={(e) => {
+                      e.stopPropagation();
+                      handleChangeKeyActionField(block.uuid, index, e.target.value, true);
+                    }}/>
+                    <Trash
+                      className="icon"
+                      onClick={(e) => {
+                        dispatch(removeActionField(block.uuid, key));
+                      }}
+                    />
+                  </Division>
+                );
+              })}
+            </GroupedFields>
+          );
       }
       if (endpoint && !Array.isArray(endpoint[el])) {
         return (
@@ -220,7 +267,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
             <Division style={{marginTop: '16px'}}>
               <span>{leadLetter(el)}</span>
             </Division>
-            {parseConfig(config[el], blockUuid, endpoint[el], el)}
+            {config[el] && parseConfig(config[el], blockUuid, endpoint[el], el)}
           </GroupedFields>
         );
       }
@@ -258,6 +305,12 @@ const Inspector: React.FC<TInspector> = ({display}) => {
         <div>
           <Division>
             <span>Navigation items</span>
+            <Plus
+              className="icon"
+              onClick={() => {
+                dispatch(addBottomBarItem());
+              }}
+            />
           </Division>
           {block.settingsUI.navigationItems.map((element: any, index: number) => {
             return (
@@ -279,19 +332,18 @@ const Inspector: React.FC<TInspector> = ({display}) => {
               </div>
             );
           })}
-          <Button
-            onClick={() => {
-              dispatch(addBottomBarItem());
-            }}
-          >
-            Add item
-          </Button>
         </div>
       )}
       {block.interactive?.rightButtons && (
         <div>
           <Division>
             <span>Right buttons</span>
+            <Plus
+              className="icon"
+              onClick={() => {
+                dispatch(addTopAppBarButton());
+              }}
+            />
           </Division>
           {block.interactive.rightButtons.map((element: any, index: number) => {
             return (
@@ -314,13 +366,6 @@ const Inspector: React.FC<TInspector> = ({display}) => {
               </div>
             );
           })}
-          <Button
-            onClick={() => {
-              dispatch(addTopAppBarButton());
-            }}
-          >
-            Add item
-          </Button>
         </div>
       )}
     </div>
