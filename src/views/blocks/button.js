@@ -19,8 +19,8 @@ import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
 import {getSizeStyle} from 'views/utils/styles/size';
 import {useSelector} from 'react-redux';
-import {setCorrectImageUrl} from 'utils';
-
+import {setCorrectImageUrl, getFieldValue} from 'utils';
+import {CustomSvg} from 'components/CustomSvg';
 
 const Button = styled.div`
   position: relative;
@@ -102,12 +102,17 @@ const Component = ({settingsUI, ...props}) => {
   const {text} = settingsUI;
   const {id} = useSelector(state => state.project);
   const getCorrectImageUrl = setCorrectImageUrl(settingsUI.imageUrl, id);
+  const getExtension = getFieldValue(settingsUI.imageUrl);
 
   return (
     <Wrapper id={props.id} {...settingsUI}>
       <Button className="draggable" {...settingsUI} {...props}>
         <span>{text}</span>
-        {getCorrectImageUrl && <img src={getCorrectImageUrl} />}
+        {getExtension === 'icons' ? (
+          <CustomSvg fill={settingsUI.iconTintColor} src={getCorrectImageUrl} />
+        ): (
+          <img src={getCorrectImageUrl} />
+        )}
       </Button>
     </Wrapper>
   );

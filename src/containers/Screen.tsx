@@ -199,7 +199,7 @@ const Screen: React.FC<any> = (props) => {
               }
             />
             <ColorPicker
-              debounceTimeout={500}
+              debouncetimeout={500}
               label="Background color"
               $isWide
               placeholder="Background color"
@@ -227,7 +227,7 @@ const Screen: React.FC<any> = (props) => {
               }
             />
             <ColorPicker
-              debounceTimeout={500}
+              debouncetimeout={500}
               label="Scrim color"
               $isWide
               placeholder="Scrim color"
