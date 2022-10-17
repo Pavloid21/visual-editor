@@ -67,6 +67,14 @@ export default createGlobalStyle`
     }
   }
 
+  .left-bar-image {
+    &.active {
+      & path {
+        fill: var(--main-color);
+      };
+    }
+  }
+
   .rst__tree {
     font-size: 16px;
     line-height: 20px;
@@ -83,6 +91,12 @@ export default createGlobalStyle`
 
   .tab_active {
     color: #333333 !important;
+  }
+
+  .actions_tab {
+    .tab_active {
+      border-bottom: 2px solid #333333;
+    }
   }
 
   pre {

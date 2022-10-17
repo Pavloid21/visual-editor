@@ -135,6 +135,11 @@ export type EditorMode = {
   dpi: number;
 };
 
+export type LeftBarMenu = {
+  activeTab: string,
+  filterAction: number
+}
+
 export type TScreenListOption = {
   label: string;
   value: string;

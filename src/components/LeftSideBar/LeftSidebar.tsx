@@ -3,21 +3,20 @@ import React, {useState, useEffect, useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import actionTypes from 'constants/actionTypes';
 import {Gallery} from 'containers/Gallery';
-import {Actions, ButtonSelector, Modal, SideBarHeader} from 'components';
-import SortableTree from '@nosferatu500/react-sortable-tree';
-import FileExplorerTheme from '@nosferatu500/theme-file-explorer';
-import {ReactComponent as Copy} from 'assets/copy.svg';
-import {ReactComponent as Trash} from 'assets/trash.svg';
-import models from 'views/blocks/index';
+import {Actions, ButtonSelector, LeftSideBarMenu, Modal, SideBarHeader} from 'components';
 import {v4} from 'uuid';
 import {getScreenesList, getScreenByName, getScreenTemplates, getTemplateData} from 'services/ApiService';
-import {BounceLoader} from 'react-spinners';
-import {css} from '@emotion/react';
-import Loader from '../Loader';
 import {useParams} from 'react-router-dom';
 import {observer, snippet, prepareTree, buildLayout, useModal} from 'utils';
-import {Container, DefaultTemplateWrapper, Icon, ModalContent, ScreenTitle, TemplateItem} from './LeftSideBar.styled';
-import {addAction, setSelectAction} from 'store/actions.slice';
+import {
+  Container,
+  DefaultTemplateWrapper,
+  ModalContent,
+  SideBarBody,
+  SideBarContent,
+  TemplateItem,
+} from './LeftSideBar.styled';
+import {addAction} from 'store/actions.slice';
 import {setActiveTab as setActiveTabAction} from 'store/config.slice';
 import {saveCode} from 'store/code.slice';
 import {cloneBlock, deleteBlock, selectScreen, setLayout, setSelectedBlock, setSnippet} from 'store/layout.slice';
@@ -25,17 +24,18 @@ import {RootStore, ActionTypes} from 'store/types';
 import {Bar} from 'containers/Project/Modal/Modal.styled';
 import {ReactComponent as Close} from 'assets/close.svg';
 import {screenTemplates as defaultTemplates} from 'constants/screenTemplates';
-import {Subheader} from './Subheader';
 import {setScreens} from 'store/screens.slice';
+import {Screens} from 'components/Screens';
+import {SubheaderScreens, SubheaderActions} from 'components/LeftSideBar/Subheader';
 
 const LeftSidebar: React.FC<unknown> = () => {
   const {
     topAppBar,
     bottomBar,
-    selectedBlockUuid: selectedBlock,
     selectedScreen,
     blocks: layout,
   } = useSelector((state: RootStore) => state.layout);
+  const activeTabMenu = useSelector((state: RootStore) => state.leftBarMenu.activeTab);
   const [loading, setLoading] = useState(false);
   const barState = useSelector((state: RootStore) => state.sideBar);
   const api = useSelector((state: RootStore) => state.api);
@@ -45,18 +45,14 @@ const LeftSidebar: React.FC<unknown> = () => {
   );
   const projectName = useSelector((state: RootStore) => state.project.name);
   const {project} = useParams();
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTabScreens, setActiveTabScreens] = useState(0);
+  const [activeTabActions, setActiveTabActions] = useState(0);
   const [availableScreenes, setScreenes] = useState<Record<string, any>[]>([]);
   const [treeData, setTree] = useState<Record<string, any>[]>([]);
-  const [load, setLoadScreen] = useState<Record<string, any>>();
+  const [load, setLoadScreen] = useState<{uuid: string, load: boolean}>();
   const [templates, setScreenTemplates] = useState<Record<string, any>[]>([]);
   const [itemModalOpen, setItemModalOpen] = useModal();
-  const override = css`
-    display: inline-block;
-    margin: 0 auto;
-    border-color: red;
-    margin-right: 6px;
-  `;
+
   const dispatch = useDispatch();
 
   const generatePromiseStack = useCallback(
@@ -395,82 +391,39 @@ const LeftSidebar: React.FC<unknown> = () => {
 
   return (
     <Container>
-      <div className="screen-list">
-        <SideBarHeader title={projectName} left />
-        <Subheader
-          activeTab={activeTab}
-          handleAddAction={handleAddAction}
-          handleAddScreen={handleAddScreen}
-          handleClick={() => {
-            setActiveTab(0);
-            dispatch(setSelectAction(null));
-          }}
-          setActiveTab={setActiveTab}
-        />
-        {activeTab === 0 && (
-          <div
-            style={{
-              height: 'calc(100% - 104px)',
-              overflow: 'auto',
-              padding: '14px',
-              position: 'relative',
-            }}
-          >
-            {loading ? (
-              <Loader loading={true} size={40} />
-            ) : (
-              <SortableTree
+      <SideBarHeader title={projectName} left />
+      <SideBarBody>
+        <LeftSideBarMenu />
+        <SideBarContent>
+          <div className="screen-list" style={{flex: 1}}>
+            {activeTabMenu === 'screen' &&
+              <SubheaderScreens
+                handleAddScreen={handleAddScreen}
+              />}
+            {activeTabMenu === 'action' &&
+              <SubheaderActions
+                activeTab={activeTabActions}
+                handleAddAction={handleAddAction}
+                setActiveTab={setActiveTabActions}
+              />}
+            {activeTabMenu === 'screen' && activeTabScreens === 0 &&
+              <Screens
+                loading={loading}
                 treeData={treeData}
-                onChange={(treeData) => setTree(treeData)}
-                theme={FileExplorerTheme}
-                generateNodeProps={(extendedNode) => {
-                  return {
-                    title: (
-                      <section
-                        className={`node ${
-                          selectedBlock === extendedNode.node.subtitle || selectedScreen === extendedNode.node.uuid
-                            ? 'node_selected'
-                            : ''
-                        }`}
-                        onClick={async (event) => await handleItemClick(event, extendedNode)}
-                      >
-                        <ScreenTitle>
-                          {load?.load && load?.uuid === extendedNode.node.uuid ? (
-                            <BounceLoader loading={true} size={24} color="#F44532" css={override} />
-                          ) : (
-                            <Icon src={models[extendedNode.node?.title?.toLowerCase()]?.().previewImageUrl} />
-                          )}
-                          <span>{extendedNode.node.endpoint || extendedNode.node.title}</span>
-                        </ScreenTitle>
-                      </section>
-                    ),
-                    buttons: [
-                      <Copy
-                        className="icon"
-                        onClick={(event) => {
-                          extendedNode.node.subtitle === 'screen'
-                            ? handleCloneScreen(event, extendedNode.node.uuid)
-                            : handleCloneBlock(extendedNode.node.subtitle);
-                        }}
-                      />,
-                      <Trash
-                        className="icon"
-                        onClick={(event) =>
-                          extendedNode.node.subtitle === 'screen'
-                            ? handleDeleteScreen(event, extendedNode.node)
-                            : handleDeleteBlock(extendedNode.node.subtitle)
-                        }
-                      />,
-                    ],
-                  };
-                }}
-              />
-            )}
+                setTree={setTree}
+                handleItemClick={handleItemClick}
+                load={load}
+                handleCloneScreen={handleCloneScreen}
+                handleCloneBlock={handleCloneBlock}
+                handleDeleteScreen={handleDeleteScreen}
+                handleDeleteBlock={handleDeleteBlock}
+              />}
+            {activeTabMenu === 'action' && activeTabActions === 0 && <Actions />}
           </div>
-        )}
-        {activeTab === 1 && <Actions />}
-      </div>
-      <Gallery />
+          <Gallery />
+        </SideBarContent>
+      </SideBarBody>
+
       <Modal isActive={itemModalOpen} handleClose={() => setItemModalOpen(false)} style={{width: 'fit-content'}}>
         <Bar>
           <h3>Screens</h3>

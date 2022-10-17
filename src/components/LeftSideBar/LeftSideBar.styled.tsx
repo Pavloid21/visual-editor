@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  min-width: 422px;
+  min-width: 458px;
   background-color: #ffffff;
   overflow: hidden;
   display: flex;
@@ -13,16 +13,29 @@ export const Container = styled.div`
   & > .screen-list {
     flex: 1;
   }
+
+
+  @media (max-width: 1500px) {
+    min-width: 336px;
+  }
+`;
+
+export const SideBarContent = styled.div`
+  flex: 1;
+  height: calc(100vh - 120px);
+  overflow: hidden;
   & > div {
     overflow: hidden;
     & .rst__virtualScrollOverride > div {
       position: static !important;
     }
   }
+  display: flex;
+  flex-direction: column;
+`;
 
-  @media (max-width: 1500px) {
-    min-width: 300px;
-  }
+export const SideBarBody = styled.div`
+  display: flex;
 `;
 
 export const Icon = styled.img`

@@ -16,7 +16,6 @@ export const Header = styled.div`
 
 export const Subheader = styled.div`
   height: 44px;
-  border-bottom: 1px solid #e6e6e6;
   padding: 0 16px;
   display: flex;
   align-items: center;
@@ -63,4 +62,9 @@ export const WarningWrapper = styled.div`
     display: flex;
     gap: 16px;
   }
+`;
+
+export const Search = styled.div`
+  padding: 0 16px;
+  margin-bottom: 15px;
 `;
