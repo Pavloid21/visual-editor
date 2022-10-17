@@ -1,8 +1,11 @@
 import {SideBarSubheader} from 'components';
 import {ReactComponent as Plus} from 'assets/plus.svg';
-import React from 'react';
+import React, {useState} from 'react';
 import {Input} from 'components/controls';
 import {Search} from 'components/SideBarHeader/SideBarHeader.styled';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootStore} from '../../../store/types';
+import {setScreenNameFilter} from '../../../store/left-bar-menu.slice';
 
 type TSideBarSubheaderScreens = {
   handleAddScreen: () => void;
@@ -11,6 +14,12 @@ type TSideBarSubheaderScreens = {
 const SubheaderScreens: React.FC<TSideBarSubheaderScreens> = ({
   handleAddScreen,
 }) => {
+  const dispatch = useDispatch();
+  const screenNameFilter = useSelector((state: RootStore) => state.leftBarMenu.screenNameFilter);
+  const setFilterValue = (e: any) => {
+    dispatch(setScreenNameFilter(e.target.value));
+  };
+
   return (
     <>
       <SideBarSubheader>
@@ -25,6 +34,8 @@ const SubheaderScreens: React.FC<TSideBarSubheaderScreens> = ({
         <Input
           $isWide
           placeholder="Screen name"
+          value={screenNameFilter}
+          onChange={setFilterValue}
         />
       </Search>
     </>

@@ -18,6 +18,9 @@ export type EditScreenNamePayloadAction = Action<string> & {
 export type Actions = {
   actions: ActionItem[];
   data: ActionItem[];
+  externals: ActionItem[];
+  push: ActionItem[];
+  cronTasks: ActionItem[];
   selected: ActionItem | null;
   deleted: {
     actions: ActionItem[];
@@ -28,6 +31,9 @@ export type Actions = {
 export enum ActionTypes {
   data = 'data',
   action = 'action',
+  push = 'push',
+  external = 'external',
+  cronTask = 'cronTask'
 }
 
 export type ActionItem = {
@@ -137,7 +143,10 @@ export type EditorMode = {
 
 export type LeftBarMenu = {
   activeTab: string,
-  filterAction: number
+  filterAction: number,
+  screenNameFilter: string,
+  actionNameFilter: string,
+  activeTabActions: number
 }
 
 export type TScreenListOption = {

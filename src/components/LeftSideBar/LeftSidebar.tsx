@@ -27,6 +27,7 @@ import {screenTemplates as defaultTemplates} from 'constants/screenTemplates';
 import {setScreens} from 'store/screens.slice';
 import {Screens} from 'components/Screens';
 import {SubheaderScreens, SubheaderActions} from 'components/LeftSideBar/Subheader';
+import {setActiveTabActions} from 'store/left-bar-menu.slice';
 
 const LeftSidebar: React.FC<unknown> = () => {
   const {
@@ -36,6 +37,7 @@ const LeftSidebar: React.FC<unknown> = () => {
     blocks: layout,
   } = useSelector((state: RootStore) => state.layout);
   const activeTabMenu = useSelector((state: RootStore) => state.leftBarMenu.activeTab);
+  const activeTabActions = useSelector((state: RootStore) => state.leftBarMenu.activeTabActions);
   const [loading, setLoading] = useState(false);
   const barState = useSelector((state: RootStore) => state.sideBar);
   const api = useSelector((state: RootStore) => state.api);
@@ -46,7 +48,7 @@ const LeftSidebar: React.FC<unknown> = () => {
   const projectName = useSelector((state: RootStore) => state.project.name);
   const {project} = useParams();
   const [activeTabScreens, setActiveTabScreens] = useState(0);
-  const [activeTabActions, setActiveTabActions] = useState(0);
+  // const [activeTabActions, setActiveTabActions] = useState(0);
   const [availableScreenes, setScreenes] = useState<Record<string, any>[]>([]);
   const [treeData, setTree] = useState<Record<string, any>[]>([]);
   const [load, setLoadScreen] = useState<{uuid: string, load: boolean}>();
@@ -418,7 +420,7 @@ const LeftSidebar: React.FC<unknown> = () => {
                 handleDeleteScreen={handleDeleteScreen}
                 handleDeleteBlock={handleDeleteBlock}
               />}
-            {activeTabMenu === 'action' && activeTabActions === 0 && <Actions />}
+            {activeTabMenu === 'action' && <Actions activeTabActions={activeTabActions} />}
           </div>
           <Gallery />
         </SideBarContent>

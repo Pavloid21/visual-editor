@@ -86,13 +86,23 @@ export const getDataActionsList = async (projectId: string) => {
   return callApi(url, null, 'GET');
 };
 
-export const getActionByName = async (projectId: string, actionName: string) => {
-  const url = API.defaults.baseURL + `projects/${projectId}/admin/actions/${actionName}`;
+export const getExternalActionsList = async (projectId: string) => {
+  const url = API.defaults.baseURL + `projects/${projectId}/admin/externalActions/`;
   return callApi(url, null, 'GET');
 };
 
-export const getDataActionByName = async (projectId: string, actionName: string) => {
-  const url = API.defaults.baseURL + `projects/${projectId}/admin/data/${actionName}`;
+export const getCronTaskList = async (projectId: string) => {
+  const url = API.defaults.baseURL + `projects/${projectId}/admin/cron/tasks/`;
+  return callApi(url, null, 'GET');
+};
+
+export const getPushList = async (projectId: string) => {
+  const url = API.defaults.baseURL + `projects/${projectId}/admin/push/defaultTopics/`;
+  return callApi(url, null, 'GET');
+};
+
+export const getActionByName = async (projectId: string, actionName: string, actionPath: string) => {
+  const url = API.defaults.baseURL + `projects/${projectId}/admin/${actionPath}/${actionName}`;
   return callApi(url, null, 'GET');
 };
 

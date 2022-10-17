@@ -1,13 +1,16 @@
 import {SideBarSubheader} from 'components';
 import {ReactComponent as Plus} from 'assets/plus.svg';
-import React, {ChangeEvent, MouseEventHandler} from 'react';
+import React from 'react';
 import {Search} from 'components/SideBarHeader/SideBarHeader.styled';
 import {Input} from 'components/controls';
 import FilterAction from 'components/Actions/FilterAction';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootStore} from '../../../store/types';
+import {setActionNameFilter} from '../../../store/left-bar-menu.slice';
 
 type TSideBarSubheaderActions = {
   activeTab: number;
-  setActiveTab: React.Dispatch<React.SetStateAction<number>>;
+  setActiveTab: any;
   handleAddAction: () => void;
 };
 
@@ -16,11 +19,18 @@ const SubheaderActions: React.FC<TSideBarSubheaderActions> = ({
   setActiveTab,
   handleAddAction,
 }) => {
-  const getClassTabById = (index: number) => activeTab === index ? 'tab_active' : '';
+  const dispatch = useDispatch();
+  const actionNameFilter = useSelector((state: RootStore) => state.leftBarMenu.actionNameFilter);
+  const setFilterValue = (e: any) => {
+    dispatch(setActionNameFilter(e.target.value));
+  };
+  const getClassTabById = (index: number) => {
+    return activeTab === index ? 'tab_active' : '';
+  };
 
   const handlerClickAction = (event: React.MouseEvent<HTMLDivElement>) => {
-    const activeTab = +((event.target as HTMLDivElement)?.dataset?.tabId || 0);
-    setActiveTab(activeTab);
+    const activeTabAction = +((event.target as HTMLDivElement)?.dataset?.tabId || 0);
+    dispatch(setActiveTab(activeTabAction));
   };
 
   return (
@@ -43,6 +53,8 @@ const SubheaderActions: React.FC<TSideBarSubheaderActions> = ({
         <Input
           $isWide
           placeholder="Action name"
+          value={actionNameFilter}
+          onChange={setFilterValue}
         />
       </Search>
       {activeTab === 0 && <FilterAction />}

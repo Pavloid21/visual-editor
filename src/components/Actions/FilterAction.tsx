@@ -1,9 +1,9 @@
 import React, {FC, useState} from 'react';
 import {FilterActionContainer} from './Actions.styled';
-import {Radio} from '../controls';
+import {Radio} from 'components/controls';
 import {useDispatch, useSelector} from 'react-redux';
-import {RootStore} from '../../store/types';
-import {setLeftBarActionFilter} from '../../store/left-bar-menu.slice';
+import {RootStore} from 'store/types';
+import {setLeftBarActionFilter} from 'store/left-bar-menu.slice';
 
 const FilterAction: FC = () => {
   const dispatch = useDispatch();

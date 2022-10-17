@@ -5,6 +5,9 @@ import {ActionItem, Actions, ActionTypes} from './types';
 const initialState: Actions = {
   actions: [],
   data: [],
+  externals: [],
+  push: [],
+  cronTasks: [],
   selected: null,
   deleted: {
     actions: [],
@@ -16,12 +19,21 @@ const actionsSlice = createSlice({
   name: 'actions',
   initialState,
   reducers: {
-    setActions: (state, action: PayloadAction<{actions?: any[], data?: any[]}>) => {
+    setActions: (state, action: PayloadAction<{actions?: any[], data?: any[], externals?: any[], cronTasks?: any[], push?: any[]}>) => {
       if (action.payload.actions) {
         state.actions = action.payload.actions;
       }
       if (action.payload.data) {
         state.data = action.payload.data;
+      }
+      if (action.payload.externals) {
+        state.externals = action.payload.externals;
+      }
+      if (action.payload.cronTasks) {
+        state.cronTasks = action.payload.cronTasks;
+      }
+      if (action.payload.push) {
+        state.push = action.payload.push;
       }
     },
     setSelectAction: (state, action: PayloadAction<ActionItem | null>) => {

@@ -6,10 +6,17 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
-  height: calc(100% - 60px);
+  height: calc(100% - 110px);
   & > .buttons {
     display: flex;
     gap: 16px;
+  }
+  justify-content: space-between;
+  & .input-rows {
+    & > section {
+      margin-top: 15px;
+    }
+
   }
 `;
 
@@ -20,6 +27,7 @@ export const EditorWrapper = styled.div<{icon: string}>`
   border: 1px solid var(--neo-gray);
   border-radius: 4px;
   position: relative;
+  height: 100%;
   & > button.fullScreen {
     position: absolute;
     right: 12px;
@@ -31,4 +39,19 @@ export const EditorWrapper = styled.div<{icon: string}>`
     height: 16px;
     z-index: 2;
   }
+`;
+
+export const H4 = styled.h4`
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  color: #333333;
+  margin: 0;
+`;
+
+export const Settings = styled.div`
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
 `;
