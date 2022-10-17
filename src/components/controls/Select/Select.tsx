@@ -33,13 +33,13 @@ export const Select = React.memo((props: ISelect) => {
           return filteredMenu.find((option) => option.actionType === 'screen')?.actionType;
         }
         if (value.indexOf(ActionTypes.action) === 0) {
-          return filteredMenu.find((option) => option.actionType === 'action')?.actionType;
+          return filteredMenu.find((option) => option.actionType === 'actions')?.actionType;
         }
         if (value.indexOf(ActionTypes.data) === 0) {
-          return filteredMenu.find((option) => option.actionType === 'data')?.actionType;
+          return filteredMenu.find((option) => option.actionType === ActionTypes.data)?.actionType;
         }
-        return 'other';
       }
+      return 'other';
     },
     [filteredMenu, props.async]
   );

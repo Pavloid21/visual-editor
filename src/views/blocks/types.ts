@@ -42,7 +42,6 @@ export interface Blocks extends SimpleObject {
   divider: (state?: BlocksState) => Block;
   list: (state?: BlocksState) => Block;
   collection: (state?: BlocksState) => Block;
-  bottomsheet: (state?: BlocksState) => Block;
   webview: (state?: BlocksState) => Block;
   // screen: (state?: BlocksState) => Block;
   calendar_text_field: (state?: BlocksState) => Block;

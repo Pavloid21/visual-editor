@@ -74,22 +74,34 @@ export const addBottomBarItem = createAction('layout/addBottomBarItem', () => {
   };
 });
 
-function goThrough(array: any, uuid: string, extendedFields: any) {
+function goThrough(array: any, uuid: string, extendedFields: any, addKey: string, addValue: any) {
   const arr = JSON.parse(JSON.stringify(array));
   for (const index in arr) {
     if (arr[index].uuid === uuid) {
       arr[index].interactive.action = {
-        fields: {},
-        url: '',
+        [addKey]: addValue,
         ...arr[index].interactive.action,
       };
-      arr[index].interactive.action.fields = extendedFields;
+      arr[index].interactive.action[addKey] = extendedFields;
     } else if (arr[index].listItems) {
-      arr[index].listItems = goThrough(arr[index].listItems, uuid, extendedFields);
+      arr[index].listItems = goThrough(arr[index].listItems, uuid, extendedFields, addKey, addValue);
     }
   }
   return arr;
 }
+
+export const changeActionURL = createAction('layout/changeActionURL', (uuid: string, value: string) => {
+  const store = rootStore.getState();
+  const {layout: state} = store;
+
+  let extendedItems = [...get(state, 'blocks', [])];
+
+  extendedItems = goThrough(extendedItems, uuid, value, 'url', value);
+
+  return {
+    payload: extendedItems,
+  };
+});
 
 export const addActionField = createAction('layout/addActionField', (uuid: string) => {
   const store = rootStore.getState();
@@ -104,7 +116,7 @@ export const addActionField = createAction('layout/addActionField', (uuid: strin
 
   let extendedItems = [...get(state, 'blocks', [])];
 
-  extendedItems = goThrough(extendedItems, uuid, extendedFields);
+  extendedItems = goThrough(extendedItems, uuid, extendedFields, 'fields', {});
 
   return {
     payload: extendedItems,
@@ -121,7 +133,7 @@ export const removeActionField = createAction('layout/removeActionField', (uuid:
 
   let extendedItems = [...get(state, 'blocks', [])];
 
-  extendedItems = goThrough(extendedItems, uuid, extendedFields);
+  extendedItems = goThrough(extendedItems, uuid, extendedFields, 'fields', {});
 
   return {
     payload: extendedItems,
@@ -158,7 +170,7 @@ export const changeKeyActionField = createAction(
 
     let extendedItems = [...get(state, 'blocks', [])];
 
-    extendedItems = goThrough(extendedItems, uuid, fields);
+    extendedItems = goThrough(extendedItems, uuid, fields, 'fields', {});
 
     return {
       payload: extendedItems,
@@ -541,6 +553,9 @@ const layoutSlice = createSlice({
       state.blocks = action.payload;
     });
     builder.addCase(changeKeyActionField, (state, action) => {
+      state.blocks = action.payload;
+    });
+    builder.addCase(changeActionURL, (state, action) => {
       state.blocks = action.payload;
     });
     builder.addCase(pushBlockInside, (state, action) => {
