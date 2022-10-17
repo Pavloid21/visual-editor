@@ -42,9 +42,7 @@ const Screens: React.FC<ScreensProps> = ({
     border-color: red;
     margin-right: 6px;
   `;
-
   const treeDataFilter = treeData.filter((item: any) => item.screen.toUpperCase().includes(screenNameFilter.toUpperCase()));
-
 
   return (
     <Container>

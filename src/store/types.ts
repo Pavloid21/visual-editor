@@ -43,6 +43,24 @@ export type ActionItem = {
   type: ActionTypes;
 };
 
+export type ActionCronTaskItem = {
+  action: string;
+  object: {
+    id: string;
+    pattern: string;
+    snippetType?: string;
+    snippetName?: string;
+  }
+  type: ActionTypes;
+  selected?: boolean;
+};
+
+export type ActionPushItem = {
+  action: string;
+  selected?: boolean;
+  type: ActionTypes;
+};
+
 export type API = {
   list: APIItem[];
 };

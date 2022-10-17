@@ -31,5 +31,11 @@ const leftBarMenuSlice = createSlice({
   }
 });
 
-export const {setLeftBarMenu, setLeftBarActionFilter, setScreenNameFilter, setActionNameFilter, setActiveTabActions} = leftBarMenuSlice.actions;
+export const {
+  setLeftBarMenu,
+  setLeftBarActionFilter,
+  setScreenNameFilter,
+  setActionNameFilter,
+  setActiveTabActions
+} = leftBarMenuSlice.actions;
 export default leftBarMenuSlice.reducer;

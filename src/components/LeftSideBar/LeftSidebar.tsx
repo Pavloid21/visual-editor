@@ -48,7 +48,6 @@ const LeftSidebar: React.FC<unknown> = () => {
   const projectName = useSelector((state: RootStore) => state.project.name);
   const {project} = useParams();
   const [activeTabScreens, setActiveTabScreens] = useState(0);
-  // const [activeTabActions, setActiveTabActions] = useState(0);
   const [availableScreenes, setScreenes] = useState<Record<string, any>[]>([]);
   const [treeData, setTree] = useState<Record<string, any>[]>([]);
   const [load, setLoadScreen] = useState<{uuid: string, load: boolean}>();

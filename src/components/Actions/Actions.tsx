@@ -1,8 +1,6 @@
 import React, {useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {orderBy} from 'external/lodash';
-import {ReactComponent as CodeIcon} from 'assets/code.svg';
-import {ReactComponent as DataIcon} from 'assets/folder-upload.svg';
 import {ReactComponent as ActionDots} from 'assets/left-sidebar-menu/actionDots.svg';
 import {ReactComponent as ActionObject} from 'assets/left-sidebar-menu/actionObject.svg';
 import {
@@ -12,19 +10,13 @@ import {
   getExternalActionsList,
   getCronTaskList,
   getPushList,
-  deleteProject,
-  getScreenesList,
-  getScreenByName,
-  createProject,
-  saveScreen,
 } from 'services/ApiService';
 import {ActionImage, Container} from './Actions.styled';
 import {setActions, setSelectAction} from 'store/actions.slice';
-import {ActionItem, ActionTypes, Project, RootStore} from 'store/types';
-import {useOutside} from '../../utils';
+import {ActionItem, ActionTypes, RootStore} from 'store/types';
 import {Option} from 'react-dropdown';
 import {DropdownIcon} from 'components/Actions/Actions.styled';
-import {v4} from 'uuid';
+import ActionDropdownItem from './ActionDropdownItem';
 
 type ActionsProps = {
   activeTabActions: number
@@ -131,7 +123,16 @@ const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
     getActions(getDataActionsList, project_id, 'data', 'data');
     getActions(getExternalActionsList, project_id, 'externals', 'externalActions');
     getActions(getCronTaskList, project_id, 'cronTasks', 'cron/tasks');
-    getActions(getPushList, project_id, 'push', 'push/defaultTopics');
+    getPushList(project_id)
+      .then((response: any) => response.data)
+      .then((actionsArr: string[]) => {
+        const actions: any[] = [];
+        actionsArr.forEach((action) => {
+            actions.push({action, selected: false});
+        });
+        dispatch(setActions({push: actions}));
+      })
+      .catch(console.log);
   }, []);
 
   const handleSelectSnippet = (action: ActionItem | null) => {
@@ -141,10 +142,9 @@ const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
   const handleChangeDropdown = async (arg: Option) => {
     switch (arg.value) {
       case 'Delete':
-        console.log('delete');
         break;
       case 'Copy':
-       console.log('Copy');
+        break;
     }
   };
 
@@ -168,7 +168,10 @@ const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
                 <ActionObject />
                 <div>
                   <DropdownIcon
-                    options={['Copy', 'Delete']}
+                    options={[
+                      {label: <ActionDropdownItem label='Copy' />, value: 'Copy'},
+                      {label: <ActionDropdownItem label='Delete' />, value: 'Delete'}
+                    ]}
                     placeholder=" "
                     arrowClosed={<ActionDots />}
                     arrowOpen={<ActionDots />}

@@ -31,8 +31,21 @@ export const Container = styled.div`
       & > div > svg > * {
         fill: #ffffff;
       }
+      & .Dropdown-control svg > * {
+        fill: #ffffff;
+      }
+      & .Dropdown-menu:hover {
+        & svg {
+          fill: #ffffff;
+        }
+      }
       color: #ffffff;
       background-color: var(--main-color);
+    }
+  }
+  & > .action-item.active:first-child {
+    .Dropdown-menu {
+      top: -7px;
     }
   }
 `;
@@ -65,19 +78,30 @@ export const DropdownIcon = styled<any>(Dropdown)<ReactDropdownProps>`
     padding: 0;
     background-color: transparent;
     border: none;
+    width: 15px;
+    text-align: center;
   }
   & > .Dropdown-menu {
     width: auto;
-    right: 0;
+    right: 17px;
+    top: -47px;
     border-radius: 4px;
     box-shadow: 0px 20px 30px -10px rgba(0, 0, 0, 0.15);
     border: 1px solid var(--neo-gray);
+    z-index: 100;
   }
   .Dropdown-option {
     color: var(--neo-black);
     font-size: 13px;
     line-height: 20px;
     min-width: 150px;
+    & > div {
+      display: flex;
+      align-items: center;
+      svg {
+        margin-right: 8px;
+      }
+    }
     &.is-selected {
       background-color: var(--main-color);
       color: white;

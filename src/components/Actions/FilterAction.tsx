@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC} from 'react';
 import {FilterActionContainer} from './Actions.styled';
 import {Radio} from 'components/controls';
 import {useDispatch, useSelector} from 'react-redux';

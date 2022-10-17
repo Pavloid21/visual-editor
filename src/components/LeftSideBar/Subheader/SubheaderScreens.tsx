@@ -1,11 +1,11 @@
 import {SideBarSubheader} from 'components';
 import {ReactComponent as Plus} from 'assets/plus.svg';
-import React, {useState} from 'react';
+import React from 'react';
 import {Input} from 'components/controls';
 import {Search} from 'components/SideBarHeader/SideBarHeader.styled';
 import {useDispatch, useSelector} from 'react-redux';
-import {RootStore} from '../../../store/types';
-import {setScreenNameFilter} from '../../../store/left-bar-menu.slice';
+import {RootStore} from 'store/types';
+import {setScreenNameFilter} from 'store/left-bar-menu.slice';
 
 type TSideBarSubheaderScreens = {
   handleAddScreen: () => void;

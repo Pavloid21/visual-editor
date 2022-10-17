@@ -1,10 +1,15 @@
 import {Container, H4, Settings} from './ActionForm.styled';
-import {Button, Input} from '../../components/controls';
+import {Button, Input} from 'components/controls';
 import {Controller, useForm} from 'react-hook-form';
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
+import {ActionPushItem} from 'store/types';
 
-const ActionPushForm: FC = () => {
-  const {control} = useForm();
+const ActionPushForm: FC<{action: ActionPushItem}> = ({action}) => {
+  const {setValue, control} = useForm();
+
+  useEffect(() => {
+    setValue('topicName', action.action);
+  }, [action]);
 
   return (
     <>
