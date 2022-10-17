@@ -19,6 +19,7 @@ import {
   addActionField,
   removeActionField,
   changeKeyActionField,
+  changeActionURL,
 } from 'store/layout.slice';
 import type {TInspector} from './types';
 import type {RootStore} from 'store/types';
@@ -84,6 +85,10 @@ const Inspector: React.FC<TInspector> = ({display}) => {
     },
     [dispatch]
   );
+
+  const handleChangeActionURL = useCallback((uuid, value = '') => {
+    dispatch(changeActionURL(uuid, value));
+  }, [dispatch]);
 
   const parseConfig = (config: any, blockUuid: string, endpoint: any, parentKey?: any) => {
     return Object.keys(config).map((el: string, index: number) => {
@@ -186,7 +191,11 @@ const Inspector: React.FC<TInspector> = ({display}) => {
               <Select
                 async={config[el].action_types}
                 label={config[el].name}
-                onChange={(value) => handleChangeBlockData(blockUuid, el, value, parentKey)}
+                onChange={(value) => {
+                  parentKey !== 'action'
+                  ? handleChangeBlockData(blockUuid, el, value, parentKey)
+                  : handleChangeActionURL(blockUuid, value);
+                }}
                 options={config[el].options || []}
                 value={endpoint ? endpoint[el] : null}
                 clearable

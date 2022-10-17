@@ -10,7 +10,7 @@ interface ICustomSvg {
 const CustomSvg = ({src, fill}: ICustomSvg) => {
   const [svgTemplate, setSvgTemplate] = useState<string>('');
   const [isLoader, setIsLoader] = useState<boolean>(false);
-  const [sizeSvg, setSizeSvg] = useState<string>(`${40 * 1.25}px`);
+  const [sizeSvg, setSizeSvg] = useState<string>(`${20 * 1.25}px`);
 
   if(src === undefined) {
     setSizeSvg('');
