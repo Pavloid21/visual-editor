@@ -100,7 +100,7 @@ export const buttonImagePadding = {
   bottom: {type: 'number', name: 'Image padding bottom'},
   left: {type: 'number', name: 'Image padding left'},
 };
-export const imageUrl = {type: 'string', name: 'image Url'};
+export const imageUrl = {type: 'image', name: 'Image URL', action_types: 'icons,data,other'};
 export const distribution = {
   type: 'select',
   name: 'Distribution',

@@ -26,6 +26,7 @@ import type {RootStore} from 'store/types';
 import {blockStateUnsafeSelector} from 'store/selectors';
 import {getUnitOptionByDevice} from 'utils/units';
 import {get} from 'external/lodash';
+import {ImageSelect} from 'components/controls/Select/ImageSelect';
 
 const Inspector: React.FC<TInspector> = ({display}) => {
   const dispatch = useDispatch();
@@ -86,9 +87,12 @@ const Inspector: React.FC<TInspector> = ({display}) => {
     [dispatch]
   );
 
-  const handleChangeActionURL = useCallback((uuid, value = '') => {
-    dispatch(changeActionURL(uuid, value));
-  }, [dispatch]);
+  const handleChangeActionURL = useCallback(
+    (uuid, value = '') => {
+      dispatch(changeActionURL(uuid, value));
+    },
+    [dispatch]
+  );
 
   const parseConfig = (config: any, blockUuid: string, endpoint: any, parentKey?: any) => {
     return Object.keys(config).map((el: string, index: number) => {
@@ -193,8 +197,25 @@ const Inspector: React.FC<TInspector> = ({display}) => {
                 label={config[el].name}
                 onChange={(value) => {
                   parentKey !== 'action'
-                  ? handleChangeBlockData(blockUuid, el, value, parentKey)
-                  : handleChangeActionURL(blockUuid, value);
+                    ? handleChangeBlockData(blockUuid, el, value, parentKey)
+                    : handleChangeActionURL(blockUuid, value);
+                }}
+                options={config[el].options || []}
+                value={endpoint ? endpoint[el] : null}
+                clearable
+              />
+            </div>
+          );
+        case 'image':
+          return (
+            <div className="form-group" key={`${parentKey}_${index}`}>
+              <ImageSelect
+                async={config[el].action_types}
+                label={config[el].name}
+                onChange={(value) => {
+                  parentKey !== 'action'
+                    ? handleChangeBlockData(blockUuid, el, value, parentKey)
+                    : handleChangeActionURL(blockUuid, value);
                 }}
                 options={config[el].options || []}
                 value={endpoint ? endpoint[el] : null}
@@ -240,33 +261,40 @@ const Inspector: React.FC<TInspector> = ({display}) => {
                 <span>{leadLetter(el)}</span>
                 <Plus className="icon" onClick={() => dispatch(addActionField(block.uuid))} />
               </Division>
-              {block.interactive[parentKey] && Object.keys(block.interactive[parentKey][el] || {}).map((key: any, index: number) => {
-                const item = block.interactive[parentKey][el][key];
-                return (
-                  <Division key={`object_item_${index}`} style={{alignItems: 'end', gap: '12px'}} withoutBorder>
-                    <Input
-                      $clearable
-                      $isWide
-                      label="Key"
-                      value={key}
-                      onChange={(e) => {
-                        e.stopPropagation();
-                        handleChangeKeyActionField(block.uuid, index, e.target.value);
-                      }}
-                    />
-                    <Input $clearable $isWide label="Value" value={item} onChange={(e) => {
-                      e.stopPropagation();
-                      handleChangeKeyActionField(block.uuid, index, e.target.value, true);
-                    }}/>
-                    <Trash
-                      className="icon"
-                      onClick={(e) => {
-                        dispatch(removeActionField(block.uuid, key));
-                      }}
-                    />
-                  </Division>
-                );
-              })}
+              {block.interactive[parentKey] &&
+                Object.keys(block.interactive[parentKey][el] || {}).map((key: any, index: number) => {
+                  const item = block.interactive[parentKey][el][key];
+                  return (
+                    <Division key={`object_item_${index}`} style={{alignItems: 'end', gap: '12px'}} withoutBorder>
+                      <Input
+                        $clearable
+                        $isWide
+                        label="Key"
+                        value={key}
+                        onChange={(e) => {
+                          e.stopPropagation();
+                          handleChangeKeyActionField(block.uuid, index, e.target.value);
+                        }}
+                      />
+                      <Input
+                        $clearable
+                        $isWide
+                        label="Value"
+                        value={item}
+                        onChange={(e) => {
+                          e.stopPropagation();
+                          handleChangeKeyActionField(block.uuid, index, e.target.value, true);
+                        }}
+                      />
+                      <Trash
+                        className="icon"
+                        onClick={(e) => {
+                          dispatch(removeActionField(block.uuid, key));
+                        }}
+                      />
+                    </Division>
+                  );
+                })}
             </GroupedFields>
           );
       }

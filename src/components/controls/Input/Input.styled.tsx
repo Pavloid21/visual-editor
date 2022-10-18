@@ -6,7 +6,7 @@ import {NeoInputProps} from './types';
 export const Container = styled.section<TextAreaProps & NeoInputProps & {label?: string}>`
   position: relative;
   & svg {
-    position: absolute;
+    position: ${(props) => (props.$clearable ? 'absolute' : 'initial')};
     right: 12px;
     top: ${(props) => (props.label ? '38px' : '10px')};
     &:hover {
@@ -20,11 +20,22 @@ export const Container = styled.section<TextAreaProps & NeoInputProps & {label?:
   }
 `;
 
+export const Inline = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  & :nth-child(n) {
+    flex: 1 1 auto;
+  }
+`;
+
 export const StyledNeoInput = styled(Input)<NeoInputProps>`
   font-size: 14px;
   & > .rc-input,
   &[type='text'] {
-    background: #ffffff;
+    background: ${(props) => (props.disabled ? 'var(--neo-gray)' : '#FFFFFF')};
     width: ${(props) => (props.$isWide ? '100%' : 'auto')};
     border: 1px solid ${(props) => (props.status === 'error' ? 'var(--error-text)' : 'var(--neo-gray)')};
     height: 40px;
