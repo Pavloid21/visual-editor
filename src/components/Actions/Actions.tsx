@@ -1,18 +1,18 @@
 import React, {useEffect} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {orderBy} from 'external/lodash';
 import {ReactComponent as ActionDots} from 'assets/left-sidebar-menu/actionDots.svg';
 import {ReactComponent as ActionObject} from 'assets/left-sidebar-menu/actionObject.svg';
 import {
-  getActionsList,
   getActionByName,
+  getActionsList,
+  getCronTaskList,
   getDataActionsList,
   getExternalActionsList,
-  getCronTaskList,
   getPushList,
 } from 'services/ApiService';
 import {ActionImage, Container} from './Actions.styled';
-import {setActions, setSelectAction} from 'store/actions.slice';
+import {deleteAction, setActions, setSelectAction} from 'store/actions.slice';
 import {ActionItem, ActionTypes, RootStore} from 'store/types';
 import {Option} from 'react-dropdown';
 import {DropdownIcon} from 'components/Actions/Actions.styled';
@@ -27,14 +27,18 @@ const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
   const actionNameFilter = useSelector((state: RootStore) => state.leftBarMenu.actionNameFilter);
   const filterActionType = useSelector((state: RootStore) => state.leftBarMenu.filterAction);
 
+  const filterActionsType = (arr: ActionItem[], type: ActionTypes) => {
+    return arr.filter((item: ActionItem) => item.type === type);
+  };
+
   let availableActions: ActionItem[] = useSelector((state: RootStore) =>
     orderBy(
       [
-        ...state.actions.actions.map((item) => ({...item, type: ActionTypes.action})),
+        ...state.actions.actions.map((item) => ({...item, type: ActionTypes.actions})),
         ...state.actions.data.map((item) => ({...item, type: ActionTypes.data})),
         ...state.actions.externals.map((item) => ({...item, type: ActionTypes.external}))
       ],
-      ActionTypes.action,
+      ActionTypes.actions,
       'asc'
     )
   );
@@ -60,21 +64,20 @@ const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
   );
 
   if (filterActionType === 1) {
-    availableActions = availableActions.filter((item: any) => item.type === 'data');
+    availableActions = filterActionsType(availableActions, ActionTypes.data);
   }
   if (filterActionType === 2) {
-    availableActions = availableActions.filter((item: any) => item.type === 'action');
+    availableActions = filterActionsType(availableActions, ActionTypes.actions);
   }
   if (filterActionType === 3) {
-    availableActions = availableActions.filter((item: any) => item.type === 'external');
+    availableActions = filterActionsType(availableActions, ActionTypes.external);
   }
-  const availableActionsFilter = availableActions.filter((item: any) => item.action.toUpperCase().includes(actionNameFilter.toUpperCase()));
 
   let renderActions: ActionItem[] = [];
 
   switch (activeTabActions) {
     case 0:
-      renderActions = [...availableActionsFilter];
+      renderActions = [...availableActions];
       break;
     case 1:
       renderActions = [...cronTasksActions];
@@ -83,9 +86,11 @@ const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
       renderActions = [...pushListActions];
       break;
     default:
-      renderActions = [...availableActionsFilter];
+      renderActions = [];
     break;
   }
+
+  const renderActionsFilter = renderActions.filter((item: any) => item.action.toUpperCase().includes(actionNameFilter.toUpperCase()));
 
   const selectedAction = useSelector((state: RootStore) => state.actions.selected);
   const projectID = useSelector((state: RootStore) => state.project.id);
@@ -139,19 +144,34 @@ const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
     dispatch(setSelectAction(action));
   };
 
-  const handleChangeDropdown = async (arg: Option) => {
+  const handleDeleteAction = (action: ActionItem) => {
+    const newActions = filterActionsType(renderActions, action.type).filter((item) => item.action !== action.action);
+    dispatch(deleteAction(action));
+    dispatch(setActions({[action.type]: newActions}));
+  };
+
+  const handleCopyAction = (action: ActionItem) => {
+    const availableActions = [...filterActionsType(renderActions, action.type)];
+    const indexAction = availableActions.findIndex((item: ActionItem) => item.action === action.action && item.type === action.type);
+    const newActions = [...availableActions.slice(0, indexAction + 1), {...action, action: action.action + '_copy'}, ...availableActions.slice(indexAction + 1)];
+    dispatch(setActions({[action.type]: newActions}));
+  };
+
+  const handleChangeDropdown = async (arg: Option, action: ActionItem) => {
     switch (arg.value) {
       case 'Delete':
+        handleDeleteAction(action);
         break;
       case 'Copy':
+        handleCopyAction(action);
         break;
     }
   };
 
   return (
     <Container>
-      {renderActions &&
-        renderActions.map((action, index) => {
+      {renderActionsFilter &&
+        renderActionsFilter.map((action, index) => {
           return (
             <div
               className={
@@ -175,7 +195,7 @@ const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
                     placeholder=" "
                     arrowClosed={<ActionDots />}
                     arrowOpen={<ActionDots />}
-                    onChange={(arg: Option) => handleChangeDropdown(arg)}
+                    onChange={(arg: Option) => handleChangeDropdown(arg, action)}
                   />
                 </div>
               </ActionImage>

@@ -32,7 +32,7 @@ const ActionForm: React.FC<{action: ActionItem}> = ({action}) => {
     const {actionName, code, type} = getValues();
     const nextActions = [...snippets.actions];
     const nextData = [...snippets.data];
-    const key = action.type === ActionTypes.action ? 'actions' : 'data';
+    const key = action.type === ActionTypes.actions ? 'actions' : 'data';
     snippets[key].forEach((item, index) => {
       const ref = type === 'data' ? nextData : nextActions;
       if (item.action === actionName) {

@@ -30,7 +30,7 @@ export type Actions = {
 
 export enum ActionTypes {
   data = 'data',
-  action = 'action',
+  actions = 'actions',
   push = 'push',
   external = 'external',
   cronTask = 'cronTask'

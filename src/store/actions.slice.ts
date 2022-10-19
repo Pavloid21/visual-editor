@@ -44,7 +44,7 @@ const actionsSlice = createSlice({
     },
     deleteAction: (state, action: PayloadAction<ActionItem | null>) => {
       let removed: ActionItem[] = [];
-      if (action.payload?.type === ActionTypes.action) {
+      if (action.payload?.type === ActionTypes.actions) {
         const actions = [...state.actions];
         state.actions.forEach((item, index) => {
           if (item.action === action.payload?.action) {

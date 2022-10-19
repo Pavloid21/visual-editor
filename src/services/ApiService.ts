@@ -107,7 +107,7 @@ export const getActionByName = async (projectId: string, actionName: string, act
 };
 
 export const saveAction = async (projectId: string, actionType: string, endpoint: string, payload: string) => {
-  const keyType = actionType === ActionTypes.action ? 'actions' : actionType;
+  const keyType = actionType === ActionTypes.actions ? 'actions' : actionType;
   const url = API.defaults.baseURL + `projects/${projectId}/admin/${keyType}/${endpoint}`;
   return callApi(url, payload, 'PUT', undefined, undefined, {
     'Content-Type': 'application/javascript',

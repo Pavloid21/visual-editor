@@ -326,7 +326,7 @@ const LeftSidebar: React.FC<unknown> = () => {
     const added = {
       action: 'new_action',
       object: '',
-      type: ActionTypes.action
+      type: ActionTypes.actions
     };
     dispatch(addAction(added));
   }, [dispatch]);

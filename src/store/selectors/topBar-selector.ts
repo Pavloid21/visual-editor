@@ -17,13 +17,13 @@ const getCurrentEditorState = ({project, layout, actions}: RootStore): TCurrentE
     currentProject: project,
     snippets: layout.snippets,
     actions: [
-      ...actions.actions.map((item) => ({...item, type: ActionTypes.action})),
+      ...actions.actions.map((item) => ({...item, type: ActionTypes.actions})),
       ...actions.data.map((item) => ({...item, type: ActionTypes.data})),
     ],
     deletedActions: [
       ...actions.deleted.actions.map((item) => ({
         ...item,
-        type: ActionTypes.action,
+        type: ActionTypes.actions,
       })),
       ...actions.deleted.data.map((item) => ({...item, type: ActionTypes.data})),
     ],

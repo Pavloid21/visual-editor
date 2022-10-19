@@ -13,7 +13,7 @@ const ActionCronTasksForm: FC<{action: ActionCronTaskItem}> = ({action}) => {
   const actionsAll: ActionOption[] = useSelector((state: RootStore) =>
     orderBy(
       [
-        ...state.actions.actions.map((item) => ({label: item.action, value: item.action, type: ActionTypes.action})),
+        ...state.actions.actions.map((item) => ({label: item.action, value: item.action, type: ActionTypes.actions})),
         ...state.actions.data.map((item) => ({label: item.action, value: item.action, type: ActionTypes.data})),
         ...state.actions.externals.map((item) => ({label: item.action, value: item.action, type: ActionTypes.external}))
       ],
