@@ -66,11 +66,15 @@ const Component = ({settingsUI, ...props}) => {
   <Wrapper id={props.id} style={{padding: 0, width: '100%'}} sizeModifier='FULLWIDTH'>
     <TopAppBar {...settingsUI} {...props}>
       <label>{settingsUI?.title}</label>
-        {checkIcon.colorSvg ? (
-          <CustomSvg fill={checkIcon.colorSvg} src={setCorrectImageUrl(checkIcon.url, id)} />
+      {checkIcon.url.length ? (
+        <>
+          {checkIcon.colorSvg ? (
+            <CustomSvg fill={checkIcon.colorSvg} src={setCorrectImageUrl(checkIcon.url, id)} />
           ) : (
             <img src={setCorrectImageUrl(checkIcon.url, id)} />
           )}
+        </>
+      ) : null}
     </TopAppBar>
   </Wrapper>
   );
