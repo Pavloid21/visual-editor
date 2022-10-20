@@ -46,3 +46,49 @@ export interface Blocks extends SimpleObject {
   // screen: (state?: BlocksState) => Block;
   calendar_text_field: (state?: BlocksState) => Block;
 }
+
+export type SettingsUIType = Partial<{
+  alignment: string;
+  sizeModifier: string;
+  backgroundColor: string;
+  distribution: string;
+  padding: {
+    top: number;
+    right: number;
+    bottom: number;
+    left: number;
+  };
+  borderWidth: number;
+  borderColor: string;
+  spacing: string;
+  corners: {
+    topLeftRadius: number;
+    topRightRadius: number;
+    bottomRightRadius: number;
+    bottomLeftRadius: number;
+  };
+  shadow: {
+    color: string;
+    opacity: number;
+    radius: number;
+    offsetSize: {
+      width: number;
+      height: number;
+    }
+  };
+  size: {
+    width: number,
+    height: number,
+    widthInPercent: number,
+    heightInPercent: number
+  }
+}>;
+
+export type StyledComponentPropsType = SettingsUIType & {
+  blockState: BlocksState
+}
+
+export type ListItemType = {
+  type: string
+  settingsUI: SettingsUIType
+}
