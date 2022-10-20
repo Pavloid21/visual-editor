@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {Container, MenuItem} from './LeftSideBarMenu.styled.jsx';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootStore} from '../../store/types';
@@ -10,44 +10,58 @@ const LeftSideBarMenu: React.FC = () => {
   const dispatch = useDispatch();
   const activeTab = useSelector((state: RootStore) => state.leftBarMenu.activeTab);
 
-  const handleModeClick = (mode: string| undefined) => {
-    if (!mode) return;
-    dispatch(setLeftBarMenu(mode));
-  };
+  const handleModeClick = useCallback(
+    (mode: string | undefined) => {
+      if (!mode) return;
+      dispatch(setLeftBarMenu(mode));
+    },
+    [dispatch]
+  );
 
   let screenClass = '';
   let actionClass = '';
   let imageClass = '';
-  if (activeTab === 'screen') {
-    screenClass = 'active';
-  }
-  if (activeTab === 'action') {
-    actionClass = 'active';
-    screenClass = 'borderNone';
-  }
-  if (activeTab === 'image') {
-    imageClass = 'active';
-    actionClass = 'borderNone';
+
+  switch (activeTab) {
+    case 'screen':
+      screenClass = 'active';
+      break;
+    case 'action':
+      actionClass = 'active';
+      screenClass = 'borderNone';
+      break;
+    case 'image':
+      imageClass = 'active';
+      actionClass = 'borderNone';
+      break;
   }
 
-  const ContainerClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    const tab = (event.target as HTMLDivElement).closest('div');
-    if (tab) {
-      handleModeClick(tab.dataset.tabActive);
-    }
-  };
+  const ContainerClick = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      const tab = (event.target as HTMLDivElement).closest('div');
+      if (tab) {
+        handleModeClick(tab.dataset.tabActive);
+      }
+    },
+    [handleModeClick]
+  );
 
-  const getClassTabById = (value: string) => activeTab === value ? 'left-bar-image active' : 'left-bar-image';
+  const getClassTabById = useMemo(
+    () => (value: string) => {
+      return activeTab === value ? 'left-bar-image active' : 'left-bar-image';
+    },
+    [activeTab]
+  );
 
   return (
     <Container onClick={ContainerClick}>
-      <MenuItem data-tab-active='screen' className={screenClass}>
+      <MenuItem data-tab-active="screen" className={screenClass}>
         <ScreenImage className={getClassTabById('screen')} />
       </MenuItem>
-      <MenuItem data-tab-active='action' className={actionClass}>
+      <MenuItem data-tab-active="action" className={actionClass}>
         <ActionImage className={getClassTabById('action')} />
       </MenuItem>
-      <MenuItem data-tab-active='image' className={imageClass}>
+      <MenuItem data-tab-active="image" className={imageClass}>
         <ImageImage className={getClassTabById('image')} />
       </MenuItem>
     </Container>

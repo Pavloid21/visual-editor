@@ -27,14 +27,10 @@ import {screenTemplates as defaultTemplates} from 'constants/screenTemplates';
 import {setScreens} from 'store/screens.slice';
 import {Screens} from 'components/Screens';
 import {SubheaderScreens, SubheaderActions} from 'components/LeftSideBar/Subheader';
+import {generatePromiseStack, updateScreenList} from './utils';
 
 const LeftSidebar: React.FC<unknown> = () => {
-  const {
-    topAppBar,
-    bottomBar,
-    selectedScreen,
-    blocks: layout,
-  } = useSelector((state: RootStore) => state.layout);
+  const {topAppBar, bottomBar, selectedScreen, blocks: layout} = useSelector((state: RootStore) => state.layout);
   const activeTabMenu = useSelector((state: RootStore) => state.leftBarMenu.activeTab);
   const [loading, setLoading] = useState(false);
   const barState = useSelector((state: RootStore) => state.sideBar);
@@ -49,36 +45,16 @@ const LeftSidebar: React.FC<unknown> = () => {
   const [activeTabActions, setActiveTabActions] = useState(0);
   const [availableScreenes, setScreenes] = useState<Record<string, any>[]>([]);
   const [treeData, setTree] = useState<Record<string, any>[]>([]);
-  const [load, setLoadScreen] = useState<{uuid: string, load: boolean}>();
+  const [load, setLoadScreen] = useState<{uuid: string; load: boolean}>();
   const [templates, setScreenTemplates] = useState<Record<string, any>[]>([]);
   const [itemModalOpen, setItemModalOpen] = useModal();
 
   const dispatch = useDispatch();
 
-  const generatePromiseStack = useCallback(
-    (data: any[], parsed: boolean) => {
-      const screenesArr = data.map(async (screen: string) => {
-        try {
-          const response = await getScreenByName(screen, parsed, project);
-          return {
-            screen,
-            object: response.data,
-            logic: response.data,
-            project,
-          };
-        } catch (e) {
-          console.log('e :>> ', e);
-        }
-      });
-      return screenesArr;
-    },
-    [project]
-  );
-
   useEffect(() => {
     setLoading(true);
     getScreenesList(project).then(({data}) => {
-      Promise.allSettled(generatePromiseStack(data, true))
+      Promise.allSettled(generatePromiseStack(data, true, project))
         .then((resolves) => {
           const layouts: Record<string, any>[] = [];
           resolves.forEach((result) => {
@@ -173,37 +149,6 @@ const LeftSidebar: React.FC<unknown> = () => {
     }
   }, [output]);
 
-  const parseRuturnStatement = (script: any) => {
-    const string: string = script.data.indexOf(' ') === 0 ? `${script.data}`.replace(' ', '') : script.data;
-    //@ts-ignore
-    const func = eval(`(() => {return {${string.match(/(?<=^return.{).*$/gms)[0]}})`);
-    return func();
-  };
-
-  const updateScreenList = (script: any, screenLayout: Record<string, any>, screenPositionInList: number) => {
-    if (script.data) {
-      const rawData = {
-        screen,
-        logic: parseRuturnStatement(script),
-        object: parseRuturnStatement(script),
-        project,
-      };
-      const {newBlock, action, screenEndpoint} = buildLayout(rawData);
-      const newScreenData = {
-        uuid: screenLayout.uuid,
-        value: newBlock,
-        action,
-        screenEndpoint,
-        logic: rawData.logic[0],
-        project,
-      };
-      const nextList = [...availableScreenes];
-      nextList[screenPositionInList] = newScreenData;
-      return nextList;
-    }
-    return availableScreenes;
-  };
-
   const handleItemClick = async (event: React.MouseEvent, item: Record<string, any>) => {
     event.stopPropagation();
     const uuid = item.node.subtitle;
@@ -218,7 +163,7 @@ const LeftSidebar: React.FC<unknown> = () => {
           return true;
         }
       })[0];
-      const nextList = updateScreenList(script, screenLayout, screenPositionInList);
+      const nextList = updateScreenList.call(availableScreenes, script, screenLayout, screenPositionInList);
       dispatch(setActiveTabAction(5));
       dispatch(
         selectScreen({
@@ -325,7 +270,7 @@ const LeftSidebar: React.FC<unknown> = () => {
     const added = {
       action: 'new_action',
       object: '',
-      type: ActionTypes.action
+      type: ActionTypes.action,
     };
     dispatch(addAction(added));
   }, [dispatch]);
@@ -396,17 +341,15 @@ const LeftSidebar: React.FC<unknown> = () => {
         <LeftSideBarMenu />
         <SideBarContent>
           <div className="screen-list" style={{flex: 1}}>
-            {activeTabMenu === 'screen' &&
-              <SubheaderScreens
-                handleAddScreen={handleAddScreen}
-              />}
-            {activeTabMenu === 'action' &&
+            {activeTabMenu === 'screen' && <SubheaderScreens handleAddScreen={handleAddScreen} />}
+            {activeTabMenu === 'action' && (
               <SubheaderActions
                 activeTab={activeTabActions}
                 handleAddAction={handleAddAction}
                 setActiveTab={setActiveTabActions}
-              />}
-            {activeTabMenu === 'screen' && activeTabScreens === 0 &&
+              />
+            )}
+            {activeTabMenu === 'screen' && activeTabScreens === 0 && (
               <Screens
                 loading={loading}
                 treeData={treeData}
@@ -417,7 +360,8 @@ const LeftSidebar: React.FC<unknown> = () => {
                 handleCloneBlock={handleCloneBlock}
                 handleDeleteScreen={handleDeleteScreen}
                 handleDeleteBlock={handleDeleteBlock}
-              />}
+              />
+            )}
             {activeTabMenu === 'action' && activeTabActions === 0 && <Actions />}
           </div>
           <Gallery />

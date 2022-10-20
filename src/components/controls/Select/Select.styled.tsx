@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import {motion} from 'framer-motion';
 
-export const Item = styled.div<{isActive?: boolean}>`
-  width: 100%;
+export const Item = styled.div<{isActive?: boolean, pure?: boolean}>`
+  width: ${(props) => props.pure ? '' : '100%'};
   ${(props) => props.isActive ? 'font-weight: bold;' : ''}
   &:hover {
     cursor: pointer;

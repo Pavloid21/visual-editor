@@ -20,8 +20,7 @@ export const Subheader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  & div {
-    display: flex;
+  & > div {
     font-size: 16px;
     line-height: 20px;
     gap: 8px;

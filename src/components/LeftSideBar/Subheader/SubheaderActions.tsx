@@ -1,9 +1,12 @@
 import {SideBarSubheader} from 'components';
 import {ReactComponent as Plus} from 'assets/plus.svg';
-import React, {ChangeEvent, MouseEventHandler} from 'react';
+import React from 'react';
 import {Search} from 'components/SideBarHeader/SideBarHeader.styled';
 import {Input} from 'components/controls';
 import FilterAction from 'components/Actions/FilterAction';
+import {AnimateSharedLayout} from 'framer-motion';
+import {Item, Indicator} from 'components/controls/Select/Select.styled';
+import {TabWrapper} from './SubheaderActions.styled';
 
 type TSideBarSubheaderActions = {
   activeTab: number;
@@ -11,39 +14,41 @@ type TSideBarSubheaderActions = {
   handleAddAction: () => void;
 };
 
-const SubheaderActions: React.FC<TSideBarSubheaderActions> = ({
-  activeTab,
-  setActiveTab,
-  handleAddAction,
-}) => {
-  const getClassTabById = (index: number) => activeTab === index ? 'tab_active' : '';
+const SubheaderActions: React.FC<TSideBarSubheaderActions> = ({activeTab, setActiveTab, handleAddAction}) => {
+  const getClassTabById = (index: number) => (activeTab === index ? 'tab_active' : '');
 
   const handlerClickAction = (event: React.MouseEvent<HTMLDivElement>) => {
     const activeTab = +((event.target as HTMLDivElement)?.dataset?.tabId || 0);
     setActiveTab(activeTab);
   };
 
+  const menus = ['Actions', 'Cron Tasks', 'Push'];
+
   return (
     <>
       <SideBarSubheader>
-        <div className="actions_tab" onClick={handlerClickAction}>
-          <span data-tab-id={0} className={getClassTabById(0)}>
-            Actions
-          </span>
-          <span data-tab-id={1} className={getClassTabById(1)}>
-            Cron Tasks
-          </span>
-          <span data-tab-id={2} className={getClassTabById(2)}>
-            Push
-          </span>
-        </div>
+        <TabWrapper>
+          <AnimateSharedLayout>
+            {menus.map((item, index) => {
+              return (
+                <Item
+                  pure
+                  data-tab-id={index}
+                  isActive={activeTab === index}
+                  key={`sideBarActionsTabs_${index}`}
+                  onClick={handlerClickAction}
+                >
+                  {item}
+                  {getClassTabById(index) && <Indicator layoutId="idk" />}
+                </Item>
+              );
+            })}
+          </AnimateSharedLayout>
+        </TabWrapper>
         <Plus className="icon" onClick={handleAddAction} />
       </SideBarSubheader>
       <Search>
-        <Input
-          $isWide
-          placeholder="Action name"
-        />
+        <Input $isWide placeholder="Action name" />
       </Search>
       {activeTab === 0 && <FilterAction />}
     </>
