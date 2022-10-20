@@ -26,7 +26,7 @@ import {
 import hstack from 'assets/hstack.svg';
 import {pushBlockInside} from 'store/layout.slice';
 import {hexToRgb} from 'constants/utils';
-import {getSizeStyle} from '../utils/styles/size';
+import {findParentInTree} from 'utils/blocks';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
 
@@ -57,8 +57,8 @@ const HStack = styled.div`
         return '0 auto auto auto';
     }
   }};
-  width: ${(props) => getSizeStyle('width', props)};
-  height: ${(props) => getSizeStyle('height', props)};
+  width: 100%;
+  height: 100%;
   background-color: ${(props) => props.backgroundColor || 'transparent'};
   display: flex;
   justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
@@ -91,7 +91,7 @@ const HStack = styled.div`
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, settingsUI, ...props}) => {
   return (
-    <Wrapper id={props.id} {...settingsUI} {...props} sizeModifier="FULLSIZE">
+    <Wrapper id={props.id} {...settingsUI} {...props}>
       <HStack {...settingsUI} {...props} backgroundColor={backgroundColor} ref={drop} className="draggable">
         {listItems && renderHandlebars(listItems, 'document2').components}
       </HStack>
@@ -102,6 +102,7 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, 
 const Component = ({settingsUI, uuid, listItems, ...props}) => {
   const dispatch = useDispatch();
   const layout = useSelector((state) => state.layout);
+  const isRoot = !findParentInTree(layout.blocks, uuid);
   const [{canDrop, isOver, target}, drop] = useDrop(() => ({
     accept: ItemTypes.BOX,
     drop: (item) => {
@@ -150,6 +151,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
       settingsUI={settingsUI}
       distance={1}
       shouldCancelStart={onSortMove}
+      isRoot={isRoot}
     />
   );
 };

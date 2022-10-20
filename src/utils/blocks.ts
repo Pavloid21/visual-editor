@@ -32,6 +32,24 @@ export const findInTree = (tree: BlockItem[], uuid: string): BlockItem | null =>
   return result;
 };
 
+export const findParentInTree = (tree: BlockItem[], uuid: string, parentItem: BlockItem | null = null): BlockItem | null => {
+  let result: BlockItem | null = null;
+  for (const item of tree) {
+    if (item.uuid === uuid) {
+      result = parentItem;
+      break;
+    }
+    if (!result && item.listItems) {
+      result = findParentInTree(item.listItems, uuid, item);
+    }
+    if (!result && item.listItem) {
+      result = findParentInTree([item.listItem], uuid, item);
+    }
+  }
+
+  return result;
+};
+
 export const removeFromList = (tree: BlockItem[], uuid: string) => {
   const result = [...tree];
   tree.forEach((item, index) => {
