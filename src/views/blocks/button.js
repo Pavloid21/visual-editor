@@ -117,7 +117,7 @@ const Component = ({settingsUI, ...props}) => {
                 sizeSvg={`${20 * 1.25}px`}
               />
             ) : (
-              <img src={getCorrectImageUrl} />
+              <img src={getCorrectImageUrl} width="100%" height="100%" />
             )}
           </>
         ) : null}
