@@ -111,7 +111,11 @@ const Component = ({settingsUI, ...props}) => {
         {getExtension.length ? (
           <>
             {getExtension === 'icons' ? (
-              <CustomSvg fill={settingsUI.iconTintColor} src={getCorrectImageUrl} />
+              <CustomSvg
+                fill={settingsUI.iconTintColor}
+                src={getCorrectImageUrl}
+                sizeSvg={`${20 * 1.25}px`}
+              />
             ) : (
               <img src={getCorrectImageUrl} />
             )}

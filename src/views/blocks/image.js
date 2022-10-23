@@ -13,7 +13,7 @@ import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
 import {getSizeStyle} from 'views/utils/styles/size';
 import {useSelector} from 'react-redux';
-import {setCorrectImageUrl, getFieldValue} from 'utils';
+import {setCorrectImageUrl, getFieldValue, checkExtension} from 'utils';
 import {CustomSvg} from 'components/CustomSvg';
 
 const Image = styled.img`
@@ -62,7 +62,7 @@ const Component = ({settingsUI, ...props}) => {
 
   return (
     <Wrapper id={props.id} {...settingsUI} {...props}>
-      {getExtension === 'icons' ? (
+      {getExtension === 'icons' || checkExtension(getCorrectImageUrl) === 'svg' ? (
         <CustomSvg fill={settingsUI.iconTintColor} src={getCorrectImageUrl} />
       ) : (
         <Image

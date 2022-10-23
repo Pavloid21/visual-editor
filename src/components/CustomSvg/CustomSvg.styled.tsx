@@ -10,7 +10,7 @@ export const CustomSvgStyled = styled.div<{
     height: ${(props) => props.height || '100%'};
     
     & path {
-        fill: ${(props) => props.fill || 'black'};
+        fill: ${(props) => props.fill || ''};
     }
   }
 `;

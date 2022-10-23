@@ -69,7 +69,11 @@ const Component = ({settingsUI, ...props}) => {
       {checkIcon.url.length ? (
         <>
           {checkIcon.colorSvg ? (
-            <CustomSvg fill={checkIcon.colorSvg} src={setCorrectImageUrl(checkIcon.url, id)} />
+            <CustomSvg
+              fill={checkIcon.colorSvg}
+              src={setCorrectImageUrl(checkIcon.url, id)}
+              sizeSvg={`${20 * 1.25}px`}
+            />
           ) : (
             <img src={setCorrectImageUrl(checkIcon.url, id)} />
           )}
