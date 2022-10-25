@@ -7,6 +7,7 @@ import {Store} from 'react-notifications-component';
 import {successNotification} from 'constants/notifications';
 import {changesSaved} from 'store/layout.slice';
 import {currentEditorStateSafeSelector} from 'store/selectors';
+import {deleteAction as deleteActionStore} from 'store/actions.slice';
 
 export const SaveAppWrapper: React.FC<unknown> = () => {
   const dispatch = useDispatch();
@@ -29,7 +30,7 @@ export const SaveAppWrapper: React.FC<unknown> = () => {
         }
       });
 
-      const actionsPromises: Promise<any>[] = actions.map((item) => {
+      const actionsPromises: Promise<any>[] = actions.map((item: any) => {
         return saveAction(projectID, item.type, item.action, item.object);
       });
       const deletedActionsPromises: Promise<any>[] = deletedActions.map((item) => {
@@ -49,6 +50,7 @@ export const SaveAppWrapper: React.FC<unknown> = () => {
         });
       });
       dispatch(changesSaved());
+      dispatch(deleteActionStore(null));
     },
     [actions, currentProject, deletedActions, deletedScreens, dispatch, editedScreens, projectID, snippets]
   );

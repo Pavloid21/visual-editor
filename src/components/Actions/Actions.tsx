@@ -36,7 +36,7 @@ const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
       [
         ...state.actions.actions.map((item) => ({...item, type: ActionTypes.actions})),
         ...state.actions.data.map((item) => ({...item, type: ActionTypes.data})),
-        ...state.actions.externals.map((item) => ({...item, type: ActionTypes.external}))
+        ...state.actions.externals.map((item) => ({...item, type: ActionTypes.externals}))
       ],
       ActionTypes.actions,
       'asc'
@@ -46,7 +46,7 @@ const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
   const cronTasksActions: ActionItem[] = useSelector((state: RootStore) =>
     orderBy(
       [
-        ...state.actions.cronTasks.map((item) => ({...item, type: ActionTypes.cronTask}))
+        ...state.actions.cronTasks.map((item) => ({...item, type: ActionTypes.cronTasks}))
       ],
       'action',
       'asc'
@@ -70,7 +70,7 @@ const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
     availableActions = filterActionsType(availableActions, ActionTypes.actions);
   }
   if (filterActionType === 3) {
-    availableActions = filterActionsType(availableActions, ActionTypes.external);
+    availableActions = filterActionsType(availableActions, ActionTypes.externals);
   }
 
   let renderActions: ActionItem[] = [];
@@ -114,7 +114,7 @@ const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
             const actions: any[] = [];
             resolves.forEach((result) => {
               if (result.status === 'fulfilled') {
-                actions.push({...result.value, selected: false});
+                actions.push({...result.value, type: actionType, selected: false});
               }
             });
             dispatch(setActions({[actionType]: actions}));

@@ -63,7 +63,11 @@ export const FilterActionContainer = styled.div`
   & label {
     font-size: 12px;
     line-height: 16px;
-    margin: 0 0 0 10px;
+  }
+
+  & .radio-label {
+    padding: 0 0 0 10px;
+    margin: 0;
   }
 `;
 

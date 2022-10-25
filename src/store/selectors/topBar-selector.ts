@@ -19,6 +19,9 @@ const getCurrentEditorState = ({project, layout, actions}: RootStore): TCurrentE
     actions: [
       ...actions.actions.map((item) => ({...item, type: ActionTypes.actions})),
       ...actions.data.map((item) => ({...item, type: ActionTypes.data})),
+      ...actions.externals.map((item) => ({...item, type: ActionTypes.externals})),
+      ...actions.push.map((item) => ({...item, type: ActionTypes.push})),
+      ...actions.cronTasks.map((item) => ({...item, type: ActionTypes.cronTasks}))
     ],
     deletedActions: [
       ...actions.deleted.actions.map((item) => ({
@@ -26,6 +29,9 @@ const getCurrentEditorState = ({project, layout, actions}: RootStore): TCurrentE
         type: ActionTypes.actions,
       })),
       ...actions.deleted.data.map((item) => ({...item, type: ActionTypes.data})),
+      ...actions.deleted.externals.map((item) => ({...item, type: ActionTypes.externals})),
+      ...actions.deleted.push.map((item) => ({...item, type: ActionTypes.push})),
+      ...actions.deleted.cronTasks.map((item) => ({...item, type: ActionTypes.cronTasks})),
     ],
     deletedScreens: layout.deletedScreens,
     editedScreens: layout.editedScreens,

@@ -1,13 +1,13 @@
 /* eslint-disable react/jsx-key */
-import React, {useState, useEffect, useCallback} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import React, {useCallback, useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import actionTypes from 'constants/actionTypes';
 import {Gallery} from 'containers/Gallery';
 import {Actions, ButtonSelector, LeftSideBarMenu, Modal, SideBarHeader} from 'components';
 import {v4} from 'uuid';
-import {getScreenesList, getScreenByName, getScreenTemplates, getTemplateData} from 'services/ApiService';
+import {getScreenByName, getScreenesList, getScreenTemplates, getTemplateData} from 'services/ApiService';
 import {useParams} from 'react-router-dom';
-import {observer, snippet, prepareTree, buildLayout, useModal} from 'utils';
+import {buildLayout, observer, prepareTree, snippet, useModal} from 'utils';
 import {
   Container,
   DefaultTemplateWrapper,
@@ -20,13 +20,13 @@ import {addAction} from 'store/actions.slice';
 import {setActiveTab as setActiveTabAction} from 'store/config.slice';
 import {saveCode} from 'store/code.slice';
 import {cloneBlock, deleteBlock, selectScreen, setLayout, setSelectedBlock, setSnippet} from 'store/layout.slice';
-import {RootStore, ActionTypes} from 'store/types';
+import {ActionTypes, RootStore} from 'store/types';
 import {Bar} from 'containers/Project/Modal/Modal.styled';
 import {ReactComponent as Close} from 'assets/close.svg';
 import {screenTemplates as defaultTemplates} from 'constants/screenTemplates';
 import {setScreens} from 'store/screens.slice';
 import {Screens} from 'components/Screens';
-import {SubheaderScreens, SubheaderActions} from 'components/LeftSideBar/Subheader';
+import {SubheaderActions, SubheaderScreens} from 'components/LeftSideBar/Subheader';
 import {setActiveTabActions} from 'store/left-bar-menu.slice';
 
 const LeftSidebar: React.FC<unknown> = () => {
@@ -38,6 +38,7 @@ const LeftSidebar: React.FC<unknown> = () => {
   } = useSelector((state: RootStore) => state.layout);
   const activeTabMenu = useSelector((state: RootStore) => state.leftBarMenu.activeTab);
   const activeTabActions = useSelector((state: RootStore) => state.leftBarMenu.activeTabActions);
+  const filterAction = useSelector((state: RootStore) => state.leftBarMenu.filterAction);
   const [loading, setLoading] = useState(false);
   const barState = useSelector((state: RootStore) => state.sideBar);
   const api = useSelector((state: RootStore) => state.api);
@@ -323,13 +324,49 @@ const LeftSidebar: React.FC<unknown> = () => {
   }, [availableScreenes, bottomBar, selectedScreen, topAppBar]);
 
   const handleAddAction = useCallback(() => {
-    const added = {
-      action: 'new_action',
-      object: '',
-      type: ActionTypes.actions
-    };
+    let actionNew = ActionTypes.actions;
+    let added: any;
+    if (activeTabActions === 0) {
+      switch (filterAction) {
+        case 1:
+          actionNew = ActionTypes.data;
+          break;
+        case 3:
+          actionNew = ActionTypes.externals;
+          break;
+        default:
+          actionNew = ActionTypes.actions;
+          break;
+      }
+      added = {
+        action: 'new_action',
+        object: '',
+        type: actionNew
+      };
+    } else if (activeTabActions === 1) {
+      actionNew = ActionTypes.cronTasks;
+      added = {
+        action: 'new_action',
+        object: {
+          id: 'new_action',
+          pattern: '',
+          snippetType: '',
+          snippetName: ''
+        },
+        selected: false,
+        type: actionNew
+      };
+    } else if (activeTabActions === 2) {
+      actionNew = ActionTypes.push;
+      added = {
+        action: 'new_action',
+        type: actionNew
+      };
+    }
+
+
     dispatch(addAction(added));
-  }, [dispatch]);
+  }, [dispatch, activeTabActions, filterAction]);
 
   const handleCloneScreen = useCallback(
     (event, screenUuid) => {

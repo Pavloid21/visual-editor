@@ -25,6 +25,9 @@ export type Actions = {
   deleted: {
     actions: ActionItem[];
     data: ActionItem[];
+    externals: ActionItem[];
+    cronTasks: ActionItem[];
+    push: ActionItem[];
   };
 };
 
@@ -32,27 +35,22 @@ export enum ActionTypes {
   data = 'data',
   actions = 'actions',
   push = 'push',
-  external = 'external',
-  cronTask = 'cronTask'
+  externals = 'externals',
+  cronTasks = 'cronTasks'
+}
+
+export type ActionCronTasksObject = {
+  id?: string;
+  pattern?: string;
+  snippetType?: string;
+  snippetName?: string;
 }
 
 export type ActionItem = {
   action: string;
-  object: string;
+  object?: ActionCronTasksObject | string;
   selected?: boolean;
   type: ActionTypes;
-};
-
-export type ActionCronTaskItem = {
-  action: string;
-  object: {
-    id: string;
-    pattern: string;
-    snippetType?: string;
-    snippetName?: string;
-  }
-  type: ActionTypes;
-  selected?: boolean;
 };
 
 export type ActionPushItem = {

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {ActionTypes} from 'store/types';
+import {ACTIONS_API} from './constants';
 
 type OptionsType = {
   url: string;
@@ -107,7 +107,7 @@ export const getActionByName = async (projectId: string, actionName: string, act
 };
 
 export const saveAction = async (projectId: string, actionType: string, endpoint: string, payload: string) => {
-  const keyType = actionType === ActionTypes.actions ? 'actions' : actionType;
+  const keyType = ACTIONS_API[actionType];
   const url = API.defaults.baseURL + `projects/${projectId}/admin/${keyType}/${endpoint}`;
   return callApi(url, payload, 'PUT', undefined, undefined, {
     'Content-Type': 'application/javascript',
@@ -115,7 +115,8 @@ export const saveAction = async (projectId: string, actionType: string, endpoint
 };
 
 export const deleteAction = async (projectId: string, actionType: string, endpoint: string) => {
-  const url = API.defaults.baseURL + `projects/${projectId}/admin/${actionType}/${endpoint}`;
+  const keyType = ACTIONS_API[actionType];
+  const url = API.defaults.baseURL + `projects/${projectId}/admin/${keyType}/${endpoint}`;
   return callApi(url, null, 'DELETE');
 };
 
