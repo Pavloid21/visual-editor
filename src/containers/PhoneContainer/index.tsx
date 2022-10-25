@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 import {DeviceKeys, mockByDeviceKey, statusBarByDevice, stylesByDeviceKey} from 'containers/MobileSelect/consts';
@@ -7,6 +7,7 @@ import {Zoom} from 'containers/ZoomSelect/types';
 import {ReactComponent as AlignCenterIcon} from 'assets/align-center.svg';
 import {setZoom} from 'store/editor-mode.slice';
 import type {RootStore} from 'store/types';
+import {BottomSheetContainer} from './PhoneContainer.styled';
 
 const Wrapper = styled.div<any>`
   position: absolute;
@@ -41,6 +42,8 @@ const PhoneContainer = (props: IPhoneContainer) => {
   const topAppBar = useSelector((state: RootStore) => state.layout.topAppBar);
   const model: string = useSelector((state: RootStore) => state.editorMode.model);
   const zoom: Zoom = useSelector((state: RootStore) => state.editorMode.zoom);
+  const {settingsUI} = useSelector((state: RootStore) => state.output);
+  const [countHeightTopBlock, setCountHeightTopBlock] = useState<string>('30%');
 
   const dispatch = useDispatch();
 
@@ -57,6 +60,13 @@ const PhoneContainer = (props: IPhoneContainer) => {
     dispatch(setZoom(Zoom['100%']));
   };
 
+  useEffect(() => {
+    if(settingsUI) {
+      const result = 100 - settingsUI.bottomSheetSettings?.heightInPercent;
+      setCountHeightTopBlock(`${result}%`);
+    }
+  }, [settingsUI]);
+
   return (
     <>
       <PanZoom
@@ -71,8 +81,26 @@ const PhoneContainer = (props: IPhoneContainer) => {
           styled={{...stylesByDeviceKey[model as DeviceKeys]}}
           backgroundColor={topAppBar?.settingsUI.backgroundColor}
         >
-          {statusBarByDevice(topAppBar?.settingsUI.backgroundColor, model)}
-          {props.children}
+          {settingsUI && settingsUI.isBottomSheet ? (
+            <>
+              {statusBarByDevice(topAppBar?.settingsUI.backgroundColor, model)}
+              <BottomSheetContainer
+                backgroundColor={settingsUI.bottomSheetSettings?.scrimColor}
+                heightTop={countHeightTopBlock}
+                heightInPercent={`${settingsUI.bottomSheetSettings?.heightInPercent}%`}
+              >
+                <div className="top-block" />
+                <div className="bottom-sheet">
+                  {props.children}
+                </div>
+              </BottomSheetContainer>
+            </>
+          ): (
+            <>
+              {statusBarByDevice(topAppBar?.settingsUI.backgroundColor, model)}
+              {props.children}
+            </>
+          )}
         </Wrapper>
         {mockByDeviceKey[model as DeviceKeys]}
       </PanZoom>

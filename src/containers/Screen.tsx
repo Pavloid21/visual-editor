@@ -142,6 +142,7 @@ const Screen: React.FC<any> = (props) => {
               label="Height"
               type="number"
               placeholder="Height"
+              maxNumber={100}
               value={settingsUI.bottomSheetSettings?.heightInPercent}
               max={100}
               min={0}
@@ -154,65 +155,6 @@ const Screen: React.FC<any> = (props) => {
                     bottomSheetSettings: {
                       ...settingsUI.bottomSheetSettings,
                       heightInPercent: +e.target.value,
-                    },
-                  },
-                  snippet: {
-                    screenID: selectedScreen.uuid,
-                    endpoint: e.target.value.replace(/\s/g, '_'),
-                    snippet: snippet({
-                      screen: e.target.value,
-                      listItems: layout,
-                    }),
-                  },
-                })
-              }
-            />
-            <Input
-              $isWide
-              $clearable={false}
-              label="Scrim color alpha"
-              type="number"
-              placeholder="Scrim color alpha"
-              value={settingsUI.bottomSheetSettings?.scrimColorAlpha}
-              max={1}
-              min={0}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement> & React.ChangeEvent<HTMLInputElement>) =>
-                dispatch({
-                  type: actionTypes.EDIT_SCREEN_NAME,
-                  screen: screenName,
-                  navigationSettings: navigationSettings,
-                  settingsUI: {
-                    bottomSheetSettings: {
-                      ...settingsUI.bottomSheetSettings,
-                      scrimColorAlpha: +e.target.value,
-                    },
-                  },
-                  snippet: {
-                    screenID: selectedScreen.uuid,
-                    endpoint: e.target.value.replace(/\s/g, '_'),
-                    snippet: snippet({
-                      screen: e.target.value,
-                      listItems: layout,
-                    }),
-                  },
-                })
-              }
-            />
-            <ColorPicker
-              debouncetimeout={500}
-              label="Background color"
-              $isWide
-              placeholder="Background color"
-              value={settingsUI.bottomSheetSettings?.sheetBackgroundColor}
-              onChange={(e: any) =>
-                dispatch({
-                  type: actionTypes.EDIT_SCREEN_NAME,
-                  screen: screenName,
-                  navigationSettings: navigationSettings,
-                  settingsUI: {
-                    bottomSheetSettings: {
-                      ...settingsUI.bottomSheetSettings,
-                      sheetBackgroundColor: e.target.value,
                     },
                   },
                   snippet: {
