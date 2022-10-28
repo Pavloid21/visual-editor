@@ -1,53 +1,36 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import styled from 'styled-components';
-import {DeviceKeys, mockByDeviceKey, statusBarByDevice, stylesByDeviceKey} from 'containers/MobileSelect/consts';
+import {
+  DeviceKeys,
+  mockByDeviceKey,
+  statusBarByDevice,
+  stylesByDeviceKey
+} from 'containers/MobileSelect/consts';
 import {PanZoom} from 'react-easy-panzoom';
+
 import {Zoom} from 'containers/ZoomSelect/types';
 import {ReactComponent as AlignCenterIcon} from 'assets/align-center.svg';
 import {setZoom} from 'store/editor-mode.slice';
+
+import {BottomSheetContainer, Wrapper, AlignCenterButton} from './PhoneContainer.styled';
+
 import type {RootStore} from 'store/types';
-import {BottomSheetContainer} from './PhoneContainer.styled';
-
-const Wrapper = styled.div<any>`
-  position: absolute;
-  width: 428px;
-  height: 836px;
-  border-radius: 37px;
-  border: 1px solid #000;
-  overflow: hidden;
-  padding: 56px 26px 0;
-  background-color: ${(props) => props.backgroundColor};
-  ${(props) => {
-    return props.styled;
-  }}
-`;
-
-const AlignCenterButton = styled.div`
-  position: absolute;
-  right: 16px;
-  bottom: 25px;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 50px;
-  border: 1px solid var(--neo-gray);
-  cursor: pointer;
-`;
 
 interface IPhoneContainer {
   children?: JSX.Element;
 }
 
-const PhoneContainer = (props: IPhoneContainer) => {
+export const PhoneContainer = (props: IPhoneContainer) => {
+  const [countHeightTopBlock, setCountHeightTopBlock] = useState<string>('30%');
+
   const topAppBar = useSelector((state: RootStore) => state.layout.topAppBar);
   const model: string = useSelector((state: RootStore) => state.editorMode.model);
   const zoom: Zoom = useSelector((state: RootStore) => state.editorMode.zoom);
   const {settingsUI} = useSelector((state: RootStore) => state.output);
-  const [countHeightTopBlock, setCountHeightTopBlock] = useState<string>('30%');
-
   const dispatch = useDispatch();
-
   const zoomRef = useRef(null);
+
+  const maxHeight = 100;
 
   useEffect(() => {
     // @ts-ignore
@@ -62,7 +45,7 @@ const PhoneContainer = (props: IPhoneContainer) => {
 
   useEffect(() => {
     if(settingsUI) {
-      const result = 100 - settingsUI.bottomSheetSettings?.heightInPercent;
+      const result = maxHeight - settingsUI.bottomSheetSettings?.heightInPercent;
       setCountHeightTopBlock(`${result}%`);
     }
   }, [settingsUI]);
@@ -95,13 +78,14 @@ const PhoneContainer = (props: IPhoneContainer) => {
                 </div>
               </BottomSheetContainer>
             </>
-          ): (
+          ) : (
             <>
               {statusBarByDevice(topAppBar?.settingsUI.backgroundColor, model)}
               {props.children}
             </>
           )}
         </Wrapper>
+
         {mockByDeviceKey[model as DeviceKeys]}
       </PanZoom>
 
@@ -111,5 +95,3 @@ const PhoneContainer = (props: IPhoneContainer) => {
     </>
   );
 };
-
-export default PhoneContainer;

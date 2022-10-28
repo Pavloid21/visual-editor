@@ -1,8 +1,36 @@
 import styled from 'styled-components';
 
-export const BottomSheetContainer = styled.div<{
+const Wrapper = styled.div<{
+  backgroundColor: string;
+  styled: any;
+}>`
+  position: absolute;
+  width: 428px;
+  height: 836px;
+  border-radius: 37px;
+  border: 1px solid #000;
+  overflow: hidden;
+  padding: 56px 26px 0;
+  background-color: ${(props) => props.backgroundColor};
+  ${(props) => {
+    return props.styled;
+  }}
+`;
+
+const AlignCenterButton = styled.div`
+  position: absolute;
+  right: 16px;
+  bottom: 25px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 50px;
+  border: 1px solid var(--neo-gray);
+  cursor: pointer;
+`;
+
+const BottomSheetContainer = styled.div<{
   backgroundColor: string,
-  heightTop?: string
+  heightTop?: string,
   heightInPercent: string,
 }>`
   height: 100%;
@@ -20,3 +48,9 @@ export const BottomSheetContainer = styled.div<{
     height: ${(props) => (props.heightInPercent || '100%')};
   }
 `;
+
+export {
+  Wrapper,
+  AlignCenterButton,
+  BottomSheetContainer
+};
