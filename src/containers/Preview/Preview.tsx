@@ -5,7 +5,7 @@ import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 import {ItemTypes} from 'constants/actionTypes';
 import {arrayMoveImmutable} from 'array-move';
 import {observer, onSortMove} from 'utils';
-import PhoneContainer from '../PhoneContainer';
+import {PhoneContainer} from '../PhoneContainer';
 import {Code} from '../Code';
 import {ReactComponent as Screen} from 'assets/screen.svg';
 import {ReactComponent as Json} from 'assets/json.svg';

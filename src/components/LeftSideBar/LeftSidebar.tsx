@@ -5,7 +5,7 @@ import actionTypes from 'constants/actionTypes';
 import {Gallery} from 'containers/Gallery';
 import {Actions, ButtonSelector, LeftSideBarMenu, Modal, SideBarHeader} from 'components';
 import {v4} from 'uuid';
-import {getScreenesList, getScreenByName, getScreenTemplates, getTemplateData} from 'services/ApiService';
+import {getScreensList, getScreenByName, getScreenTemplates, getTemplateData} from 'services/ApiService';
 import {useParams} from 'react-router-dom';
 import {observer, snippet, prepareTree, buildLayout, useModal} from 'utils';
 import {
@@ -77,7 +77,7 @@ const LeftSidebar: React.FC<unknown> = () => {
 
   useEffect(() => {
     setLoading(true);
-    getScreenesList(project).then(({data}) => {
+    getScreensList(project).then(({data}) => {
       Promise.allSettled(generatePromiseStack(data, true))
         .then((resolves) => {
           const layouts: Record<string, any>[] = [];
@@ -171,7 +171,7 @@ const LeftSidebar: React.FC<unknown> = () => {
         })
       );
     }
-  }, [output]);
+  }, [output, settingsUI]);
 
   const parseRuturnStatement = (script: any) => {
     const string: string = script.data.indexOf(' ') === 0 ? `${script.data}`.replace(' ', '') : script.data;

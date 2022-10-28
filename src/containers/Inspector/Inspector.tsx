@@ -111,7 +111,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
           return (
             <div className="form-group" key={`${parentKey}_${index}`}>
               <ColorPicker
-                debounceTimeout={500}
+                debouncetimeout={500}
                 label={config[el].name}
                 $isWide
                 placeholder={config[el].name}

@@ -59,7 +59,7 @@ const Screens: React.FC<ScreensProps> = ({
                       ? 'node_selected'
                       : ''
                   }`}
-                  onClick={async (event) => await handleItemClick(event, extendedNode)}
+                  onClick={async (event) => handleItemClick(event, extendedNode)}
                 >
                   <ScreenTitle>
                     {load?.load && load?.uuid === extendedNode.node.uuid ? (

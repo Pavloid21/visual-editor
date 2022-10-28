@@ -5,7 +5,7 @@ import {Input, Label} from 'components/controls';
 import {WithLabel} from './WithLabel';
 import {DropdownIndicator} from './Dropdown';
 import {baseStyleSelect} from './style';
-import {getActionsList, getDataActionsList, getScreenesList} from 'services/ApiService';
+import {getActionsList, getDataActionsList, getScreensList} from 'services/ApiService';
 import {Indicator, Item, TabsContainer} from './Select.styled';
 import {AnimateSharedLayout} from 'framer-motion';
 import {ActionTypes} from 'store/types';
@@ -82,7 +82,7 @@ export const Select = React.memo((props: ISelect) => {
       };
     }
     if (actionTypesList?.includes('screens')) {
-      screens = await getScreenesList(projectId!);
+      screens = await getScreensList(projectId!);
       optionsModel = {
         ...optionsModel,
         screens: screens.data.map((screen: string) => ({
@@ -129,6 +129,7 @@ export const Select = React.memo((props: ISelect) => {
       setOptions(options);
     }
   }, [options, optionsModel, selected_value]);
+
   return (
     <>
       {props.async && (
