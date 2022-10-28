@@ -5,7 +5,7 @@ import store from './index';
 export type EditScreenNamePayloadAction = Action<string> & {
   screen: string;
   navigationSettings: any;
-  settingsUI: any;
+  settingsUI: TSettingsUI;
   snippet: {
     snippet: string;
     endpoint: string;
@@ -115,13 +115,6 @@ export type Config = {
   previewMode: number;
 };
 
-export type Output = {
-  screen: string;
-  logic: string;
-  navigationSettings: any;
-  settingsUI: any;
-};
-
 export type SideBar = {
   left: boolean;
   right: boolean;
@@ -143,6 +136,14 @@ export type LeftBarMenu = {
 export type TScreenListOption = {
   label: string;
   value: string;
+}
+
+export type TSettingsUI = {
+  isBottomSheet: any;
+    bottomSheetSettings: {
+      heightInPercent: number;
+      scrimColor: string;
+    }
 }
 
 export type RootStore = ReturnType<typeof store.getState>;

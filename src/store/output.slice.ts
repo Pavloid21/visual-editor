@@ -1,12 +1,30 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import actionTypes from 'constants/actionTypes';
-import type {EditScreenNamePayloadAction, Output} from './types';
 
-const initialState: Output = {
+import type {EditScreenNamePayloadAction, TSettingsUI} from './types';
+
+interface IInitialState {
+  screen: string;
+  logic: string;
+  navigationSettings: any;
+  settingsUI: TSettingsUI;
+}
+
+const initialState: IInitialState = {
   screen: 'screen name',
   logic: '',
-  navigationSettings: undefined,
-  settingsUI: undefined,
+  navigationSettings: {
+    saveScreen: false,
+    showBottomBar: false,
+    updateUrlBottomBar: '',
+  },
+  settingsUI: {
+    isBottomSheet: false,
+    bottomSheetSettings: {
+      heightInPercent: 70,
+      scrimColor: '#FFFFFF'
+    }
+  }
 };
 
 const outputSlice = createSlice({
