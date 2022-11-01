@@ -8,6 +8,7 @@ const initialState: Actions = {
   externals: [],
   push: [],
   cronTasks: [],
+  all: [],
   selected: null,
   deleted: {
     actions: [],

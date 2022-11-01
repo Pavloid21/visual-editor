@@ -2,7 +2,7 @@ import {Button} from 'components/controls';
 import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useLocation} from 'react-router-dom';
-import {deleteAction, deleteScreen, editProject, saveAction, saveScreen} from '../../../services/ApiService';
+import {deleteAction, deleteScreen, editProject, saveAction, saveScreen} from 'services/ApiService';
 import {Store} from 'react-notifications-component';
 import {successNotification} from 'constants/notifications';
 import {changesSaved} from 'store/layout.slice';

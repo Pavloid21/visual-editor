@@ -1,12 +1,12 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import type {LeftBarMenu} from './types';
+import {ActionTypes, LeftBarMenu} from './types';
 
 const initialState: LeftBarMenu = {
   activeTab: 'screen',
-  filterAction: 0,
+  filterAction: ActionTypes.all,
   screenNameFilter: '',
   actionNameFilter: '',
-  activeTabActions: 0
+  activeTabActions: 'actions'
 };
 
 const leftBarMenuSlice = createSlice({
@@ -16,8 +16,8 @@ const leftBarMenuSlice = createSlice({
     setLeftBarMenu: (state, action: PayloadAction<string>) => {
       state.activeTab = action.payload;
     },
-    setLeftBarActionFilter: (state, action: PayloadAction<number>) => {
-      state.filterAction = +action.payload;
+    setLeftBarActionFilter: (state, action: PayloadAction<ActionTypes>) => {
+      state.filterAction = action.payload;
     },
     setScreenNameFilter: (state, action: PayloadAction<string>) => {
       state.screenNameFilter = action.payload;
@@ -25,7 +25,7 @@ const leftBarMenuSlice = createSlice({
     setActionNameFilter: (state, action: PayloadAction<string>) => {
       state.actionNameFilter = action.payload;
     },
-    setActiveTabActions: (state, action: PayloadAction<number>) => {
+    setActiveTabActions: (state, action: PayloadAction<string>) => {
       state.activeTabActions = action.payload;
     }
   }

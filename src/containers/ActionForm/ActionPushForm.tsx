@@ -2,15 +2,16 @@ import {Container, H4, Settings} from './ActionForm.styled';
 import {Button, Input} from 'components/controls';
 import {Controller, useForm} from 'react-hook-form';
 import React, {FC, useEffect} from 'react';
-import {ActionItem, ActionPushItem, RootStore} from 'store/types';
-import {deleteActionEdit, setActions, setSelectAction} from '../../store/actions.slice';
+import {ActionItem, ActionPushItem} from 'store/types';
+import {deleteActionEdit, setActions, setSelectAction} from 'store/actions.slice';
 import {useDispatch, useSelector} from 'react-redux';
+import {selectedActionSelector, snippetsSelector} from 'store/selectors/left-bar-selector';
 
 const ActionPushForm: FC<{action: ActionPushItem}> = ({action}) => {
   const dispatch = useDispatch();
   const {setValue, getValues, control} = useForm();
-  const snippets = useSelector((state: RootStore) => state.actions);
-  const selected = useSelector((state: RootStore) => state.actions.selected);
+  const snippets = useSelector(snippetsSelector);
+  const selected = useSelector(selectedActionSelector);
 
   useEffect(() => {
     setValue('topicName', action.action);

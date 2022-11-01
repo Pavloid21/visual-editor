@@ -16,81 +16,74 @@ import {deleteAction, setActions, setSelectAction} from 'store/actions.slice';
 import {ActionItem, ActionTypes, RootStore} from 'store/types';
 import {Option} from 'react-dropdown';
 import {DropdownIcon} from 'components/Actions/Actions.styled';
-import ActionDropdownItem from './ActionDropdownItem';
+import {ActionDropdownItem} from './components/ActionDropdownItem';
+import {ActionsDropdown} from './types';
+import {DROPDOWN_VALUES} from './constants';
+import {snippetsSelector} from 'store/selectors/left-bar-selector';
 
 type ActionsProps = {
-  activeTabActions: number
+  activeTabActions: string
 };
 
 const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
   const dispatch = useDispatch();
   const actionNameFilter = useSelector((state: RootStore) => state.leftBarMenu.actionNameFilter);
   const filterActionType = useSelector((state: RootStore) => state.leftBarMenu.filterAction);
+  const snippets = useSelector(snippetsSelector);
 
   const filterActionsType = (arr: ActionItem[], type: ActionTypes) => {
     return arr.filter((item: ActionItem) => item.type === type);
   };
 
-  let availableActions: ActionItem[] = useSelector((state: RootStore) =>
-    orderBy(
+  let availableActions: ActionItem[] = orderBy(
       [
-        ...state.actions.actions.map((item) => ({...item, type: ActionTypes.actions})),
-        ...state.actions.data.map((item) => ({...item, type: ActionTypes.data})),
-        ...state.actions.externals.map((item) => ({...item, type: ActionTypes.externals}))
+        ...snippets.actions.map((item) => ({...item, type: ActionTypes.actions})),
+        ...snippets.data.map((item) => ({...item, type: ActionTypes.data})),
+        ...snippets.externals.map((item) => ({...item, type: ActionTypes.externals}))
       ],
       ActionTypes.actions,
       'asc'
-    )
-  );
+    );
 
-  const cronTasksActions: ActionItem[] = useSelector((state: RootStore) =>
-    orderBy(
+  const cronTasksActions: ActionItem[] = orderBy(
       [
-        ...state.actions.cronTasks.map((item) => ({...item, type: ActionTypes.cronTasks}))
+        ...snippets.cronTasks.map((item) => ({...item, type: ActionTypes.cronTasks}))
       ],
       'action',
       'asc'
-    )
-  );
+    );
 
-  const pushListActions: ActionItem[] = useSelector((state: RootStore) =>
-    orderBy(
+  const pushListActions: ActionItem[] = orderBy(
       [
-        ...state.actions.push.map((item) => ({...item, type: ActionTypes.push}))
+        ...snippets.push.map((item) => ({...item, type: ActionTypes.push}))
       ],
       'action',
       'asc'
-    )
-  );
+    );
 
-  if (filterActionType === 1) {
-    availableActions = filterActionsType(availableActions, ActionTypes.data);
-  }
-  if (filterActionType === 2) {
-    availableActions = filterActionsType(availableActions, ActionTypes.actions);
-  }
-  if (filterActionType === 3) {
-    availableActions = filterActionsType(availableActions, ActionTypes.externals);
+  if (filterActionType !== 'all') {
+    availableActions = filterActionsType(availableActions, ActionTypes[filterActionType]);
   }
 
   let renderActions: ActionItem[] = [];
 
   switch (activeTabActions) {
-    case 0:
+    case 'actions':
       renderActions = [...availableActions];
       break;
-    case 1:
+    case 'cronTasks':
       renderActions = [...cronTasksActions];
       break;
-    case 2:
+    case 'push':
       renderActions = [...pushListActions];
       break;
     default:
-      renderActions = [];
+      renderActions = [...availableActions];
     break;
   }
 
-  const renderActionsFilter = renderActions.filter((item: any) => item.action.toUpperCase().includes(actionNameFilter.toUpperCase()));
+  const regex = new RegExp(actionNameFilter, 'gi');
+  const renderActionsFilter = renderActions.filter((item: ActionItem) => item.action.match(regex));
 
   const selectedAction = useSelector((state: RootStore) => state.actions.selected);
   const projectID = useSelector((state: RootStore) => state.project.id);
@@ -145,7 +138,7 @@ const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
   };
 
   const handleDeleteAction = (action: ActionItem) => {
-    const newActions = filterActionsType(renderActions, action.type).filter((item) => item.action !== action.action);
+    const newActions = renderActions.filter((item) => item.type === action.type && item.action !== action.action);
     dispatch(deleteAction(action));
     dispatch(setActions({[action.type]: newActions}));
   };
@@ -159,10 +152,10 @@ const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
 
   const handleChangeDropdown = async (arg: Option, action: ActionItem) => {
     switch (arg.value) {
-      case 'Delete':
+      case DROPDOWN_VALUES.DELETE:
         handleDeleteAction(action);
         break;
-      case 'Copy':
+      case DROPDOWN_VALUES.COPY:
         handleCopyAction(action);
         break;
     }
@@ -189,8 +182,8 @@ const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
                 <div>
                   <DropdownIcon
                     options={[
-                      {label: <ActionDropdownItem label='Copy' />, value: 'Copy'},
-                      {label: <ActionDropdownItem label='Delete' />, value: 'Delete'}
+                      {label: <ActionDropdownItem label={ActionsDropdown.Copy} />, value: 'Copy'},
+                      {label: <ActionDropdownItem label={ActionsDropdown.Delete} />, value: 'Delete'}
                     ]}
                     placeholder=" "
                     arrowClosed={<ActionDots />}

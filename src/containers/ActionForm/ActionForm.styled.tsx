@@ -20,6 +20,11 @@ export const Container = styled.div`
   }
 `;
 
+export const Separator = styled.div`
+  height: 1px;
+  background: #E6E6E6;
+`;
+
 export const EditorWrapper = styled.div<{icon: string}>`
   max-height: 638px;
   overflow: auto;

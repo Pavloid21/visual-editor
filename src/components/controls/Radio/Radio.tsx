@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {Container} from './Radio.styled';
 
 type RadioProps = {
-  value: number,
+  value: string,
   checked: boolean,
   name: string,
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,

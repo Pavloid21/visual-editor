@@ -41,18 +41,18 @@ const LeftSideBarMenu: React.FC = () => {
     }
   };
 
-  const setClassTabs = (value: string) => activeTab === value ? 'left-bar-image active' : 'left-bar-image';
+  const getClassTabById = (value: string) => activeTab === value ? 'left-bar-image active' : 'left-bar-image';
 
   return (
     <Container onClick={ContainerClick}>
       <MenuItem data-tab-active='screen' className={screenClass}>
-        <ScreenImage className={setClassTabs('screen')} />
+        <ScreenImage className={getClassTabById('screen')} />
       </MenuItem>
       <MenuItem data-tab-active='action' className={actionClass}>
-        <ActionImage className={setClassTabs('action')} />
+        <ActionImage className={getClassTabById('action')} />
       </MenuItem>
       <MenuItem data-tab-active='image' className={imageClass}>
-        <ImageImage className={setClassTabs('image')} />
+        <ImageImage className={getClassTabById('image')} />
       </MenuItem>
     </Container>
   );

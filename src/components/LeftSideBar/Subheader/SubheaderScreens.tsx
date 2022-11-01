@@ -1,6 +1,6 @@
 import {SideBarSubheader} from 'components';
 import {ReactComponent as Plus} from 'assets/plus.svg';
-import React from 'react';
+import React, {ChangeEvent} from 'react';
 import {Input} from 'components/controls';
 import {Search} from 'components/SideBarHeader/SideBarHeader.styled';
 import {useDispatch, useSelector} from 'react-redux';
@@ -16,7 +16,7 @@ const SubheaderScreens: React.FC<TSideBarSubheaderScreens> = ({
 }) => {
   const dispatch = useDispatch();
   const screenNameFilter = useSelector((state: RootStore) => state.leftBarMenu.screenNameFilter);
-  const setFilterValue = (e: any) => {
+  const setFilterValue = (e: ChangeEvent<HTMLTextAreaElement> & ChangeEvent<HTMLInputElement>) => {
     dispatch(setScreenNameFilter(e.target.value));
   };
 

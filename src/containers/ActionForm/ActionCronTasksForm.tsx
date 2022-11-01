@@ -2,29 +2,28 @@ import {Controller, useForm} from 'react-hook-form';
 import React, {FC, useEffect, useState} from 'react';
 import {Container, H4, Settings} from './ActionForm.styled';
 import {Button, Input, Select} from 'components/controls';
-import {ActionItem, ActionTypes, RootStore} from 'store/types';
+import {ActionItem, ActionTypes} from 'store/types';
 import {snippetTypeOptions} from './constants';
 import {useDispatch, useSelector} from 'react-redux';
 import {orderBy} from 'external/lodash';
 import {ActionOption} from 'components/Actions/types';
 import {deleteActionEdit, setActions, setSelectAction} from 'store/actions.slice';
+import {selectedActionSelector, snippetsSelector} from '../../store/selectors/left-bar-selector';
 
 const ActionCronTasksForm: FC<{action: any}> = ({action}) => {
   const dispatch = useDispatch();
   const {setValue, getValues, control} = useForm();
-  const snippets = useSelector((state: RootStore) => state.actions);
-  const selected = useSelector((state: RootStore) => state.actions.selected);
-  const actionsAll: ActionOption[] = useSelector((state: RootStore) =>
-    orderBy(
+  const snippets = useSelector(snippetsSelector);
+  const selected = useSelector(selectedActionSelector);
+  const actionsAll: ActionOption[] = orderBy(
       [
-        ...state.actions.actions.map((item) => ({label: item.action, value: item.action, type: ActionTypes.actions})),
-        ...state.actions.data.map((item) => ({label: item.action, value: item.action, type: ActionTypes.data})),
-        ...state.actions.externals.map((item) => ({label: item.action, value: item.action, type: ActionTypes.externals}))
+        ...snippets.actions.map((item) => ({label: item.action, value: item.action, type: ActionTypes.actions})),
+        ...snippets.data.map((item) => ({label: item.action, value: item.action, type: ActionTypes.data})),
+        ...snippets.externals.map((item) => ({label: item.action, value: item.action, type: ActionTypes.externals}))
       ],
       'value',
       'asc'
-    )
-  );
+    );
 
   useEffect(() => {
     setValue('id', action?.object?.id);
@@ -34,28 +33,19 @@ const ActionCronTasksForm: FC<{action: any}> = ({action}) => {
   }, [action]);
 
   const [snippetTypeValue, setSnippetTypeValue] = useState<string | undefined>(action?.object?.snippetType || '');
+
   const [snippetNameValue, setSnippetNameValue] = useState<string | undefined>(action?.object?.snippetName || '');
 
-  let availableActions: ActionOption[] = [];
-
-  switch (snippetTypeValue) {
-    case 'action':
-      availableActions = [{label: '', value: ''}, ...actionsAll.filter((item) => item.type === 'action')];
-      break;
-    case 'data':
-      availableActions = [{label: '', value: ''}, ...actionsAll.filter((item) => item.type === 'data')];
-      break;
-    case 'externalActions':
-      availableActions = [{label: '', value: ''}, ...actionsAll.filter((item) => item.type === 'externals')];
-      break;
-    default:
-      availableActions = actionsAll;
-  }
+  const availableActions: ActionOption[] =  [{label: '', value: ''}, ...actionsAll.filter((item) => item.type === snippetTypeValue)];
 
   const changeSnippetTypeValue = (e: string) => {
     setSnippetTypeValue(e);
     setValue('snippetName', '');
     setSnippetNameValue('');
+  };
+
+  const changeSnippetNameValue = (e: string) => {
+    setSnippetNameValue(e);
   };
 
   const handleSave = () => {
@@ -124,7 +114,7 @@ const ActionCronTasksForm: FC<{action: any}> = ({action}) => {
                 options={snippetTypeOptions}
                 value={snippetTypeValue}
                 label="Snippet Type"
-                onChange={(e: string) => changeSnippetTypeValue(e)}
+                onChange={changeSnippetTypeValue}
               />}
           />
           <Controller
@@ -136,7 +126,7 @@ const ActionCronTasksForm: FC<{action: any}> = ({action}) => {
                 options={availableActions}
                 label="Snippet Name"
                 value={snippetNameValue}
-                onChange={(e: string) => setSnippetNameValue(e)}
+                onChange={changeSnippetNameValue}
               />}
           />
         </div>

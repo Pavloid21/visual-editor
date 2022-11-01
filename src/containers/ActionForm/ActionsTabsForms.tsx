@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {ActionForm} from './index';
+import {ActionForm} from './ActionForm';
 import {ActionItem, RootStore} from 'store/types';
 import {useSelector} from 'react-redux';
 import ActionPushForm from './ActionPushForm';
@@ -14,9 +14,9 @@ const ActionsTabsForms: FC<ActionsTabsFormsType> = ({selectedAction}) => {
 
   return (
     <>
-      {activeTabActions === 0 && <ActionForm action={selectedAction} />}
-      {activeTabActions === 1 && <ActionCronTasksForm action={selectedAction} />}
-      {activeTabActions === 2 && <ActionPushForm action={selectedAction} />}
+      {activeTabActions === 'actions' && <ActionForm action={selectedAction} />}
+      {activeTabActions === 'cronTasks' && <ActionCronTasksForm action={selectedAction} />}
+      {activeTabActions === 'push' && <ActionPushForm action={selectedAction} />}
     </>
   );
 };

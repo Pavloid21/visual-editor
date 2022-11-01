@@ -8,8 +8,8 @@ export type TCurrentEditorState = {
   snippets: any[];
   actions: ActionItem[];
   deletedActions: ActionItem[];
-  deletedScreens: any[];
-  editedScreens: any[];
+  deletedScreens: string[];
+  editedScreens: string[];
 };
 
 const getCurrentEditorState = ({project, layout, actions}: RootStore): TCurrentEditorState => {

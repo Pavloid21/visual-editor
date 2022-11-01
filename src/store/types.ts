@@ -22,6 +22,7 @@ export type Actions = {
   push: ActionItem[];
   cronTasks: ActionItem[];
   selected: ActionItem | null;
+  all: ActionItem[];
   deleted: {
     actions: ActionItem[];
     data: ActionItem[];
@@ -32,6 +33,7 @@ export type Actions = {
 };
 
 export enum ActionTypes {
+  all = 'all',
   data = 'data',
   actions = 'actions',
   push = 'push',
@@ -159,10 +161,10 @@ export type EditorMode = {
 
 export type LeftBarMenu = {
   activeTab: string,
-  filterAction: number,
+  filterAction: ActionTypes,
   screenNameFilter: string,
   actionNameFilter: string,
-  activeTabActions: number
+  activeTabActions: string
 }
 
 export type TScreenListOption = {

@@ -13,15 +13,16 @@ import {Button, Input, Label} from 'components/controls';
 import ButtonSelector from 'components/ButtonSelector';
 import {useSelector, useDispatch} from 'react-redux';
 import {v4} from 'uuid';
-import {Container, EditorWrapper, H4, Settings} from './ActionForm.styled';
+import {Container, EditorWrapper, H4, Separator, Settings} from './ActionForm.styled';
 import {deleteActionEdit, setActions, setSelectAction} from 'store/actions.slice';
-import {ActionItem, RootStore} from 'store/types';
+import {ActionItem, ActionTypes} from 'store/types';
+import {selectedActionSelector, snippetsSelector} from 'store/selectors/left-bar-selector';
 
-const ActionForm: React.FC<{action: ActionItem}> = ({action}) => {
+export const ActionForm: React.FC<{action: ActionItem}> = ({action}) => {
   const dispatch = useDispatch();
   const {setValue, getValues, control} = useForm();
-  const snippets = useSelector((state: RootStore) => state.actions);
-  const selected = useSelector((state: RootStore) => state.actions.selected);
+  const snippets = useSelector(snippetsSelector);
+  const selected = useSelector(selectedActionSelector);
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal();
   useEffect(() => {
     setValue('actionName', action.action);
@@ -30,14 +31,13 @@ const ActionForm: React.FC<{action: ActionItem}> = ({action}) => {
   }, [action]);
 
   const handleSave = () => {
-    console.log('handleSave');
     const {actionName, code, type} = getValues();
     const nextActions = [...snippets.actions];
     const nextData = [...snippets.data];
     const nextExternals = [...snippets.externals];
     const nextPush = [...snippets.push];
     const nextCronTasks = [...snippets.cronTasks];
-    const key = action.type;
+    const key: ActionTypes = action.type;
     snippets[key].forEach((item: ActionItem, index: number) => {
       let ref = [];
       switch (selected?.type) {
@@ -116,7 +116,7 @@ const ActionForm: React.FC<{action: ActionItem}> = ({action}) => {
       <Settings>
         <H4>Action settings</H4>
       </Settings>
-      <div style={{height: '1px', background: '#E6E6E6'}}></div>
+      <Separator />
       <Container>
           <Controller
             name="actionName"
@@ -210,5 +210,3 @@ const ActionForm: React.FC<{action: ActionItem}> = ({action}) => {
     </>
   );
 };
-
-export default ActionForm;

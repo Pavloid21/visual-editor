@@ -27,7 +27,6 @@ import {screenTemplates as defaultTemplates} from 'constants/screenTemplates';
 import {setScreens} from 'store/screens.slice';
 import {Screens} from 'components/Screens';
 import {SubheaderActions, SubheaderScreens} from 'components/LeftSideBar/Subheader';
-import {setActiveTabActions} from 'store/left-bar-menu.slice';
 
 const LeftSidebar: React.FC<unknown> = () => {
   const {
@@ -326,12 +325,12 @@ const LeftSidebar: React.FC<unknown> = () => {
   const handleAddAction = useCallback(() => {
     let actionNew = ActionTypes.actions;
     let added: any;
-    if (activeTabActions === 0) {
+    if (activeTabActions === 'actions') {
       switch (filterAction) {
-        case 1:
+        case 'data':
           actionNew = ActionTypes.data;
           break;
-        case 3:
+        case 'externals':
           actionNew = ActionTypes.externals;
           break;
         default:
@@ -343,7 +342,7 @@ const LeftSidebar: React.FC<unknown> = () => {
         object: '',
         type: actionNew
       };
-    } else if (activeTabActions === 1) {
+    } else if (activeTabActions === 'cronTasks') {
       actionNew = ActionTypes.cronTasks;
       added = {
         action: 'new_action',
@@ -356,7 +355,7 @@ const LeftSidebar: React.FC<unknown> = () => {
         selected: false,
         type: actionNew
       };
-    } else if (activeTabActions === 2) {
+    } else if (activeTabActions === 'push') {
       actionNew = ActionTypes.push;
       added = {
         action: 'new_action',
@@ -442,7 +441,6 @@ const LeftSidebar: React.FC<unknown> = () => {
               <SubheaderActions
                 activeTab={activeTabActions}
                 handleAddAction={handleAddAction}
-                setActiveTab={setActiveTabActions}
               />}
             {activeTabMenu === 'screen' && activeTabScreens === 0 &&
               <Screens

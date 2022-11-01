@@ -6,18 +6,16 @@ import {Input} from 'components/controls';
 import FilterAction from 'components/Actions/FilterAction';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootStore} from 'store/types';
-import {setActionNameFilter} from 'store/left-bar-menu.slice';
+import {setActionNameFilter, setActiveTabActions} from 'store/left-bar-menu.slice';
 import {setSelectAction} from 'store/actions.slice';
 
 type TSideBarSubheaderActions = {
-  activeTab: number;
-  setActiveTab: any;
+  activeTab: string;
   handleAddAction: () => void;
 };
 
 const SubheaderActions: React.FC<TSideBarSubheaderActions> = ({
   activeTab,
-  setActiveTab,
   handleAddAction,
 }) => {
   const dispatch = useDispatch();
@@ -25,13 +23,13 @@ const SubheaderActions: React.FC<TSideBarSubheaderActions> = ({
   const setFilterValue = (e: any) => {
     dispatch(setActionNameFilter(e.target.value));
   };
-  const getClassTabById = (index: number) => {
-    return activeTab === index ? 'tab_active' : '';
+  const getClassTabById = (actionType: string) => {
+    return activeTab === actionType ? 'tab_active' : '';
   };
 
   const handlerClickAction = (event: React.MouseEvent<HTMLDivElement>) => {
-    const activeTabAction = +((event.target as HTMLDivElement)?.dataset?.tabId || 0);
-    dispatch(setActiveTab(activeTabAction));
+    const activeTabAction = (event.target as HTMLDivElement)?.dataset?.tabId || 'actions';
+    dispatch(setActiveTabActions(activeTabAction));
     dispatch(setSelectAction(null));
   };
 
@@ -39,13 +37,13 @@ const SubheaderActions: React.FC<TSideBarSubheaderActions> = ({
     <>
       <SideBarSubheader>
         <div className="actions_tab" onClick={handlerClickAction}>
-          <span data-tab-id={0} className={getClassTabById(0)}>
+          <span data-tab-id='actions' className={getClassTabById('actions')}>
             Actions
           </span>
-          <span data-tab-id={1} className={getClassTabById(1)}>
+          <span data-tab-id='cronTasks' className={getClassTabById('cronTasks')}>
             Cron Tasks
           </span>
-          <span data-tab-id={2} className={getClassTabById(2)}>
+          <span data-tab-id='push' className={getClassTabById('push')}>
             Push
           </span>
         </div>
@@ -59,7 +57,7 @@ const SubheaderActions: React.FC<TSideBarSubheaderActions> = ({
           onChange={setFilterValue}
         />
       </Search>
-      {activeTab === 0 && <FilterAction />}
+      {activeTab === 'actions' && <FilterAction />}
     </>
   );
 };
