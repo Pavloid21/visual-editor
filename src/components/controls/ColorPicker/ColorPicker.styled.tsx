@@ -6,7 +6,7 @@ export const Wrapper = styled.section`
   flex-direction: column;
 `;
 
-export const Container = styled.span<{isWide?: boolean}>`
+export const Container = styled.span<{isWide?: boolean, color: string}>`
   display: inline-flex;
   align-items: center;
   width: ${(props) => (props.isWide ? '100%' : 'auto')};

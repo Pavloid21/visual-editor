@@ -2,7 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import {ReactComponent as Dots} from 'assets/dots.svg';
 import 'react-dropdown/style.css';
-import {createProject, deleteProject, getScreenByName, getScreenesList, saveScreen} from 'services/ApiService';
+import {createProject, deleteProject, getScreenByName, getScreensList, saveScreen} from 'services/ApiService';
 import {useOutside} from 'utils';
 import {Container, DropdownIcon} from './Card.styled';
 import {TCardProps} from './types';
@@ -54,8 +54,8 @@ export const Card: React.FC<TCardProps> = ({
           icon: '',
           id: newProjId,
         };
-        const screenesList = await getScreenesList(id);
-        const screenesObjArr = screenesList.data.map(async (screen: string) => {
+        const screensList = await getScreensList(id);
+        const screensObjArr = screensList.data.map(async (screen: string) => {
           try {
             const response = await getScreenByName(screen, true, id);
             return {
@@ -68,7 +68,7 @@ export const Card: React.FC<TCardProps> = ({
             console.log('e :>> ', e);
           }
         });
-        const resolves = await Promise.allSettled(screenesObjArr);
+        const resolves = await Promise.allSettled(screensObjArr);
         await createProject(JSON.stringify(duplicated));
         resolves.forEach((screen: any) => {
           saveScreen(newProjId, screen.value.screen, `return ${JSON.stringify(screen.value.logic)}`);

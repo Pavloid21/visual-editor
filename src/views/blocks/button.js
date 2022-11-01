@@ -108,11 +108,19 @@ const Component = ({settingsUI, ...props}) => {
     <Wrapper id={props.id} {...settingsUI}>
       <Button className="draggable" {...settingsUI} {...props}>
         <span>{text}</span>
-        {getExtension === 'icons' ? (
-          <CustomSvg fill={settingsUI.iconTintColor} src={getCorrectImageUrl} />
-        ): (
-          <img src={getCorrectImageUrl} />
-        )}
+        {getExtension.length ? (
+          <>
+            {getExtension === 'icons' ? (
+              <CustomSvg
+                fill={settingsUI.iconTintColor}
+                src={getCorrectImageUrl}
+                sizeSvg={`${20 * 1.25}px`}
+              />
+            ) : (
+              <img src={getCorrectImageUrl} width="100%" height="100%" />
+            )}
+          </>
+        ) : null}
       </Button>
     </Wrapper>
   );

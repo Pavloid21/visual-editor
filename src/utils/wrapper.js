@@ -9,8 +9,18 @@ const Wrapper = styled.div`
   padding: 2px;
   border-radius: 4px;
   border: 1px dashed var(--main-color);
-  width: ${(props) => getSizeStyle('width', props)};
-  height: ${(props) => getSizeStyle('height', props)};
+  width: ${(props) => {
+    if (props.isRoot || ['FULLWIDTH', 'FULLSIZE'].includes(props.sizeModifier)) {
+      return '100%';
+    }
+    return getSizeStyle('width', props);
+  }};
+  height: ${(props) => {
+    if (props.isRoot || ['FULLHEIGHT', 'FULLSIZE'].includes(props.sizeModifier)) {
+      return '100%';
+    }
+    return getSizeStyle('height', props);
+  }};
   align-items: inherit;
   display: flex;
   flex-direction: column;

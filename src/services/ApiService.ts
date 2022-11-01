@@ -54,7 +54,7 @@ export const getProjectData = async (projectId: string) => {
   return callApi(url, null, 'GET');
 };
 
-export const getScreenesList = async (projectId?: string) => {
+export const getScreensList = async (projectId?: string) => {
   const url = API.defaults.baseURL + `projects/${projectId}/admin/screens`;
   return callApi(url, null, 'GET');
 };

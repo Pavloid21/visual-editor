@@ -8,4 +8,5 @@ export interface NeoInputProps extends InputProps {
   $extraText?: string;
   status?: 'error' | 'success';
   type?: string;
+  maxNumber?: number;
 }

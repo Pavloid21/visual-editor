@@ -25,7 +25,7 @@ import type {TInspector} from './types';
 import type {RootStore} from 'store/types';
 import {blockStateUnsafeSelector} from 'store/selectors';
 import {getUnitOptionByDevice} from 'utils/units';
-import {get} from 'external/lodash';
+import {get, isEmpty} from 'external/lodash';
 
 const Inspector: React.FC<TInspector> = ({display}) => {
   const dispatch = useDispatch();
@@ -111,7 +111,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
           return (
             <div className="form-group" key={`${parentKey}_${index}`}>
               <ColorPicker
-                debounceTimeout={500}
+                debouncetimeout={500}
                 label={config[el].name}
                 $isWide
                 placeholder={config[el].name}
@@ -169,7 +169,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
                 handleChangeBlockData(
                   blockUuid,
                   endpoint && endpoint[el] !== undefined ? el : el + 'InPercent',
-                  +e.target.value,
+                  !isEmpty(e.target.value) ? +e.target.value : e.target.value,
                   parentKey
                 )
               }

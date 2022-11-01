@@ -12,6 +12,7 @@ const Modal: React.FC<ModalProps> = (props) => {
   const handlePlatformButtonClick = (event: React.MouseEvent, value: any) => {
     const platform = event.currentTarget.attributes.getNamedItem('data-platform')?.value;
     if (platform) {
+      // @ts-ignore
       setValue('form.platform', JSON.stringify({...value, [platform]: value ? !value[platform] : true}));
     }
   };
