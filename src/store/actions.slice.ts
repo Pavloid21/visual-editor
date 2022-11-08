@@ -1,6 +1,60 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice, Dispatch, PayloadAction} from '@reduxjs/toolkit';
 import actionTypes from 'constants/actionTypes';
 import {ActionItem, Actions, ActionTypes} from './types';
+import {
+  getActionByName,
+  getActionsList,
+  getCronTaskList,
+  getDataActionsList,
+  getExternalActionsList, getPushList,
+} from 'services/ApiService';
+
+const getActions = (getActionsArr: any, project_id: string, actionType: string, actionPath: string, dispatch: Dispatch) => {
+  getActionsArr(project_id)
+    .then((response: any) => response.data)
+    .then((actions: string[]) => {
+      const actionsArr = actions?.map(async (action) => {
+        try {
+          const response = await getActionByName(project_id, action, actionPath);
+          const data = response.data;
+          return {action, object: data};
+        } catch (e) {
+          console.log('e :>> ', e);
+        }
+      });
+      Promise.allSettled(actionsArr)
+        .then((resolves) => {
+          const actions: any[] = [];
+          resolves.forEach((result) => {
+            if (result.status === 'fulfilled') {
+              actions.push({...result.value, type: actionType, selected: false});
+            }
+          });
+          dispatch(setActions({[actionType]: actions}));
+        })
+        .catch(console.log);
+    });
+};
+
+export const fetchActions = createAsyncThunk(
+  'actions/fetchActions',
+  async function(project_id: string, {dispatch}) {
+    getActions(getActionsList, project_id, 'actions', 'actions', dispatch);
+    getActions(getDataActionsList, project_id, 'data', 'data', dispatch);
+    getActions(getExternalActionsList, project_id, 'externals', 'externalActions', dispatch);
+    getActions(getCronTaskList, project_id, 'cronTasks', 'cron/tasks', dispatch);
+    getPushList(project_id)
+      .then((response: any) => response.data)
+      .then((actionsArr: string[]) => {
+        const actions: any[] = [];
+        actionsArr.forEach((action) => {
+          actions.push({action, selected: false});
+        });
+        dispatch(setActions({push: actions}));
+      })
+      .catch(console.log);
+  }
+);
 
 const initialState: Actions = {
   actions: [],
@@ -24,7 +78,7 @@ const actionsSlice = createSlice({
   initialState,
   reducers: {
     setActions: (state, action: PayloadAction<{actions?: any[], data?: any[], externals?: any[], cronTasks?: any[], push?: any[]}>) => {
-      if (action.payload.actions) {
+     if (action.payload.actions) {
         state.actions = action.payload.actions;
       }
       if (action.payload.data) {

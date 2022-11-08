@@ -3,16 +3,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import {orderBy} from 'external/lodash';
 import {ReactComponent as ActionDots} from 'assets/left-sidebar-menu/actionDots.svg';
 import {ReactComponent as ActionObject} from 'assets/left-sidebar-menu/actionObject.svg';
-import {
-  getActionByName,
-  getActionsList,
-  getCronTaskList,
-  getDataActionsList,
-  getExternalActionsList,
-  getPushList,
-} from 'services/ApiService';
+import {getActionByName} from 'services/ApiService';
 import {ActionImage, Container} from './Actions.styled';
-import {deleteAction, setActions, setSelectAction} from 'store/actions.slice';
+import {deleteAction, fetchActions, setActions, setSelectAction} from 'store/actions.slice';
 import {ActionItem, ActionTypes, RootStore} from 'store/types';
 import {Option} from 'react-dropdown';
 import {DropdownIcon} from 'components/Actions/Actions.styled';
@@ -20,6 +13,8 @@ import {ActionDropdownItem} from './components/ActionDropdownItem';
 import {ActionsDropdown} from './types';
 import {DROPDOWN_VALUES} from './constants';
 import {snippetsSelector} from 'store/selectors/left-bar-selector';
+import {ReactComponent as Copy} from 'assets/copy-item.svg';
+import {ReactComponent as Trash} from 'assets/trash-item.svg';
 
 type ActionsProps = {
   activeTabActions: string
@@ -117,20 +112,7 @@ const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
   };
 
   useEffect(() => {
-    getActions(getActionsList, project_id, 'actions', 'actions');
-    getActions(getDataActionsList, project_id, 'data', 'data');
-    getActions(getExternalActionsList, project_id, 'externals', 'externalActions');
-    getActions(getCronTaskList, project_id, 'cronTasks', 'cron/tasks');
-    getPushList(project_id)
-      .then((response: any) => response.data)
-      .then((actionsArr: string[]) => {
-        const actions: any[] = [];
-        actionsArr.forEach((action) => {
-            actions.push({action, selected: false});
-        });
-        dispatch(setActions({push: actions}));
-      })
-      .catch(console.log);
+    dispatch(fetchActions(project_id));
   }, []);
 
   const handleSelectSnippet = (action: ActionItem | null) => {
@@ -182,8 +164,8 @@ const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
                 <div>
                   <DropdownIcon
                     options={[
-                      {label: <ActionDropdownItem label={ActionsDropdown.Copy} />, value: 'Copy'},
-                      {label: <ActionDropdownItem label={ActionsDropdown.Delete} />, value: 'Delete'}
+                      {label: <ActionDropdownItem label={ActionsDropdown.Copy} icon={<Copy />} />, value: 'Copy'},
+                      {label: <ActionDropdownItem label={ActionsDropdown.Delete} icon={<Trash />} />, value: 'Delete'}
                     ]}
                     placeholder=" "
                     arrowClosed={<ActionDots />}

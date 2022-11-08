@@ -1,27 +1,15 @@
-import {ReactComponent as Copy} from 'assets/copy-item.svg';
-import {ReactComponent as Trash} from 'assets/trash-item.svg';
-import {FC} from 'react';
-import {ActionsDropdown} from '../types';
+import {ActionsDropdown} from 'components/Actions/types';
+import {ReactElement} from 'react';
 
 type ActionDropdownItemProps = {
   label: ActionsDropdown;
+  icon: ReactElement
 }
 
-export const ActionDropdownItem: FC<ActionDropdownItemProps> = ({label}) => {
-  const renderButtonImg = (label: ActionsDropdown) => {
-    switch (label) {
-      case ActionsDropdown.Copy:
-        return <Copy />;
-      case ActionsDropdown.Delete:
-        return <Trash />;
-      default:
-        return <Copy />;
-    }
-  };
-
+export const ActionDropdownItem = ({label, icon}: ActionDropdownItemProps) => {
   return (
-    <>
-      <div>{renderButtonImg(label)}<span>{label}</span></div>
-    </>
+    <div>
+      {icon}<span>{label}</span>
+    </div>
   );
 };

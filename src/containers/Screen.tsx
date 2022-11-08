@@ -62,7 +62,6 @@ const Screen: React.FC<any> = (props) => {
     useEvent: boolean,
     navigationChange?: boolean,
   ) => {
-    console.log(event, tag);
     dispatch({
       type: actionTypes.EDIT_SCREEN_NAME,
       screen: tag === 'screenName' ? event : screenName,
