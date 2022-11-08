@@ -17,19 +17,14 @@ import {
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
-import {getSizeStyle} from 'views/utils/styles/size';
+import {getDimensionStyles} from 'views/utils/styles/size';
 import {useSelector} from 'react-redux';
 import {setCorrectImageUrl, getFieldValue} from 'utils';
 import {CustomSvg} from 'components/CustomSvg';
 
 const Button = styled.div`
   position: relative;
-  padding-top: ${(props) => props.padding?.top || 0}px;
-  padding-bottom: ${(props) => props.padding?.bottom || 0}px;
-  padding-left: ${(props) => props.padding?.left || 0}px;
-  padding-right: ${(props) => props.padding?.right || 0}px;
   box-sizing: border-box;
-  font-size: ${(props) => props.fontSize || 12}px;
   color: ${(props) => props.textColor || 'transparent'};
   background-color: ${(props) => props.backgroundColor || 'transparent'};
   align-items: center;
@@ -38,8 +33,13 @@ const Button = styled.div`
   border-width: ${(props) => props.borderWidth  || 0}px;
   border-style: solid;
   border-color: ${(props) => props.borderColor || 'transparent'};
-  width: ${(props) => getSizeStyle('width', props)};
-  height: ${(props) => getSizeStyle('height', props)};
+  ${(props) => getDimensionStyles(props)
+    .width()
+    .height()
+    .padding()
+    .fontSize()
+    .apply()
+  }
   ${(props) => {
     if (props.shadow) {
       return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${
@@ -85,16 +85,16 @@ const Button = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: ${(props) => props.textAlignment || 'left'};
-    padding-top: ${(props) => props.buttonTextPadding?.top || 0}px;
-    padding-left: ${(props) => props.buttonTextPadding?.left || 0}px;
-    padding-right: ${(props) => props.buttonTextPadding?.right || 0}px;
-    padding-bottom: ${(props) => props.buttonTextPadding?.bottom || 0}px;
+    ${(props) => getDimensionStyles(props)
+      .padding('buttonTextPadding')
+      .apply()
+    }
   }
   & > img {
-    padding-top: ${(props) => props.buttonImagePadding?.top || 0}px;
-    padding-left: ${(props) => props.buttonImagePadding?.left || 0}px;
-    padding-right: ${(props) => props.buttonImagePadding?.right || 0}px;
-    padding-bottom: ${(props) => props.buttonImagePadding?.bottom || 0}px;
+    ${(props) => getDimensionStyles(props)
+      .padding('buttonImagePadding')
+      .apply()
+    }
   }
 `;
 

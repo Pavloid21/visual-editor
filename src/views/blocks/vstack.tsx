@@ -32,6 +32,7 @@ import {Block, BlocksState, ListItemType, SettingsUIType, StyledComponentPropsTy
 import {RootStore} from 'store/types';
 import {findParentInTree} from 'utils/blocks';
 import {FieldConfigType} from 'views/configs/types';
+import {getDimensionStyles} from 'views/utils/styles/size';
 
 interface ComponentPropsType {
   blockId: string;
@@ -100,21 +101,16 @@ const VStack = styled.div<StyledComponentPropsType & VStackPropsType>`
     }
   }};
   flex-direction: column;
-  padding-top: ${(props) => props.padding?.top || 0}px;
-  padding-bottom: ${(props) => props.padding?.bottom || 0}px;
-  padding-left: ${(props) => props.padding?.left || 0}px;
-  padding-right: ${(props) => props.padding?.right || 0}px;
   box-sizing: border-box;
   border-width: ${(props) => props.borderWidth || 0}px;
   border-style: ${(props) => props.borderColor ? 'solid' : 'none'};
   border-color: ${(props) => props.borderColor || 'transparent'};
   gap: ${(props) => props.spacing || 0}px;
-  border-radius: ${(props) => `
-    ${props.corners?.topLeftRadius || 0}px
-    ${props.corners?.topRightRadius || 0}px
-    ${props.corners?.bottomRightRadius || 0}px
-    ${props.corners?.bottomLeftRadius || 0}px
-  `};
+  ${(props) => getDimensionStyles(props)
+    .padding()
+    .borderRadius()
+    .apply()
+  }
   ${(props) => {
     if (props.shadow) {
       return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${props.shadow?.radius

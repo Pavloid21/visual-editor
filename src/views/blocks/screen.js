@@ -18,6 +18,7 @@ import {
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
 import {pageSize, shadowConfigBuilder, shapeConfigBuilder, startPage} from '../configs/index';
+import {getDimensionStyles} from '../utils/styles/size';
 
 const VStack = styled.div`
   align-self: center;
@@ -28,18 +29,13 @@ const VStack = styled.div`
   justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
   align-items: center;
   flex-direction: column;
-  padding-top: ${(props) => props.padding?.top || 5}px;
-  padding-bottom: ${(props) => props.padding?.bottom || 5}px;
-  padding-left: ${(props) => props.padding?.left || 5}px;
-  padding-right: ${(props) => props.padding?.right || 5}px;
+  ${(props) => getDimensionStyles(props)
+    .padding('padding', 5)
+    .borderRadius()
+    .apply()
+  }
   box-sizing: border-box;
   gap: ${(props) => props.spacing}px;
-  border-radius: ${(props) => `
-    ${props.corners?.topLeftRadius || 0}px
-    ${props.corners?.topRightRadius || 0}px
-    ${props.corners?.bottomRightRadius || 0}px
-    ${props.corners?.bottomLeftRadius || 0}px
-  `};
 `;
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, settingsUI, ...props}) => {

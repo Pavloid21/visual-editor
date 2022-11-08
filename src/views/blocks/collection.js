@@ -22,18 +22,18 @@ import collection from 'assets/collection.svg';
 import {pushBlockInside} from 'store/layout.slice';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
-import {getSizeStyle} from 'views/utils/styles/size';
+import {getDimensionStyles} from 'views/utils/styles/size';
 
 const Collection = styled.div`
   align-self: center;
-  width: ${(props) => getSizeStyle('width', props)};
-  height: ${(props) => getSizeStyle('height', props)};
   background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
   display: flex;
-  padding-top: ${(props) => props.padding?.top || 0}px;
-  padding-bottom: ${(props) => props.padding?.bottom || 0}px;
-  padding-left: ${(props) => props.padding?.left || 0}px;
-  padding-right: ${(props) => props.padding?.right || 0}px;
+  ${(props) => getDimensionStyles(props)
+    .width()
+    .height()
+    .padding()
+    .apply()
+  }
   flex-direction: column;
   box-sizing: border-box;
   ${(props) => {

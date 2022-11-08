@@ -19,7 +19,7 @@ import {
 import {pushBlockInside} from 'store/layout.slice';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
-import {getSizeStyle} from 'views/utils/styles/size';
+import {getDimensionStyles} from 'views/utils/styles/size';
 
 const Card = styled.div`
   align-self: stretch;
@@ -28,22 +28,17 @@ const Card = styled.div`
   background-color: ${(props) => props.backgroundColor};
   display: flex;
   flex-direction: column;
-  padding-top: ${(props) => props.padding?.top}px;
-  padding-right: ${(props) => props.padding?.right}px;
-  padding-bottom: ${(props) => props.padding?.bottom}px;
-  padding-left: ${(props) => props.padding?.left}px;
-  height: ${(props) => getSizeStyle('height', props)};
+  ${(props) => getDimensionStyles(props)
+    .height()
+    .padding()
+    .borderRadius()
+    .apply()
+  }
   overflow: hidden;
   box-shadow: ${(props) => {
     const RGB = hexToRgb(props.shadow?.color);
     return `${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px 8px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b}, ${props.shadow?.opacity})`;
   }};
-  border-radius: ${(props) => `
-    ${props.corners?.topLeftRadius}px
-    ${props.corners?.topRightRadius}px
-    ${props.corners?.bottomRightRadius}px
-    ${props.corners?.bottomLeftRadius}px
-  `};
 `;
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, settingsUI, ...props}) => {

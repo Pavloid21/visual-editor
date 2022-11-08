@@ -81,7 +81,8 @@ export type SettingsUIType = Partial<{
     height: number,
     widthInPercent: number,
     heightInPercent: number
-  }
+  },
+  fontSize: number
 }>;
 
 export type StyledComponentPropsType = SettingsUIType & {

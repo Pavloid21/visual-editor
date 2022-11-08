@@ -9,6 +9,7 @@ import {
   interactive,
   padding,
 } from 'views/configs';
+import {getDimensionStyles} from '../utils/styles/size';
 
 const Switch = styled.div`
   font-size: 16px;
@@ -18,10 +19,11 @@ const Switch = styled.div`
   margin-bottom: 0;
   z-index: 0;
   width: fit-content;
-  padding-top: ${(props) => props.padding?.top || 0}px;
-  padding-bottom: ${(props) => props.padding?.bottom || 0}px;
-  padding-left: ${(props) => props.padding?.left || 0}px;
-  padding-right: ${(props) => props.padding?.right || 0}px;
+  ${(props) => getDimensionStyles(props)
+    .padding()
+    .fontSize()
+    .apply()
+  }
   & input:checked + span::before {
     background-color: ${(props) => props.thumbOnColor || 'transparent'};
   }

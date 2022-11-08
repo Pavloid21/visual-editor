@@ -20,13 +20,16 @@ import {
 import {pushBlockInside} from 'store/layout.slice';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
-import {getSizeStyle} from 'views/utils/styles/size';
+import {getDimensionStyles} from 'views/utils/styles/size';
 
 const List = styled.div`
   align-self: center;
   margin: 0 0;
-  width: ${(props) => getSizeStyle('width', props)};
-  height: ${(props) => getSizeStyle('height', props)};
+  ${(props) => getDimensionStyles(props)
+    .width()
+    .height()
+    .apply()
+  }
   background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
   display: flex;
   padding: 4px 0;

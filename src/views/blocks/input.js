@@ -15,7 +15,7 @@ import {
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
-import {getSizeStyle} from 'views/utils/styles/size';
+import {getDimensionStyles} from 'views/utils/styles/size';
 
 const Input = styled.div`
   align-self: center;
@@ -25,12 +25,12 @@ const Input = styled.div`
   align-items: center;
   border: 1px solid var(--neo-gray);
   text-align: ${(props) => props.textAlignment || 'left'};
-  width: ${(props) => getSizeStyle('width', props)};
-  height: ${(props) => getSizeStyle('height', props)};
-  padding-top: ${(props) => props.padding?.top || 0}px;
-  padding-bottom: ${(props) => props.padding?.bottom || 0}px;
-  padding-left: ${(props) => props.padding?.left || 0}px;
-  padding-right: ${(props) => props.padding?.right || 0}px;
+  ${(props) => getDimensionStyles(props)
+    .width()
+    .height()
+    .padding()
+    .apply()
+  }
   ${(props) => {
     if (props.shadow) {
       return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${
