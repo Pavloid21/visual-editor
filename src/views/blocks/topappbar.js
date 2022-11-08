@@ -49,7 +49,7 @@ const Component = ({settingsUI, ...props}) => {
   const {id} = useSelector(state => state.project);
 
   useEffect(() => {
-    if(props.interactive.rightButtons.length) {
+    if(props.interactive.length) {
       const {iconUrl, tintColor} = props.interactive.rightButtons[0];
 
       setCheckIcon({
@@ -60,7 +60,7 @@ const Component = ({settingsUI, ...props}) => {
     }
 
     return () => setCheckIcon({isIcon: false, url: '', colorSvg: ''});
-  }, [props.interactive.rightButtons.length]);
+  }, [props.interactive]);
 
   return (
   <Wrapper id={props.id} style={{padding: 0, width: '100%'}} sizeModifier='FULLWIDTH'>
