@@ -232,6 +232,21 @@ export const pushBlockInside = createAction('layout/pushBlockInside', (payload) 
           ...block,
           listItems: replaceTargetBlock(block.listItems),
         };
+      } else if (block.listItem && block.listItem.listItems) {
+        if (block.listItem.uuid === payload.uuid) {
+          return {
+            ...block,
+            listItem: target
+          };
+        } else {
+          return {
+            ...block,
+            listItem: {
+              ...block.listItem,
+              listItems: replaceTargetBlock(block.listItem.listItems)
+            },
+          };
+        }
       }
       return block;
     });
