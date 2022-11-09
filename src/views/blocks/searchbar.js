@@ -23,7 +23,7 @@ import {
 import {pushBlockInside} from 'store/layout.slice';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
-import {getSizeStyle} from 'views/utils/styles/size';
+import {getDimensionStyles} from 'views/utils/styles/size';
 
 const SearchBar = styled.div`
   display: flex;
@@ -40,16 +40,22 @@ const SearchBar = styled.div`
 
     color: ${(props) => props.textColor};
     background-color: ${(props) => props.backgroundColor || 'transparent'};
-    height: ${(props) => getSizeStyle('height', props)};
-    width: ${(props) => getSizeStyle('width', props)};
+    ${(props) => getDimensionStyles(props)
+      .width()
+      .height()
+      .apply()
+    }
     text-align: ${(props) => props.textAllignment || 'left'};
   }
 
   &::after {
     content: '';
     display: block;
-    width: ${(props) => getSizeStyle('width', props)};
-    height: ${(props) => getSizeStyle('height', props)};
+    ${(props) => getDimensionStyles(props)
+      .width()
+      .height()
+      .apply()
+    }
     position: absolute;
     top: 0;
     right: 0;

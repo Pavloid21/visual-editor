@@ -29,6 +29,7 @@ import {hexToRgb} from 'constants/utils';
 import {findParentInTree} from 'utils/blocks';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
+import {getDimensionStyles} from 'views/utils/styles/size';
 
 const HStack = styled.div`
   align-self: ${(props) => {
@@ -65,21 +66,16 @@ const HStack = styled.div`
   text-align: ${(props) => props.alignment};
   flex-direction: row;
   align-items: center;
-  padding-top: ${(props) => props.padding?.top || 0}px;
-  padding-bottom: ${(props) => props.padding?.bottom || 0}px;
-  padding-left: ${(props) => props.padding?.left || 0}px;
-  padding-right: ${(props) => props.padding?.right || 0}px;
+  ${(props) => getDimensionStyles(props)
+    .padding()
+    .borderRadius()
+    .apply()
+  }
   border-width: ${(props) => props.borderWidth || 0}px;
   border-style: solid;
   border-color: ${(props) => props.borderColor || 'transparent'};
   gap: ${(props) => props.spacing || 0}px;
   position: relative;
-  border-radius: ${(props) => `
-    ${props.corners?.topLeftRadius || 0}px
-    ${props.corners?.topRightRadius || 0}px
-    ${props.corners?.bottomRightRadius || 0}px
-    ${props.corners?.bottomLeftRadius || 0}px
-  `};
   ${(props) => {
     if (props.shadow) {
       return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${props.shadow?.radius

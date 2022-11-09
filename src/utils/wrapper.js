@@ -6,9 +6,9 @@ import {blockStateUnsafeSelector} from 'store/selectors';
 const Wrapper = styled.div`
   position: relative;
   box-sizing: border-box;
-  padding: 2px;
+  padding: 0;
   border-radius: 4px;
-  border: 1px dashed var(--main-color);
+  outline: 1px dashed var(--main-color);
   width: ${(props) => {
     if (props.isRoot || ['FULLWIDTH', 'FULLSIZE'].includes(props.sizeModifier)) {
       return '100%';

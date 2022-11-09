@@ -232,6 +232,21 @@ export const pushBlockInside = createAction('layout/pushBlockInside', (payload) 
           ...block,
           listItems: replaceTargetBlock(block.listItems),
         };
+      } else if (block.listItem && block.listItem.listItems) {
+        if (block.listItem.uuid === payload.uuid) {
+          return {
+            ...block,
+            listItem: target
+          };
+        } else {
+          return {
+            ...block,
+            listItem: {
+              ...block.listItem,
+              listItems: replaceTargetBlock(block.listItem.listItems)
+            },
+          };
+        }
       }
       return block;
     });
@@ -415,11 +430,15 @@ const layoutSlice = createSlice({
       state.bottomBar = {...newBottomBar};
     },
     removeTopAppBarButton: (state, action: PayloadAction<number>) => {
-      const newBarItems = [...state.topAppBar.interactive.rightButtons];
-      newBarItems.splice(action.payload, 1);
-      const newTopAppBar = {...state.topAppBar};
-      newTopAppBar.interactive.rightButtons = newBarItems;
-      state.topAppBar = {...newTopAppBar};
+      if(action.payload === 0) {
+        state.topAppBar.interactive = {};
+      } else {
+        const newBarItems = [...state.topAppBar.interactive.rightButtons];
+        newBarItems.splice(action.payload, 1);
+        const newTopAppBar = {...state.topAppBar};
+        newTopAppBar.interactive.rightButtons = newBarItems;
+        state.topAppBar = {...newTopAppBar};
+      }
     },
     removeTopAppBarItem: (state, action: PayloadAction<number>) => {
       const newAppBarItems = [...state.topAppBar.settingsUI.topAppBarItems];

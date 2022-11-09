@@ -61,6 +61,9 @@ export const mockByDeviceKey = {
 };
 
 export const stylesByDeviceKey: Record<DeviceKeys, CSSProperties> = {
+  /**
+   * SVG Viewport - correct
+   * */
   [DeviceKeys.ANDROID_SMALL]: {
     width: '396px',
     height: '802px',
@@ -68,12 +71,18 @@ export const stylesByDeviceKey: Record<DeviceKeys, CSSProperties> = {
     borderRadius: '55px',
     padding: '76px 20px 80px',
   },
+  /**
+   * SVG Viewport - maybe
+   * */
   [DeviceKeys.ANDROID_LARGE]: {
     width: '424px',
     height: '997px',
     clipPath: 'url(#clipPath)',
     padding: '86px 26px 100px',
   },
+  /**
+   * SVG Viewport - correct
+   * */
   [DeviceKeys.IPHONE_13_PRO_MAX]: {
     width: '475px',
     height: '972px',
@@ -82,6 +91,9 @@ export const stylesByDeviceKey: Record<DeviceKeys, CSSProperties> = {
     borderRadius: '50px',
     paddingTop: '22px',
   },
+  /**
+   * SVG Viewport - correct
+   * */
   [DeviceKeys.IPHONE_13]: {
     width: '439px',
     height: '886px',
@@ -89,6 +101,9 @@ export const stylesByDeviceKey: Record<DeviceKeys, CSSProperties> = {
     clipPath: 'url(#clipPath)',
     padding: '20px 26px 19px',
   },
+  /**
+   * SVG Viewport - correct
+   * */
   [DeviceKeys.IPHONE_13_MINI]: {
     width: '422px',
     height: '853px',
@@ -96,36 +111,51 @@ export const stylesByDeviceKey: Record<DeviceKeys, CSSProperties> = {
     padding: '20px 25px 20px',
     clipPath: 'url(#clipPath)',
   },
+  /**
+   * SVG Viewport - correct
+   * */
   [DeviceKeys.IPHONE_11_PRO_MAX]: {
     width: '474px',
     height: '953px',
     clipPath: 'url(#clipPath)',
     padding: '22px 26px 0px',
   },
+  /**
+   * SVG Viewport - correct
+   * */
   [DeviceKeys.IPHONE_11_PRO_10]: {
     width: '428px',
     height: '836px',
     clipPath: 'url(#maskRect1)',
     padding: '22px 26px 0px',
   },
+  /**
+   * SVG Viewport - correct
+   * */
   [DeviceKeys.IPHONE_SE]: {
-    width: '361px',
-    height: '753px',
-    padding: '86px 20px 90px',
+    width: '422px',
+    height: '881px',
+    padding: '110px 21px 100px',
     clipPath: 'url(#clipPath)',
   },
+  /**
+   * SVG Viewport - correct
+   * */
   [DeviceKeys.IPHONE_8_PLUS]: {
-    width: '467px',
-    height: '975px',
-    padding: '115px 26px 119px',
+    width: '465px',
+    height: '969px',
+    padding: '115px 24px 115px',
     borderRadius: '65px',
     clipPath: 'url(#clipPath)',
   },
+  /**
+   * SVG Viewport - correct
+   * */
   [DeviceKeys.IPHONE_8]: {
     clipPath: 'url(#clipPath)',
-    width: '425px',
-    height: '883px',
-    padding: '105px 26px 105px',
+    width: '421px',
+    height: '878px',
+    padding: '105px 22px 103px',
   },
 };
 

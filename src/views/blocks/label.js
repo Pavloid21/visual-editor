@@ -16,7 +16,7 @@ import {
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
-import {getSizeStyle} from 'views/utils/styles/size';
+import {getDimensionStyles} from 'views/utils/styles/size';
 
 const Label = styledComponents.div`
   box-sizing: border-box;
@@ -40,11 +40,8 @@ const Label = styledComponents.div`
   }}
   & > span {
     display: block;
-    width: ${(props) => getSizeStyle('width', props)};
-    height: ${(props) => getSizeStyle('height', props)};
     text-align: ${(props) => props.textAlignment || 'left'};
     color: ${(props) => props.textColor || 'transparent'};
-    font-size: ${(props) => props.fontSize || 12}px;
     background-color: ${(props) => props.backgroundColor || 'transparent'};
     font-weight: ${(props) => {
       switch (props.fontWeight) {
@@ -70,10 +67,13 @@ const Label = styledComponents.div`
           return 400;
       }
     }};
-    padding-top: ${(props) => props.padding?.top || 0}px;
-    padding-bottom: ${(props) => props.padding?.bottom || 0}px;
-    padding-left: ${(props) => props.padding?.left || 0}px;
-    padding-right: ${(props) => props.padding?.right || 0}px;
+    ${(props) => getDimensionStyles(props)
+      .width()
+      .height()
+      .padding()
+      .fontSize()
+      .apply()
+    }
   }
 `;
 

@@ -11,7 +11,7 @@ import {
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
-import {getSizeStyle} from 'views/utils/styles/size';
+import {getDimensionStyles} from 'views/utils/styles/size';
 import {useSelector} from 'react-redux';
 import {setCorrectImageUrl, getFieldValue, checkExtension} from 'utils';
 import {CustomSvg} from 'components/CustomSvg';
@@ -20,10 +20,6 @@ const Image = styled.img`
   display: flex;
   box-sizing: border-box;
   background-color: ${(props) => props.backgroundColor || 'transparent'};
-  padding-top: ${(props) => props.padding?.top || 0}px;
-  padding-bottom: ${(props) => props.padding?.bottom || 0}px;
-  padding-left: ${(props) => props.padding?.left || 0}px;
-  padding-right: ${(props) => props.padding?.right || 0}px;
   border-width: ${(props) => props.borderWidth  || 0}px;
   border-color: ${(props) => props.borderColor || 'transparent'};
   border-style: solid;
@@ -46,8 +42,12 @@ const Image = styled.img`
   }};
   align-self: center;
   z-index: 90;
-  width: ${(props) => getSizeStyle('width', props)};
-  height: ${(props) => getSizeStyle('height', props)};
+  ${(props) => getDimensionStyles(props)
+    .width()
+    .height()
+    .padding()
+    .apply()
+  }
   ${(props) => {
     if (props.shape?.type === 'ALLCORNERSROUND') {
       return `border-radius: ${props.shape?.radius || 0}px;`;

@@ -13,21 +13,27 @@ import {
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
-import {getSizeStyle} from 'views/utils/styles/size';
+import {getDimensionStyles} from 'views/utils/styles/size';
 
 export const Container = styled.div`
   display: flex;
   align-self: center;
-  width: ${(props) => getSizeStyle('width', props)};
+  ${(props) => getDimensionStyles(props)
+    .width()
+    .apply()
+  }
   & > input {
-    height: ${(props) => getSizeStyle('height', props)};
     display: block;
     pointer-events: none;
     color: ${(props) => props.textColor || 'transparent'};
     background-color: ${(props) => props.backgroundColor || 'transparent'};
     box-sizing: border-box;
     text-align: ${(props) => props.textAlignment || 'left'};
-    font-size: ${(props) => props.fontSize || 12}px;
+    ${(props) => getDimensionStyles(props)
+      .height()
+      .fontSize()
+      .apply()
+    }
     & ::placeholder {
       color: ${(props) => props.placeholderColor || 'transparent'};
       font-size: 12px;

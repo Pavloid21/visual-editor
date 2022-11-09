@@ -104,6 +104,8 @@ export const cloneToList = (tree: BlockItem[], uuid: string) => {
       result.push(newItem);
     } else if (item.listItems) {
       item.listItems = cloneToList(item.listItems, uuid);
+    } else if (item.listItem && item.listItem.listItems) {
+      item.listItem.listItems = cloneToList(item.listItem.listItems, uuid);
     }
   });
   return result;
