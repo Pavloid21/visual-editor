@@ -163,7 +163,7 @@ export const ActionForm: React.FC<{action: ActionItem}> = ({action}) => {
                         ...gruvboxLight,
                         fontSize: '16px',
                         lineHeight: '20px',
-                        height: '100%'
+                        minHeight: '100%',
                       }}
                       tabSize={4}
                       insertSpaces

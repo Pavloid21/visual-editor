@@ -27,6 +27,7 @@ import {screenTemplates as defaultTemplates} from 'constants/screenTemplates';
 import {setScreens} from 'store/screens.slice';
 import {Screens} from 'components/Screens';
 import {SubheaderActions, SubheaderScreens} from 'components/LeftSideBar/Subheader';
+import {ACTION_TEMPLATES} from '../Actions/constants';
 
 const LeftSidebar: React.FC<unknown> = () => {
   const {
@@ -325,21 +326,25 @@ const LeftSidebar: React.FC<unknown> = () => {
   const handleAddAction = useCallback(() => {
     let actionNew = ActionTypes.actions;
     let added: any;
+    let objectAction = '';
     if (activeTabActions === 'actions') {
       switch (filterAction) {
         case 'data':
           actionNew = ActionTypes.data;
+          objectAction = ACTION_TEMPLATES.DATA_USAGE;
           break;
         case 'externals':
           actionNew = ActionTypes.externals;
+          objectAction = ACTION_TEMPLATES.EXTERNAL_ACTION;
           break;
         default:
           actionNew = ActionTypes.actions;
+          objectAction = ACTION_TEMPLATES.CASTOM_ACTION;
           break;
       }
       added = {
         action: 'new_action',
-        object: '',
+        object: objectAction,
         type: actionNew
       };
     } else if (activeTabActions === 'cronTasks') {
