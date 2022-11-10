@@ -173,10 +173,16 @@ const LeftSidebar: React.FC<unknown> = () => {
     }
   }, [output, settingsUI]);
 
-  const parseRuturnStatement = (script: any) => {
-    const string: string = script.data.indexOf(' ') === 0 ? `${script.data}`.replace(' ', '') : script.data;
-    //@ts-ignore
-    const func = eval(`(() => {return {${string.match(/(?<=^return.{).*$/gms)[0]}})`);
+  const parseReturnStatement = (script: any) => {
+    const regExpReturn = /^\s*return\s*{/gms;
+    const data = script.data.trim();
+
+    const matchLength = data.match(regExpReturn).length;
+    for (let i = 0; i < matchLength; i++) {
+      regExpReturn.test(data);
+    }
+
+    const func = eval(`(() => {return {${data.substring(regExpReturn.lastIndex)}})`);
     return func();
   };
 
@@ -184,8 +190,8 @@ const LeftSidebar: React.FC<unknown> = () => {
     if (script.data) {
       const rawData = {
         screen,
-        logic: parseRuturnStatement(script),
-        object: parseRuturnStatement(script),
+        logic: parseReturnStatement(script),
+        object: parseReturnStatement(script),
         project,
       };
       const {newBlock, action, screenEndpoint} = buildLayout(rawData);
