@@ -1,5 +1,5 @@
 import {createDraftSafeSelector} from '@reduxjs/toolkit';
-import {ActionItem, ActionTypes, Project, RootStore} from 'store/types';
+import {ActionItem, Project, RootStore} from 'store/types';
 
 const selectSelf = (state: RootStore) => state;
 
@@ -17,21 +17,18 @@ const getCurrentEditorState = ({project, layout, actions}: RootStore): TCurrentE
     currentProject: project,
     snippets: layout.snippets,
     actions: [
-      ...actions.actions.map((item) => ({...item, type: ActionTypes.actions})),
-      ...actions.data.map((item) => ({...item, type: ActionTypes.data})),
-      ...actions.externals.map((item) => ({...item, type: ActionTypes.externals})),
-      ...actions.push.map((item) => ({...item, type: ActionTypes.push})),
-      ...actions.cronTasks.map((item) => ({...item, type: ActionTypes.cronTasks}))
+      ...actions.actions,
+      ...actions.data,
+      ...actions.externals,
+      ...actions.push,
+      ...actions.cronTasks
     ],
     deletedActions: [
-      ...actions.deleted.actions.map((item) => ({
-        ...item,
-        type: ActionTypes.actions,
-      })),
-      ...actions.deleted.data.map((item) => ({...item, type: ActionTypes.data})),
-      ...actions.deleted.externals.map((item) => ({...item, type: ActionTypes.externals})),
-      ...actions.deleted.push.map((item) => ({...item, type: ActionTypes.push})),
-      ...actions.deleted.cronTasks.map((item) => ({...item, type: ActionTypes.cronTasks})),
+      ...actions.deleted.actions,
+      ...actions.deleted.data,
+      ...actions.deleted.externals,
+      ...actions.deleted.push,
+      ...actions.deleted.cronTasks,
     ],
     deletedScreens: layout.deletedScreens,
     editedScreens: layout.editedScreens,

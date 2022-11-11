@@ -37,8 +37,7 @@ const LeftSidebar: React.FC<unknown> = () => {
     blocks: layout,
   } = useSelector((state: RootStore) => state.layout);
   const activeTabMenu = useSelector((state: RootStore) => state.leftBarMenu.activeTab);
-  const activeTabActions = useSelector((state: RootStore) => state.leftBarMenu.activeTabActions);
-  const filterAction = useSelector((state: RootStore) => state.leftBarMenu.filterAction);
+  const {activeTabActions, filterAction} = useSelector((state: RootStore) => state.leftBarMenu);
   const [loading, setLoading] = useState(false);
   const barState = useSelector((state: RootStore) => state.sideBar);
   const api = useSelector((state: RootStore) => state.api);

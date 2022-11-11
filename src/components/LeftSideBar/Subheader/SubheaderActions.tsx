@@ -20,7 +20,8 @@ const SubheaderActions: React.FC<TSideBarSubheaderActions> = ({
 }) => {
   const dispatch = useDispatch();
   const actionNameFilter = useSelector((state: RootStore) => state.leftBarMenu.actionNameFilter);
-  const setFilterValue = (e: any) => {
+
+  const setFilterValue = (e: React.ChangeEvent<HTMLInputElement> & React.ChangeEvent<HTMLTextAreaElement>) => {
     dispatch(setActionNameFilter(e.target.value));
   };
   const getClassTabById = (actionType: string) => {

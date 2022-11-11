@@ -3,7 +3,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {orderBy} from 'external/lodash';
 import {ReactComponent as ActionDots} from 'assets/left-sidebar-menu/actionDots.svg';
 import {ReactComponent as ActionObject} from 'assets/left-sidebar-menu/actionObject.svg';
-import {getActionByName} from 'services/ApiService';
 import {ActionImage, Container} from './Actions.styled';
 import {deleteAction, fetchActions, setActions, setSelectAction} from 'store/actions.slice';
 import {ActionItem, ActionTypes, RootStore} from 'store/types';
@@ -83,33 +82,6 @@ const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
   const selectedAction = useSelector((state: RootStore) => state.actions.selected);
   const projectID = useSelector((state: RootStore) => state.project.id);
   const project_id = projectID || location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
-
-  const getActions = (getActionsArr: any, project_id: string, actionType: string, actionPath: string) => {
-    getActionsArr(project_id)
-      .then((response: any) => response.data)
-      .then((actions: string[]) => {
-        const actionsArr = actions?.map(async (action) => {
-          try {
-            const response = await getActionByName(project_id, action, actionPath);
-            const data = response.data;
-            return {action, object: data};
-          } catch (e) {
-            console.log('e :>> ', e);
-          }
-        });
-        Promise.allSettled(actionsArr)
-          .then((resolves) => {
-            const actions: any[] = [];
-            resolves.forEach((result) => {
-              if (result.status === 'fulfilled') {
-                actions.push({...result.value, type: actionType, selected: false});
-              }
-            });
-            dispatch(setActions({[actionType]: actions}));
-          })
-          .catch(console.log);
-      });
-  };
 
   useEffect(() => {
     dispatch(fetchActions(project_id));

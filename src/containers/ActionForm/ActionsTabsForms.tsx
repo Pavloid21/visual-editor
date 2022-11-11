@@ -12,11 +12,19 @@ type ActionsTabsFormsType = {
 const ActionsTabsForms: FC<ActionsTabsFormsType> = ({selectedAction}) => {
   const activeTabActions = useSelector((state: RootStore) => state.leftBarMenu.activeTabActions);
 
+  const renderActionForm = () => {
+    switch (activeTabActions) {
+      case 'cronTasks':
+        return <ActionCronTasksForm action={selectedAction} />;
+      case 'push':
+        return <ActionPushForm action={selectedAction} />;
+    }
+    return <ActionForm action={selectedAction} />;
+  };
+
   return (
     <>
-      {activeTabActions === 'actions' && <ActionForm action={selectedAction} />}
-      {activeTabActions === 'cronTasks' && <ActionCronTasksForm action={selectedAction} />}
-      {activeTabActions === 'push' && <ActionPushForm action={selectedAction} />}
+      {renderActionForm()}
     </>
   );
 };

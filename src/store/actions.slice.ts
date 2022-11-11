@@ -112,57 +112,22 @@ const actionsSlice = createSlice({
     },
     deleteAction: (state, action: PayloadAction<ActionItem | null>) => {
       let removed: ActionItem[] = [];
-      if (action.payload?.type === ActionTypes.actions) {
-        const actions = [...state.actions];
-        const deleted = [...state.deleted.actions];
-        state.actions.forEach((item, index) => {
-          if (item.action === action.payload?.action) {
-            removed = [...deleted, ...actions.splice(index, 1)];
-          }
-        });
-        state.deleted.actions = removed;
-      } else if (action.payload?.type === ActionTypes.data) {
-        const data = [...state.data];
-        const deleted = [...state.deleted.data];
-        state.data.forEach((item, index) => {
-          if (item.action === action.payload?.action) {
-            removed = [...deleted, ...data.splice(index, 1)];
-          }
-        });
-        state.deleted.data = removed;
-      } else if (action.payload?.type === ActionTypes.externals) {
-        const externals = [...state.externals];
-        const deleted = [...state.deleted.externals];
-        state.externals.forEach((item, index) => {
-          if (item.action === action.payload?.action) {
-            removed = [...deleted, ...externals.splice(index, 1)];
-          }
-        });
-        state.deleted.externals = removed;
-      } else if (action.payload?.type === ActionTypes.push) {
-        const push = [...state.push];
-        const deleted = [...state.deleted.push];
-        state.push.forEach((item, index) => {
-          if (item.action === action.payload?.action) {
-            removed = [...deleted, ...push.splice(index, 1)];
-          }
-        });
-        state.deleted.push = removed;
-      } else if (action.payload?.type === ActionTypes.cronTasks) {
-        const cronTasks = [...state.cronTasks];
-        const deleted = [...state.deleted.cronTasks];
-        state.cronTasks.forEach((item, index) => {
-          if (item.action === action.payload?.action) {
-            removed = [...deleted, ...cronTasks.splice(index, 1)];
-          }
-        });
-        state.deleted.cronTasks = removed;
-      } else if (action.payload === null) {
+      const type = action.payload?.type;
+      if (action.payload === null) {
         state.deleted.data = [];
         state.deleted.actions = [];
         state.deleted.externals = [];
         state.deleted.push = [];
         state.deleted.cronTasks = [];
+      } else if (type && type !== ActionTypes.all) {
+        const actions = [...state[type]];
+        const deleted = [...state.deleted[type]];
+        state[type].forEach((item, index) => {
+          if (item.action === action.payload?.action) {
+            removed = [...deleted, ...actions.splice(index, 1)];
+          }
+        });
+        state.deleted[type] = removed;
       }
     },
     deleteActionEdit: (state, action: PayloadAction<ActionItem | null>) => {
