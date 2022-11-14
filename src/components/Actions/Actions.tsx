@@ -19,7 +19,7 @@ type ActionsProps = {
   activeTabActions: string
 };
 
-const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
+export const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
   const dispatch = useDispatch();
   const actionNameFilter = useSelector((state: RootStore) => state.leftBarMenu.actionNameFilter);
   const filterActionType = useSelector((state: RootStore) => state.leftBarMenu.filterAction);
@@ -152,5 +152,3 @@ const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
     </Container>
   );
 };
-
-export default Actions;
