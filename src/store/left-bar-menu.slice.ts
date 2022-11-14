@@ -3,7 +3,9 @@ import type {LeftBarMenu} from './types';
 
 const initialState: LeftBarMenu = {
   activeTab: 'screen',
-  filterAction: 0
+  filterAction: 0,
+  activeImageTab: 'Icon',
+  iconNameFilter: ''
 };
 
 const leftBarMenuSlice = createSlice({
@@ -15,9 +17,15 @@ const leftBarMenuSlice = createSlice({
     },
     setLeftBarActionFilter: (state, action: PayloadAction<number>) => {
       state.filterAction = +action.payload;
-    }
+    },
+    setLeftBarImageTab: (state, action: PayloadAction<string>) => {
+      state.activeImageTab = action.payload;
+    },
+    setIconNameFilter: (state, action: PayloadAction<string>) => {
+      state.iconNameFilter = action.payload;
+    },
   }
 });
 
-export const {setLeftBarMenu, setLeftBarActionFilter} = leftBarMenuSlice.actions;
+export const {setLeftBarMenu, setLeftBarActionFilter, setLeftBarImageTab, setIconNameFilter} = leftBarMenuSlice.actions;
 export default leftBarMenuSlice.reducer;

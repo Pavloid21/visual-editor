@@ -130,7 +130,9 @@ export type EditorMode = {
 
 export type LeftBarMenu = {
   activeTab: string,
-  filterAction: number
+  filterAction: number,
+  activeImageTab: string,
+  iconNameFilter: string
 }
 
 export type TScreenListOption = {

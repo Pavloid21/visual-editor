@@ -10,7 +10,7 @@ import {ActionImage, Container} from './Actions.styled';
 import {setActions, setSelectAction} from 'store/actions.slice';
 import {ActionItem, ActionTypes, RootStore} from 'store/types';
 
-const Actions: React.FC<unknown> = () => {
+export const Actions: React.FC<unknown> = () => {
   const dispatch = useDispatch();
   const availableActions: ActionItem[] = useSelector((state: RootStore) =>
     orderBy(
@@ -107,5 +107,3 @@ const Actions: React.FC<unknown> = () => {
     </Container>
   );
 };
-
-export default Actions;
