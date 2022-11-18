@@ -6,7 +6,7 @@ const initialState: LeftBarMenu = {
   filterAction: ActionTypes.all,
   screenNameFilter: '',
   actionNameFilter: '',
-  activeTabActions: 'actions'
+  activeTabActions: ActionTypes.actions
 };
 
 const leftBarMenuSlice = createSlice({
@@ -25,7 +25,7 @@ const leftBarMenuSlice = createSlice({
     setActionNameFilter: (state, action: PayloadAction<string>) => {
       state.actionNameFilter = action.payload;
     },
-    setActiveTabActions: (state, action: PayloadAction<string>) => {
+    setActiveTabActions: (state, action: PayloadAction<ActionTypes>) => {
       state.activeTabActions = action.payload;
     }
   }

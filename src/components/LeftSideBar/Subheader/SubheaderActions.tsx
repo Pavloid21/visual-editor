@@ -5,7 +5,7 @@ import {Search} from 'components/SideBarHeader/SideBarHeader.styled';
 import {Input} from 'components/controls';
 import FilterAction from 'components/Actions/FilterAction';
 import {useDispatch, useSelector} from 'react-redux';
-import {RootStore} from 'store/types';
+import {ActionTypes, RootStore} from 'store/types';
 import {setActionNameFilter, setActiveTabActions} from 'store/left-bar-menu.slice';
 import {setSelectAction} from 'store/actions.slice';
 
@@ -29,8 +29,8 @@ const SubheaderActions: React.FC<TSideBarSubheaderActions> = ({
   };
 
   const handlerClickAction = (event: React.MouseEvent<HTMLDivElement>) => {
-    const activeTabAction = (event.target as HTMLDivElement)?.dataset?.tabId || 'actions';
-    dispatch(setActiveTabActions(activeTabAction));
+    const activeTabAction = (event.target as HTMLDivElement)?.dataset?.tabId || ActionTypes.actions;
+    dispatch(setActiveTabActions(activeTabAction as ActionTypes));
     dispatch(setSelectAction(null));
   };
 

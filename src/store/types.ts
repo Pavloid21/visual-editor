@@ -157,7 +157,7 @@ export type LeftBarMenu = {
   filterAction: ActionTypes,
   screenNameFilter: string,
   actionNameFilter: string,
-  activeTabActions: string
+  activeTabActions: ActionTypes
 }
 
 export type TScreenListOption = {

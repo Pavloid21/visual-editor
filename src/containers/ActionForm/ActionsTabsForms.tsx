@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {ActionForm} from './ActionForm';
-import {ActionItem, RootStore} from 'store/types';
+import {ActionItem, ActionTypes, RootStore} from 'store/types';
 import {useSelector} from 'react-redux';
 import ActionPushForm from './ActionPushForm';
 import ActionCronTasksForm from './ActionCronTasksForm';
@@ -12,21 +12,14 @@ type ActionsTabsFormsType = {
 const ActionsTabsForms: FC<ActionsTabsFormsType> = ({selectedAction}) => {
   const activeTabActions = useSelector((state: RootStore) => state.leftBarMenu.activeTabActions);
 
-  const renderActionForm = () => {
     switch (activeTabActions) {
-      case 'cronTasks':
+      case ActionTypes.cronTasks:
         return <ActionCronTasksForm action={selectedAction} />;
-      case 'push':
+      case ActionTypes.push:
         return <ActionPushForm action={selectedAction} />;
+      default:
+        return <ActionForm action={selectedAction} />;
     }
-    return <ActionForm action={selectedAction} />;
-  };
-
-  return (
-    <>
-      {renderActionForm()}
-    </>
-  );
 };
 
 export default ActionsTabsForms;

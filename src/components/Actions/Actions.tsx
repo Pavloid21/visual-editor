@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {orderBy} from 'external/lodash';
 import {ReactComponent as ActionDots} from 'assets/left-sidebar-menu/actionDots.svg';
 import {ReactComponent as ActionObject} from 'assets/left-sidebar-menu/actionObject.svg';
 import {ActionImage, Container} from './Actions.styled';
@@ -11,73 +10,28 @@ import {DropdownIcon} from 'components/Actions/Actions.styled';
 import {ActionDropdownItem} from './components/ActionDropdownItem';
 import {ActionsDropdown} from './types';
 import {DROPDOWN_VALUES} from './constants';
-import {snippetsSelector} from 'store/selectors/left-bar-selector';
+import {filteredSnippetsSelector} from 'store/selectors/left-bar-selector';
 import {ReactComponent as Copy} from 'assets/copy-item.svg';
 import {ReactComponent as Trash} from 'assets/trash-item.svg';
 
 type ActionsProps = {
-  activeTabActions: string
+  activeTabActions: ActionTypes
+};
+
+const getFilteredRenderActions = (data: ActionItem[], searchText: string) => {
+  const regex = new RegExp(searchText, 'gi');
+  return data.filter((item: ActionItem) => item.action.match(regex));
 };
 
 export const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
   const dispatch = useDispatch();
-  const actionNameFilter = useSelector((state: RootStore) => state.leftBarMenu.actionNameFilter);
-  const filterActionType = useSelector((state: RootStore) => state.leftBarMenu.filterAction);
-  const snippets = useSelector(snippetsSelector);
+  const {actionNameFilter} = useSelector((state: RootStore) => state.leftBarMenu);
 
-  const filterActionsType = (arr: ActionItem[], type: ActionTypes) => {
-    return arr.filter((item: ActionItem) => item.type === type);
-  };
+  const renderActions: ActionItem[] = useSelector(
+    (store: RootStore) => filteredSnippetsSelector(store, activeTabActions)
+  );
 
-  let availableActions: ActionItem[] = orderBy(
-      [
-        ...snippets.actions.map((item) => ({...item, type: ActionTypes.actions})),
-        ...snippets.data.map((item) => ({...item, type: ActionTypes.data})),
-        ...snippets.externals.map((item) => ({...item, type: ActionTypes.externals}))
-      ],
-      ActionTypes.actions,
-      'asc'
-    );
-
-  const cronTasksActions: ActionItem[] = orderBy(
-      [
-        ...snippets.cronTasks.map((item) => ({...item, type: ActionTypes.cronTasks}))
-      ],
-      'action',
-      'asc'
-    );
-
-  const pushListActions: ActionItem[] = orderBy(
-      [
-        ...snippets.push.map((item) => ({...item, type: ActionTypes.push}))
-      ],
-      'action',
-      'asc'
-    );
-
-  if (filterActionType !== 'all') {
-    availableActions = filterActionsType(availableActions, ActionTypes[filterActionType]);
-  }
-
-  let renderActions: ActionItem[] = [];
-
-  switch (activeTabActions) {
-    case 'actions':
-      renderActions = [...availableActions];
-      break;
-    case 'cronTasks':
-      renderActions = [...cronTasksActions];
-      break;
-    case 'push':
-      renderActions = [...pushListActions];
-      break;
-    default:
-      renderActions = [...availableActions];
-    break;
-  }
-
-  const regex = new RegExp(actionNameFilter, 'gi');
-  const renderActionsFilter = renderActions.filter((item: ActionItem) => item.action.match(regex));
+  const renderActionsFilter = getFilteredRenderActions(renderActions, actionNameFilter);
 
   const selectedAction = useSelector((state: RootStore) => state.actions.selected);
   const projectID = useSelector((state: RootStore) => state.project.id);
@@ -98,7 +52,7 @@ export const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
   };
 
   const handleCopyAction = (action: ActionItem) => {
-    const availableActions = [...filterActionsType(renderActions, action.type)];
+    const availableActions = renderActions.filter(item => item.type === action.type);
     const indexAction = availableActions.findIndex((item: ActionItem) => item.action === action.action && item.type === action.type);
     const newActions = [...availableActions.slice(0, indexAction + 1), {...action, action: action.action + '_copy'}, ...availableActions.slice(indexAction + 1)];
     dispatch(setActions({[action.type]: newActions}));

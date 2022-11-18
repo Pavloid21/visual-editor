@@ -78,7 +78,7 @@ const actionsSlice = createSlice({
   initialState,
   reducers: {
     setActions: (state, action: PayloadAction<{actions?: any[], data?: any[], externals?: any[], cronTasks?: any[], push?: any[]}>) => {
-     if (action.payload.actions) {
+      if (action.payload.actions) {
         state.actions = action.payload.actions;
       }
       if (action.payload.data) {
@@ -98,16 +98,9 @@ const actionsSlice = createSlice({
       state.selected = action.payload;
     },
     addAction: (state, action: PayloadAction<ActionItem>) => {
-      if (action.payload.type === ActionTypes.actions) {
-        state.actions.push(action.payload);
-      } else if (action.payload.type === ActionTypes.data) {
-        state.data.push(action.payload);
-      } else if (action.payload.type === ActionTypes.externals) {
-        state.externals.push(action.payload);
-      } else if (action.payload.type === ActionTypes.cronTasks) {
-        state.cronTasks.push(action.payload);
-      } else if (action.payload.type === ActionTypes.push) {
-        state.push.push(action.payload);
+      const type = action.payload?.type;
+      if (type && type !== ActionTypes.all) {
+        state[type].push(action.payload);
       }
     },
     deleteAction: (state, action: PayloadAction<ActionItem | null>) => {
@@ -131,25 +124,10 @@ const actionsSlice = createSlice({
       }
     },
     deleteActionEdit: (state, action: PayloadAction<ActionItem | null>) => {
-      if (action.payload?.type === ActionTypes.actions) {
-        const deleted = [...state.deleted.actions];
-        state.deleted.actions = [...deleted, action.payload];
-      }
-      if (action.payload?.type === ActionTypes.data) {
-        const deleted = [...state.deleted.data];
-        state.deleted.data = [...deleted, action.payload];
-      }
-      if (action.payload?.type === ActionTypes.externals) {
-        const deleted = [...state.deleted.externals];
-        state.deleted.externals = [...deleted, action.payload];
-      }
-      if (action.payload?.type === ActionTypes.push) {
-        const deleted = [...state.deleted.push];
-        state.deleted.push = [...deleted, action.payload];
-      }
-      if (action.payload?.type === ActionTypes.cronTasks) {
-        const deleted = [...state.deleted.cronTasks];
-        state.deleted.cronTasks = [...deleted, action.payload];
+      const type = action.payload?.type;
+      if (type && type !== ActionTypes.all) {
+        const deleted = [...state.deleted[type]];
+        state.deleted[type] = [...deleted, action.payload as ActionItem];
       }
     },
   },
