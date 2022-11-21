@@ -55,6 +55,20 @@ export type Project = {
   edited?: string;
 };
 
+export type TBusinessSetting = {
+  loginUrl?: string;
+  passCodeVerificationUrl?: string;
+  isTouchId?: boolean;
+  isFaceId?: boolean;
+  timeTokenExpired?: number;
+  tokenDeviceUrl?: string;
+  countPincodeAttempt?: number;
+  countFaceIdAttempt?: number;
+  countTouchIdAttempt?: number;
+  mainScreenUrl?: string;
+  invalidAccessTime?: number;
+};
+
 export type Template = {
   id: string;
   title: string;

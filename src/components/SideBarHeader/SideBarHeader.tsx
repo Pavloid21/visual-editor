@@ -1,12 +1,12 @@
 import {Inputs} from 'containers/Project/Project';
 import React, {useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
-import {useLocation, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {useModal} from 'utils';
 import {ReactComponent as ArrowBack} from 'assets/arrow_back.svg';
 import {ReactComponent as Settings} from 'assets/settings.svg';
 import {ReactComponent as Warning} from 'assets/warning.svg';
-import {BASE_URL, editProject, getProjectData} from 'services/ApiService';
+import {BASE_URL, editProject, getProjectData, saveAction} from 'services/ApiService';
 import Modal from 'containers/Project/Modal/Modal';
 import {useDispatch, useSelector} from 'react-redux';
 import {Modal as CustomModal} from '../Modal';
@@ -27,7 +27,9 @@ export const SideBarHeader: React.FC<SideBarHeaderProps> = React.memo((props) =>
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal();
   const [warningOpen, setWarningOpen, toggleWarning] = useModal();
   const layout = useSelector((state: RootStore) => state.layout);
-  const location = useLocation();
+  const businessSettings = useSelector((state: RootStore) => state.businessSetting);
+  const projectID = useSelector((state: RootStore) => state.project.id);
+  const project_id = projectID || location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
   const {
     setValue,
     getValues,
@@ -69,7 +71,7 @@ export const SideBarHeader: React.FC<SideBarHeaderProps> = React.memo((props) =>
         })
       );
     });
-    
+
   }, [itemModalOpen, dispatch]);
 
   useBackListener(() => {
@@ -81,6 +83,22 @@ export const SideBarHeader: React.FC<SideBarHeaderProps> = React.memo((props) =>
   });
 
   const handleSave = async () => {
+    const businessSettingsEdit = `
+return {
+  loginUrl: "${businessSettings.loginUrl}",
+  passCodeVerificationUrl: "${businessSettings.passCodeVerificationUrl}",
+  isTouchId: ${businessSettings.isTouchId},
+  isFaceId: ${businessSettings.isFaceId},
+  timeTokenExpired: ${businessSettings.timeTokenExpired},
+  tokenDeviceUrl: "${businessSettings.tokenDeviceUrl}",
+  countPincodeAttempt: ${businessSettings.countPincodeAttempt},
+  countFaceIdAttempt: ${businessSettings.countFaceIdAttempt},
+  countTouchIdAttempt: ${businessSettings.countTouchIdAttempt},
+  mainScreenUrl: "${businessSettings.mainScreenUrl}",
+  invalidAccessTime: ${businessSettings.invalidAccessTime}
+}`;
+    await saveAction(project_id, 'data', 'appSettings', businessSettingsEdit);
+
     const {name, icon: icons, description, platform, url} = getValues().form;
     const requestIcons = await filesToDTO(icons);
     editProject(

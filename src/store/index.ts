@@ -12,6 +12,7 @@ import sideBarReducer from './side-bar.slice';
 import projectFormReducer from './project-form.slice';
 import screensReducer from './screens.slice';
 import leftBarMenuSlice from './left-bar-menu.slice';
+import businessSettingSlice from './business-setting.slice';
 
 const rootReducer = combineReducers({
   actions: actionsReducer,
@@ -26,7 +27,8 @@ const rootReducer = combineReducers({
   sideBar: sideBarReducer,
   projectForm: projectFormReducer,
   screenList: screensReducer,
-  leftBarMenu: leftBarMenuSlice
+  leftBarMenu: leftBarMenuSlice,
+  businessSetting: businessSettingSlice
 });
 
 const store = configureStore({

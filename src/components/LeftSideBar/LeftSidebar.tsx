@@ -27,6 +27,7 @@ import {screenTemplates as defaultTemplates} from 'constants/screenTemplates';
 import {setScreens} from 'store/screens.slice';
 import {Screens} from 'components/Screens';
 import {SubheaderScreens, SubheaderActions} from 'components/LeftSideBar/Subheader';
+import {parseRuturnStatement} from '../../utils/parse';
 
 const LeftSidebar: React.FC<unknown> = () => {
   const {
@@ -172,13 +173,6 @@ const LeftSidebar: React.FC<unknown> = () => {
       );
     }
   }, [output, settingsUI]);
-
-  const parseRuturnStatement = (script: any) => {
-    const string: string = script.data.indexOf(' ') === 0 ? `${script.data}`.replace(' ', '') : script.data;
-    //@ts-ignore
-    const func = eval(`(() => {return {${string.match(/(?<=^return.{).*$/gms)[0]}})`);
-    return func();
-  };
 
   const updateScreenList = (script: any, screenLayout: Record<string, any>, screenPositionInList: number) => {
     if (script.data) {

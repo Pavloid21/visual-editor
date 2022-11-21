@@ -19,6 +19,7 @@ export interface ISelect extends IBaseSelect {
   className?: string;
   label?: string;
   async?: string;
+  placeholder?: string;
 }
 
 export interface ICreateSelectProps extends IBaseSelect {
