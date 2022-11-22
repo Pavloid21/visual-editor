@@ -61,12 +61,6 @@ export type SettingsUIType = Partial<{
   borderWidth: number;
   borderColor: string;
   spacing: string;
-  corners: {
-    topLeftRadius: number;
-    topRightRadius: number;
-    bottomRightRadius: number;
-    bottomLeftRadius: number;
-  };
   shadow: {
     color: string;
     opacity: number;
@@ -82,7 +76,11 @@ export type SettingsUIType = Partial<{
     widthInPercent: number,
     heightInPercent: number
   },
-  fontSize: number
+  fontSize: number,
+  shape: {
+    type: string,
+    radius: string
+  }
 }>;
 
 export type StyledComponentPropsType = SettingsUIType & {

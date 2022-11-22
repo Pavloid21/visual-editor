@@ -12,7 +12,6 @@ import {ItemTypes} from 'constants/actionTypes';
 import {
   alignmentConfig,
   backgroundColor,
-  corners,
   distribution,
   scroll,
   borderColor,
@@ -30,6 +29,7 @@ import {findParentInTree} from 'utils/blocks';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
 import {getDimensionStyles} from 'views/utils/styles/size';
+import {shapeConfigBuilder} from '../configs';
 
 const HStack = styled.div`
   align-self: ${(props) => {
@@ -81,6 +81,11 @@ const HStack = styled.div`
       return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${props.shadow?.radius
         }px rgba(${hexToRgb(props.shadow?.color).r}, ${hexToRgb(props.shadow?.color).g}, ${hexToRgb(props.shadow?.color).b
         }, ${props.shadow?.opacity});`;
+    }
+  }}
+  ${(props) => {
+    if (props.shape?.type === 'ALLCORNERSROUND') {
+      return `border-radius: ${props.shape.radius}px;`;
     }
   }}
 `;
@@ -182,12 +187,6 @@ const block = (state) => {
         left: '10',
         right: '10',
       },
-      corners: {
-        topLeftRadius: 0,
-        topRightRadius: 0,
-        bottomLeftRadius: 0,
-        bottomRightRadius: 0,
-      },
       shadow: {
         color: '#000000',
         opacity: 0,
@@ -196,6 +195,10 @@ const block = (state) => {
           height: 0,
         },
         radius: 8,
+      },
+      shape: {
+        type: 'ALLCORNERSROUND',
+        radius: '20',
       },
     },
     listItems: [],
@@ -207,10 +210,13 @@ const block = (state) => {
       scroll,
       borderColor,
       borderWidth,
+      shape: shapeConfigBuilder()
+        .withAllCornersRound
+        .withRadius
+        .done(),
       size: getSizeConfig(blockState.deviceInfo.device),
       padding,
       shadow: shadowConfigBuilder().withRadius.done(),
-      corners,
     },
     interactive,
   });

@@ -293,6 +293,8 @@ const Inspector: React.FC<TInspector> = ({display}) => {
 
   if (!block || !blocks[block.blockId]) return null;
 
+  console.log('block', block);
+
   /* @ts-ignore */
   const {config, interactive, complex, name} = blocks[block.blockId](blockState);
 
