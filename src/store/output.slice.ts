@@ -10,6 +10,14 @@ interface IInitialState {
   settingsUI: TSettingsUI;
 }
 
+const defaultSettingsUI: TSettingsUI = {
+  isBottomSheet: false,
+    bottomSheetSettings: {
+      heightInPercent: 70,
+      scrimColor: '#FFFFFF'
+    }
+};
+
 const initialState: IInitialState = {
   screen: 'screen name',
   logic: '',
@@ -18,13 +26,7 @@ const initialState: IInitialState = {
     showBottomBar: false,
     updateUrlBottomBar: '',
   },
-  settingsUI: {
-    isBottomSheet: false,
-    bottomSheetSettings: {
-      heightInPercent: 70,
-      scrimColor: '#FFFFFF'
-    }
-  }
+  settingsUI: defaultSettingsUI,
 };
 
 const outputSlice = createSlice({
@@ -46,8 +48,11 @@ const outputSlice = createSlice({
       if (action.navigationSettings) {
         nextState.navigationSettings = {...nextState.navigationSettings, ...action.navigationSettings};
       }
-      if (action.settingsUI) {
+      if (action.settingsUI !== undefined) {
         nextState.settingsUI = {...nextState.settingsUI, ...action.settingsUI};
+      } else {
+        state = {...nextState, settingsUI: defaultSettingsUI};
+        return state;
       }
       return nextState;
     });
