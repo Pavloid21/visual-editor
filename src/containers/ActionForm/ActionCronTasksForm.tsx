@@ -71,7 +71,7 @@ const ActionCronTasksForm: FC<{action: any}> = ({action}) => {
                 snippetName
               },
               selected: false,
-              type: 'cronTasks'
+              type: ActionTypes.cronTasks
             },
           ],
           data: nextData,

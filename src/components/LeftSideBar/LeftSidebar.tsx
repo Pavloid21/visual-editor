@@ -326,13 +326,13 @@ const LeftSidebar: React.FC<unknown> = () => {
     let actionNew = ActionTypes.actions;
     let added: any;
     let objectAction = '';
-    if (activeTabActions === 'actions') {
+    if (activeTabActions === ActionTypes.actions) {
       switch (filterAction) {
-        case 'data':
+        case ActionTypes.data:
           actionNew = ActionTypes.data;
           objectAction = ACTION_TEMPLATES.DATA_USAGE;
           break;
-        case 'externals':
+        case ActionTypes.externals:
           actionNew = ActionTypes.externals;
           objectAction = ACTION_TEMPLATES.EXTERNAL_ACTION;
           break;
@@ -346,7 +346,7 @@ const LeftSidebar: React.FC<unknown> = () => {
         object: objectAction,
         type: actionNew
       };
-    } else if (activeTabActions === 'cronTasks') {
+    } else if (activeTabActions === ActionTypes.cronTasks) {
       actionNew = ActionTypes.cronTasks;
       added = {
         action: 'new_action',
@@ -359,7 +359,7 @@ const LeftSidebar: React.FC<unknown> = () => {
         selected: false,
         type: actionNew
       };
-    } else if (activeTabActions === 'push') {
+    } else if (activeTabActions === ActionTypes.push) {
       actionNew = ActionTypes.push;
       added = {
         action: 'new_action',

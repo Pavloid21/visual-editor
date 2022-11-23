@@ -42,12 +42,12 @@ const getAvailableActions = (snippets: Actions, type: ActionTypes) => {
 export const filteredSnippetsSelector = createSelector(
   snippets,
   (_state: RootStore, tab: ActionTypes) => tab,
-  (_state: RootStore, type: ActionTypes) => type,
+  (_state: RootStore, _tab: ActionTypes, type: ActionTypes) => type,
   (snippets, tab, type) => {
     if ([ActionTypes.cronTasks, ActionTypes.push].includes(tab)) {
       return order(
         [
-          ...snippets[type].map(normalizer(type))
+          ...snippets[tab].map(normalizer(tab))
         ],
         'action'
       );

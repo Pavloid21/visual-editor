@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {useForm, Controller} from 'react-hook-form';
+import {Controller, useForm} from 'react-hook-form';
 import Editor from 'react-simple-code-editor';
 import {gruvboxLight} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import Prism from 'prismjs';
@@ -11,7 +11,7 @@ import {Modal} from 'components';
 import {useModal} from 'utils';
 import {Button, Input, Label} from 'components/controls';
 import ButtonSelector from 'components/ButtonSelector';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {v4} from 'uuid';
 import {Container, EditorWrapper, H4, Separator, Settings} from './ActionForm.styled';
 import {deleteActionEdit, setActions, setSelectAction} from 'store/actions.slice';
@@ -41,13 +41,13 @@ export const ActionForm: React.FC<{action: ActionItem}> = ({action}) => {
     snippets[key].forEach((item: ActionItem, index: number) => {
       let ref = [];
       switch (selected?.type) {
-        case 'actions':
+        case ActionTypes.actions:
           ref = nextActions;
           break;
-        case 'data':
+        case ActionTypes.data:
           ref = nextData;
           break;
-        case 'externals':
+        case ActionTypes.externals:
           ref = nextExternals;
           break;
         default:
@@ -57,7 +57,7 @@ export const ActionForm: React.FC<{action: ActionItem}> = ({action}) => {
 
       if (item.action === selected?.action) {
         ref.splice(index, 1);
-        if (type === 'data') {
+        if (type === ActionTypes.data) {
           dispatch(setActions({
             actions: nextActions,
             externals: nextExternals,
@@ -68,18 +68,18 @@ export const ActionForm: React.FC<{action: ActionItem}> = ({action}) => {
               {
                 action: actionName,
                 object: code,
-                type: 'data'
+                type: ActionTypes.data
               },
             ],
           }));
-        } else if (type === 'actions') {
+        } else if (type === ActionTypes.actions) {
           dispatch(setActions({
             actions: [
               ...nextActions,
               {
                 action: actionName,
                 object: code,
-                type: 'actions'
+                type: ActionTypes.actions
               },
             ],
             data: nextData,
@@ -87,14 +87,14 @@ export const ActionForm: React.FC<{action: ActionItem}> = ({action}) => {
             push: nextPush,
             cronTasks: nextCronTasks,
           }));
-        } else if (type === 'externals') {
+        } else if (type === ActionTypes.externals) {
           dispatch(setActions({
             externals: [
               ...nextExternals,
               {
                 action: actionName,
                 object: code,
-                type: 'externals'
+                type: ActionTypes.externals
               },
             ],
             data: nextData,

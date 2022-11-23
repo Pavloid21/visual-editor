@@ -25,10 +25,10 @@ const getFilteredRenderActions = (data: ActionItem[], searchText: string) => {
 
 export const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
   const dispatch = useDispatch();
-  const {actionNameFilter} = useSelector((state: RootStore) => state.leftBarMenu);
+  const {actionNameFilter, filterAction} = useSelector((state: RootStore) => state.leftBarMenu);
 
   const renderActions: ActionItem[] = useSelector(
-    (store: RootStore) => filteredSnippetsSelector(store, activeTabActions)
+    (store: RootStore) => filteredSnippetsSelector(store, activeTabActions, filterAction)
   );
 
   const renderActionsFilter = getFilteredRenderActions(renderActions, actionNameFilter);

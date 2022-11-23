@@ -38,13 +38,13 @@ const SubheaderActions: React.FC<TSideBarSubheaderActions> = ({
     <>
       <SideBarSubheader>
         <div className="actions_tab" onClick={handlerClickAction}>
-          <span data-tab-id='actions' className={getClassTabById('actions')}>
+          <span data-tab-id={ActionTypes.actions} className={getClassTabById(ActionTypes.actions)}>
             Actions
           </span>
-          <span data-tab-id='cronTasks' className={getClassTabById('cronTasks')}>
+          <span data-tab-id={ActionTypes.cronTasks} className={getClassTabById(ActionTypes.cronTasks)}>
             Cron Tasks
           </span>
-          <span data-tab-id='push' className={getClassTabById('push')}>
+          <span data-tab-id={ActionTypes.push} className={getClassTabById(ActionTypes.push)}>
             Push
           </span>
         </div>
@@ -58,7 +58,7 @@ const SubheaderActions: React.FC<TSideBarSubheaderActions> = ({
           onChange={setFilterValue}
         />
       </Search>
-      {activeTab === 'actions' && <FilterAction />}
+      {activeTab === ActionTypes.actions && <FilterAction />}
     </>
   );
 };

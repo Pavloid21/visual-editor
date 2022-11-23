@@ -77,29 +77,18 @@ const actionsSlice = createSlice({
   name: 'actions',
   initialState,
   reducers: {
-    setActions: (state, action: PayloadAction<{actions?: any[], data?: any[], externals?: any[], cronTasks?: any[], push?: any[]}>) => {
-      if (action.payload.actions) {
-        state.actions = action.payload.actions;
-      }
-      if (action.payload.data) {
-        state.data = action.payload.data;
-      }
-      if (action.payload.externals) {
-        state.externals = action.payload.externals;
-      }
-      if (action.payload.cronTasks) {
-        state.cronTasks = action.payload.cronTasks;
-      }
-      if (action.payload.push) {
-        state.push = action.payload.push;
-      }
+    setActions: (state, action: PayloadAction<Partial<Record<ActionTypes, ActionItem[]>>>) => {
+      const payloadKeys = Object.keys(action.payload) as ActionTypes[];
+      payloadKeys.forEach((payloadKey) => {
+        state[payloadKey] = action.payload[payloadKey] || [];
+      });
     },
     setSelectAction: (state, action: PayloadAction<ActionItem | null>) => {
       state.selected = action.payload;
     },
     addAction: (state, action: PayloadAction<ActionItem>) => {
       const type = action.payload?.type;
-      if (type && type !== ActionTypes.all) {
+      if (type && (type !== ActionTypes.all)) {
         state[type].push(action.payload);
       }
     },
