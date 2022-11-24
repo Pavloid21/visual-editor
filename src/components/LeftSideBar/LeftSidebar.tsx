@@ -27,7 +27,7 @@ import {screenTemplates as defaultTemplates} from 'constants/screenTemplates';
 import {setScreens} from 'store/screens.slice';
 import {Screens} from 'components/Screens';
 import {SubheaderScreens, SubheaderActions, SubheaderImages} from 'components/LeftSideBar/Subheader';
-import {Images} from '../Images';
+import {Images} from 'components/Images';
 
 const LeftSidebar: React.FC<unknown> = () => {
   const {

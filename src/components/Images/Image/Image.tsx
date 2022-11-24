@@ -8,6 +8,7 @@ import {createImagesFolder, deleteImagesFolder, getImagesData} from 'services/Ap
 import {useSelector} from 'react-redux';
 import {RootStore} from 'store/types';
 import {ImageSections} from './components/ImageSections';
+import {IconTabObjectType} from '../types';
 
 export const Image = () => {
   const projectID = useSelector((state: RootStore) => state.project.id);
@@ -29,7 +30,7 @@ export const Image = () => {
 
   const groupedTabs = groupTabs(tabsData);
 
-  const createContentTabs = (obj: any) => {
+  const createContentTabs = (obj: IconTabObjectType) => {
     const result = [];
     for (const item in obj) {
       result.push({
@@ -54,11 +55,9 @@ export const Image = () => {
   const contentTabs = createContentTabs(groupedTabs);
 
   return (
-    <>
-      <Container>
-        <img src='http://mobile-platform.apps.msa31.do.neoflex.ru/api/v2/projects/portal/admin/files/test/otpusk.svg' alt='' />
-        <Accordion tabs={contentTabs} />
-      </Container>
-    </>
+    <Container>
+      <img src='http://mobile-platform.apps.msa31.do.neoflex.ru/api/v2/projects/portal/admin/files/test/otpusk.svg' alt='' />
+      <Accordion tabs={contentTabs} />
+    </Container>
   );
 };

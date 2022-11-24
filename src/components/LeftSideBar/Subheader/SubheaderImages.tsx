@@ -1,12 +1,11 @@
-import React, {useEffect} from 'react';
+import React, {ChangeEvent, useEffect} from 'react';
 import {ButtonSelector} from 'components';
-import {v4} from 'uuid';
-import {Control, Controller, FieldError, useForm, UseFormHandleSubmit, UseFormSetValue} from 'react-hook-form';
+import {Controller, useForm} from 'react-hook-form';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootStore} from 'store/types';
 import {setIconNameFilter, setLeftBarImageTab} from 'store/left-bar-menu.slice';
-import {Input} from '../../controls';
-import {SearchImage} from '../../SideBarHeader/SideBarHeader.styled';
+import {Input} from 'components/controls';
+import {SearchImage} from 'components/SideBarHeader/SideBarHeader.styled';
 import {Container, SearchImageContainer} from './SubheaderImages.styled';
 import {ReactComponent as Folder} from 'assets/left-sidebar-images/folder.svg';
 import {useModal} from 'utils';
@@ -16,7 +15,7 @@ const SubheaderImages: React.FC = () => {
   const dispatch = useDispatch();
   const activeTab = useSelector((state: RootStore) => state.leftBarMenu.activeImageTab);
   const iconNameFilter = useSelector((state: RootStore) => state.leftBarMenu.iconNameFilter);
-  const setFilterValue = (e: any) => {
+  const setFilterValue = (e: ChangeEvent<HTMLTextAreaElement & HTMLInputElement>) => {
     dispatch(setIconNameFilter(e.target.value));
   };
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal();
@@ -54,8 +53,8 @@ const SubheaderImages: React.FC = () => {
                 {...field}
                 label="Image"
                 buttons={[
-                  {title: 'Icon', key: 'Icon', uuid: v4()},
-                  {title: 'Image', key: 'Image', uuid: v4()},
+                  {title: 'Icon', key: 'Icon', uuid: 'Icon'},
+                  {title: 'Image', key: 'Image', uuid: 'Image'},
                 ]}
                 onChange={handleActiveImageTab}
                 value={activeTab}

@@ -1,10 +1,9 @@
 import React from 'react';
-import {SearchImage} from 'components/SideBarHeader/SideBarHeader.styled';
-import {Input} from 'components/controls';
 import {Container} from 'components/Images/Icon/Icon.styled';
 import {Accordion} from 'components/Accordion';
 import {groupTabs} from 'components/Images/utils';
 import {IconSections} from './components/IconSections';
+import {IconTabObjectType} from 'components/Images/types';
 
 export const Icon = () => {
   const tabsData = [
@@ -21,7 +20,7 @@ export const Icon = () => {
 
   const groupedTabs = groupTabs(tabsData);
 
-  const createContentTabs = (obj: any) => {
+  const createContentTabs = (obj: IconTabObjectType) => {
     const result = [];
     for (const item in obj) {
       result.push({
@@ -35,10 +34,8 @@ export const Icon = () => {
   const contentTabs = createContentTabs(groupedTabs);
 
   return (
-    <>
-      <Container>
-        <Accordion tabs={contentTabs} />
-      </Container>
-    </>
+    <Container>
+      <Accordion tabs={contentTabs} />
+    </Container>
   );
 };

@@ -12,7 +12,7 @@ type ModalProps = {
   handleSubmit: UseFormHandleSubmit<FieldValues>;
 };
 
-export const Modal: FC<ModalProps> = (props: any) => {
+export const Modal = (props: ModalProps) => {
   const {itemModalOpen, setItemModalOpen, handleSave, handleSubmit} = props;
   return (
     <ModalWrapper>

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Icon} from './Icon/Icon';
 import {useSelector} from 'react-redux';
-import {RootStore} from '../../store/types';
+import {RootStore} from 'store/types';
 import {Image} from './Image/Image';
 import {Container} from './Images.styled';
 

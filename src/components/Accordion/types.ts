@@ -1,8 +1,12 @@
 export type AccordionTab = {
-  title: any,
-  content: any
+  title: string,
+  content: JSX.Element
 }
 
 export type AccordionProps = {
   tabs: AccordionTab[];
+}
+
+export type SectionsType = {
+  itemTabs: AccordionTab;
 }

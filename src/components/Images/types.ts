@@ -1,8 +1,13 @@
-export type ImageItem = {
-    title: string,
-    image: any
+export type IconTabType = {
+  name: string,
+  tabsType: string,
+  url: string
 }
 
-export type IconAccordionProps = {
-  imageItems: ImageItem[]
+export type IconSectionsProps = {
+  sections: IconTabType[]
+}
+
+export type IconTabObjectType = {
+  [key: string]: IconTabType[]
 }

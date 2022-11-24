@@ -1,15 +1,12 @@
-import styles from './Accordion.module.scss';
 import Sections from './Sections';
-import React, {FC} from 'react';
+import React from 'react';
+import {Container} from './Accordion.styled';
+import {AccordionProps, AccordionTab} from './types';
 
-const Accordion: FC<any> = ({tabs}) => {
+export const Accordion = ({tabs}: AccordionProps) => {
     return (
-        <>
-            <div className={styles.accordion}>
-              {tabs.map((item: any, i: number) => <Sections key={i} itemTabs={item} />)}
-            </div>
-        </>
+      <Container>
+        {tabs.map((item: AccordionTab, i: number) => <Sections key={i} itemTabs={item} />)}
+      </Container>
     );
 };
-
-export default Accordion;
