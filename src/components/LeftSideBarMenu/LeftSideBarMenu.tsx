@@ -1,11 +1,12 @@
 import React from 'react';
 import {Container, MenuItem} from './LeftSideBarMenu.styled.jsx';
 import {useDispatch, useSelector} from 'react-redux';
-import {RootStore} from '../../store/types';
-import {setLeftBarMenu} from '../../store/left-bar-menu.slice';
+import {RootStore} from 'store/types';
+import {setLeftBarMenu} from 'store/left-bar-menu.slice';
 import {ReactComponent as ScreenImage} from 'assets/left-sidebar-menu/screens.svg';
 import {ReactComponent as ActionImage} from 'assets/left-sidebar-menu/actions.svg';
 import {ReactComponent as ImageImage} from 'assets/left-sidebar-menu/images.svg';
+import {deleteAction, setSelectAction} from 'store/actions.slice';
 const LeftSideBarMenu: React.FC = () => {
   const dispatch = useDispatch();
   const activeTab = useSelector((state: RootStore) => state.leftBarMenu.activeTab);
@@ -34,6 +35,10 @@ const LeftSideBarMenu: React.FC = () => {
     const tab = (event.target as HTMLDivElement).closest('div');
     if (tab) {
       handleModeClick(tab.dataset.tabActive);
+    }
+    if (tab?.dataset.tabActive !== 'action') {
+      dispatch(setSelectAction(null));
+      dispatch(deleteAction(null));
     }
   };
 

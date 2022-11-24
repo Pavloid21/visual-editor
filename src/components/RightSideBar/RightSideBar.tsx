@@ -2,8 +2,8 @@ import React, {useRef, useState} from 'react';
 import {SideBarHeader} from 'components';
 import {Inspector} from 'containers/Inspector';
 import Screen from 'containers/Screen';
-import {Button, Input} from '../controls';
-import {ActionForm} from 'containers/ActionForm';
+import {Button, Input} from 'components/controls';
+import {ActionsTabsForms} from 'containers/ActionForm';
 import {useSelector, useDispatch} from 'react-redux';
 import {ReactComponent as Plus} from 'assets/plus.svg';
 import {ReactComponent as Remove} from 'assets/trash.svg';
@@ -111,7 +111,7 @@ const RightSidebar: React.FC<unknown> = () => {
       <div>
         <SideBarHeader title="Properties" />
         <Inspector display />
-        {selectedAction && !selectedBlock && <ActionForm action={selectedAction} />}
+        {selectedAction && !selectedBlock && <ActionsTabsForms selectedAction={selectedAction} />}
         {activeTab === 5 && selectedScreen && (
           <Screen category="screen" display={activeTab === 5} onPushBlock={noop} onPushBlockInside={noop} />
         )}
