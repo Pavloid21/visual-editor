@@ -27,7 +27,6 @@ import {screenTemplates as defaultTemplates} from 'constants/screenTemplates';
 import {setScreens} from 'store/screens.slice';
 import {Screens} from 'components/Screens';
 import {SubheaderScreens, SubheaderActions} from 'components/LeftSideBar/Subheader';
-import {parseRuturnStatement} from '../../utils/parse';
 
 const LeftSidebar: React.FC<unknown> = () => {
   const {
@@ -174,12 +173,25 @@ const LeftSidebar: React.FC<unknown> = () => {
     }
   }, [output, settingsUI]);
 
+  const parseReturnStatement = (script: any) => {
+    const regExpReturn = /^\s*return\s*{/gms;
+    const data = script.data.trim();
+
+    const matchLength = data.match(regExpReturn).length;
+    for (let i = 0; i < matchLength; i++) {
+      regExpReturn.test(data);
+    }
+
+    const func = eval(`(() => {return {${data.substring(regExpReturn.lastIndex)}})`);
+    return func();
+  };
+
   const updateScreenList = (script: any, screenLayout: Record<string, any>, screenPositionInList: number) => {
     if (script.data) {
       const rawData = {
         screen,
-        logic: parseRuturnStatement(script),
-        object: parseRuturnStatement(script),
+        logic: parseReturnStatement(script),
+        object: parseReturnStatement(script),
         project,
       };
       const {newBlock, action, screenEndpoint} = buildLayout(rawData);
