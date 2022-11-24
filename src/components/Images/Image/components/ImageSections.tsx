@@ -8,7 +8,6 @@ const Container = styled.div`
 `;
 
 export const ImageSections = ({sections}: IconSectionsProps) => {
-  console.log('sections', sections);
 
   return(
     <Container>
