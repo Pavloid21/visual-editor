@@ -57,6 +57,7 @@ const Button = styled.div`
   }}
   & > span {
     width: 100%;
+
     font-size: inherit;
     font-weight: ${(props) => {
       switch (props.fontWeight) {

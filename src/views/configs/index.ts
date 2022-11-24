@@ -110,24 +110,6 @@ export const spacing = {
   type: 'number',
   name: 'Spacing',
 };
-export const corners = {
-  topLeftRadius: {
-    type: 'number',
-    name: 'Top left radius',
-  },
-  topRightRadius: {
-    type: 'number',
-    name: 'Top right radius',
-  },
-  bottomLeftRadius: {
-    type: 'number',
-    name: 'Bottom left radius',
-  },
-  bottomRightRadius: {
-    type: 'number',
-    name: 'Bottom right radius',
-  },
-};
 export const interactive = {
   action: {
     url: {
