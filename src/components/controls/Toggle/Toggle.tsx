@@ -1,18 +1,18 @@
-import styles from './Toggle.module.scss';
+import {Container} from './Toggle.styled';
 
 export const Toggle = ({value, onChange}: {value: boolean, onChange: any}) => {
-    const classOn = !value ? styles.onbtn + ' ' + styles.noVisible :  styles.onbtn;
-    const classOf = value ? styles.ofbtn + ' ' + styles.noVisible :  styles.ofbtn;
+    const classOn = !value ? 'onbtn noVisible' :  'onbtn';
+    const classOf = value ? 'ofbtn noVisible' :  'ofbtn';
 
     return (
         <div>
-            <div className={styles.toggleBox}>
-                <div className={styles.toggle}>
+            <Container>
+                <div className='toggle'>
                     <input type="checkbox" onChange={onChange} checked={value} />
                     <label htmlFor="" className={classOn}>ON</label>
                     <label htmlFor="" className={classOf}>OFF</label>
                 </div>
-            </div>
+            </Container>
         </div>
     );
 };
