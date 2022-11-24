@@ -20,7 +20,8 @@ import {
   padding,
   shadowConfigBuilder,
   getSizeConfig,
-  interactive
+  interactive,
+  shapeConfigBuilder
 } from 'views/configs';
 import hstack from 'assets/hstack.svg';
 import {pushBlockInside} from 'store/layout.slice';
@@ -29,7 +30,6 @@ import {findParentInTree} from 'utils/blocks';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
 import {getDimensionStyles} from 'views/utils/styles/size';
-import {shapeConfigBuilder} from '../configs';
 
 const HStack = styled.div`
   align-self: ${(props) => {
