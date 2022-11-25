@@ -155,6 +155,23 @@ export const getTemplateData = async (templateId: string, params?: string) => {
   return callApi(url, null, 'GET');
 };
 
+export const getImagesData = async (projectId: string) => {
+  const url = API.defaults.baseURL + `projects/${projectId}/admin/files`;
+  return callApi(url, null, 'GET');
+};
+
+export const createImagesFolder = async (projectId: string, payload: string) => {
+  const url = API.defaults.baseURL + `projects/${projectId}/admin/files`;
+  return callApi(url, payload, 'POST', undefined, undefined, {
+    'Content-Type': 'multipart/form-data',
+  });
+};
+
+export const deleteImagesFolder = async (projectId: string, endpoint: string) => {
+  const url = API.defaults.baseURL + `projects/${projectId}/admin/files/${endpoint}/`;
+  return callApi(url, null, 'DELETE');
+};
+
 export const applyTemplate = async (templateId: string, payload: string) => {
   const url = API.defaults.baseURL + `templates/${templateId}/extraction`;
   return callApi(url, payload, 'POST', undefined, undefined, {

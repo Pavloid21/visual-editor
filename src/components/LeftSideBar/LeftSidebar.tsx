@@ -26,7 +26,8 @@ import {ReactComponent as Close} from 'assets/close.svg';
 import {screenTemplates as defaultTemplates} from 'constants/screenTemplates';
 import {setScreens} from 'store/screens.slice';
 import {Screens} from 'components/Screens';
-import {SubheaderActions, SubheaderScreens} from 'components/LeftSideBar/Subheader';
+import {SubheaderScreens, SubheaderActions, SubheaderImages} from 'components/LeftSideBar/Subheader';
+import {Images} from 'components/Images';
 import {ACTION_TEMPLATES} from '../Actions/constants';
 
 const LeftSidebar: React.FC<unknown> = () => {
@@ -452,6 +453,8 @@ const LeftSidebar: React.FC<unknown> = () => {
                 activeTab={activeTabActions}
                 handleAddAction={handleAddAction}
               />}
+            {activeTabMenu === 'image' &&
+            <SubheaderImages />}
             {activeTabMenu === 'screen' && activeTabScreens === 0 &&
               <Screens
                 loading={loading}
@@ -465,6 +468,7 @@ const LeftSidebar: React.FC<unknown> = () => {
                 handleDeleteBlock={handleDeleteBlock}
               />}
             {activeTabMenu === 'action' && <Actions activeTabActions={activeTabActions} />}
+            {activeTabMenu === 'image' && <Images />}
           </div>
           <Gallery />
         </SideBarContent>

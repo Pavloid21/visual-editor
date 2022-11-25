@@ -154,6 +154,8 @@ export type EditorMode = {
 
 export type LeftBarMenu = {
   activeTab: string,
+  activeImageTab: string,
+  iconNameFilter: string
   filterAction: ActionTypes,
   screenNameFilter: string,
   actionNameFilter: string,

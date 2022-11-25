@@ -3,7 +3,7 @@ import ButtonSelector from './ButtonSelector';
 export {ButtonSelector};
 export {LeftSidebar} from './LeftSideBar';
 export {BlockPreview} from './BlockPreview';
-export {Actions} from './Actions';
+export {Actions} from './Actions/Actions';
 export {HighlightedElement} from './HighlightedElement';
 export {Modal} from './Modal';
 export {TopBar, VerticalDivider} from './TopBar';
