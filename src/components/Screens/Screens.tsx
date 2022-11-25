@@ -35,19 +35,24 @@ const Screens: React.FC<ScreensProps> = ({
   handleDeleteScreen,
   handleDeleteBlock}) => {
   const {selectedBlockUuid: selectedBlock, selectedScreen} = useSelector((state: RootStore) => state.layout);
+  const screenNameFilter = useSelector((state: RootStore) => state.leftBarMenu.screenNameFilter);
   const override = css`
     display: inline-block;
     margin: 0 auto;
     border-color: red;
     margin-right: 6px;
   `;
+
+  const regex = new RegExp(screenNameFilter, 'gi');
+  const treeDataFilter = treeData.filter((item: any) => item.screen.match(regex));
+
   return (
     <Container>
       {loading ? (
         <Loader loading={true} size={40} />
       ) : (
         <SortableTree
-          treeData={treeData}
+          treeData={treeDataFilter}
           onChange={(treeData) => setTree(treeData)}
           theme={FileExplorerTheme}
           generateNodeProps={(extendedNode) => {

@@ -1,13 +1,13 @@
 /* eslint-disable react/jsx-key */
-import React, {useState, useEffect, useCallback} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import React, {useCallback, useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import actionTypes from 'constants/actionTypes';
 import {Gallery} from 'containers/Gallery';
 import {Actions, ButtonSelector, LeftSideBarMenu, Modal, SideBarHeader} from 'components';
 import {v4} from 'uuid';
-import {getScreensList, getScreenByName, getScreenTemplates, getTemplateData} from 'services/ApiService';
+import {getScreenByName, getScreensList, getScreenTemplates, getTemplateData} from 'services/ApiService';
 import {useParams} from 'react-router-dom';
-import {observer, snippet, prepareTree, buildLayout, useModal} from 'utils';
+import {buildLayout, observer, prepareTree, snippet, useModal} from 'utils';
 import {
   Container,
   DefaultTemplateWrapper,
@@ -20,7 +20,7 @@ import {addAction} from 'store/actions.slice';
 import {setActiveTab as setActiveTabAction} from 'store/config.slice';
 import {saveCode} from 'store/code.slice';
 import {cloneBlock, deleteBlock, selectScreen, setLayout, setSelectedBlock, setSnippet} from 'store/layout.slice';
-import {RootStore, ActionTypes} from 'store/types';
+import {ActionTypes, RootStore} from 'store/types';
 import {Bar} from 'containers/Project/Modal/Modal.styled';
 import {ReactComponent as Close} from 'assets/close.svg';
 import {screenTemplates as defaultTemplates} from 'constants/screenTemplates';
@@ -28,6 +28,7 @@ import {setScreens} from 'store/screens.slice';
 import {Screens} from 'components/Screens';
 import {SubheaderScreens, SubheaderActions, SubheaderImages} from 'components/LeftSideBar/Subheader';
 import {Images} from 'components/Images';
+import {ACTION_TEMPLATES} from '../Actions/constants';
 
 const LeftSidebar: React.FC<unknown> = () => {
   const {
@@ -37,6 +38,7 @@ const LeftSidebar: React.FC<unknown> = () => {
     blocks: layout,
   } = useSelector((state: RootStore) => state.layout);
   const activeTabMenu = useSelector((state: RootStore) => state.leftBarMenu.activeTab);
+  const {activeTabActions, filterAction} = useSelector((state: RootStore) => state.leftBarMenu);
   const [loading, setLoading] = useState(false);
   const barState = useSelector((state: RootStore) => state.sideBar);
   const api = useSelector((state: RootStore) => state.api);
@@ -47,7 +49,6 @@ const LeftSidebar: React.FC<unknown> = () => {
   const projectName = useSelector((state: RootStore) => state.project.name);
   const {project} = useParams();
   const [activeTabScreens, setActiveTabScreens] = useState(0);
-  const [activeTabActions, setActiveTabActions] = useState(0);
   const [availableScreenes, setScreenes] = useState<Record<string, any>[]>([]);
   const [treeData, setTree] = useState<Record<string, any>[]>([]);
   const [load, setLoadScreen] = useState<{uuid: string, load: boolean}>();
@@ -174,10 +175,16 @@ const LeftSidebar: React.FC<unknown> = () => {
     }
   }, [output, settingsUI]);
 
-  const parseRuturnStatement = (script: any) => {
-    const string: string = script.data.indexOf(' ') === 0 ? `${script.data}`.replace(' ', '') : script.data;
-    //@ts-ignore
-    const func = eval(`(() => {return {${string.match(/(?<=^return.{).*$/gms)[0]}})`);
+  const parseReturnStatement = (script: any) => {
+    const regExpReturn = /^\s*return\s*{/gms;
+    const data = script.data.trim();
+
+    const matchLength = data.match(regExpReturn).length;
+    for (let i = 0; i < matchLength; i++) {
+      regExpReturn.test(data);
+    }
+
+    const func = eval(`(() => {return {${data.substring(regExpReturn.lastIndex)}})`);
     return func();
   };
 
@@ -185,8 +192,8 @@ const LeftSidebar: React.FC<unknown> = () => {
     if (script.data) {
       const rawData = {
         screen,
-        logic: parseRuturnStatement(script),
-        object: parseRuturnStatement(script),
+        logic: parseReturnStatement(script),
+        object: parseReturnStatement(script),
         project,
       };
       const {newBlock, action, screenEndpoint} = buildLayout(rawData);
@@ -323,13 +330,53 @@ const LeftSidebar: React.FC<unknown> = () => {
   }, [availableScreenes, bottomBar, selectedScreen, topAppBar]);
 
   const handleAddAction = useCallback(() => {
-    const added = {
-      action: 'new_action',
-      object: '',
-      type: ActionTypes.action
-    };
+    let actionNew = ActionTypes.actions;
+    let added: any;
+    let objectAction = '';
+    if (activeTabActions === ActionTypes.actions) {
+      switch (filterAction) {
+        case ActionTypes.data:
+          actionNew = ActionTypes.data;
+          objectAction = ACTION_TEMPLATES.DATA_USAGE;
+          break;
+        case ActionTypes.externals:
+          actionNew = ActionTypes.externals;
+          objectAction = ACTION_TEMPLATES.EXTERNAL_ACTION;
+          break;
+        default:
+          actionNew = ActionTypes.actions;
+          objectAction = ACTION_TEMPLATES.CASTOM_ACTION;
+          break;
+      }
+      added = {
+        action: 'new_action',
+        object: objectAction,
+        type: actionNew
+      };
+    } else if (activeTabActions === ActionTypes.cronTasks) {
+      actionNew = ActionTypes.cronTasks;
+      added = {
+        action: 'new_action',
+        object: {
+          id: 'new_action',
+          pattern: '',
+          snippetType: '',
+          snippetName: ''
+        },
+        selected: false,
+        type: actionNew
+      };
+    } else if (activeTabActions === ActionTypes.push) {
+      actionNew = ActionTypes.push;
+      added = {
+        action: 'new_action',
+        type: actionNew
+      };
+    }
+
+
     dispatch(addAction(added));
-  }, [dispatch]);
+  }, [dispatch, activeTabActions, filterAction]);
 
   const handleCloneScreen = useCallback(
     (event, screenUuid) => {
@@ -405,7 +452,6 @@ const LeftSidebar: React.FC<unknown> = () => {
               <SubheaderActions
                 activeTab={activeTabActions}
                 handleAddAction={handleAddAction}
-                setActiveTab={setActiveTabActions}
               />}
             {activeTabMenu === 'image' &&
             <SubheaderImages />}
@@ -421,7 +467,7 @@ const LeftSidebar: React.FC<unknown> = () => {
                 handleDeleteScreen={handleDeleteScreen}
                 handleDeleteBlock={handleDeleteBlock}
               />}
-            {activeTabMenu === 'action' && activeTabActions === 0 && <Actions />}
+            {activeTabMenu === 'action' && <Actions activeTabActions={activeTabActions} />}
             {activeTabMenu === 'image' && <Images />}
           </div>
           <Gallery />
