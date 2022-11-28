@@ -57,6 +57,7 @@ const Button = styled.div`
   }}
   & > span {
     width: 100%;
+
     font-size: inherit;
     font-weight: ${(props) => {
       switch (props.fontWeight) {
@@ -141,7 +142,7 @@ const block = (state) => {
     },
     defaultData: {
       text: 'Button',
-      fontSize: '14',
+      fontSize: 14,
       textColor: '#000000',
       backgroundColor: '#FFFFFF',
       imageUrl: '',
@@ -161,7 +162,7 @@ const block = (state) => {
       },
       shape: {
         type: 'ALLCORNERSROUND',
-        radius: '4',
+        radius: 4,
       },
       size: {
         height: 36,

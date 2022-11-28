@@ -12,7 +12,7 @@ import {hexToRgb} from 'constants/utils';
 import {ItemTypes} from 'constants/actionTypes';
 import card from 'assets/card.svg';
 import {
-  backgroundColor, corners, elevation, getSizeConfig,
+  backgroundColor, elevation, getSizeConfig,
   padding, shadowConfigBuilder,
   shapeConfigBuilder, interactive
 } from 'views/configs';
@@ -39,6 +39,11 @@ const Card = styled.div`
     const RGB = hexToRgb(props.shadow?.color);
     return `${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px 8px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b}, ${props.shadow?.opacity})`;
   }};
+  ${(props) => {
+    if (props.shape?.type === 'ALLCORNERSROUND') {
+      return `border-radius: ${props.shape.radius}px;`;
+    }
+  }}
 `;
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, settingsUI, ...props}) => {
@@ -138,14 +143,8 @@ const block = (state) => {
         height: 0,
       },
       shape: {
-        type: 'ROUND',
+        type: 'ALLCORNERSROUND',
         radius: 20,
-      },
-      corners: {
-        topLeftRadius: 20,
-        topRightRadius: 20,
-        bottomLeftRadius: 0,
-        bottomRightRadius: 0,
       },
       shadow: {
         color: '#000000',
@@ -164,7 +163,6 @@ const block = (state) => {
         .withAllCornersRound
         .withRadius
         .done(),
-      corners,
       shadow: shadowConfigBuilder().done(),
       padding,
       size: {

@@ -25,7 +25,7 @@ const Image = styled.img`
   border-style: solid;
   box-shadow: ${(props) => {
     const RGB = hexToRgb(props.shadow?.color);
-    return `${props.shadow?.offsetSize?.width || props.shadow?.offsetSize?.widthInPercent}px ${props.shadow?.offsetSize?.height || props.shadow?.offsetSize?.heightInPercent
+    return `${props.shadow?.offsetSize?.width ?? props.shadow?.offsetSize?.widthInPercent}px ${props.shadow?.offsetSize?.height ?? props.shadow?.offsetSize?.heightInPercent
       }px 8px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b}, ${props.shadow?.opacity})`;
   }};
   object-fit: ${(props) => {

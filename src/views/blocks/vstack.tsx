@@ -14,7 +14,6 @@ import vstack from 'assets/vstack.svg';
 import {
   alignmentConfig,
   backgroundColor,
-  corners,
   distribution,
   scroll,
   borderColor,
@@ -23,7 +22,8 @@ import {
   padding,
   shadowConfigBuilder,
   getSizeConfig,
-  interactive
+  interactive,
+  shapeConfigBuilder,
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
 import {blockStateSafeSelector} from 'store/selectors';
@@ -116,6 +116,11 @@ const VStack = styled.div<StyledComponentPropsType & VStackPropsType>`
       return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${props.shadow?.radius
         }px rgba(${hexToRgb(props.shadow?.color)!.r}, ${hexToRgb(props.shadow?.color)!.g}, ${hexToRgb(props.shadow?.color)!.b
         }, ${props.shadow?.opacity});`;
+    }
+  }}
+  ${(props) => {
+    if (props.shape?.type === 'ALLCORNERSROUND') {
+      return `border-radius: ${props.shape.radius}px;`;
     }
   }}
 `;
@@ -220,6 +225,10 @@ const block = (state?: BlocksState): Block => {
         heightInPercent: 50,
         widthInPercent: 100,
       },
+      shape: {
+        type: 'ALLCORNERSROUND',
+        radius: '20',
+      },
       backgroundColor: '#e3e3e3',
       distribution: '',
       spacing: 0,
@@ -252,10 +261,13 @@ const block = (state?: BlocksState): Block => {
       scroll,
       borderColor,
       borderWidth,
+      shape: shapeConfigBuilder()
+        .withAllCornersRound
+        .withRadius
+        .done(),
       size: getSizeConfig(blockState.deviceInfo.device),
       padding,
       shadow: shadowConfigBuilder().withRadius.done(),
-      corners,
     },
   });
 };
