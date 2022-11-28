@@ -44,10 +44,6 @@ export const screenTemplates = [
           url: 'nextScreenName',
           target: '',
         },
-
-        appBarItems: {
-          title: 'Title',
-        },
       },
 
       bottomBar: {
@@ -538,10 +534,6 @@ export const screenTemplates = [
           url: 'nextScreenName',
           target: '',
         },
-
-        appBarItems: {
-          title: 'Title',
-        },
       },
 
       bottomBar: {
@@ -978,10 +970,6 @@ export const screenTemplates = [
           url: 'nextScreenName',
           target: '',
         },
-
-        appBarItems: {
-          title: 'Title',
-        },
       },
 
       bottomBar: {
@@ -1090,10 +1078,6 @@ export const screenTemplates = [
         action: {
           url: 'nextScreenName',
           target: '',
-        },
-
-        appBarItems: {
-          title: 'Title',
         },
       },
 

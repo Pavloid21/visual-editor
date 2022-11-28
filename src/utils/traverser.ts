@@ -109,7 +109,6 @@ export const buildLayout = ({screen, object}: Record<string, any>) => {
       },
       interactive: {
         rightButtons: [...object.topAppBar.rightButtons || []],
-        appBarItems: {...object.topAppBar.appBarItems},
       },
     };
   }
