@@ -65,7 +65,16 @@ const HStack = styled.div`
   justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
   text-align: ${(props) => props.alignment};
   flex-direction: row;
-  align-items: center;
+  align-items: ${(props) => {
+    switch(props.alignment) {
+      case 'CENTER':
+        return 'center';
+      case 'TOP':
+        return 'start';
+      case 'BOTTOM':
+        return 'end';
+    }
+  }};
   ${(props) => getDimensionStyles(props)
     .padding()
     .borderRadius()
