@@ -138,7 +138,7 @@ const block = (state) => {
     previewImageUrl: button,
     category: 'Controls',
     defaultInteractiveOptions: {
-      action: {url: '', target: '', fields: {}},
+      action: {url: '', fields: {}},
     },
     defaultData: {
       text: 'Button',
