@@ -142,10 +142,6 @@ const block = (state) => {
       size: {
         height: 0,
       },
-      shape: {
-        type: 'ALLCORNERSROUND',
-        radius: 20,
-      },
       shadow: {
         color: '#000000',
         opacity: 0.5,
