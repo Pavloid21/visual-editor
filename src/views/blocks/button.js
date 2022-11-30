@@ -160,10 +160,6 @@ const block = (state) => {
         bottom: 0,
         left: 0,
       },
-      shape: {
-        type: 'ALLCORNERSROUND',
-        radius: 4,
-      },
       size: {
         height: 36,
       },
