@@ -111,7 +111,7 @@ const block = (state) => {
       },
     },
     defaultInteractiveOptions: {
-      action: {url: '', target: '', fields: {}},
+      action: {url: '', fields: {}},
     },
     interactive,
     config: {
