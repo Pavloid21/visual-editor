@@ -132,6 +132,17 @@ const block = (state) => {
           {label: 'Uri', value: 'URI'},
         ],
       },
+      maxLength: {type: 'number', name: 'Max length'},
+      errorText: {type: 'string', name: 'Error text'},
+      helperText: {type: 'string', name: 'Helper text'},
+      isShowCharCounter: {
+        type: 'select', 
+        name: 'Show char counter',
+        options: [
+          {label: 'True', value: true},
+          {label: 'False', value: false},
+        ],
+      },
     },
   });
 };
