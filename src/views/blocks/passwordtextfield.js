@@ -104,10 +104,6 @@ const block = (state) => {
         top: 4,
         bottom: 4,
       },
-      shape: {
-        type: 'ALLCORNERSROUND',
-        radius: '4',
-      },
     },
     config: {
       placeholder,
