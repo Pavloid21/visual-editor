@@ -286,6 +286,10 @@ export const showUnselectedText = {
     {label: 'False', value: false},
   ],
 };
+export const label = {
+  type: 'string',
+  name: 'Label',
+};
 export const unfocusedLabelColor = {
   type: 'color',
   name: 'Unfocused label color',
