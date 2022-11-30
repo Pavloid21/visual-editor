@@ -224,10 +224,6 @@ const block = (state?: BlocksState): Block => {
         heightInPercent: 50,
         widthInPercent: 100,
       },
-      shape: {
-        type: 'ALLCORNERSROUND',
-        radius: '20',
-      },
       backgroundColor: '#e3e3e3',
       distribution: '',
       spacing: 0,
