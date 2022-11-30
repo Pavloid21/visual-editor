@@ -286,3 +286,35 @@ export const showUnselectedText = {
     {label: 'False', value: false},
   ],
 };
+export const unfocusedLabelColor = {
+  type: 'color',
+  name: 'Unfocused label color',
+};
+export const focusedLabelColor = {
+  type: 'color',
+  name: 'Focused label color',
+};
+export const focusedIndicatorColor = {
+  type: 'color',
+  name: 'Focused indicator color',
+};
+export const unfocusedIndicatorColor = {
+  type: 'color',
+  name: 'Unfocused indicator color',
+};
+export const cursorColor = {
+  type: 'color',
+  name: 'Cursor color',
+};
+export const regexp = {
+  type: 'string',
+  name: 'Regexp',
+};
+export const regexpTrigger = {
+  type: 'select',
+  name: 'Regexp trigger',
+  options: [
+    {label: 'Focus change', value: 'ON_FOCUS_CHANGE'},
+    {label: 'Value change', value: 'ON_VALUE_CHANGE'},
+  ],
+};
