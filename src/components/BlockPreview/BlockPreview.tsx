@@ -1,21 +1,30 @@
 import React from 'react';
 import {useDrag} from 'react-dnd';
 import {ItemTypes} from 'constants/actionTypes';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {Container} from './BlockPreview.styled';
 import {TBlockPreview} from './types';
-import {pushBottomBar, pushTopAppBar} from 'store/layout.slice';
+import {pushBlockInside, pushBottomBar, pushTopAppBar} from 'store/layout.slice';
+import {RootStore} from 'store/types';
 
 const BlockPreview: React.FC<TBlockPreview> = (props) => {
+  const {blocks} = useSelector((state: RootStore) => state.layout);
   const dispatch = useDispatch();
+
+  const correctContainer = ['vstack', 'hstack'];
+  const actualStateBlocks = Boolean(blocks.length);
+
   const [{isDragging}, drag] = useDrag(() => ({
     type: ItemTypes.BOX,
     item: {id: props.blockId, type: props.type},
     end: (item, monitor) => {
       const dropResult: Record<string, any> | null = monitor.getDropResult();
       if (item && dropResult) {
-        if (!dropResult.uuid && item.id !== 'bottombar' && item.id !== 'topappbar') {
-          props.onPushBlock(props.blockId);
+        if (!actualStateBlocks && correctContainer.includes(item.id)) {
+          dispatch(pushBlockInside({
+            blockId: props.blockId,
+            uuid: dropResult.uuid,
+          }, true));
         } else if (item.id === 'topappbar') {
           dispatch(pushTopAppBar(item.id));
         } else if (item.id === 'bottombar') {
@@ -26,7 +35,7 @@ const BlockPreview: React.FC<TBlockPreview> = (props) => {
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
-  }));
+  }), [actualStateBlocks]);
   const opacity = isDragging ? 0.4 : 1;
 
   return (
