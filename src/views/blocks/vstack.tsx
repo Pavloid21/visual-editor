@@ -42,7 +42,6 @@ interface ComponentPropsType {
   interactive: {
     action: {
       url: string,
-      target: string,
       fields: FieldConfigType;
     }
   };
@@ -214,7 +213,7 @@ const block = (state?: BlocksState): Block => {
     previewImageUrl: vstack,
     category: 'Container',
     defaultInteractiveOptions: {
-      action: {url: '',  target: '', fields: {}},
+      action: {url: '',  fields: {}},
     },
     complex: [
       {label: 'Vertical', value: 'VSTACK'},
