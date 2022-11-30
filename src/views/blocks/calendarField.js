@@ -1,11 +1,15 @@
 import Wrapper from 'utils/wrapper';
 import passwordtextfield from 'assets/passwordtextfield.svg';
 import {
-  backgroundColor, fontSize,
+  backgroundColor, 
+  fontSize,
   placeholder,
-  placeholderColor, size,
+  placeholderColor, 
+  getSizeConfig,
   text,
-  textAlignment, textColor, systemCalendar
+  textAlignment, 
+  textColor, 
+  systemCalendar
 } from 'views/configs';
 import {Container} from './passwordtextfield';
 
@@ -82,7 +86,7 @@ const block = () => ({
     textColor,
     backgroundColor,
     fontSize,
-    size,
+    size: getSizeConfig(blockState.deviceInfo.device),
   },
   interactive: {
     field: {type: 'string', name: 'Field name'},
