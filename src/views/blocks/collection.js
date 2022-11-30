@@ -62,38 +62,13 @@ const Collection = styled.div`
 }
 `;
 
-//const SortableContainer = sortableContainer(({drop, backgroundColor, listItem, settingsUI, ...props}) => {
-//  return (
-//    <Wrapper
-//      id={props.id}
-//      {...settingsUI}
-//      {...props}
-//    >
-//      <Collection
-//        {...settingsUI}
-//        {...props}
-//        ref={drop}
-//        backgroundColor={backgroundColor}
-//        className="draggable"
-//      >
-//        <div>{listItem && renderHandlebars([listItem], 'document2').components}</div>
-//      </Collection>
-//    </Wrapper>
-//  );
-//});
-const SortableContainer = sortableContainer(({
-  drop,
-  backgroundColor,
-  listItem,
-  settingsUI,
-  pageSize = 5,
-  ...props
-}) => {
-  const listItems = listItem
-    && range(pageSize).map(() => renderHandlebars([listItem], 'document2').components);
-
+const SortableContainer = sortableContainer(({drop, backgroundColor, listItem, settingsUI, ...props}) => {
   return (
-    <Wrapper id={props.id} {...settingsUI} {...props}>
+    <Wrapper
+      id={props.id}
+      {...settingsUI}
+      {...props}
+    >
       <Collection
         {...settingsUI}
         {...props}
@@ -101,7 +76,7 @@ const SortableContainer = sortableContainer(({
         backgroundColor={backgroundColor}
         className="draggable"
       >
-        {listItems}
+        <div>{listItem && renderHandlebars([listItem], 'document2').components}</div>
       </Collection>
     </Wrapper>
   );
@@ -155,7 +130,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
       {...settingsUI}
       {...props}
       backgroundColor={backgroundColor}
-      distance={5}
+      distance={1}
       shouldCancelStart={onSortMove}
     />
   );
