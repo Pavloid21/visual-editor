@@ -103,7 +103,6 @@ const block = () => ({
         iconUrl: 'icons/material/action/ic_account_circle_48px',
         action: {
           url: '',
-          target: '',
         },
       },
     ],
