@@ -11,21 +11,57 @@ import {
   textColor, 
   systemCalendar
 } from 'views/configs';
-import {Container} from './passwordtextfield';
+import {blockStateSafeSelector} from 'store/selectors';
+import store from 'store';
+import {getDimensionStyles} from 'views/utils/styles/size';
 
+export const Container = styled.div`
+  display: flex;
+  align-self: center;
+  ${(props) => getDimensionStyles(props)
+    .width()
+    .apply()
+  }
+  & > input {
+    display: block;
+    pointer-events: none;
+    color: ${(props) => props.textColor || 'transparent'};
+    background-color: ${(props) => props.backgroundColor || 'transparent'};
+    box-sizing: border-box;
+    text-align: ${(props) => props.textAlignment || 'left'};
+    ${(props) => getDimensionStyles(props)
+      .height()
+      .fontSize()
+      .apply()
+    }
+    & ::placeholder {
+      color: ${(props) => props.placeholderColor || 'transparent'};
+      font-size: 12px;
+      font-weight: 400;
+    }
+  }
+`;
 
 const Component = ({settingsUI, ...props}) => {
   const {placeholder, text} = settingsUI;
+
   return (
     <Wrapper id={props.id} {...settingsUI} {...props}>
-      <Container className="draggable" {...props} {...settingsUI}>
-        <input {...props} type="text" className="form-control" placeholder={placeholder} value={text} />
+      <Container
+        className="draggable"
+        {...props}
+        {...settingsUI}
+      >
+        <input {...props} type="password" className="form-control" placeholder={placeholder} value={text} />
       </Container>
     </Wrapper>
   );
 };
 
-const block = () => ({
+const block = (state) => {
+  const blockState = state || blockStateSafeSelector(store.getState());
+
+  return ({
   Component,
   name: 'CALENDAR_TEXT_FIELD',
   title: 'CALENDAR_TEXT_FIELD',
