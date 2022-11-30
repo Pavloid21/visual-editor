@@ -115,7 +115,7 @@ export const interactive = {
     url: {
       type: 'select',
       name: 'Action URL',
-      action_types: 'actions,screens,data,other',
+      action_types: 'actions,screens,other',
     },
     method: {
       type: 'select',
@@ -199,7 +199,7 @@ export const dataSourceSettings = {
   dataSource: {
     type: 'select',
     name: 'Data source',
-    action_types: 'data',
+    action_types: 'data,other',
   },
   startPage: {
     type: 'number',
