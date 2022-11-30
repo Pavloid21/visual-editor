@@ -148,7 +148,19 @@ const block = (state) => {
     },
     listItem: null,
     interactive: {
-    dataSourceSettings
+      dataSource: {
+        type: 'select',
+        name: 'Data source',
+        action_types: 'data',
+      },
+      startPage: {
+        type: 'number',
+        name: 'Start page',
+      },
+      pageSize: {
+        type: 'number',
+        name: 'Page size',
+      },
   },
     config: {
       shape: shapeConfigBuilder()
