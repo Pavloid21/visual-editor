@@ -17,6 +17,7 @@ import {
   shapeConfigBuilder,
   textAlignment,
   getSizeConfig,
+  label,
   unfocusedLabelColor,
   focusedLabelColor,
   focusedIndicatorColor,
@@ -172,6 +173,7 @@ const block = (state) => {
         .withRadius
         .done(),
       shape: shapeConfigBuilder().withAllCornersRound.withRadius.done(),
+      label,
       unfocusedLabelColor,
       focusedLabelColor,
       focusedIndicatorColor,
