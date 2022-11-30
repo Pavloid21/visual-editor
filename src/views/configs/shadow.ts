@@ -21,7 +21,6 @@ export const shadowConfigBuilder = () => {
         name: 'Height',
         options: [
           {label: 'px', value: 'px'},
-          {label: '%', value: '%'},
         ],
       },
       width: {
@@ -29,7 +28,6 @@ export const shadowConfigBuilder = () => {
         name: 'Width',
         options: [
           {label: 'px', value: 'px'},
-          {label: '%', value: '%'},
         ],
       },
     },
