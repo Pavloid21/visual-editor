@@ -16,14 +16,8 @@ export const shadowConfigBuilder = () => {
     color: {type: 'color', name: 'Shadow color'},
     opacity: {type: 'number', name: 'Opacity'},
     offsetSize: {
-      height: {
-        type: 'number',
-        name: 'Height',
-      },
-      width: {
-        type: 'number',
-        name: 'Width',
-      },
+      height: {type: 'number', name: 'Height'},
+      width: {type: 'number', name: 'Width'},
     },
   };
 
