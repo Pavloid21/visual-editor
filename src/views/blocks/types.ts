@@ -75,12 +75,20 @@ export type SettingsUIType = Partial<{
     height: number,
     widthInPercent: number,
     heightInPercent: number
-  },
+  };
   fontSize: number,
   shape: {
     type: string,
     radius: string
-  }
+  };
+  label: string;
+  unfocusedLabelColor: string;
+  focusedLabelColor: string;
+  focusedIndicatorColor: string;
+  unfocusedIndicatorColor: string;
+  cursorColor: string;
+  regexp: string;
+  regexpTrigger: string
 }>;
 
 export type StyledComponentPropsType = SettingsUIType & {
