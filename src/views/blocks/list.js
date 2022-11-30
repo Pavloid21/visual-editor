@@ -149,8 +149,8 @@ const block = (state) => {
     listItem: null,
     interactive: {
       dataSource: dataSourceSettings.dataSource,
-      dataSource: dataSourceSettings.startPage,
-      dataSource: dataSourceSettings.pageSize,
+      startPage: dataSourceSettings.startPage,
+      pageSize: dataSourceSettings.pageSize,
   },
     config: {
       shape: shapeConfigBuilder()
