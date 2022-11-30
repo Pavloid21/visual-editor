@@ -130,7 +130,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
       {...settingsUI}
       {...props}
       backgroundColor={backgroundColor}
-      distance={1}
+      distance={5}
       shouldCancelStart={onSortMove}
     />
   );
