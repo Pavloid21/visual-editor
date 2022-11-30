@@ -52,7 +52,7 @@ const Component = ({settingsUI, ...props}) => {
         {...props}
         {...settingsUI}
       >
-        <input {...props} type="password" className="form-control" placeholder={placeholder} value={text} />
+        <input {...props} type="text" className="form-control" placeholder={placeholder} value={text} />
       </Container>
     </Wrapper>
   );
@@ -129,5 +129,6 @@ const block = (state) => {
     systemCalendar
   },
 });
+};
 
 export default block;
