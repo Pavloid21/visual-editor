@@ -205,10 +205,6 @@ const block = (state) => {
         },
         radius: 8,
       },
-      shape: {
-        type: 'ALLCORNERSROUND',
-        radius: '20',
-      },
     },
     listItems: [],
     config: {
