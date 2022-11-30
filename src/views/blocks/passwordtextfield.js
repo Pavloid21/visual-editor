@@ -117,6 +117,21 @@ const block = (state) => {
     },
     interactive: {
       field: {type: 'string', name: 'Field name'},
+      keyboardType: {
+        type: 'select',
+        name: 'Keyboard type',
+        options: [
+          {label: 'Password', value: 'PASSWORD'},
+          {label: 'Text', value: 'TEXT'},
+          {label: 'Ascii', value: 'ASCII'},
+          {label: 'Decimal', value: 'DECIMAL'},
+          {label: 'Email', value: 'EMAIL'},
+          {label: 'Number', value: 'NUMBER'},
+          {label: 'Number password', value: 'NUMBER_PASSWORD'},
+          {label: 'Phone', value: 'PHONE'},
+          {label: 'Uri', value: 'URI'},
+        ],
+      },
     },
   });
 };
