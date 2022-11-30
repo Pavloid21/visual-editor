@@ -176,6 +176,9 @@ const block = (state) => {
     listItem: null,
     interactive: {
       dataSource: dataSourceSettings.dataSource,
+      startPage: dataSourceSettings.startPage,
+      pageSize: dataSourceSettings.pageSize,
+
     },
     config: {
       backgroundColor,
