@@ -10,6 +10,13 @@ import {
   text,
   textAlignment,
   textColor,
+  unfocusedLabelColor,
+  focusedLabelColor,
+  focusedIndicatorColor,
+  unfocusedIndicatorColor,
+  cursorColor,
+  regexp,
+  regexpTrigger,
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
@@ -114,6 +121,13 @@ const block = (state) => {
       backgroundColor,
       fontSize,
       size: getSizeConfig(blockState.deviceInfo.device),
+      unfocusedLabelColor,
+      focusedLabelColor,
+      focusedIndicatorColor,
+      unfocusedIndicatorColor,
+      cursorColor,
+      regexp,
+      regexpTrigger,
     },
     interactive: {
       field: {type: 'string', name: 'Field name'},
