@@ -48,7 +48,7 @@ const SortableContainer = sortableContainer(({
   backgroundColor,
   listItem,
   settingsUI,
-  pageSize = pageSize || 5,
+  pageSize,
   ...props
 }) => {
   const listItems = listItem
