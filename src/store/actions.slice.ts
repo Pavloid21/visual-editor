@@ -9,7 +9,12 @@ import {
   getExternalActionsList, getPushList,
 } from 'services/ApiService';
 
-const getActions = (getActionsArr: any, project_id: string, actionType: string, actionPath: string, dispatch: Dispatch) => {
+const getActions = (
+    getActionsArr: (project_id: string) => Promise<void>,
+    project_id: string,
+    actionType: string,
+    actionPath: string, dispatch: Dispatch
+  ) => {
   getActionsArr(project_id)
     .then((response: any) => response.data)
     .then((actions: string[]) => {
@@ -38,7 +43,7 @@ const getActions = (getActionsArr: any, project_id: string, actionType: string, 
 
 export const fetchActions = createAsyncThunk(
   'actions/fetchActions',
-  async function(project_id: string, {dispatch}) {
+  async (project_id: string, {dispatch}) => {
     getActions(getActionsList, project_id, 'actions', 'actions', dispatch);
     getActions(getDataActionsList, project_id, 'data', 'data', dispatch);
     getActions(getExternalActionsList, project_id, 'externals', 'externalActions', dispatch);

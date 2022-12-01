@@ -2,6 +2,8 @@ import {Action} from 'redux';
 import {Zoom} from 'containers/ZoomSelect/types';
 import store from './index';
 
+import type {ThunkDispatch} from '@reduxjs/toolkit';
+
 export type EditScreenNamePayloadAction = Action<string> & {
   screen: string;
   navigationSettings: any;
@@ -176,4 +178,4 @@ export type TSettingsUI = {
 }
 
 export type RootStore = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export type ThunkAppDispatch = ThunkDispatch<RootStore, void, Action>;
