@@ -14,7 +14,7 @@ import screensReducer from './screens.slice';
 import leftBarMenuSlice from './left-bar-menu.slice';
 import {useDispatch, useSelector, TypedUseSelectorHook} from 'react-redux';
 
-import type {AppDispatch, RootStore} from './types';
+import type {RootStore, ThunkAppDispatch} from './types';
 
 const rootReducer = combineReducers({
   actions: actionsReducer,
@@ -36,7 +36,7 @@ const store = configureStore({
   reducer: rootReducer,
 });
 
-export const useAppDispatch: () => AppDispatch = useDispatch;
+export const useAppDispatch = (): ThunkAppDispatch => useDispatch<ThunkAppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootStore> = useSelector;
 
 export default store;

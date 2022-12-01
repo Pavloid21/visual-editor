@@ -39,7 +39,7 @@ export const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
 
   useEffect(() => {
     dispatch(fetchActions(project_id));
-  }, []);
+  }, [dispatch, project_id]);
 
   const handleSelectSnippet = (action: ActionItem | null) => {
     dispatch(setSelectAction(action));
