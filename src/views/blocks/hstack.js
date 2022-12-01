@@ -57,7 +57,8 @@ const HStack = styled.div`
         return '0 auto auto auto';
     }
   }};
-  width: 100%;
+  min-width: 100%;
+  width: fit-content;
   height: 100%;
   background-color: ${(props) => props.backgroundColor || 'transparent'};
   display: flex;
