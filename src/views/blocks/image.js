@@ -10,9 +10,8 @@ import {
   shapeConfigBuilder, padding,
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
-import store from 'store';
+import store, {useAppSelector} from 'store';
 import {getDimensionStyles} from 'views/utils/styles/size';
-import {useSelector} from 'react-redux';
 import {setCorrectImageUrl, getFieldValue, checkExtension} from 'utils';
 import {CustomSvg} from 'components/CustomSvg';
 
@@ -56,7 +55,7 @@ const Image = styled.img`
 `;
 
 const Component = ({settingsUI, ...props}) => {
-  const {id} = useSelector(state => state.project);
+  const {id} = useAppSelector(state => state.project);
   const getCorrectImageUrl = setCorrectImageUrl(settingsUI.imageUrl, id);
   const getExtension = getFieldValue(settingsUI.imageUrl);
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import {useDrop} from 'react-dnd';
-import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 import {sortableContainer} from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
@@ -28,7 +27,7 @@ import {pushBlockInside} from 'store/layout.slice';
 import {hexToRgb} from 'constants/utils';
 import {findParentInTree} from 'utils/blocks';
 import {blockStateSafeSelector} from 'store/selectors';
-import store from 'store';
+import store, {useAppDispatch, useAppSelector} from 'store';
 import {getDimensionStyles} from 'views/utils/styles/size';
 
 const HStack = styled.div`
@@ -110,8 +109,8 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, 
 });
 
 const Component = ({settingsUI, uuid, listItems, ...props}) => {
-  const dispatch = useDispatch();
-  const layout = useSelector((state) => state.layout);
+  const dispatch = useAppDispatch();
+  const {layout} = useAppSelector((state) => state);
   const isRoot = !findParentInTree(layout.blocks, uuid);
   const [{canDrop, isOver, target}, drop] = useDrop(() => ({
     accept: ItemTypes.BOX,

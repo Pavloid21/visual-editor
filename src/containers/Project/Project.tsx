@@ -7,7 +7,7 @@ import {ReactComponent as Plus} from '../../assets/button_plus.svg';
 import {BASE_URL, getProjectData, getProjectsList} from 'services/ApiService';
 import {Card} from 'containers/Card';
 import {useNavigate} from 'react-router-dom';
-import {useDispatch} from 'react-redux';
+import {useAppDispatch} from 'store';
 import {AxiosResponse} from 'axios';
 import {useModal} from 'utils';
 import {useForm} from 'react-hook-form';
@@ -56,7 +56,7 @@ export const Project: React.FC<unknown> = () => {
     mode: 'onBlur',
   });
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const getProjects = async () => {
     setLoading(true);

@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import {useAppDispatch, useAppSelector} from 'store';
 import blocks from 'views/blocks';
 import {ReactComponent as Trash} from 'assets/trash.svg';
 import {leadLetter} from 'constants/utils';
@@ -22,15 +22,14 @@ import {
   changeActionURL,
 } from 'store/layout.slice';
 import type {TInspector} from './types';
-import type {RootStore} from 'store/types';
 import {blockStateUnsafeSelector} from 'store/selectors';
 import {getUnitOptionByDevice} from 'utils/units';
 import {get, isEmpty} from 'external/lodash';
 
 const Inspector: React.FC<TInspector> = ({display}) => {
-  const dispatch = useDispatch();
-  const layout = useSelector((state: RootStore) => state.layout);
-  const blockState = useSelector(blockStateUnsafeSelector);
+  const dispatch = useAppDispatch();
+  const {layout} = useAppSelector((state) => state);
+  const blockState = useAppSelector(blockStateUnsafeSelector);
   const handleChangeBlockData = useCallback(
     (blockUuid: string, key: string, value: any, parentKey: string | undefined) => {
       dispatch(

@@ -4,17 +4,17 @@ import {Container, H4, Settings} from './ActionForm.styled';
 import {Button, Input, Select} from 'components/controls';
 import {ActionItem, ActionTypes} from 'store/types';
 import {snippetTypeOptions} from './constants';
-import {useDispatch, useSelector} from 'react-redux';
+import {useAppDispatch, useAppSelector} from 'store';
 import {orderBy} from 'external/lodash';
 import {ActionOption} from 'components/Actions/types';
 import {deleteActionEdit, setActions, setSelectAction} from 'store/actions.slice';
 import {selectedActionSelector, snippetsSelector} from '../../store/selectors/left-bar-selector';
 
 const ActionCronTasksForm: FC<{action: any}> = ({action}) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {setValue, getValues, control} = useForm();
-  const snippets = useSelector(snippetsSelector);
-  const selected = useSelector(selectedActionSelector);
+  const snippets = useAppSelector(snippetsSelector);
+  const selected = useAppSelector(selectedActionSelector);
   const actionsAll: ActionOption[] = orderBy(
       [
         ...snippets.actions.map((item) => ({label: item.action, value: item.action, type: ActionTypes.actions})),

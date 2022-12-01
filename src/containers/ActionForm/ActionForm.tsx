@@ -11,7 +11,7 @@ import {Modal} from 'components';
 import {useModal} from 'utils';
 import {Button, Input, Label} from 'components/controls';
 import ButtonSelector from 'components/ButtonSelector';
-import {useDispatch, useSelector} from 'react-redux';
+import {useAppDispatch, useAppSelector} from 'store';
 import {v4} from 'uuid';
 import {Container, EditorWrapper, H4, Separator, Settings} from './ActionForm.styled';
 import {deleteActionEdit, setActions, setSelectAction} from 'store/actions.slice';
@@ -19,10 +19,10 @@ import {ActionItem, ActionTypes} from 'store/types';
 import {selectedActionSelector, snippetsSelector} from 'store/selectors/left-bar-selector';
 
 export const ActionForm: React.FC<{action: ActionItem}> = ({action}) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {setValue, getValues, control} = useForm();
-  const snippets = useSelector(snippetsSelector);
-  const selected = useSelector(selectedActionSelector);
+  const snippets = useAppSelector(snippetsSelector);
+  const selected = useAppSelector(selectedActionSelector);
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal();
   useEffect(() => {
     setValue('actionName', action.action);

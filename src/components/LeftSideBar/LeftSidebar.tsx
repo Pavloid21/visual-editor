@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-key */
 import React, {useCallback, useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 import actionTypes from 'constants/actionTypes';
 import {Gallery} from 'containers/Gallery';
 import {Actions, ButtonSelector, LeftSideBarMenu, Modal, SideBarHeader} from 'components';
@@ -20,7 +19,7 @@ import {addAction} from 'store/actions.slice';
 import {setActiveTab as setActiveTabAction} from 'store/config.slice';
 import {saveCode} from 'store/code.slice';
 import {cloneBlock, deleteBlock, selectScreen, setLayout, setSelectedBlock, setSnippet} from 'store/layout.slice';
-import {ActionTypes, RootStore} from 'store/types';
+import {ActionTypes} from 'store/types';
 import {Bar} from 'containers/Project/Modal/Modal.styled';
 import {ReactComponent as Close} from 'assets/close.svg';
 import {screenTemplates as defaultTemplates} from 'constants/screenTemplates';
@@ -29,6 +28,7 @@ import {Screens} from 'components/Screens';
 import {SubheaderScreens, SubheaderActions, SubheaderImages} from 'components/LeftSideBar/Subheader';
 import {Images} from 'components/Images';
 import {ACTION_TEMPLATES} from '../Actions/constants';
+import {useAppDispatch, useAppSelector} from 'store';
 
 const LeftSidebar: React.FC<unknown> = () => {
   const {
@@ -36,17 +36,16 @@ const LeftSidebar: React.FC<unknown> = () => {
     bottomBar,
     selectedScreen,
     blocks: layout,
-  } = useSelector((state: RootStore) => state.layout);
-  const activeTabMenu = useSelector((state: RootStore) => state.leftBarMenu.activeTab);
-  const {activeTabActions, filterAction} = useSelector((state: RootStore) => state.leftBarMenu);
+  } = useAppSelector((state) => state.layout);
+  const {activeTab, activeTabActions, filterAction} = useAppSelector((state) => state.leftBarMenu);
   const [loading, setLoading] = useState(false);
-  const barState = useSelector((state: RootStore) => state.sideBar);
-  const api = useSelector((state: RootStore) => state.api);
-  const {screen: output, navigationSettings, settingsUI} = useSelector((state: RootStore) => state.output);
-  const currentSnippet = useSelector(
-    (state: RootStore) => state.layout.snippets.filter((snippetData) => snippetData.screenID === selectedScreen)[0]
+  const barState = useAppSelector((state) => state.sideBar);
+  const api = useAppSelector((state) => state.api);
+  const {screen: output, navigationSettings, settingsUI} = useAppSelector((state) => state.output);
+  const currentSnippet = useAppSelector(
+    (state) => state.layout.snippets.filter((snippetData) => snippetData.screenID === selectedScreen)[0]
   );
-  const projectName = useSelector((state: RootStore) => state.project.name);
+  const projectName = useAppSelector((state) => state.project.name);
   const {project} = useParams();
   const [activeTabScreens, setActiveTabScreens] = useState(0);
   const [availableScreens, setAvailableScreens] = useState<Record<string, any>[]>([]);
@@ -55,7 +54,7 @@ const LeftSidebar: React.FC<unknown> = () => {
   const [templates, setScreenTemplates] = useState<Record<string, any>[]>([]);
   const [itemModalOpen, setItemModalOpen] = useModal();
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const generatePromiseStack = useCallback(
     (data: any[], parsed: boolean) => {
@@ -445,18 +444,18 @@ const LeftSidebar: React.FC<unknown> = () => {
         <LeftSideBarMenu />
         <SideBarContent>
           <div className="screen-list" style={{flex: 1}}>
-            {activeTabMenu === 'screen' &&
+            {activeTab === 'screen' &&
               <SubheaderScreens
                 handleAddScreen={handleAddScreen}
               />}
-            {activeTabMenu === 'action' &&
+            {activeTab === 'action' &&
               <SubheaderActions
                 activeTab={activeTabActions}
                 handleAddAction={handleAddAction}
               />}
-            {activeTabMenu === 'image' &&
+            {activeTab === 'image' &&
             <SubheaderImages />}
-            {activeTabMenu === 'screen' && activeTabScreens === 0 &&
+            {activeTab === 'screen' && activeTabScreens === 0 &&
               <Screens
                 loading={loading}
                 treeData={treeData}
@@ -468,8 +467,8 @@ const LeftSidebar: React.FC<unknown> = () => {
                 handleDeleteScreen={handleDeleteScreen}
                 handleDeleteBlock={handleDeleteBlock}
               />}
-            {activeTabMenu === 'action' && <Actions activeTabActions={activeTabActions} />}
-            {activeTabMenu === 'image' && <Images />}
+            {activeTab === 'action' && <Actions activeTabActions={activeTabActions} />}
+            {activeTab === 'image' && <Images />}
           </div>
           <Gallery />
         </SideBarContent>

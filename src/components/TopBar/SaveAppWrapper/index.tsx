@@ -1,9 +1,9 @@
 import {Button} from 'components/controls';
 import React, {useCallback} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 import {useLocation} from 'react-router-dom';
 import {deleteAction, deleteScreen, editProject, saveAction, saveScreen} from 'services/ApiService';
 import {Store} from 'react-notifications-component';
+import {useAppDispatch, useAppSelector} from 'store';
 import {successNotification} from 'constants/notifications';
 import {changesSaved} from 'store/layout.slice';
 import {currentEditorStateSafeSelector} from 'store/selectors';
@@ -11,10 +11,10 @@ import {deleteAction as deleteActionStore} from 'store/actions.slice';
 import {ActionItem} from 'store/types';
 
 export const SaveAppWrapper: React.FC<unknown> = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const {currentProject, actions, deletedActions, deletedScreens, editedScreens, snippets} =
-    useSelector(currentEditorStateSafeSelector);
+    useAppSelector(currentEditorStateSafeSelector);
   const projectID = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
 
   const handleSaveApplication: React.MouseEventHandler<HTMLButtonElement> = useCallback(

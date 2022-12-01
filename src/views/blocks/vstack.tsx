@@ -3,7 +3,6 @@ import {useDrop} from 'react-dnd';
 import styled from 'styled-components';
 import {SortableContainer, SortEndHandler} from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
-import {useDispatch, useSelector} from 'react-redux';
 import Wrapper from 'utils/wrapper';
 import {onSortMove} from 'utils/hooks';
 import {observer} from 'utils/observer';
@@ -27,9 +26,8 @@ import {
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
 import {blockStateSafeSelector} from 'store/selectors';
-import store from 'store';
+import store, {useAppDispatch, useAppSelector} from 'store';
 import {Block, BlocksState, ListItemType, SettingsUIType, StyledComponentPropsType} from './types';
-import {RootStore} from 'store/types';
 import {findParentInTree} from 'utils/blocks';
 import {FieldConfigType} from 'views/configs/types';
 import {getDimensionStyles} from 'views/utils/styles/size';
@@ -145,8 +143,8 @@ const ComponentSortedContainer = SortableContainer(({drop, backgroundColor, list
 });
 
 const Component = ({settingsUI, uuid, listItems, ...props}: ComponentPropsType) => {
-  const dispatch = useDispatch();
-  const layout = useSelector((state: RootStore) => state.layout);
+  const dispatch = useAppDispatch();
+  const {layout} = useAppSelector((state) => state);
   const isRoot = !findParentInTree(layout.blocks, uuid);
   // @ts-ignore
   const [{canDrop, isOver, target}, drop] = useDrop<any, any>(() => ({

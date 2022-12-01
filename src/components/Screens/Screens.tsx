@@ -7,10 +7,9 @@ import {BounceLoader} from 'react-spinners';
 import models from 'views/blocks';
 import {ReactComponent as Copy} from 'assets/copy.svg';
 import {ReactComponent as Trash} from 'assets/trash.svg';
-import {useSelector} from 'react-redux';
-import {RootStore} from 'store/types';
 import {css} from '@emotion/react';
 import {Container} from 'components/Screens/Screens.styled';
+import {useAppSelector} from 'store';
 
 type ScreensProps = {
   loading: boolean,
@@ -34,8 +33,8 @@ const Screens: React.FC<ScreensProps> = ({
   handleCloneBlock,
   handleDeleteScreen,
   handleDeleteBlock}) => {
-  const {selectedBlockUuid: selectedBlock, selectedScreen} = useSelector((state: RootStore) => state.layout);
-  const screenNameFilter = useSelector((state: RootStore) => state.leftBarMenu.screenNameFilter);
+  const {selectedBlockUuid: selectedBlock, selectedScreen} = useAppSelector((state) => state.layout);
+  const screenNameFilter = useAppSelector((state) => state.leftBarMenu.screenNameFilter);
   const override = css`
     display: inline-block;
     margin: 0 auto;

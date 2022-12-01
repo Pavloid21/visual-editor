@@ -1,10 +1,9 @@
 import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 import {ReactComponent as ActionDots} from 'assets/left-sidebar-menu/actionDots.svg';
 import {ReactComponent as ActionObject} from 'assets/left-sidebar-menu/actionObject.svg';
 import {ActionImage, Container} from './Actions.styled';
 import {deleteAction, fetchActions, setActions, setSelectAction} from 'store/actions.slice';
-import {ActionItem, ActionTypes, RootStore} from 'store/types';
+import {ActionItem, ActionTypes} from 'store/types';
 import {Option} from 'react-dropdown';
 import {DropdownIcon} from 'components/Actions/Actions.styled';
 import {ActionDropdownItem} from './components/ActionDropdownItem';
@@ -13,6 +12,7 @@ import {DROPDOWN_VALUES} from './constants';
 import {filteredSnippetsSelector} from 'store/selectors/left-bar-selector';
 import {ReactComponent as Copy} from 'assets/copy-item.svg';
 import {ReactComponent as Trash} from 'assets/trash-item.svg';
+import {useAppSelector, useAppDispatch} from 'store';
 
 type ActionsProps = {
   activeTabActions: ActionTypes
@@ -24,17 +24,17 @@ const getFilteredRenderActions = (data: ActionItem[], searchText: string) => {
 };
 
 export const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
-  const dispatch = useDispatch();
-  const {actionNameFilter, filterAction} = useSelector((state: RootStore) => state.leftBarMenu);
+  const dispatch = useAppDispatch();
+  const {actionNameFilter, filterAction} = useAppSelector((state) => state.leftBarMenu);
 
-  const renderActions: ActionItem[] = useSelector(
-    (store: RootStore) => filteredSnippetsSelector(store, activeTabActions, filterAction)
+  const renderActions: ActionItem[] = useAppSelector(
+    (store) => filteredSnippetsSelector(store, activeTabActions, filterAction)
   );
 
   const renderActionsFilter = getFilteredRenderActions(renderActions, actionNameFilter);
 
-  const selectedAction = useSelector((state: RootStore) => state.actions.selected);
-  const projectID = useSelector((state: RootStore) => state.project.id);
+  const selectedAction = useAppSelector((state) => state.actions.selected);
+  const projectID = useAppSelector((state) => state.project.id);
   const project_id = projectID || location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
 
   useEffect(() => {

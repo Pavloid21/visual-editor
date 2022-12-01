@@ -8,25 +8,24 @@ import {ReactComponent as Settings} from 'assets/settings.svg';
 import {ReactComponent as Warning} from 'assets/warning.svg';
 import {BASE_URL, editProject, getProjectData} from 'services/ApiService';
 import Modal from 'containers/Project/Modal/Modal';
-import {useDispatch, useSelector} from 'react-redux';
 import {Modal as CustomModal} from '../Modal';
 import {Button} from 'components/controls/Button';
 import {useBackListener} from 'constants/utils';
 import {setLayout} from 'store/layout.slice';
-import type {RootStore} from '../../store/types';
 import type {SideBarHeaderProps} from './types';
 import {Header, Subheader, WarningWrapper} from './SideBarHeader.styled';
 import {filesToDTO} from 'utils/files';
 import {head} from 'external/lodash';
 import Routes from 'routes/routes';
 import {selectProject} from 'store/project.slice';
+import {useAppDispatch, useAppSelector} from 'store';
 
 export const SideBarHeader: React.FC<SideBarHeaderProps> = React.memo((props) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal();
   const [warningOpen, setWarningOpen, toggleWarning] = useModal();
-  const layout = useSelector((state: RootStore) => state.layout);
+  const layout = useAppSelector((state) => state.layout);
   const location = useLocation();
   const {
     setValue,

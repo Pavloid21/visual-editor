@@ -1,6 +1,6 @@
-import {useEffect, useState} from "react";
-import {getSrcImageSvg} from "services/ApiService";
-import {CustomSvgStyled} from "./CustomSvg.styled";
+import {useEffect, useState} from 'react';
+import {getSrcImageSvg} from 'services/ApiService';
+import {CustomSvgStyled} from './CustomSvg.styled';
 
 interface ICustomSvg {
   src: string;

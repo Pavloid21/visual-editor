@@ -4,10 +4,10 @@ import React from 'react';
 import {Search} from 'components/SideBarHeader/SideBarHeader.styled';
 import {Input} from 'components/controls';
 import FilterAction from 'components/Actions/FilterAction';
-import {useDispatch, useSelector} from 'react-redux';
-import {ActionTypes, RootStore} from 'store/types';
+import {ActionTypes} from 'store/types';
 import {setActionNameFilter, setActiveTabActions} from 'store/left-bar-menu.slice';
 import {setSelectAction} from 'store/actions.slice';
+import {useAppDispatch, useAppSelector} from 'store';
 
 type TSideBarSubheaderActions = {
   activeTab: string;
@@ -18,8 +18,8 @@ const SubheaderActions: React.FC<TSideBarSubheaderActions> = ({
   activeTab,
   handleAddAction,
 }) => {
-  const dispatch = useDispatch();
-  const actionNameFilter = useSelector((state: RootStore) => state.leftBarMenu.actionNameFilter);
+  const dispatch = useAppDispatch();
+  const actionNameFilter = useAppSelector((state) => state.leftBarMenu.actionNameFilter);
 
   const setFilterValue = (e: React.ChangeEvent<HTMLInputElement> & React.ChangeEvent<HTMLTextAreaElement>) => {
     dispatch(setActionNameFilter(e.target.value));

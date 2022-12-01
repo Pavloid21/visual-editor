@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import {getSizeStyle} from 'views/utils/styles/size';
-import {useSelector} from 'react-redux';
+import {useAppSelector} from 'store';
 import {blockStateUnsafeSelector} from 'store/selectors';
 
 const Wrapper = styled.div`
@@ -28,7 +28,7 @@ const Wrapper = styled.div`
 `;
 
 const WrapperContainer = (props) => {
-  const blockState = useSelector(blockStateUnsafeSelector);
+  const blockState = useAppSelector(blockStateUnsafeSelector);
   return (<Wrapper {...props} blockState={blockState}/>);
 };
 

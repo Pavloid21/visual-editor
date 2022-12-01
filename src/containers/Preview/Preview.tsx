@@ -1,6 +1,6 @@
 import {ReactNode, useEffect} from 'react';
 import {useDrop} from 'react-dnd';
-import {useDispatch, useSelector} from 'react-redux';
+import {useAppDispatch, useAppSelector} from 'store';
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 import {ItemTypes} from 'constants/actionTypes';
 import {arrayMoveImmutable} from 'array-move';
@@ -16,14 +16,13 @@ import clsx from 'clsx';
 import ZoomSelect from '../ZoomSelect';
 import {Beforeunload} from 'react-beforeunload';
 import {setEditorMode} from 'store/editor-mode.slice';
-import type {RootStore} from 'store/types';
 import {Bar, Container, ServiceBar} from './Preview.styled';
 import {TSortableList} from './types';
 
 const SortableItem = SortableElement((props: any) => <>{props.children}</>);
 
 const SortableList = SortableContainer(({drop, backgroundColor, list}: TSortableList) => {
-  const bottomBar = useSelector((state: RootStore) => state.layout.bottomBar);
+  const bottomBar = useAppSelector((state) => state.layout.bottomBar);
   return (
     <Container backgroundColor={backgroundColor} ref={drop}>
       <div style={{flex: bottomBar ? 1 : 'none'}}>
@@ -46,7 +45,7 @@ const SortableList = SortableContainer(({drop, backgroundColor, list}: TSortable
 });
 
 export const Preview = (props: any) => {
-  const selectedScreen = useSelector((state: RootStore) => state.layout.selectedScreen);
+  const selectedScreen = useAppSelector((state) => state.layout.selectedScreen);
   const [{canDrop, isOver}, drop] = useDrop(
     () => ({
       accept: ItemTypes.BOX,
@@ -64,10 +63,10 @@ export const Preview = (props: any) => {
     [selectedScreen]
   );
 
-  const dispatch = useDispatch();
-  const editorMode = useSelector((state: RootStore) => state.editorMode.mode);
-  const layout = useSelector((state: RootStore) => state.layout);
-  const barState = useSelector((state: RootStore) => state.sideBar);
+  const dispatch = useAppDispatch();
+  const editorMode = useAppSelector((state) => state.editorMode.mode);
+  const {layout} = useAppSelector((state) => state);
+  const barState = useAppSelector((state) => state.sideBar);
 
   useEffect(() => {
     const scrollY = localStorage.getItem('scrollY');

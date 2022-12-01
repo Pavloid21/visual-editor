@@ -6,8 +6,8 @@ import topappbar from 'assets/topappbar.svg';
 import {backgroundColor} from 'views/configs';
 import {Device} from 'containers/MobileSelect/consts';
 import {setCorrectImageUrl} from 'utils';
-import {useSelector} from 'react-redux';
 import {CustomSvg} from 'components/CustomSvg';
+import {useAppSelector} from 'store';
 
 const TopAppBar = styled.div`
   padding: 16px;
@@ -46,7 +46,7 @@ const TopAppBar = styled.div`
 
 const Component = ({settingsUI, ...props}) => {
   const [checkIcon, setCheckIcon] = useState({isIcon: false, url: '', colorSvg: ''});
-  const {id} = useSelector(state => state.project);
+  const {id} = useAppSelector(state => state.project);
 
   useEffect(() => {
     if(props.interactive.length) {

@@ -4,8 +4,6 @@ import {baseStyleSelect} from './style';
 import {DropdownIndicator} from './Dropdown';
 import type {ICreateSelectProps} from './types';
 
-
-
 export const SelectCreatable = ({
   onChange,
   value,

@@ -1,8 +1,7 @@
 import {IconSection} from './IconSection';
 import styled from 'styled-components';
-import {useSelector} from 'react-redux';
-import {RootStore} from 'store/types';
 import {IconSectionsProps, IconTabType} from 'components/Images/types';
+import {useAppSelector} from 'store';
 
 const Container = styled.div`
   display: flex;
@@ -10,7 +9,7 @@ const Container = styled.div`
 `;
 
 export const IconSections = ({sections}: IconSectionsProps) => {
-  const iconNameFilter = useSelector((state: RootStore) => state.leftBarMenu.iconNameFilter);
+  const iconNameFilter = useAppSelector((state) => state.leftBarMenu.iconNameFilter);
   const regex = new RegExp(iconNameFilter, 'gi');
   const filterSections = sections.filter((item: IconTabType) => item.name.match(regex));
 

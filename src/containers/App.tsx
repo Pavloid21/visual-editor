@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 import {Routes, Route, Navigate, useLocation} from 'react-router-dom';
 import {default as AppRoutes} from 'routes/routes';
 import {renderHandlebars, observer, findInTree} from 'utils';
 import {LeftSidebar, TopBar, RightSidebar, HighlightedElement, Loader} from 'components';
+import {useAppDispatch, useAppSelector} from 'store';
 import {Preview} from './Preview';
 import actionTypes from 'constants/actionTypes';
 import GlobalStyles from 'constants/theme';
@@ -15,16 +15,16 @@ import {API} from 'services/ApiService';
 import 'react-notifications-component/dist/theme.css';
 import {setActiveTab, setPreviewMode} from 'store/config.slice';
 import {reOrderLayout, replaceElement, setSelectedBlock} from 'store/layout.slice';
-import type {BlockItem, RootStore} from 'store/types';
+import type {BlockItem} from 'store/types';
 import {Templates} from './Templates/Templates';
 
 const App: React.FC<unknown> = () => {
-  const layout = useSelector((state: RootStore) => state.layout);
+  const layout = useAppSelector((state) => state.layout);
   const location = useLocation();
-  const bottomBar = useSelector((state: RootStore) => state.layout.bottomBar);
-  const topAppBar = useSelector((state: RootStore) => state.layout.topAppBar);
-  const config = useSelector((state: RootStore) => state.config);
-  const dispatch = useDispatch();
+  const bottomBar = useAppSelector((state) => state.layout.bottomBar);
+  const topAppBar = useAppSelector((state) => state.layout.topAppBar);
+  const config = useAppSelector((state) => state.config);
+  const dispatch = useAppDispatch();
   const {initialized, keycloak} = useKeycloak();
   const setHeaderAuthorizationToken = () => {
     if (keycloak.token) {

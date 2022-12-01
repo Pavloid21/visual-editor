@@ -3,7 +3,6 @@ import {useDrop} from 'react-dnd';
 import styled from 'styled-components';
 import {arrayMoveImmutable} from 'array-move';
 import {sortableContainer} from 'react-sortable-hoc';
-import {useDispatch, useSelector} from 'react-redux';
 import searchbar from 'assets/searchbar.svg';
 import Wrapper from 'utils/wrapper';
 import {ItemTypes} from 'constants/actionTypes';
@@ -22,7 +21,7 @@ import {
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
 import {blockStateSafeSelector} from 'store/selectors';
-import store from 'store';
+import store, {useAppDispatch, useAppSelector} from 'store';
 import {getDimensionStyles} from 'views/utils/styles/size';
 
 const SearchBar = styled.div`
@@ -86,8 +85,8 @@ const SortableContainer = sortableContainer(
 );
 
 const Component = ({settingsUI, uuid, listItems, ...props}) => {
-  const dispatch = useDispatch();
-  const layout = useSelector((state) => state.layout);
+  const dispatch = useAppDispatch();
+  const {layout} = useAppSelector((state) => state);
   const [{canDrop, isOver, target}, drop] = useDrop(() => ({
     accept: ItemTypes.BOX,
     drop: (item) => {

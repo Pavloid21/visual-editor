@@ -1,14 +1,13 @@
 import {FlexContainer} from 'components/layouts';
 import React from 'react';
 import {buttons, optionsByDevice, Device} from './consts';
-import {useDispatch, useSelector} from 'react-redux';
+import {useAppDispatch, useAppSelector} from 'store';
 import {setDevice, setModelDevice} from 'store/editor-mode.slice';
-import {RootStore} from 'store/types';
 import {ButtonSelector, Select} from './styled';
 
 const MobileSelect: React.FC<unknown> = () => {
-  const dispatch = useDispatch();
-  const {phoneType, device} = useSelector((state: RootStore) => ({
+  const dispatch = useAppDispatch();
+  const {phoneType, device} = useAppSelector((state) => ({
     phoneType: state.editorMode.model,
     device: state.editorMode.device,
   }));

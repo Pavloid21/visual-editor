@@ -4,17 +4,16 @@ import {ReactComponent as ListIcon} from '../../assets/list.svg';
 import {Input} from 'components/controls';
 import {BlockPreview} from 'components';
 import {gallery as blocks} from 'views/blocks';
-import {useDispatch, useSelector} from 'react-redux';
+import {useAppDispatch, useAppSelector} from 'store';
 import {snippet} from 'utils';
 import {Collapse, Container, GalleryHeader, Wrapper} from './Gallery.styled';
 import {setSnippet} from 'store/layout.slice';
-import type {RootStore} from 'store/types';
 
 const Gallery: React.FC<unknown> = () => {
-  const dispatch = useDispatch();
-  const output = useSelector((state: RootStore) => state.output.screen);
-  const {selectedScreen, blocks: layout, topAppBar, bottomBar} = useSelector((state: RootStore) => state.layout);
-  const api = useSelector((state: RootStore) => state.api);
+  const dispatch = useAppDispatch();
+  const output = useAppSelector((state) => state.output.screen);
+  const {selectedScreen, blocks: layout, topAppBar, bottomBar} = useAppSelector((state) => state.layout);
+  const api = useAppSelector((state) => state.api);
 
   useEffect(() => {
     const constants = snippet(

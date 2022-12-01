@@ -1,15 +1,14 @@
 import React from 'react';
 import {useDrag} from 'react-dnd';
 import {ItemTypes} from 'constants/actionTypes';
-import {useDispatch, useSelector} from 'react-redux';
 import {Container} from './BlockPreview.styled';
 import {TBlockPreview} from './types';
 import {pushBlockInside, pushBottomBar, pushTopAppBar} from 'store/layout.slice';
-import {RootStore} from 'store/types';
+import {useAppDispatch, useAppSelector} from 'store';
 
 const BlockPreview: React.FC<TBlockPreview> = (props) => {
-  const {blocks} = useSelector((state: RootStore) => state.layout);
-  const dispatch = useDispatch();
+  const {blocks} = useAppSelector((state) => state.layout);
+  const dispatch = useAppDispatch();
 
   const correctContainer = ['vstack', 'hstack'];
   const actualStateBlocks = Boolean(blocks.length);

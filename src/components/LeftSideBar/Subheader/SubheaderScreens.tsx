@@ -3,9 +3,8 @@ import {ReactComponent as Plus} from 'assets/plus.svg';
 import React, {ChangeEvent} from 'react';
 import {Input} from 'components/controls';
 import {Search} from 'components/SideBarHeader/SideBarHeader.styled';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootStore} from 'store/types';
 import {setScreenNameFilter} from 'store/left-bar-menu.slice';
+import {useAppDispatch, useAppSelector} from 'store';
 
 type TSideBarSubheaderScreens = {
   handleAddScreen: () => void;
@@ -14,8 +13,8 @@ type TSideBarSubheaderScreens = {
 const SubheaderScreens: React.FC<TSideBarSubheaderScreens> = ({
   handleAddScreen,
 }) => {
-  const dispatch = useDispatch();
-  const screenNameFilter = useSelector((state: RootStore) => state.leftBarMenu.screenNameFilter);
+  const dispatch = useAppDispatch();
+  const screenNameFilter = useAppSelector((state) => state.leftBarMenu.screenNameFilter);
   const setFilterValue = (e: ChangeEvent<HTMLTextAreaElement> & ChangeEvent<HTMLInputElement>) => {
     dispatch(setScreenNameFilter(e.target.value));
   };

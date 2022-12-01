@@ -1,8 +1,6 @@
 import React, {ChangeEvent, useEffect} from 'react';
 import {ButtonSelector} from 'components';
 import {Controller, useForm} from 'react-hook-form';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootStore} from 'store/types';
 import {setIconNameFilter, setLeftBarImageTab} from 'store/left-bar-menu.slice';
 import {Input} from 'components/controls';
 import {SearchImage} from 'components/SideBarHeader/SideBarHeader.styled';
@@ -10,11 +8,12 @@ import {Container, SearchImageContainer} from './SubheaderImages.styled';
 import {ReactComponent as Folder} from 'assets/left-sidebar-images/folder.svg';
 import {useModal} from 'utils';
 import {Modal} from 'components/Images/Image/Modal/Modal';
+import {useAppDispatch, useAppSelector} from 'store';
 
 const SubheaderImages: React.FC = () => {
-  const dispatch = useDispatch();
-  const activeTab = useSelector((state: RootStore) => state.leftBarMenu.activeImageTab);
-  const iconNameFilter = useSelector((state: RootStore) => state.leftBarMenu.iconNameFilter);
+  const dispatch = useAppDispatch();
+  const activeTab = useAppSelector((state) => state.leftBarMenu.activeImageTab);
+  const iconNameFilter = useAppSelector((state) => state.leftBarMenu.iconNameFilter);
   const setFilterValue = (e: ChangeEvent<HTMLTextAreaElement & HTMLInputElement>) => {
     dispatch(setIconNameFilter(e.target.value));
   };

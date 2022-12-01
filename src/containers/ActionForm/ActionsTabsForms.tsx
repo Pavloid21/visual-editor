@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {ActionForm} from './ActionForm';
-import {ActionItem, ActionTypes, RootStore} from 'store/types';
-import {useSelector} from 'react-redux';
+import {ActionItem, ActionTypes} from 'store/types';
+import {useAppSelector} from 'store';
 import ActionPushForm from './ActionPushForm';
 import ActionCronTasksForm from './ActionCronTasksForm';
 
@@ -10,7 +10,7 @@ type ActionsTabsFormsType = {
 }
 
 const ActionsTabsForms: FC<ActionsTabsFormsType> = ({selectedAction}) => {
-  const activeTabActions = useSelector((state: RootStore) => state.leftBarMenu.activeTabActions);
+  const {activeTabActions} = useAppSelector((state) => state.leftBarMenu);
 
     switch (activeTabActions) {
       case ActionTypes.cronTasks:

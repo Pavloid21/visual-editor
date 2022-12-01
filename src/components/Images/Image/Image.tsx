@@ -1,19 +1,13 @@
 import {Container, WrapperFileInput} from './Image.styled';
 import React from 'react';
 import {groupTabs} from '../utils';
-import {IconSections} from 'components/Images/Icon/components/IconSections';
 import {Accordion} from 'components/Accordion';
 import {FileInput} from 'components/controls';
-import {createImagesFolder, deleteImagesFolder, getImagesData} from 'services/ApiService';
-import {useSelector} from 'react-redux';
-import {RootStore} from 'store/types';
+import {createImagesFolder, deleteImagesFolder} from 'services/ApiService';
 import {ImageSections} from './components/ImageSections';
 import {IconTabObjectType} from '../types';
 
 export const Image = () => {
-  const projectID = useSelector((state: RootStore) => state.project.id);
-  const data = getImagesData('portal');
-
   createImagesFolder('portal', 'test1');
   deleteImagesFolder('portal', 'test');
 

@@ -3,7 +3,7 @@ import {ReactComponent as Logo} from '../../assets/logo.svg';
 import {ReactComponent as HideLeft} from '../../assets/hide_left.svg';
 import {ReactComponent as HideRight} from '../../assets/hide_right.svg';
 import {Button} from 'components/controls';
-import {useDispatch} from 'react-redux';
+import {useAppDispatch} from 'store';
 import {useKeycloak} from '@react-keycloak/web';
 import {useLocation} from 'react-router-dom';
 import {useOutside} from 'utils';
@@ -12,7 +12,7 @@ import {Bar, VerticalDivider} from './TopBar.styled';
 import {SaveAppWrapper} from './SaveAppWrapper';
 
 const TopBar = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {keycloak} = useKeycloak();
   const location = useLocation();
   const {ref, isShow, setIsShow} = useOutside(false);

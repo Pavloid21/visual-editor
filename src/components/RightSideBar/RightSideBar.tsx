@@ -4,7 +4,7 @@ import {Inspector} from 'containers/Inspector';
 import Screen from 'containers/Screen';
 import {Button, Input} from 'components/controls';
 import {ActionsTabsForms} from 'containers/ActionForm';
-import {useSelector, useDispatch} from 'react-redux';
+import {useAppDispatch, useAppSelector} from 'store';
 import {ReactComponent as Plus} from 'assets/plus.svg';
 import {ReactComponent as Remove} from 'assets/trash.svg';
 import {ReactComponent as Pencil} from 'assets/pencil.svg';
@@ -13,19 +13,18 @@ import {noop} from 'external/lodash';
 import {useOutsideAlerter} from 'utils';
 import {addAPI, editAPI, removeAPI} from 'store/api-settings.slice';
 import {setSelectedBlock} from 'store/layout.slice';
-import {RootStore} from 'store/types';
 import {APIContainer, APIRow, Container, RowContainer} from './RightSideBar.styled';
 
 const RightSidebar: React.FC<unknown> = () => {
-  const APIs = useSelector((state: RootStore) => state.api.list);
-  const activeTab = useSelector((state: RootStore) => state.config.activeTab);
-  const {selectedBlockUuid: selectedBlock, selectedScreen} = useSelector((state: RootStore) => state.layout);
-  const barState = useSelector((state: RootStore) => state.sideBar);
-  const selectedAction = useSelector((state: RootStore) => state.actions.selected);
+  const APIs = useAppSelector((state) => state.api.list);
+  const {activeTab} = useAppSelector((state) => state.config);
+  const {selectedBlockUuid: selectedBlock, selectedScreen} = useAppSelector((state) => state.layout);
+  const barState = useAppSelector((state) => state.sideBar);
+  const selectedAction = useAppSelector((state) => state.actions.selected);
   const [showForm, setAPIFormShow] = useState(false);
   const [isEditing, setEditing] = useState(false);
   const [selected, setSelected] = useState<number | undefined>();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {handleSubmit, resetField, setValue, control, watch} = useForm();
   const {fields, append, replace, remove} = useFieldArray({
     control,

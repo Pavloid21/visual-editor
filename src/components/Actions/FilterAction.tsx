@@ -1,13 +1,13 @@
 import React, {FC} from 'react';
 import {FilterActionContainer} from './Actions.styled';
 import {Radio} from 'components/controls';
-import {useDispatch, useSelector} from 'react-redux';
-import {ActionTypes, RootStore} from 'store/types';
+import {ActionTypes} from 'store/types';
 import {setLeftBarActionFilter} from 'store/left-bar-menu.slice';
+import {useAppDispatch, useAppSelector} from 'store';
 
 const FilterAction: FC = () => {
-  const dispatch = useDispatch();
-  const filterAction = useSelector((state: RootStore) => state.leftBarMenu.filterAction);
+  const dispatch = useAppDispatch();
+  const filterAction = useAppSelector((state) => state.leftBarMenu.filterAction);
 
   const isRadioSelected = (value: string): boolean => filterAction === value;
 

@@ -3,7 +3,6 @@ import {useDrop} from 'react-dnd';
 import styled from 'styled-components';
 import {arrayMoveImmutable} from 'array-move';
 import {sortableContainer} from 'react-sortable-hoc';
-import {useDispatch, useSelector} from 'react-redux';
 import Wrapper from 'utils/wrapper';
 import {onSortMove} from 'utils/hooks';
 import {observer} from 'utils/observer';
@@ -19,6 +18,7 @@ import {
 import {pushBlockInside} from 'store/layout.slice';
 import {pageSize, shadowConfigBuilder, shapeConfigBuilder, startPage} from '../configs/index';
 import {getDimensionStyles} from '../utils/styles/size';
+import {useAppDispatch, useAppSelector} from 'store';
 
 const VStack = styled.div`
   align-self: center;
@@ -55,8 +55,8 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, 
 });
 
 const Component = ({settingsUI, uuid, listItems, ...props}) => {
-  const dispatch = useDispatch();
-  const layout = useSelector((state) => state.layout);
+  const dispatch = useAppDispatch();
+  const {layout} = useAppSelector((state) => state);
   const [{canDrop, isOver, target}, drop] = useDrop(() => ({
     accept: ItemTypes.BOX,
     drop: (item) => {

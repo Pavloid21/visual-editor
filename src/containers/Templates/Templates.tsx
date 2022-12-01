@@ -4,14 +4,14 @@ import {v4} from 'uuid';
 import {H1, P} from '../Project/Project.styled';
 import {Container, Content, TemplatesContainer} from './Templates.styled';
 import {TemplatePreview} from './TemplatePreview/TemplatePreview';
-import {useSelector} from 'react-redux';
-import {RootStore, Template} from 'store/types';
+import {useAppSelector} from 'store';
+import {Template} from 'store/types';
 import {getTemplateData, getTemplates} from 'services/ApiService';
 import {AxiosResponse} from 'axios';
 import {ITemplatePreview} from './types';
 
 export const Templates: React.FC<unknown> = () => {
-  const projectForm = useSelector((state: RootStore) => state.projectForm);
+  const {projectForm} = useAppSelector((state) => state);
   const [templates, setTemplates] = useState<ITemplatePreview[]>([]);
 
   const getTemplatesList = async () => {
