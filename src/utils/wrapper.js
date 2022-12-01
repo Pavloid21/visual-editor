@@ -24,7 +24,7 @@ const Wrapper = styled.div`
   align-items: inherit;
   display: flex;
   flex-direction: column;
-  ${(props) => props.scroll && 'flex: 1 1 auto; overflow-y: auto'};
+  ${(props) => props.scroll && 'flex: 0 1 auto; overflow-y: auto'};
 `;
 
 const WrapperContainer = (props) => {
