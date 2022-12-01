@@ -122,7 +122,7 @@ const block = () => ({
           url: {
             type: 'select',
             name: 'Action URL',
-            action_types: 'data'
+            action_types: 'screens,other'
           },
           method: {
             type: 'select',
