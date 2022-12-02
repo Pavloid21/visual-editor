@@ -6,18 +6,21 @@ import {
   strokeWidth,
   progressBarColor,
 } from 'views/configs';
-import {getDimensionStyles} from '../utils/styles/size';
 
 const Progressbar = styled.div`
     width: 48px;
     height: 48px;
-    border: 5px solid #FFF;
+    border-width: 5px;
+    border-style: solid;
+    border-top-color: ${(props) => props.progressBarColor || 'transparent'};
+    border-right-color: ${(props) => props.progressBarColor || 'transparent'};
     border-bottom-color: transparent;
+    border-left-color: ${(props) => props.progressBarColor || 'transparent'};
     border-radius: 50%;
     display: inline-block;
     box-sizing: border-box;
     animation: rotation 1s linear infinite;
-    & @keyframes rotation {
+    & > @keyframes rotation {
     0% {
         transform: rotate(0deg);
     }
@@ -50,7 +53,7 @@ const block = () => ({
   },
   config: {
     strokeWidth,
-	progressBarColor,
+  	progressBarColor,
   },
 });
 
