@@ -346,3 +346,11 @@ export const strokeWidth = {
   type: 'number',
   name: 'Stroke width',
 };
+export const checkedColor = {
+  type: 'color',
+  name: 'Checked color',
+};
+export const uncheckedColor = {
+  type: 'color',
+  name: 'Unchecked color',
+};
