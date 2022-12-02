@@ -30,8 +30,15 @@ const Switch = styled.div`
     opacity: ${(props) => (props.blockState.deviceInfo.device === Device.ANDROID ? '0.5' : '1')};
   }
   & input:checked + span::after {
-    ${(props) => (props.blockState.deviceInfo.device === Device.ANDROID ? `background-color: ${(props) => props.checkedColor || '#4ed164'};` : `background-color: #ffffff;`)}
     transform: translateX(16px);
+    ${(props) => {
+    if (props.blockState.deviceInfo.device === Device.ANDROID) {
+      return `background-color: ${(props) => props.checkedColor || '#4ed164'};`;
+    }
+    if (props.blockState.deviceInfo.device === Device.IOS) {
+      return `background-color: #ffffff;`;
+    }
+  }}
   }
   & input {
     pointer-events: none;
