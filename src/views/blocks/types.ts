@@ -45,6 +45,7 @@ export interface Blocks extends SimpleObject {
   webview: (state?: BlocksState) => Block;
   // screen: (state?: BlocksState) => Block;
   calendar_text_field: (state?: BlocksState) => Block;
+  progressbar: (state?: BlocksState) => Block;
 }
 
 export type SettingsUIType = Partial<{
