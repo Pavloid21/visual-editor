@@ -1,9 +1,9 @@
-<svg width="60" height="60" xmlns="http://www.w3.org/2000/svg" fill="none">
+<svg width="59.99999999999999" height="59.99999999999999" xmlns="http://www.w3.org/2000/svg" fill="none">
 
  <g>
   <title>Layer 1</title>
-  <rect id="svg_3" stroke="#B3B3B3" rx="3.5" height="59" width="59" y="0.5" x="0.5"/>
-  <rect transform="rotate(-70 30 30)" rx="64" stroke="#333333" id="svg_1" height="15" width="15" y="22.49999" x="22.49999"/>
-  <circle id="svg_2" fill="#ffffff" r="4" cy="23.97995" cx="25.81941"/>
+  <path id="svg_3" d="m0.72148,4c0,-1.90183 1.59817,-3.5 3.5,-3.5l52,0c1.90183,0 3.5,1.59817 3.5,3.5l0,52c0,1.90183 -1.59817,3.5 -3.5,3.5l-52,0c-1.90183,0 -3.5,-1.59817 -3.5,-3.5l0,-52z" opacity="undefined" stroke="#B3B3B3"/>
+  <rect rx="64" stroke="#919191" id="svg_1" height="29" width="29" y="15" x="16"/>
+  <circle id="svg_2" fill="#ffffff" r="7" cy="18.11062" cx="23.27234"/>
  </g>
 </svg>
