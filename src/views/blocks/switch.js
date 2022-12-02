@@ -64,7 +64,7 @@ const Switch = styled.div`
       content: "";
       float: right;
       display: inline-block;
-      margin: 5px 0 5px 10px;
+      margin: 5px 0 0 0;
       border-radius: 7px;
       width: 36px;
       height: 14px;
