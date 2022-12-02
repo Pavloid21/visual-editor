@@ -121,9 +121,17 @@ const block = () => ({
   },
   interactive:{
     field: {type: 'string', name: 'Field name'},
-    action: interactive.action,
+    action: {
+      url: interactive.action.url,
+      method: interactive.action.method,
+    },
     fields: interactive.fields,
-    confirmationDialog: interactive.confirmationDialog,
+    confirmationDialog: {
+      title: interactive.confirmationDialog.title,
+      message: interactive.confirmationDialog.message,
+      confirmText: interactive.confirmationDialog.confirmText,
+      cancelledText: interactive.confirmationDialog.cancelledText,
+    },
   },
 });
 
