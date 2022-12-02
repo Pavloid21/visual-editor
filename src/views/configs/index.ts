@@ -322,3 +322,19 @@ export const regexpTrigger = {
     {label: 'Value change', value: 'ON_VALUE_CHANGE'},
   ],
 };
+export const helperTextColor = {
+  type: 'color',
+  name: 'Helper text color',
+};
+export const errorTextColor = {
+  type: 'color',
+  name: 'Error text color',
+};
+export const errorIndicatorColor = {
+  type: 'color',
+  name: 'Error indicator color',
+};
+export const errorLabelColor = {
+  type: 'color',
+  name: 'Error label color',
+};
