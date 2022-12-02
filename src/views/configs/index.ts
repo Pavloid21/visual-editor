@@ -354,3 +354,5 @@ export const uncheckedColor = {
   type: 'color',
   name: 'Unchecked color',
 };
+export const uncheckedIcon = {type: 'string', name: 'Unchecked icon'};
+export const checkedIcon = {type: 'string', name: 'Checked icon'};
