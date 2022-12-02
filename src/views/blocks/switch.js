@@ -116,23 +116,24 @@ const block = () => ({
     padding,
   },
   defaultInteractiveOptions: {
-    field: '',
+//   field: '',
     action: {url: '', fields: {}},
   },
-  interactive:{
-    field: {type: 'string', name: 'Field name'},
-    action: {
-      url: interactive.action.url,
-      method: interactive.action.method,
-    },
-    fields: interactive.fields,
-    confirmationDialog: {
-      title: interactive.confirmationDialog.title,
-      message: interactive.confirmationDialog.message,
-      confirmText: interactive.confirmationDialog.confirmText,
-      cancelledText: interactive.confirmationDialog.cancelledText,
-    },
-  },
+  interactive,
+//  :{
+//    field: {type: 'string', name: 'Field name'},
+//    action: {
+//      url: interactive.action.url,
+//      method: interactive.action.method,
+//    },
+//    fields: interactive.fields,
+//    confirmationDialog: {
+//      title: interactive.confirmationDialog.title,
+//      message: interactive.confirmationDialog.message,
+//      confirmText: interactive.confirmationDialog.confirmText,
+//      cancelledText: interactive.confirmationDialog.cancelledText,
+//    },
+//  },
 });
 
 export default block;
