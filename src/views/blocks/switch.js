@@ -123,24 +123,51 @@ const block = () => ({
     padding,
   },
   defaultInteractiveOptions: {
-//   field: '',
     action: {url: '', fields: {}},
   },
-  interactive,
-//  :{
-//    field: {type: 'string', name: 'Field name'},
-//    action: {
-//      url: interactive.action.url,
-//      method: interactive.action.method,
-//    },
-//    fields: interactive.fields,
-//    confirmationDialog: {
-//      title: interactive.confirmationDialog.title,
-//      message: interactive.confirmationDialog.message,
-//      confirmText: interactive.confirmationDialog.confirmText,
-//      cancelledText: interactive.confirmationDialog.cancelledText,
-//    },
-//  },
+  interactive: {
+    field: {type: 'string', name: 'Field name'},
+    action: {
+      url: {
+        type: 'select',
+        name: 'Action URL',
+        action_types: 'actions,other',
+      },
+      method: {
+        type: 'select',
+        name: 'Method',
+        options: [
+          {label: 'Get', value: 'get'},
+          {label: 'Post', value: 'post'},
+        ],
+      },
+      fields: {
+        type: 'object',
+        properties: {
+          key: {type: 'string', name: 'Key'},
+          value: {type: 'string', name: 'Value'},
+        },
+      },
+    },
+    confirmationDialog: {
+      title: {
+        type: 'string',
+        name: 'Title',
+      },
+      message: {
+        type: 'string',
+        name: 'Message',
+      },
+      confirmText: {
+        type: 'string',
+        name: 'Confirm text',
+      },
+      cancelledText: {
+        type: 'string',
+        name: 'Cancelled text',
+      },
+    },
+  },
 });
 
 export default block;
