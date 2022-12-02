@@ -18,6 +18,7 @@ import collection from './collection';
 import webview from './webview';
 import calendar_text_field from './calendarField';
 import progressbar from './progressbar';
+import checkbox from './checkbox';
 import {Blocks} from './types';
 
 const blocks: Blocks = {
@@ -41,6 +42,7 @@ const blocks: Blocks = {
   screen,
   calendar_text_field,
   progressbar,
+  checkbox,
 };
 
 export const gallery: Record<string, any> = {
@@ -61,6 +63,7 @@ export const gallery: Record<string, any> = {
   webview,
   // screen,
   progressbar,
+  checkbox,
 };
 
 export default blocks;
