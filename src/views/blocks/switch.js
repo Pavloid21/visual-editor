@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import switch_ic from 'assets/switch.svg';
 import Wrapper from 'utils/wrapper';
 import {
-  backgroundColor,
   isActive,
-  thumbOnColor,
   interactive,
   padding,
+  checkedColor,
+  uncheckedColor,
 } from 'views/configs';
 import {getDimensionStyles} from '../utils/styles/size';
 
@@ -25,10 +25,11 @@ const Switch = styled.div`
     .apply()
   }
   & input:checked + span::before {
-    background-color: ${(props) => props.thumbOnColor || 'transparent'};
+    background-color: ${(props) => props.checkedColor || '#4ed164'};
+    opacity: 0.5;
   }
   & input:checked + span::after {
-    background-color: ${(props) => props.thumbOnColor || 'transparent'};
+    background-color: ${(props) => props.checkedColor || '#4ed164'};
     transform: translateX(16px);
   }
   & input {
@@ -43,14 +44,14 @@ const Switch = styled.div`
     border-radius: 50%;
     width: 40px;
     height: 40px;
-    background-color: ${(props) => props.backgroundColor || 'transparent'};
+    background-color: ${(props) => props.uncheckedColor || '#d9dadc'};
     outline: none;
     opacity: 0;
     transform: scale(1);
     transition: opacity 0.3s 0.1s, transform 0.2s 0.1s;
     &:checked {
       right: -10px;
-      background-color: ${(props) => props.thumbOnColor || 'transparent'};
+      background-color: ${(props) => props.checkedColor || '#4ed164'};
     }
   }
   & span {
@@ -69,7 +70,7 @@ const Switch = styled.div`
       height: 14px;
       vertical-align: top;
       transition: background-color 0.2s, opacity 0.2s;
-      background-color: ${(props) => props.backgroundColor || 'transparent'}
+      background-color: ${(props) => props.uncheckedColor || '#d9dadc'}
     }
     &::after {
       content: "";
@@ -105,13 +106,9 @@ const block = () => ({
   description: 'A control that toggles between on and off states.',
   previewImageUrl: switch_ic,
   category: 'Controls',
-  defaultData: {
-    backgroundColor: '#FDB291',
-    thumbOnColor: '#FA6621',
-  },
   config: {
-    backgroundColor,
-    thumbOnColor,
+    checkedColor,
+    uncheckedColor,
     isActive,
     padding,
   },
