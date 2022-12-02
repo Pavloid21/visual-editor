@@ -12,6 +12,8 @@ import {
 } from 'views/configs';
 import {setCorrectImageUrl, getFieldValue, checkExtension} from 'utils';
 import {CustomSvg} from 'components/CustomSvg';
+import {useAppSelector} from 'store';
+
 
 const Checkbox = styled.img`
   width: 24px;
