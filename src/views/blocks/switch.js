@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import switch_ic from 'assets/switch.svg';
 import Wrapper from 'utils/wrapper';
+import {Device} from 'containers/MobileSelect/consts';
 import {
   isActive,
   interactive,
@@ -64,10 +65,10 @@ const Switch = styled.div`
       content: "";
       float: right;
       display: inline-block;
-      margin: 5px 0 0 0;
+      margin: ${(props) => (props.blockState.deviceInfo.device === Device.ANDROID ? '5px 0 0 0' : '0 0 0 0')};
       border-radius: 7px;
       width: 36px;
-      height: 14px;
+      height: ${(props) => (props.blockState.deviceInfo.device === Device.ANDROID ? '14px' : '20px')};
       vertical-align: top;
       transition: background-color 0.2s, opacity 0.2s;
       background-color: ${(props) => props.uncheckedColor || '#d9dadc'}
@@ -75,7 +76,7 @@ const Switch = styled.div`
     &::after {
       content: "";
       position: absolute;
-      top: 2px;
+      top: ${(props) => (props.blockState.deviceInfo.device === Device.ANDROID ? '2px' : '0px')};
       right: 16px;
       border-radius: 50%;
       width: 20px;
@@ -115,9 +116,15 @@ const block = () => ({
     padding,
   },
   defaultInteractiveOptions: {
+    field: '',
     action: {url: '', fields: {}},
   },
-  interactive,
+  interactive:{
+    field: {type: 'string', name: 'Field name'},
+    action: interactive.action,
+    fields: interactive.fields,
+    confirmationDialog: interactive.confirmationDialog,
+  },
 });
 
 export default block;
