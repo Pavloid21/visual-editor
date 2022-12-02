@@ -53,7 +53,7 @@ const block = () => ({
   },
   config: {
     strokeWidth,
-  	progressBarColor,
+    progressBarColor,
   },
 });
 
