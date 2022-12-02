@@ -338,3 +338,11 @@ export const errorLabelColor = {
   type: 'color',
   name: 'Error label color',
 };
+export const progressBarColor = {
+  type: 'color',
+  name: 'Progress bar color',
+};
+export const strokeWidth = {
+  type: 'number',
+  name: 'Stroke width',
+};
