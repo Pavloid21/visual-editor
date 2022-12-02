@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import {hexToRgb} from 'constants/utils';
 import Wrapper from 'utils/wrapper';
 import checkbox_ic from 'assets/checkbox.svg';
 import {
@@ -10,15 +9,11 @@ import {
   iconUnselectedColor,
   padding,
   isActive,
-  interactive,
 } from 'views/configs';
-import {blockStateSafeSelector} from 'store/selectors';
-import store, {useAppSelector} from 'store';
-import {getDimensionStyles} from 'views/utils/styles/size';
 import {setCorrectImageUrl, getFieldValue, checkExtension} from 'utils';
 import {CustomSvg} from 'components/CustomSvg';
 
-const Image = styled.img`
+const Checkbox = styled.img`
   width: 24px;
   height: 24px;
   display: flex;
@@ -36,7 +31,7 @@ const Component = ({settingsUI, ...props}) => {
       {getExtension === 'icons' || checkExtension(getCorrectImageUrl) === 'svg' ? (
         <CustomSvg fill={settingsUI.iconUnselectedColor} src={getCorrectImageUrl} />
       ) : (
-        <Image
+        <Checkbox
           {...settingsUI}
           {...props}
           className="draggable"
