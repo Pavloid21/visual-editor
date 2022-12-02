@@ -17,7 +17,7 @@ import list from './list';
 import collection from './collection';
 import webview from './webview';
 import calendar_text_field from './calendarField';
-import progressbar from '.progressbar';
+import progressbar from './progressbar';
 import {Blocks} from './types';
 
 const blocks: Blocks = {
