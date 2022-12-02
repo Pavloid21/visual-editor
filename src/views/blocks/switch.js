@@ -27,10 +27,10 @@ const Switch = styled.div`
   }
   & input:checked + span::before {
     background-color: ${(props) => props.checkedColor || '#4ed164'};
-    opacity: 0.5;
+    opacity: ${(props) => (props.blockState.deviceInfo.device === Device.ANDROID ? '0.5' : '1')};
   }
   & input:checked + span::after {
-    background-color: ${(props) => props.checkedColor || '#4ed164'};
+    ${(props) => (props.blockState.deviceInfo.device === Device.ANDROID ? `background-color: ${(props) => props.checkedColor || '#4ed164'};` : `background-color: #ffffff;`)}
     transform: translateX(16px);
   }
   & input {
