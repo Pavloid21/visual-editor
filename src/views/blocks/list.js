@@ -14,7 +14,8 @@ import {
   backgroundColor,
   getSizeConfig,
   shapeConfigBuilder,
-  dataSourceSettings
+  dataSourceSettings,
+  filter,
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
 import {blockStateSafeSelector} from 'store/selectors';
@@ -150,6 +151,7 @@ const block = (state) => {
       dataSource: dataSourceSettings.dataSource,
       startPage: dataSourceSettings.startPage,
       pageSize: dataSourceSettings.pageSize,
+      filter,
   },
     config: {
       shape: shapeConfigBuilder()
