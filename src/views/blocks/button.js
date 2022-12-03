@@ -13,7 +13,7 @@ import {
   padding,
   shadowConfigBuilder,
   shapeConfigBuilder,
-  text, textColor, clearAppSettings, getSizeConfig, interactive
+  text, textColor, getSizeConfig, interactive
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
 import store, {useAppSelector} from 'store';
@@ -172,84 +172,7 @@ const block = (state) => {
         radius: 8,
       },
     },
-    interactive: {
-      action: {
-        url: {
-          type: 'select',
-          name: 'Action URL',
-          action_types: 'actions,screens,other',
-        },
-        method: {
-          type: 'select',
-          name: 'Method',
-          options: [
-            {label: 'Get', value: 'get'},
-            {label: 'Post', value: 'post'},
-          ],
-        },
-        fields: {
-          type: 'object',
-          properties: {
-            key: {type: 'string', name: 'Key'},
-            value: {type: 'string', name: 'Value'},
-          }
-
-        },
-        clearAppSettings,
-        triggresBottomSheet: {
-          type: 'select',
-          name: 'Open bottom sheet',
-          options: [
-            {label: 'True', value: true},
-            {label: 'False', value: false},
-          ],
-        },
-        closeBottomSheet: {
-          type: 'select',
-          name: 'Close bottom sheet',
-          options: [
-            {label: 'True', value: true},
-            {label: 'False', value: false},
-          ],
-        },
-        confirmationDialog: {
-          title: {
-            type: 'string',
-            name: 'Title',
-          },
-          message: {
-            type: 'string',
-            name: 'Message',
-          },
-          confirmText: {
-            type: 'string',
-            name: 'Confirm text',
-          },
-          cancelledText: {
-            type: 'string',
-            name: 'Cancelled text',
-          },
-        },
-        callEmailMessengersHolder: {
-          phoneNumber: {
-            type: 'string',
-            name: 'Phone number',
-          },
-          emailAddress: {
-            type: 'string',
-            name: 'Email address',
-          },
-          packageName: {
-            type: 'string',
-            name: 'Package name',
-          },
-          urlApiMessenger: {
-            type: 'string',
-            name: 'Api messenger',
-          },
-        },
-      },
-    },
+    interactive,
     config: {
       text,
       fontSize,
