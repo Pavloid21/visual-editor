@@ -177,7 +177,22 @@ const block = (state) => {
         url: interactive.action.url,
         method: interactive.action.method,
         fields: interactive.action.fields,
-        },
+      },
+      clearAppSettings: interactive.clearAppSettings,
+      triggresBottomSheet: interactive.triggresBottomSheet,
+      closeBottomSheet: interactive.closeBottomSheet,
+      confirmationDialog: {
+        title: interactive.confirmationDialog.title,
+        message: interactive.confirmationDialog.message,
+        confirmText: interactive.confirmationDialog.confirmText,
+        cancelledText: interactive.confirmationDialog.cancelledText,
+      },
+      callEmailMessengersHolder: {
+        phoneNumber: interactive.callEmailMessengersHolder.phoneNumber,
+        emailAddress: interactive.callEmailMessengersHolder.emailAddress,
+        packageName: interactive.callEmailMessengersHolder.packageName,
+        urlApiMessenger: interactive.callEmailMessengersHolder.urlApiMessenger,
+      },
     },
     config: {
       text,
