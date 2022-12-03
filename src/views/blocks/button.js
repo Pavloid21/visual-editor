@@ -13,7 +13,7 @@ import {
   padding,
   shadowConfigBuilder,
   shapeConfigBuilder,
-  text, textColor, getSizeConfig, interactive
+  text, textColor, clearAppSettings, getSizeConfig, interactive
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
 import store, {useAppSelector} from 'store';
@@ -195,14 +195,7 @@ const block = (state) => {
           }
 
         },
-        clearAppSettings: {
-          type: 'select',
-          name: 'Logout',
-          options: [
-            {label: 'True', value: true},
-            {label: 'False', value: false},
-          ],
-        },
+        clearAppSettings,
         triggresBottomSheet: {
           type: 'select',
           name: 'Open bottom sheet',
