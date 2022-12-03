@@ -18,6 +18,7 @@ import {
   textAlignment,
   getSizeConfig,
   cursorColor,
+  interactive,
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
@@ -132,6 +133,10 @@ const block = (state) => {
         },
         radius: 0,
       },
+    },
+    interactive: {
+      filterDataId: {type: 'string', name: 'Id data source for filter'},
+      queryKey: {type: 'string', name: 'Query key for filter'},
     },
     config: {
       padding,
