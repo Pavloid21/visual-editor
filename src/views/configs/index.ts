@@ -355,11 +355,3 @@ export const uncheckedColor = {
 };
 export const uncheckedIcon = {type: 'string', name: 'Unchecked icon'};
 export const checkedIcon = {type: 'string', name: 'Checked icon'};
-export const clearAppSettings = {
-  type: 'select',
-  name: 'Logout',
-  options: [
-    {label: 'True', value: true},
-    {label: 'False', value: false},
-  ],
-};
