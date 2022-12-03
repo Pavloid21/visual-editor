@@ -27,27 +27,11 @@ const Component = ({settingsUI, ...props}) => {
   const {id} = useAppSelector(state => state.project);
   const getCorrectImageUrl = setCorrectImageUrl(settingsUI.uncheckedIcon, id);
   const getExtension = getFieldValue(settingsUI.uncheckedIcon);
-  const getCorrectImageUrlChecked = setCorrectImageUrl(settingsUI.checkedIcon, id);
-  const getExtensionChecked = getFieldValue(settingsUI.checkedIcon);
 
-//  return (
-//    <Wrapper id={props.id} {...settingsUI} {...props}>
-//      {getExtension === 'icons' || checkExtension(getCorrectImageUrl) === 'svg' ? (
-//        <CustomSvg fill={settingsUI.iconUnselectedColor} src={getCorrectImageUrl} />
-//      ) : (
-//        <Checkbox
-//          {...settingsUI}
-//          {...props}
-//          className="draggable"
-//          src={getCorrectImageUrl}
-//        />
-//      )}
-//    </Wrapper>
- // );
- return (
+  return (
     <Wrapper id={props.id} {...settingsUI} {...props}>
-      (if (settingsUI.isActive == false) {getExtension === 'icons' || checkExtension(getCorrectImageUrl) === 'svg' ? (
-        <CustomSvg fill={settingsUI.iconUnselectedColor} src={getCorrectImageUrl} />
+      {getExtension === 'icons' || checkExtension(getCorrectImageUrl) === 'svg' ? (
+        <CustomSvg fill={settingsUI.iconUnselectedColor || '#d9dadc'} src={getCorrectImageUrl} />
       ) : (
         <Checkbox
           {...settingsUI}
@@ -56,16 +40,6 @@ const Component = ({settingsUI, ...props}) => {
           src={getCorrectImageUrl}
         />
       )}
-        else {getExtensionChecked === 'icons' || checkExtension(getCorrectImageUrlChecked) === 'svg' ? (
-        <CustomSvg fill={settingsUI.iconSelectedColor} src={getCorrectImageUrlChecked} />
-      ) : (
-        <Checkbox
-          {...settingsUI}
-          {...props}
-          className="draggable"
-          src={getCorrectImageUrlChecked}
-        />
-      )})
     </Wrapper>
   );
 };
