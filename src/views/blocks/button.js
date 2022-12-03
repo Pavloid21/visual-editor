@@ -172,7 +172,13 @@ const block = (state) => {
         radius: 8,
       },
     },
-    interactive,
+    interactive: {
+      action: {
+        url: interactive.action.url,
+        method: interactive.action.method,
+        fields: interactive.action.fields,
+        },
+    },
     config: {
       text,
       fontSize,
