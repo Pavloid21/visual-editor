@@ -56,7 +56,7 @@ const Component = ({settingsUI, ...props}) => {
           src={getCorrectImageUrl}
         />
       )}
-        else {getExtensionChecked === 'icons' || checkExtensionChecked(getCorrectImageUrlChecked) === 'svg' ? (
+        else {getExtensionChecked === 'icons' || checkExtension(getCorrectImageUrlChecked) === 'svg' ? (
         <CustomSvg fill={settingsUI.iconSelectedColor} src={getCorrectImageUrlChecked} />
       ) : (
         <Checkbox
