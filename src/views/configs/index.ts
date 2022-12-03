@@ -355,3 +355,21 @@ export const uncheckedColor = {
 };
 export const uncheckedIcon = {type: 'string', name: 'Unchecked icon'};
 export const checkedIcon = {type: 'string', name: 'Checked icon'};
+export const filter = {
+  id: {
+    type: 'string',
+    name: 'Id filter',
+  },
+  applyHere: {
+    type: 'select',
+    name: 'Apply filter',
+    options: [
+      {label: 'True', value: true},
+      {label: 'False', value: false},
+    ],
+  },
+  query: [{
+    key: {type: 'string', name: 'Query key'},
+    params: [{type: 'string', name: 'Query params'},],
+  },],
+};
