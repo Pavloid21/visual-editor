@@ -48,11 +48,10 @@ const SortableContainer = sortableContainer(({
   backgroundColor,
   listItem,
   settingsUI,
-  pageSize = 5,
   ...props
 }) => {
-  const listItems = listItem
-    && range(pageSize).map(() => renderHandlebars([listItem], 'document2').components);
+  const {pageSize} = props.interactive;
+  const listItems = listItem && range(pageSize).map(() => renderHandlebars([listItem], 'document2').components);
 
   return (
     <Wrapper id={props.id} {...settingsUI} {...props}>
@@ -136,8 +135,8 @@ const block = (state) => {
     category: 'Container',
     defaultInteractiveOptions: {
       dataSource: '',
-      startPage: 0,
-      pageSize: 20,
+      startPage: 1,
+      pageSize: 5,
     },
     defaultData: {
       backgroundColor: '',

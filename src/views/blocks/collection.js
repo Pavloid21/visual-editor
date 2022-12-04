@@ -1,5 +1,6 @@
 import React from 'react';
 import {useDrop} from 'react-dnd';
+import {range} from 'external/lodash';
 import styled from 'styled-components';
 import {arrayMoveImmutable} from 'array-move';
 import {sortableContainer} from 'react-sortable-hoc';
@@ -62,6 +63,9 @@ const Collection = styled.div`
 `;
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItem, settingsUI, ...props}) => {
+  const {pageSize} = props.interactive;
+  const listItems = listItem && range(pageSize).map(() => renderHandlebars([listItem], 'document2').components);
+
   return (
     <Wrapper
       id={props.id}
@@ -75,7 +79,7 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItem, s
         backgroundColor={backgroundColor}
         className="draggable"
       >
-        <div>{listItem && renderHandlebars([listItem], 'document2').components}</div>
+        <div>{listItems}</div>
       </Collection>
     </Wrapper>
   );
@@ -148,8 +152,8 @@ const block = (state) => {
     category: 'Container',
     defaultInteractiveOptions: {
       dataSource: '',
-      startPage: 0,
-      pageSize: 20,
+      startPage: 1,
+      pageSize: 5,
     },
     defaultData: {
       backgroundColor: '',
@@ -177,7 +181,6 @@ const block = (state) => {
       dataSource: dataSourceSettings.dataSource,
       startPage: dataSourceSettings.startPage,
       pageSize: dataSourceSettings.pageSize,
-
     },
     config: {
       backgroundColor,
