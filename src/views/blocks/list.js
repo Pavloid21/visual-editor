@@ -135,7 +135,7 @@ const block = (state) => {
     category: 'Container',
     defaultInteractiveOptions: {
       dataSource: '',
-      startPage: 1,
+      startPage: 0,
       pageSize: 5,
     },
     defaultData: {
