@@ -307,7 +307,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
       }}
     >
       {interactive && parseConfig(interactive, blockUuid, block.interactive)}
-      {complex && <Select label="Element type" options={complex} onChange={handleChangeElemType} value={name} />}
+      {complex && <Select label="Input type" options={complex} onChange={handleChangeElemType} value={name} />}
       {parseConfig(config, blockUuid, block.settingsUI)}
       {block.settingsUI?.navigationItems && (
         <div>
