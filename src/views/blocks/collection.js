@@ -17,6 +17,7 @@ import {
   shapeConfigBuilder,
   metricStyle,
   dataSourceSettings,
+  filter,
 } from 'views/configs';
 import collection from 'assets/collection.svg';
 import {pushBlockInside} from 'store/layout.slice';
@@ -154,6 +155,9 @@ const block = (state) => {
       dataSource: '',
       startPage: 0,
       pageSize: 5,
+      filter: {
+        id: '', 
+        query: [{}],
     },
     defaultData: {
       backgroundColor: '',
@@ -181,6 +185,10 @@ const block = (state) => {
       dataSource: dataSourceSettings.dataSource,
       startPage: dataSourceSettings.startPage,
       pageSize: dataSourceSettings.pageSize,
+      filter: {
+        id: filter.id,
+        query: filter.query,
+      },
     },
     config: {
       backgroundColor,
