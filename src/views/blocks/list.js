@@ -139,11 +139,7 @@ const block = (state) => {
       pageSize: 5,
       filter: {
         id: '', 
-        applyHere: '', 
-        query: [{
-          key: '',
-          params: [],
-        }]
+        query: [{}],
       },
     },
     defaultData: {
@@ -158,7 +154,10 @@ const block = (state) => {
       dataSource: dataSourceSettings.dataSource,
       startPage: dataSourceSettings.startPage,
       pageSize: dataSourceSettings.pageSize,
-      filter,
+      filter: {
+        id: filter.id,
+        query: filter.query,
+      },
   },
     config: {
       shape: shapeConfigBuilder()
