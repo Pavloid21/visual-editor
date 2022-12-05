@@ -114,6 +114,10 @@ const block = (state) => {
     description: 'Search allows users to quickly find app content.',
     previewImageUrl: searchbar,
     category: 'Controls',
+    defaultInteractiveOptions: {
+      filterDataId: '',
+      queryKey: '',
+    },
     defaultData: {
       placeholder: 'Placeholder',
       placeholderColor: '#7F7F7F',
