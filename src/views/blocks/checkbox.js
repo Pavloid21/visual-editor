@@ -58,7 +58,6 @@ const block = () => ({
       action: {url: '', fields: {}},
       filter: {
         id: '', 
-        applyHere: null,
         query: [{}],
       },
     },
