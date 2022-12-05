@@ -44,7 +44,7 @@ export const Select = React.memo((props: ISelect) => {
     [filteredMenu, props.async]
   );
 
-  const [selected_value, setSelectedValue] = useState(getCurrentTab(value));
+  const [selected_value, setSelectedValue] = useState(getCurrentTab(value?.toString()));
   const [optionsModel, setModel] = useState<any>({
     [menus[0].actionType]: [],
     [menus[1].actionType]: [],
