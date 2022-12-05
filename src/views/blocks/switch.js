@@ -9,6 +9,7 @@ import {
   padding,
   checkedColor,
   uncheckedColor,
+  filter,
 } from 'views/configs';
 import {getDimensionStyles} from '../utils/styles/size';
 
@@ -124,6 +125,11 @@ const block = () => ({
   },
   defaultInteractiveOptions: {
     action: {url: '', fields: {}},
+    filter: {
+      id: '', 
+      applyHere: null,
+      query: [{}],
+    },
   },
   interactive: {
     field: {type: 'string', name: 'Field name'},
@@ -167,6 +173,12 @@ const block = () => ({
         name: 'Cancelled text',
       },
     },
+    filter: {
+        id: filter.id,
+        applyHere: filter.applyHere,
+        query: filter.query,
+      },
+
   },
 });
 
