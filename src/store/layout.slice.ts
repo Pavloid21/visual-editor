@@ -456,7 +456,7 @@ const layoutSlice = createSlice({
     },
     removeFilterQueryItem: (state, action: PayloadAction<number>) => {
       if(action.payload === 0) {
-        state.interactive = {};
+        state.list.interactive = {};
       } else {
         const newBarItems = [...state.interactive.query];
         newBarItems.splice(action.payload, 1);
