@@ -110,30 +110,12 @@ export const spacing = {
   type: 'number',
   name: 'Spacing',
 };
-export const corners = {
-  topLeftRadius: {
-    type: 'number',
-    name: 'Top left radius',
-  },
-  topRightRadius: {
-    type: 'number',
-    name: 'Top right radius',
-  },
-  bottomLeftRadius: {
-    type: 'number',
-    name: 'Bottom left radius',
-  },
-  bottomRightRadius: {
-    type: 'number',
-    name: 'Bottom right radius',
-  },
-};
 export const interactive = {
   action: {
     url: {
       type: 'select',
       name: 'Action URL',
-      action_types: 'actions,screens,data,other',
+      action_types: 'actions,screens,other',
     },
     method: {
       type: 'select',
@@ -148,8 +130,7 @@ export const interactive = {
       properties: {
         key: {type: 'string', name: 'Key'},
         value: {type: 'string', name: 'Value'},
-      }
-
+      },
     },
     clearAppSettings: {
       type: 'select',
@@ -217,7 +198,7 @@ export const dataSourceSettings = {
   dataSource: {
     type: 'select',
     name: 'Data source',
-    action_types: 'data',
+    action_types: 'data,other',
   },
   startPage: {
     type: 'number',
@@ -303,4 +284,92 @@ export const showUnselectedText = {
     {label: 'True', value: true},
     {label: 'False', value: false},
   ],
+};
+export const label = {
+  type: 'string',
+  name: 'Label',
+};
+export const unfocusedLabelColor = {
+  type: 'color',
+  name: 'Unfocused label color',
+};
+export const focusedLabelColor = {
+  type: 'color',
+  name: 'Focused label color',
+};
+export const focusedIndicatorColor = {
+  type: 'color',
+  name: 'Focused indicator color',
+};
+export const unfocusedIndicatorColor = {
+  type: 'color',
+  name: 'Unfocused indicator color',
+};
+export const cursorColor = {
+  type: 'color',
+  name: 'Cursor color',
+};
+export const regexp = {
+  type: 'string',
+  name: 'Regexp',
+};
+export const regexpTrigger = {
+  type: 'select',
+  name: 'Regexp trigger',
+  options: [
+    {label: 'Focus change', value: 'ON_FOCUS_CHANGE'},
+    {label: 'Value change', value: 'ON_VALUE_CHANGE'},
+  ],
+};
+export const helperTextColor = {
+  type: 'color',
+  name: 'Helper text color',
+};
+export const errorTextColor = {
+  type: 'color',
+  name: 'Error text color',
+};
+export const errorIndicatorColor = {
+  type: 'color',
+  name: 'Error indicator color',
+};
+export const errorLabelColor = {
+  type: 'color',
+  name: 'Error label color',
+};
+export const progressBarColor = {
+  type: 'color',
+  name: 'Progress bar color',
+};
+export const strokeWidth = {
+  type: 'number',
+  name: 'Stroke width',
+};
+export const checkedColor = {
+  type: 'color',
+  name: 'Checked color',
+};
+export const uncheckedColor = {
+  type: 'color',
+  name: 'Unchecked color',
+};
+export const uncheckedIcon = {type: 'string', name: 'Unchecked icon'};
+export const checkedIcon = {type: 'string', name: 'Checked icon'};
+export const filter = {
+  id: {
+    type: 'string',
+    name: 'Id filter',
+  },
+  applyHere: {
+    type: 'select',
+    name: 'Apply filter',
+    options: [
+      {label: 'True', value: true},
+      {label: 'False', value: false},
+    ],
+  },
+  query: [{
+    key: {type: 'string', name: 'Query key'},
+    params: [{type: 'string', name: 'Query params'},],
+  },],
 };

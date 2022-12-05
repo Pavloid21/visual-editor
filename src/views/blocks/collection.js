@@ -1,9 +1,9 @@
 import React from 'react';
 import {useDrop} from 'react-dnd';
+import {range} from 'external/lodash';
 import styled from 'styled-components';
 import {arrayMoveImmutable} from 'array-move';
 import {sortableContainer} from 'react-sortable-hoc';
-import {useDispatch, useSelector} from 'react-redux';
 import renderHandlebars from 'utils/renderHandlebars';
 import Wrapper from 'utils/wrapper';
 import {onSortMove} from 'utils/hooks';
@@ -21,7 +21,7 @@ import {
 import collection from 'assets/collection.svg';
 import {pushBlockInside} from 'store/layout.slice';
 import {blockStateSafeSelector} from 'store/selectors';
-import store from 'store';
+import store, {useAppDispatch, useAppSelector} from 'store';
 import {getDimensionStyles} from 'views/utils/styles/size';
 
 const Collection = styled.div`
@@ -63,6 +63,9 @@ const Collection = styled.div`
 `;
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItem, settingsUI, ...props}) => {
+  const {pageSize} = props.interactive;
+  const listItems = listItem && range(pageSize).map(() => renderHandlebars([listItem], 'document2').components);
+
   return (
     <Wrapper
       id={props.id}
@@ -76,15 +79,15 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItem, s
         backgroundColor={backgroundColor}
         className="draggable"
       >
-        <div>{listItem && renderHandlebars([listItem], 'document2').components}</div>
+        <div>{listItems}</div>
       </Collection>
     </Wrapper>
   );
 });
 
 const Component = ({settingsUI, uuid, listItems, ...props}) => {
-  const dispatch = useDispatch();
-  const layout = useSelector((state) => state.layout);
+  const dispatch = useAppDispatch();
+  const {layout} = useAppSelector((state) => state);
   const [{canDrop, isOver, target}, drop] = useDrop(() => ({
     accept: ItemTypes.BOX,
     drop: (item) => {
@@ -150,7 +153,7 @@ const block = (state) => {
     defaultInteractiveOptions: {
       dataSource: '',
       startPage: 0,
-      pageSize: 20,
+      pageSize: 5,
     },
     defaultData: {
       backgroundColor: '',
@@ -176,6 +179,8 @@ const block = (state) => {
     listItem: null,
     interactive: {
       dataSource: dataSourceSettings.dataSource,
+      startPage: dataSourceSettings.startPage,
+      pageSize: dataSourceSettings.pageSize,
     },
     config: {
       backgroundColor,

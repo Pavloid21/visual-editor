@@ -2,6 +2,8 @@ import {Action} from 'redux';
 import {Zoom} from 'containers/ZoomSelect/types';
 import store from './index';
 
+import type {ThunkDispatch} from '@reduxjs/toolkit';
+
 export type EditScreenNamePayloadAction = Action<string> & {
   screen: string;
   navigationSettings: any;
@@ -18,21 +20,45 @@ export type EditScreenNamePayloadAction = Action<string> & {
 export type Actions = {
   actions: ActionItem[];
   data: ActionItem[];
+  externals: ActionItem[];
+  push: ActionItem[];
+  cronTasks: ActionItem[];
   selected: ActionItem | null;
+  all: ActionItem[];
   deleted: {
     actions: ActionItem[];
     data: ActionItem[];
+    externals: ActionItem[];
+    cronTasks: ActionItem[];
+    push: ActionItem[];
   };
 };
 
 export enum ActionTypes {
+  all = 'all',
   data = 'data',
-  action = 'action',
+  actions = 'actions',
+  push = 'push',
+  externals = 'externals',
+  cronTasks = 'cronTasks'
+}
+
+export type ActionCronTasksObject = {
+  id?: string;
+  pattern?: string;
+  snippetType?: string;
+  snippetName?: string;
 }
 
 export type ActionItem = {
   action: string;
-  object: string;
+  object?: ActionCronTasksObject | string;
+  selected?: boolean;
+  type: ActionTypes;
+};
+
+export type ActionPushItem = {
+  action: string;
   selected?: boolean;
   type: ActionTypes;
 };
@@ -144,7 +170,12 @@ export type EditorMode = {
 
 export type LeftBarMenu = {
   activeTab: string,
-  filterAction: number
+  activeImageTab: string,
+  iconNameFilter: string
+  filterAction: ActionTypes,
+  screenNameFilter: string,
+  actionNameFilter: string,
+  activeTabActions: ActionTypes
 }
 
 export type TScreenListOption = {
@@ -161,4 +192,4 @@ export type TSettingsUI = {
 }
 
 export type RootStore = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export type ThunkAppDispatch = ThunkDispatch<RootStore, void, Action>;

@@ -1,5 +1,5 @@
 import {createDraftSafeSelector} from '@reduxjs/toolkit';
-import {ActionItem, ActionTypes, Project, RootStore} from 'store/types';
+import {ActionItem, Project, RootStore} from 'store/types';
 
 const selectSelf = (state: RootStore) => state;
 
@@ -8,8 +8,8 @@ export type TCurrentEditorState = {
   snippets: any[];
   actions: ActionItem[];
   deletedActions: ActionItem[];
-  deletedScreens: any[];
-  editedScreens: any[];
+  deletedScreens: string[];
+  editedScreens: string[];
 };
 
 const getCurrentEditorState = ({project, layout, actions}: RootStore): TCurrentEditorState => {
@@ -17,15 +17,18 @@ const getCurrentEditorState = ({project, layout, actions}: RootStore): TCurrentE
     currentProject: project,
     snippets: layout.snippets,
     actions: [
-      ...actions.actions.map((item) => ({...item, type: ActionTypes.action})),
-      ...actions.data.map((item) => ({...item, type: ActionTypes.data})),
+      ...actions.actions,
+      ...actions.data,
+      ...actions.externals,
+      ...actions.push,
+      ...actions.cronTasks
     ],
     deletedActions: [
-      ...actions.deleted.actions.map((item) => ({
-        ...item,
-        type: ActionTypes.action,
-      })),
-      ...actions.deleted.data.map((item) => ({...item, type: ActionTypes.data})),
+      ...actions.deleted.actions,
+      ...actions.deleted.data,
+      ...actions.deleted.externals,
+      ...actions.deleted.push,
+      ...actions.deleted.cronTasks,
     ],
     deletedScreens: layout.deletedScreens,
     editedScreens: layout.editedScreens,

@@ -16,9 +16,8 @@ import {
   text, textColor, getSizeConfig, interactive
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
-import store from 'store';
+import store, {useAppSelector} from 'store';
 import {getDimensionStyles} from 'views/utils/styles/size';
-import {useSelector} from 'react-redux';
 import {setCorrectImageUrl, getFieldValue} from 'utils';
 import {CustomSvg} from 'components/CustomSvg';
 
@@ -57,6 +56,7 @@ const Button = styled.div`
   }}
   & > span {
     width: 100%;
+
     font-size: inherit;
     font-weight: ${(props) => {
       switch (props.fontWeight) {
@@ -100,7 +100,7 @@ const Button = styled.div`
 
 const Component = ({settingsUI, ...props}) => {
   const {text} = settingsUI;
-  const {id} = useSelector(state => state.project);
+  const {id} = useAppSelector(state => state.project);
   const getCorrectImageUrl = setCorrectImageUrl(settingsUI.imageUrl, id);
   const getExtension = getFieldValue(settingsUI.imageUrl);
 
@@ -137,11 +137,11 @@ const block = (state) => {
     previewImageUrl: button,
     category: 'Controls',
     defaultInteractiveOptions: {
-      action: {url: '', target: '', fields: {}},
+      action: {url: '', fields: {}},
     },
     defaultData: {
       text: 'Button',
-      fontSize: '14',
+      fontSize: 14,
       textColor: '#000000',
       backgroundColor: '#FFFFFF',
       imageUrl: '',
@@ -158,10 +158,6 @@ const block = (state) => {
         right: 0,
         bottom: 0,
         left: 0,
-      },
-      shape: {
-        type: 'ALLCORNERSROUND',
-        radius: '4',
       },
       size: {
         height: 36,

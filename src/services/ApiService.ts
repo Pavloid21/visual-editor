@@ -1,5 +1,6 @@
 import axios from 'axios';
-import {ActionTypes} from 'store/types';
+import {ACTIONS_API} from './constants';
+import {ActionCronTasksObject} from 'store/types';
 
 type OptionsType = {
   url: string;
@@ -86,18 +87,28 @@ export const getDataActionsList = async (projectId: string) => {
   return callApi(url, null, 'GET');
 };
 
-export const getActionByName = async (projectId: string, actionName: string) => {
-  const url = API.defaults.baseURL + `projects/${projectId}/admin/actions/${actionName}`;
+export const getExternalActionsList = async (projectId: string) => {
+  const url = API.defaults.baseURL + `projects/${projectId}/admin/externalActions/`;
   return callApi(url, null, 'GET');
 };
 
-export const getDataActionByName = async (projectId: string, actionName: string) => {
-  const url = API.defaults.baseURL + `projects/${projectId}/admin/data/${actionName}`;
+export const getCronTaskList = async (projectId: string) => {
+  const url = API.defaults.baseURL + `projects/${projectId}/admin/cron/tasks/`;
   return callApi(url, null, 'GET');
 };
 
-export const saveAction = async (projectId: string, actionType: string, endpoint: string, payload: string) => {
-  const keyType = actionType === ActionTypes.action ? 'actions' : actionType;
+export const getPushList = async (projectId: string) => {
+  const url = API.defaults.baseURL + `projects/${projectId}/admin/push/defaultTopics/`;
+  return callApi(url, null, 'GET');
+};
+
+export const getActionByName = async (projectId: string, actionName: string, actionPath: string) => {
+  const url = API.defaults.baseURL + `projects/${projectId}/admin/${actionPath}/${actionName}`;
+  return callApi(url, null, 'GET');
+};
+
+export const saveAction = async (projectId: string, actionType: string, endpoint: string, payload: ActionCronTasksObject | string = '') => {
+  const keyType = ACTIONS_API[actionType];
   const url = API.defaults.baseURL + `projects/${projectId}/admin/${keyType}/${endpoint}`;
   return callApi(url, payload, 'PUT', undefined, undefined, {
     'Content-Type': 'application/javascript',
@@ -105,7 +116,8 @@ export const saveAction = async (projectId: string, actionType: string, endpoint
 };
 
 export const deleteAction = async (projectId: string, actionType: string, endpoint: string) => {
-  const url = API.defaults.baseURL + `projects/${projectId}/admin/${actionType}/${endpoint}`;
+  const keyType = ACTIONS_API[actionType];
+  const url = API.defaults.baseURL + `projects/${projectId}/admin/${keyType}/${endpoint}`;
   return callApi(url, null, 'DELETE');
 };
 
@@ -141,6 +153,23 @@ export const getScreenTemplates = async () => {
 export const getTemplateData = async (templateId: string, params?: string) => {
   const url = API.defaults.baseURL + `templates/${templateId}${params ? '?' + params : ''}`;
   return callApi(url, null, 'GET');
+};
+
+export const getImagesData = async (projectId: string) => {
+  const url = API.defaults.baseURL + `projects/${projectId}/admin/files`;
+  return callApi(url, null, 'GET');
+};
+
+export const createImagesFolder = async (projectId: string, payload: string) => {
+  const url = API.defaults.baseURL + `projects/${projectId}/admin/files`;
+  return callApi(url, payload, 'POST', undefined, undefined, {
+    'Content-Type': 'multipart/form-data',
+  });
+};
+
+export const deleteImagesFolder = async (projectId: string, endpoint: string) => {
+  const url = API.defaults.baseURL + `projects/${projectId}/admin/files/${endpoint}/`;
+  return callApi(url, null, 'DELETE');
 };
 
 export const applyTemplate = async (templateId: string, payload: string) => {

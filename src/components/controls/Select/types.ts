@@ -9,7 +9,7 @@ export interface IOption {
 interface IBaseSelect {
   options: IOption[];
   onChange(value: string | boolean | undefined, event?: any): void;
-  value: string;
+  value: string | undefined;
   styles?: StylesConfig<IOption, false, GroupBase<IOption>>;
   menuPlacement?: MenuPlacement | undefined;
   clearable?: boolean;

@@ -10,9 +10,8 @@ import {
   shapeConfigBuilder, padding,
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
-import store from 'store';
+import store, {useAppSelector} from 'store';
 import {getDimensionStyles} from 'views/utils/styles/size';
-import {useSelector} from 'react-redux';
 import {setCorrectImageUrl, getFieldValue, checkExtension} from 'utils';
 import {CustomSvg} from 'components/CustomSvg';
 
@@ -25,7 +24,7 @@ const Image = styled.img`
   border-style: solid;
   box-shadow: ${(props) => {
     const RGB = hexToRgb(props.shadow?.color);
-    return `${props.shadow?.offsetSize?.width || props.shadow?.offsetSize?.widthInPercent}px ${props.shadow?.offsetSize?.height || props.shadow?.offsetSize?.heightInPercent
+    return `${props.shadow?.offsetSize?.width ?? props.shadow?.offsetSize?.widthInPercent}px ${props.shadow?.offsetSize?.height ?? props.shadow?.offsetSize?.heightInPercent
       }px 8px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b}, ${props.shadow?.opacity})`;
   }};
   object-fit: ${(props) => {
@@ -56,7 +55,7 @@ const Image = styled.img`
 `;
 
 const Component = ({settingsUI, ...props}) => {
-  const {id} = useSelector(state => state.project);
+  const {id} = useAppSelector(state => state.project);
   const getCorrectImageUrl = setCorrectImageUrl(settingsUI.imageUrl, id);
   const getExtension = getFieldValue(settingsUI.imageUrl);
 
@@ -96,10 +95,6 @@ const block = (state) => {
         height: 200,
         width: 400,
       },
-      shape: {
-        type: 'ALLCORNERSROUND',
-        radius: 4,
-      },
       shadow: {
         color: '#000000',
         opacity: 0.3,
@@ -111,7 +106,7 @@ const block = (state) => {
       },
     },
     defaultInteractiveOptions: {
-      action: {url: '', target: '', fields: {}},
+      action: {url: '', fields: {}},
     },
     interactive,
     config: {

@@ -3,7 +3,6 @@ import {useDrop} from 'react-dnd';
 import styled from 'styled-components';
 import {arrayMoveImmutable} from 'array-move';
 import {sortableContainer} from 'react-sortable-hoc';
-import {useSelector, useDispatch} from 'react-redux';
 import Wrapper from 'utils/wrapper';
 import {observer} from 'utils/observer';
 import {onSortMove} from 'utils/hooks';
@@ -12,13 +11,13 @@ import {hexToRgb} from 'constants/utils';
 import {ItemTypes} from 'constants/actionTypes';
 import card from 'assets/card.svg';
 import {
-  backgroundColor, corners, elevation, getSizeConfig,
+  backgroundColor, elevation, getSizeConfig,
   padding, shadowConfigBuilder,
   shapeConfigBuilder, interactive
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
 import {blockStateSafeSelector} from 'store/selectors';
-import store from 'store';
+import store, {useAppDispatch, useAppSelector} from 'store';
 import {getDimensionStyles} from 'views/utils/styles/size';
 
 const Card = styled.div`
@@ -39,6 +38,11 @@ const Card = styled.div`
     const RGB = hexToRgb(props.shadow?.color);
     return `${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px 8px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b}, ${props.shadow?.opacity})`;
   }};
+  ${(props) => {
+    if (props.shape?.type === 'ALLCORNERSROUND') {
+      return `border-radius: ${props.shape.radius}px;`;
+    }
+  }}
 `;
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, settingsUI, ...props}) => {
@@ -58,8 +62,8 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, 
 });
 
 const Component = ({settingsUI, uuid, listItems, ...props}) => {
-  const dispatch = useDispatch();
-  const layout = useSelector((state) => state.layout);
+  const dispatch = useAppDispatch();
+  const {layout} = useAppSelector((state) => state);
   const [{canDrop, isOver, target}, drop] = useDrop(() => ({
     accept: ItemTypes.BOX,
     drop: (item) => {
@@ -122,7 +126,7 @@ const block = (state) => {
     previewImageUrl: card,
     category: 'Element',
     defaultInteractiveOptions: {
-      action: {url: '', target: '', fields: {}},
+      action: {url: '', fields: {}},
     },
     defaultData: {
       elevation: 3,
@@ -136,16 +140,6 @@ const block = (state) => {
       },
       size: {
         height: 0,
-      },
-      shape: {
-        type: 'ROUND',
-        radius: 20,
-      },
-      corners: {
-        topLeftRadius: 20,
-        topRightRadius: 20,
-        bottomLeftRadius: 0,
-        bottomRightRadius: 0,
       },
       shadow: {
         color: '#000000',
@@ -164,7 +158,6 @@ const block = (state) => {
         .withAllCornersRound
         .withRadius
         .done(),
-      corners,
       shadow: shadowConfigBuilder().done(),
       padding,
       size: {

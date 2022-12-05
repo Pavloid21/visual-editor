@@ -44,10 +44,6 @@ export const screenTemplates = [
           url: 'nextScreenName',
           target: '',
         },
-
-        appBarItems: {
-          title: 'Title',
-        },
       },
 
       bottomBar: {
@@ -109,13 +105,6 @@ export const screenTemplates = [
               right: '10',
             },
 
-            corners: {
-              topLeftRadius: 0,
-              topRightRadius: 0,
-              bottomLeftRadius: 0,
-              bottomRightRadius: 0,
-            },
-
             shadow: {
               color: '#000000',
               opacity: 0,
@@ -144,13 +133,6 @@ export const screenTemplates = [
                   bottom: '100',
                   left: '10',
                   right: '10',
-                },
-
-                corners: {
-                  topLeftRadius: 0,
-                  topRightRadius: 0,
-                  bottomLeftRadius: 0,
-                  bottomRightRadius: 0,
                 },
 
                 shadow: {
@@ -184,13 +166,6 @@ export const screenTemplates = [
                   right: '10',
                 },
 
-                corners: {
-                  topLeftRadius: 0,
-                  topRightRadius: 0,
-                  bottomLeftRadius: 0,
-                  bottomRightRadius: 0,
-                },
-
                 shadow: {
                   color: '#000000',
                   opacity: 0,
@@ -222,13 +197,6 @@ export const screenTemplates = [
                   right: '10',
                 },
 
-                corners: {
-                  topLeftRadius: 0,
-                  topRightRadius: 0,
-                  bottomLeftRadius: 0,
-                  bottomRightRadius: 0,
-                },
-
                 shadow: {
                   color: '#000000',
                   opacity: 0,
@@ -258,13 +226,6 @@ export const screenTemplates = [
                   bottom: '100',
                   left: '10',
                   right: '10',
-                },
-
-                corners: {
-                  topLeftRadius: 0,
-                  topRightRadius: 0,
-                  bottomLeftRadius: 0,
-                  bottomRightRadius: 0,
                 },
 
                 shadow: {
@@ -309,13 +270,6 @@ export const screenTemplates = [
               right: '10',
             },
 
-            corners: {
-              topLeftRadius: 0,
-              topRightRadius: 0,
-              bottomLeftRadius: 0,
-              bottomRightRadius: 0,
-            },
-
             shadow: {
               color: '#000000',
               opacity: 0,
@@ -344,13 +298,6 @@ export const screenTemplates = [
                   bottom: 0,
                   left: 0,
                   right: 0,
-                },
-
-                corners: {
-                  topLeftRadius: 0,
-                  topRightRadius: 0,
-                  bottomLeftRadius: 0,
-                  bottomRightRadius: 0,
                 },
 
                 shadow: {
@@ -387,13 +334,6 @@ export const screenTemplates = [
                     shape: {
                       type: 'ROUND',
                       radius: 20,
-                    },
-
-                    corners: {
-                      topLeftRadius: 20,
-                      topRightRadius: 20,
-                      bottomLeftRadius: 0,
-                      bottomRightRadius: 0,
                     },
 
                     shadow: {
@@ -434,13 +374,6 @@ export const screenTemplates = [
                     shape: {
                       type: 'ROUND',
                       radius: 20,
-                    },
-
-                    corners: {
-                      topLeftRadius: 20,
-                      topRightRadius: 20,
-                      bottomLeftRadius: 0,
-                      bottomRightRadius: 0,
                     },
 
                     shadow: {
@@ -479,13 +412,6 @@ export const screenTemplates = [
                   right: 0,
                 },
 
-                corners: {
-                  topLeftRadius: 0,
-                  topRightRadius: 0,
-                  bottomLeftRadius: 0,
-                  bottomRightRadius: 0,
-                },
-
                 shadow: {
                   color: '#000000',
                   opacity: 0,
@@ -520,13 +446,6 @@ export const screenTemplates = [
                     shape: {
                       type: 'ROUND',
                       radius: 20,
-                    },
-
-                    corners: {
-                      topLeftRadius: 20,
-                      topRightRadius: 20,
-                      bottomLeftRadius: 0,
-                      bottomRightRadius: 0,
                     },
 
                     shadow: {
@@ -567,13 +486,6 @@ export const screenTemplates = [
                     shape: {
                       type: 'ROUND',
                       radius: 20,
-                    },
-
-                    corners: {
-                      topLeftRadius: 20,
-                      topRightRadius: 20,
-                      bottomLeftRadius: 0,
-                      bottomRightRadius: 0,
                     },
 
                     shadow: {
@@ -621,10 +533,6 @@ export const screenTemplates = [
         action: {
           url: 'nextScreenName',
           target: '',
-        },
-
-        appBarItems: {
-          title: 'Title',
         },
       },
 
@@ -685,13 +593,6 @@ export const screenTemplates = [
               bottom: 0,
               left: 0,
               right: 0,
-            },
-
-            corners: {
-              topLeftRadius: 0,
-              topRightRadius: 0,
-              bottomLeftRadius: 0,
-              bottomRightRadius: 0,
             },
 
             shadow: {
@@ -755,13 +656,6 @@ export const screenTemplates = [
                   right: 0,
                 },
 
-                corners: {
-                  topLeftRadius: 0,
-                  topRightRadius: 0,
-                  bottomLeftRadius: 0,
-                  bottomRightRadius: 0,
-                },
-
                 shadow: {
                   color: '#000000',
                   opacity: 0,
@@ -790,13 +684,6 @@ export const screenTemplates = [
                       bottom: '100',
                       left: '10',
                       right: '10',
-                    },
-
-                    corners: {
-                      topLeftRadius: 0,
-                      topRightRadius: 0,
-                      bottomLeftRadius: 0,
-                      bottomRightRadius: 0,
                     },
 
                     shadow: {
@@ -946,13 +833,6 @@ export const screenTemplates = [
                       right: '10',
                     },
 
-                    corners: {
-                      topLeftRadius: 0,
-                      topRightRadius: 0,
-                      bottomLeftRadius: 0,
-                      bottomRightRadius: 0,
-                    },
-
                     shadow: {
                       color: '#000000',
                       opacity: 0,
@@ -1090,10 +970,6 @@ export const screenTemplates = [
           url: 'nextScreenName',
           target: '',
         },
-
-        appBarItems: {
-          title: 'Title',
-        },
       },
 
       bottomBar: {
@@ -1154,13 +1030,6 @@ export const screenTemplates = [
               right: 0,
             },
 
-            corners: {
-              topLeftRadius: 0,
-              topRightRadius: 0,
-              bottomLeftRadius: 0,
-              bottomRightRadius: 0,
-            },
-
             shadow: {
               color: '#000000',
               opacity: 0,
@@ -1209,10 +1078,6 @@ export const screenTemplates = [
         action: {
           url: 'nextScreenName',
           target: '',
-        },
-
-        appBarItems: {
-          title: 'Title',
         },
       },
 
@@ -1275,13 +1140,6 @@ export const screenTemplates = [
               right: 0,
             },
 
-            corners: {
-              topLeftRadius: 0,
-              topRightRadius: 0,
-              bottomLeftRadius: 0,
-              bottomRightRadius: 0,
-            },
-
             shadow: {
               color: '#000000',
               opacity: 0,
@@ -1310,13 +1168,6 @@ export const screenTemplates = [
                   bottom: '100',
                   left: '10',
                   right: '10',
-                },
-
-                corners: {
-                  topLeftRadius: 0,
-                  topRightRadius: 0,
-                  bottomLeftRadius: 0,
-                  bottomRightRadius: 0,
                 },
 
                 shadow: {
@@ -1349,13 +1200,6 @@ export const screenTemplates = [
                       right: '10',
                     },
 
-                    corners: {
-                      topLeftRadius: 0,
-                      topRightRadius: 0,
-                      bottomLeftRadius: 0,
-                      bottomRightRadius: 0,
-                    },
-
                     shadow: {
                       color: '#000000',
                       opacity: 0,
@@ -1387,13 +1231,6 @@ export const screenTemplates = [
                       right: '10',
                     },
 
-                    corners: {
-                      topLeftRadius: 0,
-                      topRightRadius: 0,
-                      bottomLeftRadius: 0,
-                      bottomRightRadius: 0,
-                    },
-
                     shadow: {
                       color: '#000000',
                       opacity: 0,
@@ -1423,13 +1260,6 @@ export const screenTemplates = [
                       bottom: '100',
                       left: '10',
                       right: '10',
-                    },
-
-                    corners: {
-                      topLeftRadius: 0,
-                      topRightRadius: 0,
-                      bottomLeftRadius: 0,
-                      bottomRightRadius: 0,
                     },
 
                     shadow: {
@@ -1465,13 +1295,6 @@ export const screenTemplates = [
                   right: '10',
                 },
 
-                corners: {
-                  topLeftRadius: 0,
-                  topRightRadius: 0,
-                  bottomLeftRadius: 0,
-                  bottomRightRadius: 0,
-                },
-
                 shadow: {
                   color: '#000000',
                   opacity: 0,
@@ -1502,13 +1325,6 @@ export const screenTemplates = [
                       right: '10',
                     },
 
-                    corners: {
-                      topLeftRadius: 0,
-                      topRightRadius: 0,
-                      bottomLeftRadius: 0,
-                      bottomRightRadius: 0,
-                    },
-
                     shadow: {
                       color: '#000000',
                       opacity: 0,
@@ -1540,13 +1356,6 @@ export const screenTemplates = [
                       right: '10',
                     },
 
-                    corners: {
-                      topLeftRadius: 0,
-                      topRightRadius: 0,
-                      bottomLeftRadius: 0,
-                      bottomRightRadius: 0,
-                    },
-
                     shadow: {
                       color: '#000000',
                       opacity: 0,
@@ -1576,13 +1385,6 @@ export const screenTemplates = [
                       bottom: '100',
                       left: '10',
                       right: '10',
-                    },
-
-                    corners: {
-                      topLeftRadius: 0,
-                      topRightRadius: 0,
-                      bottomLeftRadius: 0,
-                      bottomRightRadius: 0,
                     },
 
                     shadow: {

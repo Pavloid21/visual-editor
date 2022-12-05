@@ -5,14 +5,14 @@ import {useNavigate} from 'react-router-dom';
 import {applyTemplate, createProject} from 'services/ApiService';
 import {H2, PhoneWrapper} from './TemplatePreview.styled';
 import type {Project as TProject} from 'store/types';
-import {useDispatch} from 'react-redux';
+import {useAppDispatch} from 'store';
 import {selectProject} from 'store/project.slice';
 import Routes from 'routes/routes';
 import {ITemplatePreview} from '../types';
 
 export const TemplatePreview: React.FC<ITemplatePreview> = ({project, template}) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const defaults = {
     name: 'Blank page',
     description: 'Description mobile app',

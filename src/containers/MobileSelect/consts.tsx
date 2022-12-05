@@ -17,12 +17,11 @@ import {ReactComponent as RightSideSE} from 'assets/mockups/right_side_se.svg';
 import {ReactComponent as Time} from 'assets/mockups/time.svg';
 import {ReactComponent as TimeAndroid} from 'assets/mockups/time_android.svg';
 import {ReactComponent as RightSideAndroid} from 'assets/mockups/right_side_android.svg';
-import {useSelector} from 'react-redux';
+import {useAppSelector} from 'store';
 import {hexToRgb, setContrast} from 'constants/utils';
 import {normalizeHEX} from 'utils/color';
 import type {TButton} from 'components/ButtonSelector/types';
 import type {IOption} from 'components/controls/Select/types';
-import type {RootStore} from 'store/types';
 
 export enum Device {
   IOS = 'IOS',
@@ -216,7 +215,7 @@ const StatusBar = styled.div<any>`
   background-color: #fff;
   ${(props) => props.styled}
   ${(props) => {
-    const appBar = useSelector((state: RootStore) => state.layout.topAppBar);
+    const appBar = useAppSelector((state) => state.layout.topAppBar);
     return `background-color: ${appBar?.settingsUI.backgroundColor};
             & > svg > g {
               fill: ${setContrast(hexToRgb(normalizeHEX(appBar?.settingsUI.backgroundColor) || '#FFFFFF'))};

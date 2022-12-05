@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useAppDispatch, useAppSelector} from 'store';
 import styled from 'styled-components';
 import {ReactComponent as MinusIcon} from 'assets/zoom_minus.svg';
 import {ReactComponent as PlusIcon} from 'assets/zoom_plus.svg';
@@ -24,8 +24,8 @@ const FlexContainer = styled(FlexContainerBase)`
 
 const ZoomSelect = () => {
   const [options, setOptions] = useState(defaultOptions);
-  const zoom = useSelector((state: any) => state.editorMode.zoom);
-  const dispatch = useDispatch();
+  const {zoom} = useAppSelector((state) => state.editorMode);
+  const dispatch = useAppDispatch();
 
   const handleChangeZoom = (e: Zoom) => {
     dispatch(setZoom(e));

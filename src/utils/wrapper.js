@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import {getSizeStyle} from 'views/utils/styles/size';
-import {useSelector} from 'react-redux';
+import {useAppSelector} from 'store';
 import {blockStateUnsafeSelector} from 'store/selectors';
 
 const Wrapper = styled.div`
@@ -24,11 +24,11 @@ const Wrapper = styled.div`
   align-items: inherit;
   display: flex;
   flex-direction: column;
-  ${(props) => props.scroll && 'flex: 1 1 auto; overflow-y: auto'};
+  ${(props) => props.scroll && 'flex: 0 1 auto; overflow-y: auto'};
 `;
 
 const WrapperContainer = (props) => {
-  const blockState = useSelector(blockStateUnsafeSelector);
+  const blockState = useAppSelector(blockStateUnsafeSelector);
   return (<Wrapper {...props} blockState={blockState}/>);
 };
 

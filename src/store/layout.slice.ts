@@ -33,6 +33,11 @@ type SetLayoutPayloadAction = PayloadAction<{
   layout: Layout[];
 }>;
 
+type TPayloadBlock = {
+  blockId: string;
+  uuid: string;
+};
+
 const initialState: Layout = {
   blocks: [],
   selectedBlockUuid: '',
@@ -192,7 +197,7 @@ export const addTopAppBarButton = createAction('layout/addTopAppBarButton', () =
   };
 });
 
-export const pushBlockInside = createAction('layout/pushBlockInside', (payload) => {
+export const pushBlockInside = createAction('layout/pushBlockInside', (payload: TPayloadBlock, rootBlock?: boolean) => {
   if (['bottombar', 'topappbar'].includes(payload.blockId)) {
     return {
       payload: null,
@@ -203,6 +208,17 @@ export const pushBlockInside = createAction('layout/pushBlockInside', (payload) 
   const {layout: state} = store;
   const blockState = blockStateUnsafeSelector(store);
   const newBlock = createBlockByConfig(payload.blockId);
+
+  if(rootBlock) {
+    return {
+      payload: [
+        ...state.blocks,
+        {
+          ...newBlock,
+        },
+      ],
+    };
+  }
 
   // add block in target node
   const target = clone(findInTree(state.blocks, payload.uuid));
@@ -254,22 +270,6 @@ export const pushBlockInside = createAction('layout/pushBlockInside', (payload) 
 
   return {
     payload: nextBlocks,
-  };
-});
-
-export const pushBlock = createAction('layout/pushBlock', (blockId) => {
-  const store = rootStore.getState();
-  const {layout: state} = store;
-
-  // const blockConfig = blocks[blockId](blockStateUnsafeSelector(store));
-  const newBlock = createBlockByConfig(blockId);
-  return {
-    payload: [
-      ...state.blocks,
-      {
-        ...newBlock,
-      },
-    ],
   };
 });
 
@@ -586,9 +586,6 @@ const layoutSlice = createSlice({
       state.blocks = action.payload.blocks;
       state.bottomBar = action.payload.bottomBar;
       state.topAppBar = action.payload.topAppBar;
-    });
-    builder.addCase(pushBlock, (state, action) => {
-      state.blocks = action.payload;
     });
     builder.addCase(removeProperty, (state, action) => {
       state.blocks = action.payload;

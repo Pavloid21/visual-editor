@@ -7,10 +7,9 @@ import {BounceLoader} from 'react-spinners';
 import models from 'views/blocks';
 import {ReactComponent as Copy} from 'assets/copy.svg';
 import {ReactComponent as Trash} from 'assets/trash.svg';
-import {useSelector} from 'react-redux';
-import {RootStore} from 'store/types';
 import {css} from '@emotion/react';
 import {Container} from 'components/Screens/Screens.styled';
+import {useAppSelector} from 'store';
 
 type ScreensProps = {
   loading: boolean,
@@ -34,20 +33,25 @@ const Screens: React.FC<ScreensProps> = ({
   handleCloneBlock,
   handleDeleteScreen,
   handleDeleteBlock}) => {
-  const {selectedBlockUuid: selectedBlock, selectedScreen} = useSelector((state: RootStore) => state.layout);
+  const {selectedBlockUuid: selectedBlock, selectedScreen} = useAppSelector((state) => state.layout);
+  const screenNameFilter = useAppSelector((state) => state.leftBarMenu.screenNameFilter);
   const override = css`
     display: inline-block;
     margin: 0 auto;
     border-color: red;
     margin-right: 6px;
   `;
+
+  const regex = new RegExp(screenNameFilter, 'gi');
+  const treeDataFilter = treeData.filter((item: any) => item.screen.match(regex));
+
   return (
     <Container>
       {loading ? (
         <Loader loading={true} size={40} />
       ) : (
         <SortableTree
-          treeData={treeData}
+          treeData={treeDataFilter}
           onChange={(treeData) => setTree(treeData)}
           theme={FileExplorerTheme}
           generateNodeProps={(extendedNode) => {

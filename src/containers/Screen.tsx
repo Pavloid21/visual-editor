@@ -1,16 +1,15 @@
 import React from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import {useAppDispatch, useAppSelector} from 'store';
 import {ColorPicker, Input, Label, Select} from 'components/controls';
 import actionTypes from 'constants/actionTypes';
 import styled from 'styled-components';
 import Editor from 'react-simple-code-editor';
-import fullScreenIcon from '../assets/full-screen.svg';
+import fullScreenIcon from 'assets/full-screen.svg';
 import {useModal, snippet} from 'utils';
 import Prism from 'prismjs';
 import {atomOneLight} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import {Modal} from 'components';
 import {editLogic} from 'store/output.slice';
-import type {RootStore} from 'store/types';
 
 const Container = styled.div`
   padding: 14px;
@@ -42,13 +41,12 @@ const EditorWrapper = styled.div<any>`
 `;
 
 const Screen: React.FC<any> = (props) => {
-  const {screen: screenName, navigationSettings, settingsUI} = useSelector((state: RootStore) => state.output);
-  const logic = useSelector((state: RootStore) => state.output.logic);
-  const selectedScreen = useSelector((state: RootStore) => state.layout.selectedScreen);
-  const layout = useSelector((state: RootStore) => state.layout);
+  const {screen: screenName, navigationSettings, settingsUI, logic} = useAppSelector((state) => state.output);
+  const {selectedScreen} = useAppSelector((state) => state.layout);
+  const {layout} = useAppSelector((state) => state);
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal();
-  const dispatch = useDispatch();
-  const screenOptions = useSelector((state: RootStore) => state.screenList);
+  const dispatch = useAppDispatch();
+  const screenOptions = useAppSelector((state) => state.screenList);
 
   const handleChange = React.useCallback((
     event: string | boolean,

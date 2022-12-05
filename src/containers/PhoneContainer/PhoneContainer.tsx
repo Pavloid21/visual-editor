@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useAppDispatch, useAppSelector} from 'store';
 import {
   DeviceKeys,
   mockByDeviceKey,
@@ -14,8 +14,6 @@ import {setZoom} from 'store/editor-mode.slice';
 
 import {BottomSheetContainer, Wrapper, AlignCenterButton} from './PhoneContainer.styled';
 
-import type {RootStore} from 'store/types';
-
 interface IPhoneContainer {
   children?: JSX.Element;
 }
@@ -23,11 +21,11 @@ interface IPhoneContainer {
 export const PhoneContainer = (props: IPhoneContainer) => {
   const [countHeightTopBlock, setCountHeightTopBlock] = useState<string>('30%');
 
-  const topAppBar = useSelector((state: RootStore) => state.layout.topAppBar);
-  const model: string = useSelector((state: RootStore) => state.editorMode.model);
-  const zoom: Zoom = useSelector((state: RootStore) => state.editorMode.zoom);
-  const {settingsUI} = useSelector((state: RootStore) => state.output);
-  const dispatch = useDispatch();
+  const topAppBar = useAppSelector((state) => state.layout.topAppBar);
+  const model: string = useAppSelector((state) => state.editorMode.model);
+  const zoom: Zoom = useAppSelector((state) => state.editorMode.zoom);
+  const {settingsUI} = useAppSelector((state) => state.output);
+  const dispatch = useAppDispatch();
   const zoomRef = useRef(null);
 
   const maxHeight = 100;

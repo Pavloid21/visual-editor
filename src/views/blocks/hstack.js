@@ -1,6 +1,5 @@
 import React from 'react';
 import {useDrop} from 'react-dnd';
-import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 import {sortableContainer} from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
@@ -12,7 +11,6 @@ import {ItemTypes} from 'constants/actionTypes';
 import {
   alignmentConfig,
   backgroundColor,
-  corners,
   distribution,
   scroll,
   borderColor,
@@ -21,14 +19,15 @@ import {
   padding,
   shadowConfigBuilder,
   getSizeConfig,
-  interactive
+  interactive,
+  shapeConfigBuilder
 } from 'views/configs';
 import hstack from 'assets/hstack.svg';
 import {pushBlockInside} from 'store/layout.slice';
 import {hexToRgb} from 'constants/utils';
 import {findParentInTree} from 'utils/blocks';
 import {blockStateSafeSelector} from 'store/selectors';
-import store from 'store';
+import store, {useAppDispatch, useAppSelector} from 'store';
 import {getDimensionStyles} from 'views/utils/styles/size';
 
 const HStack = styled.div`
@@ -58,14 +57,24 @@ const HStack = styled.div`
         return '0 auto auto auto';
     }
   }};
-  width: 100%;
+  min-width: 100%;
+  width: fit-content;
   height: 100%;
   background-color: ${(props) => props.backgroundColor || 'transparent'};
   display: flex;
   justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
   text-align: ${(props) => props.alignment};
   flex-direction: row;
-  align-items: center;
+  align-items: ${(props) => {
+    switch(props.alignment) {
+      case 'CENTER':
+        return 'center';
+      case 'TOP':
+        return 'start';
+      case 'BOTTOM':
+        return 'end';
+    }
+  }};
   ${(props) => getDimensionStyles(props)
     .padding()
     .borderRadius()
@@ -83,6 +92,11 @@ const HStack = styled.div`
         }, ${props.shadow?.opacity});`;
     }
   }}
+  ${(props) => {
+    if (props.shape?.type === 'ALLCORNERSROUND') {
+      return `border-radius: ${props.shape.radius}px;`;
+    }
+  }}
 `;
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, settingsUI, ...props}) => {
@@ -96,8 +110,8 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, 
 });
 
 const Component = ({settingsUI, uuid, listItems, ...props}) => {
-  const dispatch = useDispatch();
-  const layout = useSelector((state) => state.layout);
+  const dispatch = useAppDispatch();
+  const {layout} = useAppSelector((state) => state);
   const isRoot = !findParentInTree(layout.blocks, uuid);
   const [{canDrop, isOver, target}, drop] = useDrop(() => ({
     accept: ItemTypes.BOX,
@@ -163,7 +177,7 @@ const block = (state) => {
     previewImageUrl: hstack,
     category: 'Container',
     defaultInteractiveOptions: {
-      action: {url: '', target: '', fields: {}},
+      action: {url: '', fields: {}},
     },
     complex: [
       {label: 'Vertical', value: 'VSTACK'},
@@ -181,12 +195,6 @@ const block = (state) => {
         bottom: '100',
         left: '10',
         right: '10',
-      },
-      corners: {
-        topLeftRadius: 0,
-        topRightRadius: 0,
-        bottomLeftRadius: 0,
-        bottomRightRadius: 0,
       },
       shadow: {
         color: '#000000',
@@ -207,10 +215,13 @@ const block = (state) => {
       scroll,
       borderColor,
       borderWidth,
+      shape: shapeConfigBuilder()
+        .withAllCornersRound
+        .withRadius
+        .done(),
       size: getSizeConfig(blockState.deviceInfo.device),
       padding,
       shadow: shadowConfigBuilder().withRadius.done(),
-      corners,
     },
     interactive,
   });

@@ -45,6 +45,8 @@ export interface Blocks extends SimpleObject {
   webview: (state?: BlocksState) => Block;
   // screen: (state?: BlocksState) => Block;
   calendar_text_field: (state?: BlocksState) => Block;
+  progressbar: (state?: BlocksState) => Block;
+  checkbox: (state?: BlocksState) => Block;
 }
 
 export type SettingsUIType = Partial<{
@@ -61,12 +63,6 @@ export type SettingsUIType = Partial<{
   borderWidth: number;
   borderColor: string;
   spacing: string;
-  corners: {
-    topLeftRadius: number;
-    topRightRadius: number;
-    bottomRightRadius: number;
-    bottomLeftRadius: number;
-  };
   shadow: {
     color: string;
     opacity: number;
@@ -81,8 +77,20 @@ export type SettingsUIType = Partial<{
     height: number,
     widthInPercent: number,
     heightInPercent: number
-  },
-  fontSize: number
+  };
+  fontSize: number,
+  shape: {
+    type: string,
+    radius: string
+  };
+  label: string;
+  unfocusedLabelColor: string;
+  focusedLabelColor: string;
+  focusedIndicatorColor: string;
+  unfocusedIndicatorColor: string;
+  cursorColor: string;
+  regexp: string;
+  regexpTrigger: string
 }>;
 
 export type StyledComponentPropsType = SettingsUIType & {

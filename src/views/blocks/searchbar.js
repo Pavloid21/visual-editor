@@ -1,146 +1,111 @@
-import React from 'react';
-import {useDrop} from 'react-dnd';
 import styled from 'styled-components';
-import {arrayMoveImmutable} from 'array-move';
-import {sortableContainer} from 'react-sortable-hoc';
-import {useDispatch, useSelector} from 'react-redux';
 import searchbar from 'assets/searchbar.svg';
 import Wrapper from 'utils/wrapper';
-import {ItemTypes} from 'constants/actionTypes';
-import {observer} from 'utils/observer';
-import renderHandlebars from 'utils/renderHandlebars';
-import {onSortMove} from 'utils/hooks';
+import {hexToRgb} from 'constants/utils';
 import {
   backgroundColor,
+  borderColor,
+  borderWidth,
+  text, 
+  textColor, 
+  fontWeight, 
   fontSize,
-  getSizeConfig,
-  imageUrl,
-  placeholder,
+  padding, 
+  placeholder, 
   placeholderColor,
-  text,
-  textAlignment, textColor,
+  shadowConfigBuilder,
+  shapeConfigBuilder,
+  textAlignment,
+  getSizeConfig,
+  cursorColor,
+  interactive,
 } from 'views/configs';
-import {pushBlockInside} from 'store/layout.slice';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
 import {getDimensionStyles} from 'views/utils/styles/size';
 
 const SearchBar = styled.div`
-  display: flex;
-  flex-direction: column;
-  max-height: 100%;
   align-self: center;
-  & > input {
-    pointer-events: none;
-    &::placeholder {
-      color: ${(props) => props.placeholderColor || 'transparent'};
-      font-size: 12px;
-      font-weight: 400;
-    }
-
-    color: ${(props) => props.textColor};
-    background-color: ${(props) => props.backgroundColor || 'transparent'};
-    ${(props) => getDimensionStyles(props)
-      .width()
-      .height()
-      .apply()
-    }
-    text-align: ${(props) => props.textAllignment || 'left'};
+  color: ${(props) => props.textColor || 'transparent'};
+  background-color: ${(props) => props.backgroundColor || 'transparent'};
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--neo-gray);
+  text-align: ${(props) => props.textAlignment || 'left'};
+  ${(props) => getDimensionStyles(props)
+    .width()
+    .height()
+    .padding()
+    .apply()
   }
-
-  &::after {
-    content: '';
-    display: block;
-    ${(props) => getDimensionStyles(props)
-      .width()
-      .height()
-      .apply()
+  ${(props) => {
+    if (props.shadow) {
+      return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${
+              props.shadow?.radius
+      }px rgba(${hexToRgb(props.shadow?.color).r}, ${hexToRgb(props.shadow?.color).g}, ${
+              hexToRgb(props.shadow?.color).b
+      }, ${props.shadow?.opacity});`;
     }
-    position: absolute;
-    top: 0;
-    right: 0;
-    mask: url(${(props) => props.imageUrl}) no-repeat center;
-    background-position: center;
-    background-color: ${(props) => props.textColor || 'transparent'};
+  }}
+  ${(props) => {
+    if (props.shape?.type === 'ALLCORNERSROUND') {
+      return `border-radius: ${props.shape.radius}px;`;
+    }
+  }}
+  border-width: ${(props) => props.borderWidth || 0}px;
+  border-color: ${(props) => props.borderColor || 'transparent'};
+  & > span {
+    font-size: ${(props) => props.fontSize || 12}px;
+    font-weight: ${(props) => {
+      switch (props.fontWeight) {
+        case 'THIN':
+          return 100;
+        case 'ULTALIGHT':
+          return 200;
+        case 'LIGHT':
+          return 300;
+        case 'REGULAR':
+          return 400;
+        case 'MEDIUM':
+          return 500;
+        case 'SEMIBOLD':
+          return 600;
+        case 'BOLD':
+          return 700;
+        case 'BLACK':
+          return 800;
+        case 'HEAVY':
+          return 900;
+        default:
+          return 400;
+      }
+    }};
+  }
+  & > .placeholder {
+    color: ${(props) => props.placeholderColor || 'transparent'};
     font-size: 12px;
-    background-size: cover;
+    font-weight: 400;
   }
 `;
 
-const SortableContainer = sortableContainer(
-  ({drop, backgroundColor, listItems, text, placeholder, settingsUI, ...props}) => {
-    return (
-      <Wrapper id={props.id} {...settingsUI} {...props} style={{maxHeight: '100%'}}>
-        <SearchBar
-          {...props.settingsUI}
-          {...props}
-          ref={drop}
-          backgroundColor={backgroundColor}
-        >
-          <input type="text" className="form-control draggable" placeholder={placeholder} value={text} />
-          {listItems && renderHandlebars(listItems, 'document2').components}
-        </SearchBar>
-      </Wrapper>
-    );
-  }
-);
-
-const Component = ({settingsUI, uuid, listItems, ...props}) => {
-  const dispatch = useDispatch();
-  const layout = useSelector((state) => state.layout);
-  const [{canDrop, isOver, target}, drop] = useDrop(() => ({
-    accept: ItemTypes.BOX,
-    drop: (item) => {
-      if (target.isOver()) {
-        dispatch(pushBlockInside({
-          blockId: item.id,
-          uuid,
-        }));
-      }
-      return {
-        uuid,
-        target: target.targetId,
-      };
-    },
-    collect: (monitor) => ({
-      isOver: monitor.isOver({shallow: true}),
-      canDrop: monitor.canDrop(),
-      target: monitor,
-    }),
-  }));
-
-  const isActive = canDrop && isOver;
-  let backgroundColor = settingsUI.backgroundColor;
-  if (isActive) {
-    backgroundColor = '#f1f8ff';
-  }
-
-  const onSortEnd = ({oldIndex, newIndex, nodes}) => {
-    const newOrder = arrayMoveImmutable(nodes, oldIndex, newIndex).map((item) => item.node.getAttribute('id'));
-    observer.broadcast({
-      layout,
-      newOrder,
-      parentID: nodes[0].node.parentNode.getAttribute('id'),
-      event: 'sorted',
-    });
-  };
-
+const Component = ({settingsUI, ...props}) => {
   return (
-    <SortableContainer
-      drop={drop}
-      onSortEnd={onSortEnd}
-      listItems={listItems}
-      {...settingsUI}
-      {...props}
-      backgroundColor={backgroundColor}
-      distance={1}
-      shouldCancelStart={onSortMove}
-    />
+    <Wrapper id={props.id} {...settingsUI} {...props}>
+      <SearchBar
+        {...props}
+        {...settingsUI}
+        className="draggable"
+      >
+        {!settingsUI.text && settingsUI.placeholder && <span className="placeholder">{settingsUI.placeholder}</span>}
+        {settingsUI.text && <span>{settingsUI.text}</span>}
+      </SearchBar>
+    </Wrapper>
   );
 };
 
 const block = (state) => {
   const blockState = state || blockStateSafeSelector(store.getState());
+
 
   return ({
     Component,
@@ -148,30 +113,49 @@ const block = (state) => {
     title: 'Search',
     description: 'Search allows users to quickly find app content.',
     previewImageUrl: searchbar,
-    imgUrl: 'https://icons.getbootstrap.com/assets/icons/search.svg',
     category: 'Controls',
     defaultData: {
-      placeholder: 'Введите имя',
+      placeholder: 'Placeholder',
       placeholderColor: '#7F7F7F',
-      imageUrl: 'https://icons.getbootstrap.com/assets/icons/search.svg',
-      text: 'neo',
+      text: '',
       textColor: '#000000',
-      backgroundColor: '#FFFFFF',
+      fontSize: 16,
       size: {
+        width: 280,
         height: 48,
-        width: '',
+      },
+      shadow: {
+        color: '#000000',
+        opacity: 0,
+        offsetSize: {
+          width: 0,
+          height: 0,
+        },
+        radius: 0,
       },
     },
+    interactive: {
+      filterDataId: {type: 'string', name: 'Id data source for filter'},
+      queryKey: {type: 'string', name: 'Query key for filter'},
+    },
     config: {
+      padding,
       placeholder,
-      imageUrl,
       placeholderColor,
       text,
       textAlignment,
       textColor,
       backgroundColor,
+      borderColor,
+      borderWidth,
       fontSize,
       size: getSizeConfig(blockState.deviceInfo.device),
+      fontWeight,
+      shadow: shadowConfigBuilder()
+        .withRadius
+        .done(),
+      shape: shapeConfigBuilder().withAllCornersRound.withRadius.done(),
+      cursorColor,
     },
   });
 };

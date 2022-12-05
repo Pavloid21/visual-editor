@@ -32,7 +32,7 @@ export const Select = React.memo((props: ISelect) => {
         if (value.indexOf('screen') === 0) {
           return filteredMenu.find((option) => option.actionType === 'screen')?.actionType;
         }
-        if (value.indexOf(ActionTypes.action) === 0) {
+        if (value.indexOf(ActionTypes.actions) === 0) {
           return filteredMenu.find((option) => option.actionType === 'actions')?.actionType;
         }
         if (value.indexOf(ActionTypes.data) === 0) {
@@ -44,7 +44,7 @@ export const Select = React.memo((props: ISelect) => {
     [filteredMenu, props.async]
   );
 
-  const [selected_value, setSelectedValue] = useState(getCurrentTab(value));
+  const [selected_value, setSelectedValue] = useState(getCurrentTab(value?.toString()));
   const [optionsModel, setModel] = useState<any>({
     [menus[0].actionType]: [],
     [menus[1].actionType]: [],

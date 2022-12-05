@@ -2,12 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import switch_ic from 'assets/switch.svg';
 import Wrapper from 'utils/wrapper';
+import {Device} from 'containers/MobileSelect/consts';
 import {
-  backgroundColor,
   isActive,
-  thumbOnColor,
   interactive,
   padding,
+  checkedColor,
+  uncheckedColor,
 } from 'views/configs';
 import {getDimensionStyles} from '../utils/styles/size';
 
@@ -25,11 +26,19 @@ const Switch = styled.div`
     .apply()
   }
   & input:checked + span::before {
-    background-color: ${(props) => props.thumbOnColor || 'transparent'};
+    background-color: ${(props) => props.checkedColor || '#4ed164'};
+    opacity: ${(props) => (props.blockState.deviceInfo.device === Device.ANDROID ? '0.5' : '1')};
   }
   & input:checked + span::after {
-    background-color: ${(props) => props.thumbOnColor || 'transparent'};
     transform: translateX(16px);
+    ${(props) => {
+    if (props.blockState.deviceInfo.device === Device.ANDROID) {
+      return `background-color: ${(props) => props.checkedColor || '#4ed164'};`;
+    }
+    if (props.blockState.deviceInfo.device === Device.IOS) {
+      return `background-color: #ffffff;`;
+    }
+  }}
   }
   & input {
     pointer-events: none;
@@ -43,14 +52,14 @@ const Switch = styled.div`
     border-radius: 50%;
     width: 40px;
     height: 40px;
-    background-color: ${(props) => props.backgroundColor || 'transparent'};
+    background-color: ${(props) => props.uncheckedColor || '#d9dadc'};
     outline: none;
     opacity: 0;
     transform: scale(1);
     transition: opacity 0.3s 0.1s, transform 0.2s 0.1s;
     &:checked {
       right: -10px;
-      background-color: ${(props) => props.thumbOnColor || 'transparent'};
+      background-color: ${(props) => props.checkedColor || '#4ed164'};
     }
   }
   & span {
@@ -63,18 +72,18 @@ const Switch = styled.div`
       content: "";
       float: right;
       display: inline-block;
-      margin: 5px 0 5px 10px;
+      margin: ${(props) => (props.blockState.deviceInfo.device === Device.ANDROID ? '5px 0 0 0' : '0 0 0 0')};
       border-radius: 7px;
       width: 36px;
-      height: 14px;
+      height: ${(props) => (props.blockState.deviceInfo.device === Device.ANDROID ? '14px' : '20px')};
       vertical-align: top;
       transition: background-color 0.2s, opacity 0.2s;
-      background-color: ${(props) => props.backgroundColor || 'transparent'}
+      background-color: ${(props) => props.uncheckedColor || '#d9dadc'}
     }
     &::after {
       content: "";
       position: absolute;
-      top: 2px;
+      top: ${(props) => (props.blockState.deviceInfo.device === Device.ANDROID ? '2px' : '0px')};
       right: 16px;
       border-radius: 50%;
       width: 20px;
@@ -106,19 +115,59 @@ const block = () => ({
   previewImageUrl: switch_ic,
   category: 'Controls',
   defaultData: {
-    backgroundColor: '#FDB291',
-    thumbOnColor: '#FA6621',
   },
   config: {
-    backgroundColor,
-    thumbOnColor,
+    checkedColor,
+    uncheckedColor,
     isActive,
     padding,
   },
   defaultInteractiveOptions: {
     action: {url: '', fields: {}},
   },
-  interactive,
+  interactive: {
+    field: {type: 'string', name: 'Field name'},
+    action: {
+      url: {
+        type: 'select',
+        name: 'Action URL',
+        action_types: 'actions,other',
+      },
+      method: {
+        type: 'select',
+        name: 'Method',
+        options: [
+          {label: 'Get', value: 'get'},
+          {label: 'Post', value: 'post'},
+        ],
+      },
+      fields: {
+        type: 'object',
+        properties: {
+          key: {type: 'string', name: 'Key'},
+          value: {type: 'string', name: 'Value'},
+        },
+      },
+    },
+    confirmationDialog: {
+      title: {
+        type: 'string',
+        name: 'Title',
+      },
+      message: {
+        type: 'string',
+        name: 'Message',
+      },
+      confirmText: {
+        type: 'string',
+        name: 'Confirm text',
+      },
+      cancelledText: {
+        type: 'string',
+        name: 'Cancelled text',
+      },
+    },
+  },
 });
 
 export default block;

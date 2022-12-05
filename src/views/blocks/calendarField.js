@@ -1,27 +1,80 @@
+import styled from 'styled-components';
 import Wrapper from 'utils/wrapper';
 import passwordtextfield from 'assets/passwordtextfield.svg';
 import {
-  backgroundColor, fontSize,
+  backgroundColor, 
+  fontSize,
   placeholder,
-  placeholderColor, size,
+  placeholderColor, 
+  getSizeConfig,
   text,
-  textAlignment, textColor, systemCalendar
+  textAlignment, 
+  textColor, 
+  systemCalendar,
+  label,
+  unfocusedLabelColor,
+  focusedLabelColor,
+  focusedIndicatorColor,
+  unfocusedIndicatorColor,
+  helperTextColor,
+  errorTextColor,
+  errorIndicatorColor,
+  errorLabelColor,
+  cursorColor,
+  regexp,
+  regexpTrigger,
 } from 'views/configs';
-import {Container} from './passwordtextfield';
+import {blockStateSafeSelector} from 'store/selectors';
+import store from 'store';
+import {getDimensionStyles} from 'views/utils/styles/size';
 
+export const Container = styled.div`
+  display: flex;
+  align-self: center;
+  ${(props) => getDimensionStyles(props)
+    .width()
+    .apply()
+  }
+  & > input {
+    display: block;
+    pointer-events: none;
+    color: ${(props) => props.textColor || 'transparent'};
+    background-color: ${(props) => props.backgroundColor || 'transparent'};
+    box-sizing: border-box;
+    text-align: ${(props) => props.textAlignment || 'left'};
+    ${(props) => getDimensionStyles(props)
+      .height()
+      .fontSize()
+      .apply()
+    }
+    & ::placeholder {
+      color: ${(props) => props.placeholderColor || 'transparent'};
+      font-size: 12px;
+      font-weight: 400;
+    }
+  }
+`;
 
 const Component = ({settingsUI, ...props}) => {
   const {placeholder, text} = settingsUI;
+
   return (
     <Wrapper id={props.id} {...settingsUI} {...props}>
-      <Container className="draggable" {...props} {...settingsUI}>
+      <Container
+        className="draggable"
+        {...props}
+        {...settingsUI}
+      >
         <input {...props} type="text" className="form-control" placeholder={placeholder} value={text} />
       </Container>
     </Wrapper>
   );
 };
 
-const block = () => ({
+const block = (state) => {
+  const blockState = state || blockStateSafeSelector(store.getState());
+
+  return ({
   Component,
   name: 'CALENDAR_TEXT_FIELD',
   title: 'CALENDAR_TEXT_FIELD',
@@ -69,10 +122,6 @@ const block = () => ({
         top: 4,
         bottom: 4,
       },
-      shape: {
-        type: 'ALLCORNERSROUND',
-        radius: '4',
-      },
   },
   config: {
     placeholder,
@@ -82,12 +131,40 @@ const block = () => ({
     textColor,
     backgroundColor,
     fontSize,
-    size,
+    size: getSizeConfig(blockState.deviceInfo.device),
+    label,
+    unfocusedLabelColor,
+    focusedLabelColor,
+    focusedIndicatorColor,
+    unfocusedIndicatorColor,
+    helperTextColor,
+    errorTextColor,
+    errorIndicatorColor,
+    errorLabelColor,
+    cursorColor,
+    regexp,
+    regexpTrigger,
   },
   interactive: {
     field: {type: 'string', name: 'Field name'},
+      keyboardType: {
+        type: 'select',
+        name: 'Keyboard type',
+        options: [
+          {label: 'Password', value: 'PASSWORD'},
+          {label: 'Text', value: 'TEXT'},
+          {label: 'Ascii', value: 'ASCII'},
+          {label: 'Decimal', value: 'DECIMAL'},
+          {label: 'Email', value: 'EMAIL'},
+          {label: 'Number', value: 'NUMBER'},
+          {label: 'Number password', value: 'NUMBER_PASSWORD'},
+          {label: 'Phone', value: 'PHONE'},
+          {label: 'Uri', value: 'URI'},
+        ],
+      },
     systemCalendar
   },
 });
+};
 
 export default block;

@@ -1,89 +1,78 @@
 import React, {useEffect} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
-import {orderBy} from 'external/lodash';
-import {ReactComponent as CodeIcon} from 'assets/code.svg';
-import {ReactComponent as DataIcon} from 'assets/folder-upload.svg';
 import {ReactComponent as ActionDots} from 'assets/left-sidebar-menu/actionDots.svg';
 import {ReactComponent as ActionObject} from 'assets/left-sidebar-menu/actionObject.svg';
-import {getActionsList, getActionByName, getDataActionsList, getDataActionByName} from 'services/ApiService';
 import {ActionImage, Container} from './Actions.styled';
-import {setActions, setSelectAction} from 'store/actions.slice';
-import {ActionItem, ActionTypes, RootStore} from 'store/types';
+import {deleteAction, fetchActions, setActions, setSelectAction} from 'store/actions.slice';
+import {ActionItem, ActionTypes} from 'store/types';
+import {Option} from 'react-dropdown';
+import {DropdownIcon} from 'components/Actions/Actions.styled';
+import {ActionDropdownItem} from './components/ActionDropdownItem';
+import {ActionsDropdown} from './types';
+import {DROPDOWN_VALUES} from './constants';
+import {filteredSnippetsSelector} from 'store/selectors/left-bar-selector';
+import {ReactComponent as Copy} from 'assets/copy-item.svg';
+import {ReactComponent as Trash} from 'assets/trash-item.svg';
+import {useAppSelector, useAppDispatch} from 'store';
 
-const Actions: React.FC<unknown> = () => {
-  const dispatch = useDispatch();
-  const availableActions: ActionItem[] = useSelector((state: RootStore) =>
-    orderBy(
-      [
-        ...state.actions.actions.map((item) => ({...item, type: ActionTypes.action})),
-        ...state.actions.data.map((item) => ({...item, type: ActionTypes.data})),
-      ],
-      ActionTypes.action,
-      'asc'
-    )
+type ActionsProps = {
+  activeTabActions: ActionTypes
+};
+
+const getFilteredRenderActions = (data: ActionItem[], searchText: string) => {
+  const regex = new RegExp(searchText, 'gi');
+  return data.filter((item: ActionItem) => item.action.match(regex));
+};
+
+export const Actions: React.FC<ActionsProps> = ({activeTabActions}) => {
+  const dispatch = useAppDispatch();
+  const {actionNameFilter, filterAction} = useAppSelector((state) => state.leftBarMenu);
+
+  const renderActions: ActionItem[] = useAppSelector(
+    (store) => filteredSnippetsSelector(store, activeTabActions, filterAction)
   );
-  const selectedAction = useSelector((state: RootStore) => state.actions.selected);
-  const projectID = useSelector((state: RootStore) => state.project.id);
+
+  const renderActionsFilter = getFilteredRenderActions(renderActions, actionNameFilter);
+
+  const selectedAction = useAppSelector((state) => state.actions.selected);
+  const projectID = useAppSelector((state) => state.project.id);
   const project_id = projectID || location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
+
   useEffect(() => {
-    getActionsList(project_id)
-      .then((response) => response.data)
-      .then((actions: string[]) => {
-        const actionsArr = actions?.map(async (action) => {
-          try {
-            const response = await getActionByName(project_id, action);
-            const data = response.data;
-            return {action, object: data};
-          } catch (e) {
-            console.log('e :>> ', e);
-          }
-        });
-        Promise.allSettled(actionsArr)
-          .then((resolves) => {
-            const actions: any[] = [];
-            resolves.forEach((result) => {
-              if (result.status === 'fulfilled') {
-                actions.push({...result.value, selected: false});
-              }
-            });
-            dispatch(setActions({actions}));
-          })
-          .catch(console.log);
-      });
-    getDataActionsList(project_id)
-      .then((response) => response.data)
-      .then((actions: string[]) => {
-        const actionsArr = actions?.map(async (action) => {
-          try {
-            const response = await getDataActionByName(project_id, action);
-            const data = response.data;
-            return {action, object: data};
-          } catch (e) {
-            console.log('e :>> ', e);
-          }
-        });
-        Promise.allSettled(actionsArr)
-          .then((resolves) => {
-            const actions: any[] = [];
-            resolves.forEach((result) => {
-              if (result.status === 'fulfilled') {
-                actions.push({...result.value, selected: false});
-              }
-            });
-            dispatch(setActions({data: actions}));
-          })
-          .catch(console.log);
-      });
-  }, []);
+    dispatch(fetchActions(project_id));
+  }, [dispatch, project_id]);
 
   const handleSelectSnippet = (action: ActionItem | null) => {
     dispatch(setSelectAction(action));
   };
 
+  const handleDeleteAction = (action: ActionItem) => {
+    const newActions = renderActions.filter((item) => item.type === action.type && item.action !== action.action);
+    dispatch(deleteAction(action));
+    dispatch(setActions({[action.type]: newActions}));
+  };
+
+  const handleCopyAction = (action: ActionItem) => {
+    const availableActions = renderActions.filter(item => item.type === action.type);
+    const indexAction = availableActions.findIndex((item: ActionItem) => item.action === action.action && item.type === action.type);
+    const newActions = [...availableActions.slice(0, indexAction + 1), {...action, action: action.action + '_copy'}, ...availableActions.slice(indexAction + 1)];
+    dispatch(setActions({[action.type]: newActions}));
+  };
+
+  const handleChangeDropdown = async (arg: Option, action: ActionItem) => {
+    switch (arg.value) {
+      case DROPDOWN_VALUES.DELETE:
+        handleDeleteAction(action);
+        break;
+      case DROPDOWN_VALUES.COPY:
+        handleCopyAction(action);
+        break;
+    }
+  };
+
   return (
     <Container>
-      {availableActions &&
-        availableActions.map((action, index) => {
+      {renderActionsFilter &&
+        renderActionsFilter.map((action, index) => {
           return (
             <div
               className={
@@ -94,12 +83,22 @@ const Actions: React.FC<unknown> = () => {
               onClick={() => handleSelectSnippet(action)}
             >
               <div>
-                {action.type === ActionTypes.action ? <CodeIcon /> : <DataIcon />}
                 <span>{action.action}</span>
               </div>
               <ActionImage>
                 <ActionObject />
-                <ActionDots />
+                <div>
+                  <DropdownIcon
+                    options={[
+                      {label: <ActionDropdownItem label={ActionsDropdown.Copy} icon={<Copy />} />, value: 'Copy'},
+                      {label: <ActionDropdownItem label={ActionsDropdown.Delete} icon={<Trash />} />, value: 'Delete'}
+                    ]}
+                    placeholder=" "
+                    arrowClosed={<ActionDots />}
+                    arrowOpen={<ActionDots />}
+                    onChange={(arg: Option) => handleChangeDropdown(arg, action)}
+                  />
+                </div>
               </ActionImage>
             </div>
           );
@@ -107,5 +106,3 @@ const Actions: React.FC<unknown> = () => {
     </Container>
   );
 };
-
-export default Actions;

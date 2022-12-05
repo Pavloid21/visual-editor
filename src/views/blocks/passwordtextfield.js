@@ -10,6 +10,18 @@ import {
   text,
   textAlignment,
   textColor,
+  label,
+  unfocusedLabelColor,
+  focusedLabelColor,
+  focusedIndicatorColor,
+  unfocusedIndicatorColor,
+  helperTextColor,
+  errorTextColor,
+  errorIndicatorColor,
+  errorLabelColor,
+  cursorColor,
+  regexp,
+  regexpTrigger,
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
@@ -104,10 +116,6 @@ const block = (state) => {
         top: 4,
         bottom: 4,
       },
-      shape: {
-        type: 'ALLCORNERSROUND',
-        radius: '4',
-      },
     },
     config: {
       placeholder,
@@ -118,9 +126,47 @@ const block = (state) => {
       backgroundColor,
       fontSize,
       size: getSizeConfig(blockState.deviceInfo.device),
+      label,
+      unfocusedLabelColor,
+      focusedLabelColor,
+      focusedIndicatorColor,
+      unfocusedIndicatorColor,
+      helperTextColor,
+      errorTextColor,
+      errorIndicatorColor,
+      errorLabelColor,
+      cursorColor,
+      regexp,
+      regexpTrigger,
     },
     interactive: {
       field: {type: 'string', name: 'Field name'},
+      keyboardType: {
+        type: 'select',
+        name: 'Keyboard type',
+        options: [
+          {label: 'Password', value: 'PASSWORD'},
+          {label: 'Text', value: 'TEXT'},
+          {label: 'Ascii', value: 'ASCII'},
+          {label: 'Decimal', value: 'DECIMAL'},
+          {label: 'Email', value: 'EMAIL'},
+          {label: 'Number', value: 'NUMBER'},
+          {label: 'Number password', value: 'NUMBER_PASSWORD'},
+          {label: 'Phone', value: 'PHONE'},
+          {label: 'Uri', value: 'URI'},
+        ],
+      },
+      maxLength: {type: 'number', name: 'Max length'},
+      errorText: {type: 'string', name: 'Error text'},
+      helperText: {type: 'string', name: 'Helper text'},
+      isShowCharCounter: {
+        type: 'select', 
+        name: 'Show char counter',
+        options: [
+          {label: 'True', value: true},
+          {label: 'False', value: false},
+        ],
+      },
     },
   });
 };

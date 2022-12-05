@@ -113,6 +113,15 @@ const block = (state) => {
         left: 0,
         right: 0,
       },
+      shadow: {
+        color: '#000000',
+        opacity: 0.3,
+        offsetSize: {
+          width: 0,
+          height: 0,
+        },
+        radius: 8,
+      },
     },
     config: {
       text,
