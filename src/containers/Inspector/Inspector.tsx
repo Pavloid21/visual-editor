@@ -21,7 +21,6 @@ import {
   changeKeyActionField,
   changeActionURL,
   addFilterQueryItem,
-  removeFilterQueryItem,
 } from 'store/layout.slice';
 import type {TInspector} from './types';
 import {blockStateUnsafeSelector} from 'store/selectors';
