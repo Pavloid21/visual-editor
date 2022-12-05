@@ -20,6 +20,7 @@ import {
   removeActionField,
   changeKeyActionField,
   changeActionURL,
+  addFilterQueryItem,
 } from 'store/layout.slice';
 import type {TInspector} from './types';
 import {blockStateUnsafeSelector} from 'store/selectors';
@@ -370,6 +371,40 @@ const Inspector: React.FC<TInspector> = ({display}) => {
                 {parseConfig(interactive.rightButtons[0], blockUuid, block.interactive.rightButtons[index], [
                   index,
                   'rightButtons',
+                ])}
+              </div>
+            );
+          })}
+        </div>
+      )}
+      {block.interactive?.query && (
+        <div>
+          <Division>
+            <span>Query items</span>
+            <Plus
+              className="icon"
+              onClick={() => {
+                dispatch(addFilterQueryItem());
+              }}
+            />
+          </Division>
+          {block.interactive.query.map((element: any, index: number) => {
+            return (
+              <div key={`queryItem_${element.uuid}`}>
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                  <Division>
+                    <span>Item {index + 1}</span>
+                    <Trash
+                      className="icon"
+                      onClick={() => {
+                        dispatch(removeFilterQueryItem(index));
+                      }}
+                    />
+                  </Division>
+                </div>
+                {parseConfig(interactive.query[0], blockUuid, block.interactive.query[index], [
+                  index,
+                  'query',
                 ])}
               </div>
             );
