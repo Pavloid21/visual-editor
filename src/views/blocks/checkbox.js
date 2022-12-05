@@ -9,6 +9,7 @@ import {
   iconUnselectedColor,
   padding,
   isActive,
+  filter,
 } from 'views/configs';
 import {setCorrectImageUrl, getFieldValue, checkExtension} from 'utils';
 import {CustomSvg} from 'components/CustomSvg';
@@ -55,6 +56,11 @@ const block = () => ({
     },
     defaultInteractiveOptions: {
       action: {url: '', fields: {}},
+      filter: {
+        id: '', 
+        applyHere: null,
+        query: [{}],
+      },
     },
     interactive: {
       field: {type: 'string', name: 'Field name'},
@@ -97,6 +103,11 @@ const block = () => ({
           type: 'string',
           name: 'Cancelled text',
         },
+      },
+      filter: {
+        id: filter.id,
+        applyHere: filter.applyHere,
+        query: filter.query,
       },
     },
     config: {
