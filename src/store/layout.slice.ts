@@ -454,17 +454,6 @@ const layoutSlice = createSlice({
         state.topAppBar = {...newTopAppBar};
       }
     },
-    removeFilterQueryItem: (state, action: PayloadAction<number>) => {
-      if(action.payload === 0) {
-        state.list.interactive = {};
-      } else {
-        const newBarItems = [...state.interactive.query];
-        newBarItems.splice(action.payload, 1);
-        const newTopAppBar = {...state};
-        newTopAppBar.interactive.query = newBarItems;
-        state = {...newTopAppBar};
-      }
-    },
     removeTopAppBarItem: (state, action: PayloadAction<number>) => {
       const newAppBarItems = [...state.topAppBar.settingsUI.topAppBarItems];
       newAppBarItems.splice(action.payload, 1);
@@ -664,6 +653,5 @@ export const {
   selectScreen,
   cloneBlock,
   setSnippet,
-  removeFilterQueryItem,
 } = layoutSlice.actions;
 export default layoutSlice.reducer;
