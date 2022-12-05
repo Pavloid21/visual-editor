@@ -398,7 +398,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
                     <Trash
                       className="icon"
                       onClick={() => {
-                        dispatch(removeFilterQueryItem(index));
+                        dispatch(removeTopAppBarButton(index));
                       }}
                     />
                   </Division>
