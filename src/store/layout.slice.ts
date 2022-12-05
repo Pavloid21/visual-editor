@@ -197,6 +197,20 @@ export const addTopAppBarButton = createAction('layout/addTopAppBarButton', () =
   };
 });
 
+export const addFilterQueryItem = createAction('layout/addFilterQueryItem', () => {
+  const store = rootStore.getState();
+  const {layout: state} = store;
+  const extendedItems = [...get(state, 'interactive.query', [])];
+  extendedItems.push({
+    ...blocks.defaultData.query[0],
+    uuid: uuidv4(),
+  });
+
+  return {
+    payload: extendedItems,
+  };
+});
+
 export const pushBlockInside = createAction('layout/pushBlockInside', (payload: TPayloadBlock, rootBlock?: boolean) => {
   if (['bottombar', 'topappbar'].includes(payload.blockId)) {
     return {
@@ -440,6 +454,17 @@ const layoutSlice = createSlice({
         state.topAppBar = {...newTopAppBar};
       }
     },
+    removeFilterQueryItem: (state, action: PayloadAction<number>) => {
+      if(action.payload === 0) {
+        state.interactive = {};
+      } else {
+        const newBarItems = [...state.interactive.query];
+        newBarItems.splice(action.payload, 1);
+        const newTopAppBar = {...state};
+        newTopAppBar.interactive.query = newBarItems;
+        state = {...newTopAppBar};
+      }
+    },
     removeTopAppBarItem: (state, action: PayloadAction<number>) => {
       const newAppBarItems = [...state.topAppBar.settingsUI.topAppBarItems];
       newAppBarItems.splice(action.payload, 1);
@@ -565,6 +590,9 @@ const layoutSlice = createSlice({
     builder.addCase(addTopAppBarButton, (state, action) => {
       state.topAppBar.interactive.rightButtons = action.payload;
     });
+    builder.addCase(addFilterQueryItem, (state, action) => {
+      state.blocks = action.payload;
+    });
     builder.addCase(addActionField, (state, action) => {
       state.blocks = action.payload;
     });
@@ -636,5 +664,6 @@ export const {
   selectScreen,
   cloneBlock,
   setSnippet,
+  removeFilterQueryItem,
 } = layoutSlice.actions;
 export default layoutSlice.reducer;
