@@ -6,7 +6,7 @@ import type {ModalProps} from 'containers/Project/types';
 import {MainInfoContent} from './components/MainInfoContent';
 import {EDIT_MODAL_TABS} from 'containers/Project/constants';
 import {BusinessContent} from './components/BusinessContent';
-import {getDataActionByName} from 'services/ApiService';
+import {getActionByName} from 'services/ApiService';
 import {parseRuturnStatement} from 'utils/parse';
 import {clearBusinessSetting, setBusinessSetting} from 'store/business-setting.slice';
 import {useDispatch, useSelector} from 'react-redux';
@@ -35,7 +35,7 @@ const Modal: React.FC<ModalProps> = (props) => {
   useEffect(() => {
     const businessSettings = async () => {
       if (project_id !== 'project') {
-        const data = await getDataActionByName(project_id, 'appSettings');
+        const data = await getActionByName(project_id, 'appSettings', 'data');
         const settings = parseRuturnStatement(data);
         dispatch(setBusinessSetting(settings));
       }
