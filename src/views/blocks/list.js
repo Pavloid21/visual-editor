@@ -137,7 +137,14 @@ const block = (state) => {
       dataSource: '',
       startPage: 0,
       pageSize: 5,
-      filter: {id: '', applyHere: '', query: {}},
+      filter: {
+        id: '', 
+        applyHere: '', 
+        query: [{
+          key: '',
+          params: [],
+        }]
+      },
     },
     defaultData: {
       backgroundColor: '',
