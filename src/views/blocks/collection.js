@@ -158,6 +158,7 @@ const block = (state) => {
       filter: {
         id: '', 
         query: [{}],
+      },
     },
     defaultData: {
       backgroundColor: '',
