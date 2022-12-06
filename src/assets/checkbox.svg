@@ -1,5 +1,8 @@
-<svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="14.5" y="37.5" width="15" height="31" rx="7.5" transform="rotate(-90 14.5 37.5)" stroke="#333333"/>
-<circle cx="22" cy="30" r="6" fill="#8C8C8C"/>
-<rect x="0.5" y="0.5" width="59" height="59" rx="3.5" stroke="#B3B3B3"/>
+<svg width="60.00000000000001" height="60.00000000000001" xmlns="http://www.w3.org/2000/svg" fill="none">
+
+ <g>
+  <title>Layer 1</title>
+  <path id="svg_3" d="m0.5,4c0,-1.90183 1.59817,-3.5 3.5,-3.5l52,0c1.90183,0 3.5,1.59817 3.5,3.5l0,52c0,1.90183 -1.59817,3.5 -3.5,3.5l-52,0c-1.90183,0 -3.5,-1.59817 -3.5,-3.5l0,-52z" opacity="undefined" stroke="#B3B3B3"/>
+  <rect transform="rotate(-90 29.5 29.5)" id="svg_1" stroke="#333333" height="15" width="15" y="22" x="22"/>
+ </g>
 </svg>
