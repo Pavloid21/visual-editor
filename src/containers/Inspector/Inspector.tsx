@@ -191,9 +191,9 @@ const Inspector: React.FC<TInspector> = ({display}) => {
                 async={config[el].action_types}
                 label={config[el].name}
                 onChange={(value) => {
-                  parentKey !== 'action'
-                  ? handleChangeBlockData(blockUuid, el, value, parentKey)
-                  : handleChangeActionURL(blockUuid, value);
+                  el === 'url'
+                  ? handleChangeActionURL(blockUuid, value)
+                  : handleChangeBlockData(blockUuid, el, value, parentKey);
                 }}
                 options={config[el].options || []}
                 value={endpoint ? endpoint[el] : null}
