@@ -27,7 +27,7 @@ const BottomBar = styled.div`
     gap: 4px;
     & label {
       margin-bottom: 0;
-      color: ${(props) => props.textSelectedColor || 'transparent'};
+      color: ${(props) => props.textUnselectedColor || 'transparent'};
     }
     & .item_icon {
       background-color: ${(props) => props.iconUnselectedColor};
@@ -66,9 +66,9 @@ const Component = ({settingsUI, ...props}) => {
           return (
             <div key={`bottomBarItem_${index}`}>
               <CustomSvg
-                fill={settingsUI.iconTintColor}
+                fill={settingsUI.iconUnselectedColor}
                 src={item.iconUrl}
-                sizeSvg={`${16 * 1.25}px`}
+                sizeSvg={`${19.2 * 1.25}px`}
                />
               <label>{item.screenName}</label>
             </div>
