@@ -1,8 +1,11 @@
-import React from 'react';
+// import React from 'react';
 import styled from 'styled-components';
 import bottombar from '../../assets/bottombar.svg';
 import Wrapper from '../../utils/wrapper';
 import {iconSelectedColor, iconUnselectedColor, textSelectedColor, textUnselectedColor, showUnselectedText} from '../configs';
+import {CustomSvg} from 'components/CustomSvg';
+import {setCorrectImageUrl} from 'utils';
+import {useAppSelector} from 'store';
 
 const BottomBar = styled.div`
   background-color: ${(props) => props.backgroundColor || 'transparent'};
@@ -38,18 +41,20 @@ const BottomBar = styled.div`
   }
 `;
 
-const Icon = styled.div`
-  width: 16px;
-  height: 16px;
-  mask: url(${(props) => props.iconUrl}) no-repeat center;
-`;
-
 const Component = ({settingsUI, ...props}) => {
+  const {id} = useAppSelector(state => state.project);
+
   const {navigationItems} = settingsUI;
-  const buttons = [];
-  for (let index in navigationItems) {
-    buttons.push(navigationItems[index]);
-  }
+
+  const bottomBarItems = navigationItems.map((item) => {
+    const getCorrectUrl = setCorrectImageUrl(item.iconUrl, id);
+
+    return {
+      ...item,
+      iconUrl: getCorrectUrl,
+    };
+  });
+
   return (
     <Wrapper
       id={props.id}
@@ -57,10 +62,14 @@ const Component = ({settingsUI, ...props}) => {
       sizeModifier="FULLWIDTH"
     >
       <BottomBar {...settingsUI} {...props}>
-        {buttons.map((item, index) => {
+        {bottomBarItems.map((item, index) => {
           return (
             <div key={`bottomBarItem_${index}`}>
-              <Icon className="item_icon" iconUrl={item.iconUrl}></Icon>
+              <CustomSvg
+                fill={settingsUI.iconTintColor}
+                src={item.iconUrl}
+                sizeSvg={`${16 * 1.25}px`}
+               />
               <label>{item.screenName}</label>
             </div>
           );

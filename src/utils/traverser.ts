@@ -96,7 +96,7 @@ export const buildLayout = ({screen, object}: Record<string, any>) => {
       uuid: v4(),
       settingsUI: {
         ...object.bottomBar.settingsUI,
-        navigationItems: object.bottomBar.navigationItems,
+        navigationItems: object.bottomBar.settingsUI.navigationItems,
       },
     };
   }
