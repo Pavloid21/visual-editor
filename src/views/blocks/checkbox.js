@@ -77,6 +77,8 @@ const block = () => ({
           confirmText: interactive.action.confirmationDialog.confirmText,
           cancelledText: interactive.action.confirmationDialog.cancelledText,
         },
+        id: interactive.action.id,
+        delegateActionId: interactive.action.delegateActionId,
       },
       filter: {
         id: filter.id,
