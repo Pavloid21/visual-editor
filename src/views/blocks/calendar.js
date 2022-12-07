@@ -111,9 +111,9 @@ const Component = ({settingsUI, ...props}) => {
         {...settingsUI}
         className="draggable"
       >
-		<div class="calendar">
-  <div class="month"><a href="#" class="nav"><i class="fas fa-angle-left"></i></a><div>January <span class="year">2019</span></div><a href="#" class="nav"><i class="fas fa-angle-right"></i></a></div>
-  <div class="days">
+		<div className="calendar">
+  <div className="month"><a href="#" className="nav"><i className="fas fa-angle-left"></i></a><div>January <span className="year">2019</span></div><a href="#" className="nav"><i className="fas fa-angle-right"></i></a></div>
+  <div className="days">
     <span>Mon</span>
     <span>Tue</span>
     <span>Wed</span>
@@ -122,7 +122,7 @@ const Component = ({settingsUI, ...props}) => {
     <span>Sat</span>
     <span>Sun</span>
   </div>
-  <div class="dates">
+  <div className="dates">
       <button>
         <time>1</time>
       </button>
@@ -174,7 +174,7 @@ const Component = ({settingsUI, ...props}) => {
       <button>
         <time>17</time>
       </button>
-      <button class="today">
+      <button className="today">
         <time>18</time>
       </button>
       <button>
