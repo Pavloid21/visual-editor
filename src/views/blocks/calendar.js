@@ -4,6 +4,9 @@ import {hexToRgb} from 'constants/utils';
 import calendar from 'assets/calendar.svg';
 import {
   backgroundColor,
+  getSizeConfig,
+  dataSourceSettings,
+  filter,
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
@@ -11,7 +14,7 @@ import {getDimensionStyles} from 'views/utils/styles/size';
 
 const Calendar = styled.div`
   & body{
-  background:#fad390;
+  background: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
   font-family: sans-serif;
   display:flex;
   justify-content:center;
@@ -22,10 +25,9 @@ const Calendar = styled.div`
   display:inline-grid;
   justify-content:center;
   align-items:center;
-  background:#fff;
+  background: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
   padding:20px;
   border-radius:5px;
-  box-shadow:0px 40px 30px -20px rgba(0,0,0,0.3);
   
   & .month{
     display:flex;
@@ -233,10 +235,49 @@ const block = (state) => {
     description: '///',
     previewImageUrl: calendar,
     category: 'Controls',
-    defaultInteractiveOptions: {},
-    complex: [],
-    defaultData: {},
-    config: {},
+    defaultInteractiveOptions: {
+      dataSource: '',
+      filter: {
+        id: '',
+        applyHere: true, 
+        query: [{}],
+      },
+    },
+    defaultData: {
+      backgroundColor: '',
+    },
+    interactive: {
+      dataSource: dataSourceSettings.dataSource,
+      filtrationBySelectionDateSource: {
+        filterDataId: {type: 'string', name: 'Id data source for filter'},
+        dateFromQueryKey: {type: 'string', name: 'Date from query key'},
+        dateToQueryKey: {type: 'string', name: 'Date to query key'},
+      },
+      filter: {
+        id: filter.id,
+        applyHere: filter.applyHere,
+        query: {
+          key: filter.query.key,
+        },
+      },
+    },
+    config: {
+      backgroundColor,
+      selectionColor: {type: 'color', name: 'Selection color'},
+      borderSelectionColor: {type: 'color', name: 'Border selection color'},
+      titleSelectionColor: {type: 'color', name: 'Title selection color'},
+      todayColor: {type: 'color', name: 'Today color'},
+      headerColor: {type: 'color', name: 'Title header color'},
+      counterSelectedColor: {type: 'color', name: 'Counter selected color'},
+      counterUnselectedColor: {type: 'color', name: 'Counter unselected color'},
+      cornerRadius: {type: 'number', name: 'Corner radius'},
+      allowMultipleSelection: {
+        type: 'select', name: 'Allow Multiple Selection', options: [
+          {label: 'True', value: true},
+          {label: 'False', value: false}
+        ]
+      },
+    },
   });
 };
 
