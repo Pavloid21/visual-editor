@@ -133,51 +133,27 @@ const block = () => ({
   interactive: {
     field: {type: 'string', name: 'Field name'},
     action: {
-      url: {
-        type: 'select',
-        name: 'Action URL',
-        action_types: 'actions,other',
-      },
-      method: {
-        type: 'select',
-        name: 'Method',
-        options: [
-          {label: 'Get', value: 'get'},
-          {label: 'Post', value: 'post'},
-        ],
-      },
-      fields: {
-        type: 'object',
-        properties: {
-          key: {type: 'string', name: 'Key'},
-          value: {type: 'string', name: 'Value'},
+        url: {
+          type: 'select',
+          name: 'Action URL',
+          action_types: 'actions,other',
         },
+        method: interactive.action.method,
+        fields: interactive.action.fields,
+        confirmationDialog: {
+          title: interactive.action.confirmationDialog.title,
+          message: interactive.action.confirmationDialog.message,
+          confirmText: interactive.action.confirmationDialog.confirmText,
+          cancelledText: interactive.action.confirmationDialog.cancelledText,
+        },
+        id: interactive.action.id,
+        delegateActionId: interactive.action.delegateActionId,
       },
-    },
-    confirmationDialog: {
-      title: {
-        type: 'string',
-        name: 'Title',
-      },
-      message: {
-        type: 'string',
-        name: 'Message',
-      },
-      confirmText: {
-        type: 'string',
-        name: 'Confirm text',
-      },
-      cancelledText: {
-        type: 'string',
-        name: 'Cancelled text',
-      },
-    },
-    filter: {
+      filter: {
         id: filter.id,
         applyHere: filter.applyHere,
         query: filter.query,
       },
-
   },
 });
 
