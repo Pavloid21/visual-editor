@@ -10,6 +10,7 @@ import {
   padding,
   isActive,
   filter,
+  interactive,
 } from 'views/configs';
 import {setCorrectImageUrl, getFieldValue, checkExtension} from 'utils';
 import {CustomSvg} from 'components/CustomSvg';
