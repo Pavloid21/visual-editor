@@ -1,28 +1,24 @@
 import styled from 'styled-components';
 import Wrapper from 'utils/wrapper';
-import {hexToRgb} from 'constants/utils';
 import calendar from 'assets/calendar.svg';
 import {
   backgroundColor,
-  getSizeConfig,
   dataSourceSettings,
   filter,
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
-import {getDimensionStyles} from 'views/utils/styles/size';
 
 const Calendar = styled.div`
   & body{
   background: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
   font-family: sans-serif;
-  display:flex;
   justify-content:center;
   align-items:center;
-  height:100vh;
+  height:100%;
+  width:100%;
 }
 & .calendar{
-  display:inline-grid;
   justify-content:center;
   align-items:center;
   background: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
