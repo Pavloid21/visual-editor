@@ -21,7 +21,6 @@ const Calendar = styled.div`
   justify-content:center;
   align-items:center;
   background: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
-  padding:20px;
   border-radius:5px;
   
   & .month{
