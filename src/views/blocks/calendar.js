@@ -101,8 +101,7 @@ const Calendar = styled.div`
 
       ${(props) => {
         if (props.allowMultipleSelection === true) {
-          return `
-            &.selectStart{
+          return `&.selectStart{
               border-radius: ${(props) => props.cornerRadius * 100 +'% 0% 0% ' + props.cornerRadius * 100 +'%'|| '0% 0% 0% 0%'};
               border-color: ${(props) => (props.borderSelectionColor?.indexOf('#') >= 0 ? props.borderSelectionColor : 'transparent')};
               background: ${(props) => (props.selectionColor?.indexOf('#') >= 0 ? props.selectionColor : 'transparent')};
@@ -119,9 +118,13 @@ const Calendar = styled.div`
               border-radius: ${(props) => '0% ' + props.cornerRadius * 100 +'% ' + props.cornerRadius * 100 +'% 0%'|| '0% 0% 0% 0%'};
               border-color: ${(props) => (props.borderSelectionColor?.indexOf('#') >= 0 ? props.borderSelectionColor : 'transparent')};
               background: ${(props) => (props.selectionColor?.indexOf('#') >= 0 ? props.selectionColor : 'transparent')};
-            }
-          `;
-        }
+            }`;
+        } else {
+            return `&.selectStart{
+              border-color: ${(props) => (props.borderSelectionColor?.indexOf('#') >= 0 ? props.borderSelectionColor : 'transparent')};
+              background: ${(props) => (props.selectionColor?.indexOf('#') >= 0 ? props.selectionColor : 'transparent')};
+              }`;
+          }
       }}
       
       &:first-child{
