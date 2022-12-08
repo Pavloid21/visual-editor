@@ -56,7 +56,6 @@ const Calendar = styled.div`
     align-items:center;
     grid-template-columns: repeat(7, 1fr);
     color: ${(props) => (props.titleSelectionColor?.indexOf('#') >= 0 ? props.titleSelectionColor : 'transparent')};
-    margin-bottom:15px;
     
     & span{
       width:50px;
@@ -91,6 +90,25 @@ const Calendar = styled.div`
       &.today{
         background: ${(props) => (props.todayColor?.indexOf('#') >= 0 ? props.todayColor : 'transparent')};
       }
+
+      &.select-start{
+        background: ${(props) => (props.selectionColor?.indexOf('#') >= 0 ? props.selectionColor : 'transparent')};
+        border-color: ${(props) => (props.borderSelectionColor?.indexOf('#') >= 0 ? props.borderSelectionColor : 'transparent')};
+        border-radius: ${(props) => props.cornerRadius * 100 +'% 0% 0% ' + props.cornerRadius * 100 +'%'|| '0% 0% 0% 0%'};
+      }
+
+      &.select-interval{
+        background: ${(props) => (props.selectionColor?.indexOf('#') >= 0 ? props.selectionColor : 'transparent')};
+        border-color: ${(props) => (props.borderSelectionColor?.indexOf('#') >= 0 ? props.borderSelectionColor : 'transparent')};
+        border-radius: 0% 0% 0% 0%;
+        opacity: 50%;
+      }
+
+      &.select-end{
+        background: ${(props) => (props.selectionColor?.indexOf('#') >= 0 ? props.selectionColor : 'transparent')};
+        border-color: ${(props) => (props.borderSelectionColor?.indexOf('#') >= 0 ? props.borderSelectionColor : 'transparent')};
+        border-radius: ${(props) => '0% ' + props.cornerRadius * 100 +'% ' + props.cornerRadius * 100 +'% 0%'|| '0% 0% 0% 0%'};
+      }
       
       &:first-child{
         grid-column:3;
@@ -110,7 +128,7 @@ const Component = ({settingsUI, ...props}) => {
         className="draggable"
       >
 		<div className="calendar">
-  <div className="month"><a href="#" className="nav"><i className="fas fa-angle-left"></i></a><div className="month">January <span className="year">2019</span></div><a href="#" className="nav"><i className="fas fa-angle-right"></i></a></div>
+  <div className="month"><a href="#" className="nav"><i className="fas fa-angle-left"></i></a><div className="month">March <span className="year">2022</span></div><a href="#" className="nav"><i className="fas fa-angle-right"></i></a></div>
   <div className="days">
     <span>Mon</span>
     <span>Tue</span>
@@ -154,16 +172,16 @@ const Component = ({settingsUI, ...props}) => {
       <button>
         <time>11</time>
       </button>
-      <button>
+      <button className="select-start">
         <time>12</time>
       </button>
-      <button>
+      <button className="select-interval">
         <time>13</time>
       </button>
-      <button>
+      <button className="select-interval">
         <time>14</time>
       </button>
-      <button>
+      <button className="select-end">
         <time>15</time>
       </button>
       <button>
