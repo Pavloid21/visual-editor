@@ -54,7 +54,7 @@ const Calendar = styled.div`
     display: grid;
     justify-content:center;
     align-items:center;
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: repeat(7, 1fr);
     color: ${(props) => (props.titleSelectionColor?.indexOf('#') >= 0 ? props.titleSelectionColor : 'transparent')};
     font-weight:600;
     margin-bottom:15px;
