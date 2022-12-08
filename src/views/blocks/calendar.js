@@ -64,6 +64,7 @@ const Calendar = styled.div`
       align-self:center;
       text-align:center;
       font-size:15px;
+      font-weight:400;
     }
   }
   
@@ -77,14 +78,14 @@ const Calendar = styled.div`
       border:0;
       font-family: sans-serif;
       font-size:12px;
+      font-weight:400;
       justify-self:center;
       align-self:center;
       width:57px;
       height:57px;
-      border-radius:50px;
+      border-radius: ${(props) => props.cornerRadius * 10 +'%' || '0%'};
       margin:2px;
       transition-duration:.2s;
-      background: ${(props) => (props.titleSelectionColor?.indexOf('#') >= 0 ? props.titleSelectionColor : 'transparent')};
       
       &.today{
         background: ${(props) => (props.todayColor?.indexOf('#') >= 0 ? props.todayColor : 'transparent')};
