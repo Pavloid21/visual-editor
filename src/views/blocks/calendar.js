@@ -15,7 +15,6 @@ const Calendar = styled.div`
   font-family: sans-serif;
   justify-content:center;
   align-items:center;
-  height:100%;
 }
 & .calendar{
   justify-content:center;
@@ -27,12 +26,13 @@ const Calendar = styled.div`
     display:flex;
     justify-content:space-between;
     align-items:center;
-    font-size:40px;
+    font-size:30px;
     font-weight:600;
     color: ${(props) => (props.headerColor?.indexOf('#') >= 0 ? props.headerColor : 'transparent')};
     
     & .year{
       margin-left:10px;
+      font-size:30px;
     }
     
     & .nav{
@@ -55,7 +55,7 @@ const Calendar = styled.div`
     justify-content:center;
     align-items:center;
     grid-template-columns: repeat(7, 1fr);
-    color: ${(props) => (props.titleSelectionColor?.indexOf('#') >= 0 ? props.titleSelectionColor : 'transparent')};
+    color: #999;
     font-weight:600;
     margin-bottom:15px;
     
@@ -69,7 +69,7 @@ const Calendar = styled.div`
   
   & .dates{
     display:grid;
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: repeat(7, 1fr);
     
     & button{
       cursor:pointer;
@@ -80,11 +80,12 @@ const Calendar = styled.div`
       font-size:16px;
       justify-self:center;
       align-self:center;
-      width:50px;
-      height:50px;
+      width:57px;
+      height:57px;
       border-radius:50px;
       margin:2px;
       transition-duration:.2s;
+      color: ${(props) => (props.titleSelectionColor?.indexOf('#') >= 0 ? props.titleSelectionColor : 'transparent')};
       
       &.today{
         color: ${(props) => (props.todayColor?.indexOf('#') >= 0 ? props.todayColor : 'transparent')};
@@ -108,7 +109,7 @@ const Component = ({settingsUI, ...props}) => {
         className="draggable"
       >
 		<div className="calendar">
-  <div className="month"><a href="#" className="nav"><i className="fas fa-angle-left"></i></a><div>January <span className="year">2019</span></div><a href="#" className="nav"><i className="fas fa-angle-right"></i></a></div>
+  <div className="month"><a href="#" className="nav"><i className="fas fa-angle-left"></i></a><div className="month">January <span className="year">2019</span></div><a href="#" className="nav"><i className="fas fa-angle-right"></i></a></div>
   <div className="days">
     <span>Mon</span>
     <span>Tue</span>
@@ -226,7 +227,7 @@ const block = (state) => {
     Component,
     name: 'CALENDAR',
     title: 'Calendar',
-    description: '///',
+    description: 'Сalendar provides users with the ability to view the calendar as well as select a date or date period.',
     previewImageUrl: calendar,
     category: 'Controls',
     defaultInteractiveOptions: {
