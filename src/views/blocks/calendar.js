@@ -83,9 +83,10 @@ const Calendar = styled.div`
       align-self:center;
       width:57px;
       height:57px;
-      border-radius: ${(props) => props.cornerRadius * 10 +'%' || '0%'};
+      border-radius: ${(props) => props.cornerRadius * 100 +'%' || '0%'};
       margin:2px;
       transition-duration:.2s;
+      background:transparent;
       
       &.today{
         background: ${(props) => (props.todayColor?.indexOf('#') >= 0 ? props.todayColor : 'transparent')};
