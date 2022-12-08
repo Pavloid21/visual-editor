@@ -1,9 +1,16 @@
-<svg width="59.99999999999999" height="59.99999999999999" xmlns="http://www.w3.org/2000/svg" fill="none">
-
+<svg width="60.00000000000001" height="60.00000000000001" xmlns="http://www.w3.org/2000/svg" fill="none">
  <g>
   <title>Layer 1</title>
-  <path id="svg_3" d="m0.72148,4c0,-1.90183 1.59817,-3.5 3.5,-3.5l52,0c1.90183,0 3.5,1.59817 3.5,3.5l0,52c0,1.90183 -1.59817,3.5 -3.5,3.5l-52,0c-1.90183,0 -3.5,-1.59817 -3.5,-3.5l0,-52z" opacity="undefined" stroke="#B3B3B3"/>
-  <rect rx="64" stroke="#919191" id="svg_1" height="29" width="29" y="15" x="16"/>
-  <circle id="svg_2" fill="#ffffff" r="7" cy="18.11062" cx="23.27234"/>
+  <path stroke="#B3B3B3" opacity="undefined" d="m0.59597,4.16556c0,-1.90183 1.59817,-3.5 3.5,-3.5l52,0c1.90183,0 3.5,1.59817 3.5,3.5l0,52c0,1.90183 -1.59817,3.5 -3.5,3.5l-52,0c-1.90183,0 -3.5,-1.59817 -3.5,-3.5l0,-52z" id="svg_3"/>
+  <rect transform="rotate(-90 15 15.4106)" fill="#e5e5e5" x="10" y="10.41061" width="10" height="10" stroke="#e5e5e5" id="svg_1"/>
+  <rect transform="rotate(-90 30.7677 15.3839)" fill="#e5e5e5" x="25.76775" y="10.38388" width="10" height="10" stroke="#e5e5e5" id="svg_2"/>
+  <rect transform="rotate(-90 47.2119 15.3315)" fill="#e5e5e5" x="42.21189" y="10.33148" width="10" height="10" stroke="#e5e5e5" id="svg_4"/>
+  <rect transform="rotate(-90 14.8407 44.7332)" fill="#e5e5e5" x="9.84073" y="39.733" width="10" height="10" stroke="#e5e5e5" id="svg_5"/>
+  <rect transform="rotate(-90 30.7677 44.7819)" fill="#e5e5e5" x="25.76775" y="39.78178" width="10" height="10" stroke="#e5e5e5" id="svg_6"/>
+  <rect transform="rotate(-90 47.2119 44.8354)" fill="#e5e5e5" x="42.21189" y="39.83532" width="10" height="10" stroke="#e5e5e5" id="svg_7"/>
+  <rect transform="rotate(-90 14.8407 30.1458)" fill="#e5e5e5" x="9.84073" y="25.14569" width="10" height="10" stroke="#e5e5e5" id="svg_8"/>
+  <rect transform="rotate(-90 30.7677 30.163)" fill="#e5e5e5" x="25.76775" y="25.16312" width="10" height="10" stroke="#e5e5e5" id="svg_9"/>
+  <rect transform="rotate(-90 47.2119 30.1106)" fill="#e5e5e5" x="42.21189" y="25.11073" width="10" height="10" stroke="#e5e5e5" id="svg_10"/>
  </g>
+
 </svg>
