@@ -26,13 +26,13 @@ const Calendar = styled.div`
     display:flex;
     justify-content:space-between;
     align-items:center;
-    font-size:30px;
-    font-weight:600;
+    font-size:33px;
+    font-weight:400;
     color: ${(props) => (props.headerColor?.indexOf('#') >= 0 ? props.headerColor : 'transparent')};
     
     & .year{
       margin-left:10px;
-      font-size:30px;
+      font-size:33px;
     }
     
     & .nav{
@@ -55,8 +55,7 @@ const Calendar = styled.div`
     justify-content:center;
     align-items:center;
     grid-template-columns: repeat(7, 1fr);
-    color: #999;
-    font-weight:600;
+    color: ${(props) => (props.titleSelectionColor?.indexOf('#') >= 0 ? props.titleSelectionColor : 'transparent')};
     margin-bottom:15px;
     
     & span{
@@ -64,6 +63,7 @@ const Calendar = styled.div`
       justify-self:center;
       align-self:center;
       text-align:center;
+      font-size:15px;
     }
   }
   
@@ -75,9 +75,8 @@ const Calendar = styled.div`
       cursor:pointer;
       outline:0;
       border:0;
-      background:transparent;
       font-family: sans-serif;
-      font-size:16px;
+      font-size:12px;
       justify-self:center;
       align-self:center;
       width:57px;
@@ -85,10 +84,10 @@ const Calendar = styled.div`
       border-radius:50px;
       margin:2px;
       transition-duration:.2s;
-      color: ${(props) => (props.titleSelectionColor?.indexOf('#') >= 0 ? props.titleSelectionColor : 'transparent')};
+      background: ${(props) => (props.titleSelectionColor?.indexOf('#') >= 0 ? props.titleSelectionColor : 'transparent')};
       
       &.today{
-        color: ${(props) => (props.todayColor?.indexOf('#') >= 0 ? props.todayColor : 'transparent')};
+        background: ${(props) => (props.todayColor?.indexOf('#') >= 0 ? props.todayColor : 'transparent')};
       }
       
       &:first-child{
