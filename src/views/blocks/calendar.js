@@ -102,23 +102,23 @@ const Calendar = styled.div`
       ${(props) => {
         if (props.allowMultipleSelection === true) {
           return `
-            &.select-start{
-              background: ${(props) => (props.selectionColor?.indexOf('#') >= 0 ? props.selectionColor : 'transparent')};
-              border-color: ${(props) => (props.borderSelectionColor?.indexOf('#') >= 0 ? props.borderSelectionColor : 'transparent')};
+            &.selectStart{
               border-radius: ${(props) => props.cornerRadius * 100 +'% 0% 0% ' + props.cornerRadius * 100 +'%'|| '0% 0% 0% 0%'};
+              border-color: ${(props) => (props.borderSelectionColor?.indexOf('#') >= 0 ? props.borderSelectionColor : 'transparent')};
+              background: ${(props) => (props.selectionColor?.indexOf('#') >= 0 ? props.selectionColor : 'transparent')};
             }
 
-            &.select-interval{
-              background: ${(props) => (props.selectionColor?.indexOf('#') >= 0 ? props.selectionColor : 'transparent')};
-              border-color: ${(props) => (props.borderSelectionColor?.indexOf('#') >= 0 ? props.borderSelectionColor : 'transparent')};
+            &.selectInterval{
               border-radius: 0% 0% 0% 0%;
+              border-color: ${(props) => (props.borderSelectionColor?.indexOf('#') >= 0 ? props.borderSelectionColor : 'transparent')};
+              background: ${(props) => (props.selectionColor?.indexOf('#') >= 0 ? props.selectionColor : 'transparent')};
               opacity: 50%;
             }
 
-            &.select-end{
-              background: ${(props) => (props.selectionColor?.indexOf('#') >= 0 ? props.selectionColor : 'transparent')};
-              border-color: ${(props) => (props.borderSelectionColor?.indexOf('#') >= 0 ? props.borderSelectionColor : 'transparent')};
+            &.selectEnd{
               border-radius: ${(props) => '0% ' + props.cornerRadius * 100 +'% ' + props.cornerRadius * 100 +'% 0%'|| '0% 0% 0% 0%'};
+              border-color: ${(props) => (props.borderSelectionColor?.indexOf('#') >= 0 ? props.borderSelectionColor : 'transparent')};
+              background: ${(props) => (props.selectionColor?.indexOf('#') >= 0 ? props.selectionColor : 'transparent')};
             }
           `;
         }
@@ -186,16 +186,16 @@ const Component = ({settingsUI, ...props}) => {
       <button>
         <time>11</time>
       </button>
-      <button className="select-start">
+      <button className="selectStart">
         <time>12</time>
       </button>
-      <button className="select-interval">
+      <button className="selectInterval">
         <time>13</time>
       </button>
-      <button className="select-interval">
+      <button className="selectInterval">
         <time>14</time>
       </button>
-      <button className="select-end">
+      <button className="selectEnd">
         <time>15</time>
       </button>
       <button>
