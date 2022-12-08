@@ -32,6 +32,7 @@ const Calendar = styled.div`
     font-size:20px;
     margin-bottom:20px;
     font-weight:300;
+    color: ${(props) => (props.headerColor?.indexOf('#') >= 0 ? props.headerColor : 'transparent')};
     
     & .year{
       margin-left:10px;
@@ -57,7 +58,7 @@ const Calendar = styled.div`
     justify-content:center;
     align-items:center;
     grid-template-columns: repeat(7, 1fr);
-    color:#999;
+    color: ${(props) => (props.titleSelectionColor?.indexOf('#') >= 0 ? props.titleSelectionColor : 'transparent')};
     font-weight:600;
     margin-bottom:15px;
     
@@ -90,6 +91,7 @@ const Calendar = styled.div`
       
       &.today{
         box-shadow:inset 0px 0px 0px 2px #0a3d62;
+        color: ${(props) => (props.todayColor?.indexOf('#') >= 0 ? props.todayColor : 'transparent')};
       }
       
       &:first-child{
