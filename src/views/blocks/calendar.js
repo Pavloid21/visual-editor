@@ -16,7 +16,6 @@ const Calendar = styled.div`
   justify-content:center;
   align-items:center;
   height:100%;
-  width:100%;
 }
 & .calendar{
   justify-content:center;
@@ -29,9 +28,8 @@ const Calendar = styled.div`
     display:flex;
     justify-content:space-between;
     align-items:center;
-    font-size:20px;
-    margin-bottom:20px;
-    font-weight:300;
+    font-size:40px;
+    font-weight:600;
     color: ${(props) => (props.headerColor?.indexOf('#') >= 0 ? props.headerColor : 'transparent')};
     
     & .year{
@@ -57,7 +55,7 @@ const Calendar = styled.div`
     display: grid;
     justify-content:center;
     align-items:center;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(8, 1fr);
     color: ${(props) => (props.titleSelectionColor?.indexOf('#') >= 0 ? props.titleSelectionColor : 'transparent')};
     font-weight:600;
     margin-bottom:15px;
@@ -72,7 +70,7 @@ const Calendar = styled.div`
   
   & .dates{
     display:grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(8, 1fr);
     
     & button{
       cursor:pointer;
@@ -90,7 +88,6 @@ const Calendar = styled.div`
       transition-duration:.2s;
       
       &.today{
-        box-shadow:inset 0px 0px 0px 2px #0a3d62;
         color: ${(props) => (props.todayColor?.indexOf('#') >= 0 ? props.todayColor : 'transparent')};
       }
       
