@@ -5,8 +5,10 @@ import {
   backgroundColor,
   dataSourceSettings,
   filter,
+  getSizeConfig,
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
+import {getDimensionStyles} from 'views/utils/styles/size';
 import store from 'store';
 
 const Calendar = styled.div`
@@ -15,6 +17,13 @@ const Calendar = styled.div`
   font-family: sans-serif;
   justify-content:center;
   align-items:center;
+  ${(props) => getDimensionStyles(props)
+    .width()
+    .height()
+    .padding()
+    .fontSize()
+    .apply()
+  }
 }
 & .calendar{
   justify-content:center;
@@ -83,7 +92,6 @@ const Calendar = styled.div`
       width:57px;
       height:57px;
       border-radius: ${(props) => props.cornerRadius * 100 +'%' || '0%'};
-      margin:2px;
       transition-duration:.2s;
       background:transparent;
       
@@ -91,24 +99,30 @@ const Calendar = styled.div`
         background: ${(props) => (props.todayColor?.indexOf('#') >= 0 ? props.todayColor : 'transparent')};
       }
 
-      &.select-start{
-        background: ${(props) => (props.selectionColor?.indexOf('#') >= 0 ? props.selectionColor : 'transparent')};
-        border-color: ${(props) => (props.borderSelectionColor?.indexOf('#') >= 0 ? props.borderSelectionColor : 'transparent')};
-        border-radius: ${(props) => props.cornerRadius * 100 +'% 0% 0% ' + props.cornerRadius * 100 +'%'|| '0% 0% 0% 0%'};
-      }
+      ${(props) => {
+        if (props.allowMultipleSelection === true) {
+          return `
+            &.select-start{
+              background: ${(props) => (props.selectionColor?.indexOf('#') >= 0 ? props.selectionColor : 'transparent')};
+              border-color: ${(props) => (props.borderSelectionColor?.indexOf('#') >= 0 ? props.borderSelectionColor : 'transparent')};
+              border-radius: ${(props) => props.cornerRadius * 100 +'% 0% 0% ' + props.cornerRadius * 100 +'%'|| '0% 0% 0% 0%'};
+            }
 
-      &.select-interval{
-        background: ${(props) => (props.selectionColor?.indexOf('#') >= 0 ? props.selectionColor : 'transparent')};
-        border-color: ${(props) => (props.borderSelectionColor?.indexOf('#') >= 0 ? props.borderSelectionColor : 'transparent')};
-        border-radius: 0% 0% 0% 0%;
-        opacity: 50%;
-      }
+            &.select-interval{
+              background: ${(props) => (props.selectionColor?.indexOf('#') >= 0 ? props.selectionColor : 'transparent')};
+              border-color: ${(props) => (props.borderSelectionColor?.indexOf('#') >= 0 ? props.borderSelectionColor : 'transparent')};
+              border-radius: 0% 0% 0% 0%;
+              opacity: 50%;
+            }
 
-      &.select-end{
-        background: ${(props) => (props.selectionColor?.indexOf('#') >= 0 ? props.selectionColor : 'transparent')};
-        border-color: ${(props) => (props.borderSelectionColor?.indexOf('#') >= 0 ? props.borderSelectionColor : 'transparent')};
-        border-radius: ${(props) => '0% ' + props.cornerRadius * 100 +'% ' + props.cornerRadius * 100 +'% 0%'|| '0% 0% 0% 0%'};
-      }
+            &.select-end{
+              background: ${(props) => (props.selectionColor?.indexOf('#') >= 0 ? props.selectionColor : 'transparent')};
+              border-color: ${(props) => (props.borderSelectionColor?.indexOf('#') >= 0 ? props.borderSelectionColor : 'transparent')};
+              border-radius: ${(props) => '0% ' + props.cornerRadius * 100 +'% ' + props.cornerRadius * 100 +'% 0%'|| '0% 0% 0% 0%'};
+            }
+          `;
+        }
+      }}
       
       &:first-child{
         grid-column:3;
@@ -291,6 +305,7 @@ const block = (state) => {
           {label: 'False', value: false}
         ]
       },
+      size: getSizeConfig(blockState.deviceInfo.device),
     },
   });
 };
