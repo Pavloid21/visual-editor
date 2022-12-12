@@ -50,7 +50,7 @@ export const FileInput = React.forwardRef(
           </div>
           <input {...props} type="file" value="" onChange={onFileDrop} ref={ref} />
         </div>
-        {fileList.length ? (
+        {fileList.length && !props.fileUploaded ? (
           <div className="drop-file-preview">
             <p className="drop-file-preview__title">Ready to upload</p>
             {fileList.map((item, index) => (

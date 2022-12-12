@@ -11,10 +11,19 @@ export const Container = styled.div`
   border: 1px solid #E6E6E6;
   border-radius: 4px;
   margin: 7px;
-  & > div {
-    margin: 10px 0 0 0;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 16px;
+  position: relative;
+  & img {
+    max-width: 118px;
+    max-height: 118px;
+  }
+  &:hover .deleteImage {
+    display: block;
+    cursor: pointer;
+  }
+  & .deleteImage {
+    position: absolute;
+    bottom: 1px;
+    right: 1px;
+    display: none;
   }
 `;

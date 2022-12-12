@@ -138,7 +138,7 @@ const Modal: React.FC<ModalProps> = (props) => {
           />
         </form>
         <Actions>
-          <Button onClick={handleSubmit(handleSave)}>{isEdit ? 'Save' : 'Create'}</Button>
+          <Button onClick={handleSubmit(handleSave)}>{isEdit ? 'Save1' : 'Create1'}</Button>
           <Button className="secondary" onClick={() => setItemModalOpen(false)}>
             Cancel
           </Button>

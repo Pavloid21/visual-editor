@@ -3,6 +3,7 @@ import {Zoom} from 'containers/ZoomSelect/types';
 import store from './index';
 
 import type {ThunkDispatch} from '@reduxjs/toolkit';
+import {IconTabType} from '../components/Images/types';
 
 export type EditScreenNamePayloadAction = Action<string> & {
   screen: string;
@@ -157,7 +158,8 @@ export type EditorMode = {
 export type LeftBarMenu = {
   activeTab: string,
   activeImageTab: string,
-  iconNameFilter: string
+  iconNameFilter: string,
+  imageNameFilter: string,
   filterAction: ActionTypes,
   screenNameFilter: string,
   actionNameFilter: string,
@@ -169,12 +171,23 @@ export type TScreenListOption = {
   value: string;
 }
 
+export type TImageListOption = {
+  name: string;
+  type: string;
+}
+
 export type TSettingsUI = {
   isBottomSheet: any;
     bottomSheetSettings: {
       heightInPercent: number;
       scrimColor: string;
     }
+}
+
+export type TImagesType = {
+  images: IconTabType[],
+  newFolder: string,
+  icons: IconTabType[]
 }
 
 export type RootStore = ReturnType<typeof store.getState>;
