@@ -26,6 +26,7 @@ import type {TInspector} from './types';
 import {blockStateUnsafeSelector} from 'store/selectors';
 import {getUnitOptionByDevice} from 'utils/units';
 import {get, isEmpty} from 'external/lodash';
+import {transformHexWeb} from 'utils/color';
 
 const Inspector: React.FC<TInspector> = ({display}) => {
   const dispatch = useAppDispatch();
@@ -115,8 +116,8 @@ const Inspector: React.FC<TInspector> = ({display}) => {
                 label={config[el].name}
                 $isWide
                 placeholder={config[el].name}
-                value={endpoint ? endpoint[el] : null}
-                onChange={(e: any) => handleChangeBlockData(blockUuid, el, e.target.value, parentKey)}
+                value={transformHexWeb(endpoint ? endpoint[el] : null)}
+                onChangeColor={(value: string) => handleChangeBlockData(blockUuid, el, value, parentKey)}
               />
             </div>
           );
@@ -260,7 +261,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
                     }}/>
                     <Trash
                       className="icon"
-                      onClick={(e) => {
+                      onClick={() => {
                         dispatch(removeActionField(block.uuid, key));
                       }}
                     />
@@ -328,7 +329,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
                   <span>Button {index + 1}</span>
                   <Trash
                     className="icon"
-                    onClick={(e) => {
+                    onClick={() => {
                       dispatch(removeBottomBarItem(index));
                     }}
                   />

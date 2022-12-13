@@ -12,3 +12,27 @@ export const normalizeHEX = (colorHEX: string) => {
   }
   return colorHEX;
 };
+
+export const transformHexAndroid = (str: string | null | undefined): string => {
+  if (!str) {
+    return '';
+  }
+  if (str.length === 9) {
+    const lastChar = str.substring(7, 9);
+    const body = str.substring(1, 7);
+    return `#${lastChar}${body}`;
+  }
+  return str;
+};
+
+export const transformHexWeb = (str: string | null | undefined): string => {
+  if (!str) {
+    return '';
+  }
+  if (str.length === 9) {
+    const firstChar = str.substring(1, 3);
+    const body = str.substring(3, 9);
+    return `#${body}${firstChar}`;
+  }
+  return str;
+};

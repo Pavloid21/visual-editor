@@ -29,6 +29,7 @@ import {findParentInTree} from 'utils/blocks';
 import {blockStateSafeSelector} from 'store/selectors';
 import store, {useAppDispatch, useAppSelector} from 'store';
 import {getDimensionStyles} from 'views/utils/styles/size';
+import {transformHexWeb} from '../../utils/color';
 
 const HStack = styled.div`
   align-self: ${(props) => {
@@ -60,7 +61,7 @@ const HStack = styled.div`
   min-width: 100%;
   width: fit-content;
   height: 100%;
-  background-color: ${(props) => props.backgroundColor || 'transparent'};
+  background-color: ${(props) => transformHexWeb(props.backgroundColor || 'transparent')};
   display: flex;
   justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
   text-align: ${(props) => props.alignment};
@@ -82,14 +83,15 @@ const HStack = styled.div`
   }
   border-width: ${(props) => props.borderWidth || 0}px;
   border-style: solid;
-  border-color: ${(props) => props.borderColor || 'transparent'};
+  border-color: ${(props) => transformHexWeb(props.borderColor || 'transparent')};
   gap: ${(props) => props.spacing || 0}px;
   position: relative;
   ${(props) => {
     if (props.shadow) {
+      const webColor = transformHexWeb(props.shadow?.color);
+      const RGB = hexToRgb(webColor);
       return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${props.shadow?.radius
-        }px rgba(${hexToRgb(props.shadow?.color).r}, ${hexToRgb(props.shadow?.color).g}, ${hexToRgb(props.shadow?.color).b
-        }, ${props.shadow?.opacity});`;
+        }px rgba(${RGB.r}, ${RGB.g}, ${RGB.b}, ${props.shadow?.opacity});`;
     }
   }}
   ${(props) => {

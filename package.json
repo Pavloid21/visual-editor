@@ -36,6 +36,7 @@
     "rc-textarea": "0.3.7",
     "react": "17.0.2",
     "react-beforeunload": "2.5.3",
+    "react-colorful": "5.6.1",
     "react-debounce-input": "3.2.5",
     "react-dnd": "14.0.4",
     "react-dnd-html5-backend": "15.1.3",

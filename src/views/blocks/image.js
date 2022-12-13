@@ -14,16 +14,18 @@ import store, {useAppSelector} from 'store';
 import {getDimensionStyles} from 'views/utils/styles/size';
 import {setCorrectImageUrl, getFieldValue, checkExtension} from 'utils';
 import {CustomSvg} from 'components/CustomSvg';
+import {transformHexWeb} from '../../utils/color';
 
 const Image = styled.img`
   display: flex;
   box-sizing: border-box;
-  background-color: ${(props) => props.backgroundColor || 'transparent'};
+  background-color: ${(props) => transformHexWeb(props.backgroundColor || 'transparent')};
   border-width: ${(props) => props.borderWidth  || 0}px;
-  border-color: ${(props) => props.borderColor || 'transparent'};
+  border-color: ${(props) => transformHexWeb(props.borderColor || 'transparent')};
   border-style: solid;
   box-shadow: ${(props) => {
-    const RGB = hexToRgb(props.shadow?.color);
+    const webColor = transformHexWeb(props.shadow?.color);
+    const RGB = hexToRgb(webColor);
     return `${props.shadow?.offsetSize?.width ?? props.shadow?.offsetSize?.widthInPercent}px ${props.shadow?.offsetSize?.height ?? props.shadow?.offsetSize?.heightInPercent
       }px 8px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b}, ${props.shadow?.opacity})`;
   }};

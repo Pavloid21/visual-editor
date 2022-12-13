@@ -12,6 +12,7 @@ import {
   filter,
 } from 'views/configs';
 import {getDimensionStyles} from '../utils/styles/size';
+import {transformHexWeb} from '../../utils/color';
 
 const Switch = styled.div`
   font-size: 16px;
@@ -27,14 +28,14 @@ const Switch = styled.div`
     .apply()
   }
   & input:checked + span::before {
-    background-color: ${(props) => props.checkedColor || '#4ed164'};
+    background-color: ${(props) => transformHexWeb(props.checkedColor || '#4ed164')};
     opacity: ${(props) => (props.blockState.deviceInfo.device === Device.ANDROID ? '0.5' : '1')};
   }
   & input:checked + span::after {
     transform: translateX(16px);
     ${(props) => {
     if (props.blockState.deviceInfo.device === Device.ANDROID) {
-      return `background-color: ${(props) => props.checkedColor || '#4ed164'};`;
+      return `background-color: ${(props) => transformHexWeb(props.checkedColor || '#4ed164')};`;
     }
     if (props.blockState.deviceInfo.device === Device.IOS) {
       return `background-color: #ffffff;`;
@@ -126,7 +127,7 @@ const block = () => ({
   defaultInteractiveOptions: {
     action: {url: '', fields: {}},
     filter: {
-      id: '', 
+      id: '',
       query: [{}],
     },
   },
