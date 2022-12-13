@@ -21,7 +21,7 @@ import {
 } from 'views/configs';
 import collection from 'assets/collection.svg';
 import {pushBlockInside} from 'store/layout.slice';
-import {blockStateSafeSelector} from 'store/selectors';
+import {blockStateSafeSelector, getListItemCollectionSelector} from 'store/selectors';
 import store, {useAppDispatch, useAppSelector} from 'store';
 import {getDimensionStyles} from 'views/utils/styles/size';
 
@@ -64,8 +64,16 @@ const Collection = styled.div`
 `;
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItem, settingsUI, ...props}) => {
-  const {pageSize} = props.interactive;
-  const listItems = listItem && range(pageSize).map(() => renderHandlebars([listItem], 'document2').components);
+  const getListItemCollection = useAppSelector(getListItemCollectionSelector);
+  const [collectionSize, setCollectionSize] = React.useState(0);
+
+  React.useEffect(() => {
+    if(getListItemCollection.length > 0) {
+      setCollectionSize(5);
+    }
+  }, [getListItemCollection]);
+
+  const listItems = listItem && range(collectionSize).map(() => renderHandlebars([listItem], 'document2').components);
 
   return (
     <Wrapper
@@ -154,7 +162,7 @@ const block = (state) => {
     defaultInteractiveOptions: {
       dataSource: '',
       startPage: 0,
-      pageSize: 5,
+      pageSize: 0,
       filter: {
         id: '', 
         query: [{}],

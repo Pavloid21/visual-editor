@@ -15,8 +15,9 @@ import {API} from 'services/ApiService';
 import 'react-notifications-component/dist/theme.css';
 import {setActiveTab, setPreviewMode} from 'store/config.slice';
 import {reOrderLayout, replaceElement, setSelectedBlock} from 'store/layout.slice';
-import type {BlockItem} from 'store/types';
 import {Templates} from './Templates/Templates';
+
+import type {IListItem} from 'store/types';
 
 const App: React.FC<unknown> = () => {
   const layout = useAppSelector((state) => state.layout);
@@ -67,9 +68,9 @@ const App: React.FC<unknown> = () => {
     dispatch(setPreviewMode(mode));
   };
 
-  const handleReorderLayout = (newOrder: string[], parentID: string, blocksLayout: BlockItem[]) => {
-    const order: BlockItem[] = [];
-    let parent: BlockItem | null = null;
+  const handleReorderLayout = (newOrder: string[], parentID: string, blocksLayout: IListItem[]) => {
+    const order: IListItem[] = [];
+    let parent: IListItem | null = null;
     for (const blockUuid of newOrder) {
       const block = findInTree(blocksLayout, blockUuid);
       parent = findInTree(blocksLayout, parentID);
@@ -87,7 +88,7 @@ const App: React.FC<unknown> = () => {
     } else {
       const uuids = blocksLayout.map((block) => block.uuid);
       const next = order.filter((item) => uuids.includes(item.uuid));
-      const uniqueBlockItemList: BlockItem[] = [...new Set(next.map((blockItem) => JSON.stringify(blockItem)))].map(
+      const uniqueBlockItemList: IListItem[] = [...new Set(next.map((blockItem) => JSON.stringify(blockItem)))].map(
         (blockItem) => JSON.parse(blockItem)
       );
       dispatch(reOrderLayout(uniqueBlockItemList));

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Wrapper from 'utils/wrapper';
 import invertColor from 'utils/invertColor';
 import topappbar from 'assets/topappbar.svg';
-import {backgroundColor} from 'views/configs';
+import {backgroundColor, interactive} from 'views/configs';
 import {Device} from 'containers/MobileSelect/consts';
 import {setCorrectImageUrl} from 'utils';
 import {CustomSvg} from 'components/CustomSvg';
@@ -97,6 +97,7 @@ const block = () => ({
         title: 'Button',
         iconUrl: '',
         tintColor: '#000000',
+        action: {url: ''}
       },
     ],
   },
@@ -114,6 +115,24 @@ const block = () => ({
         title: {type: 'string', name: 'Title'},
         iconUrl: {type: 'string', name: 'Image'},
         tintColor: {type: 'color', name: 'Tint color'},
+        action: {
+          clearAppSettings: interactive.action.clearAppSettings,
+          triggresBottomSheet: interactive.action.triggresBottomSheet,
+          closeBottomSheet: interactive.action.closeBottomSheet,
+          url: {
+            type: 'select',
+            name: 'Action URL',
+           action_types: 'screens,other',
+          },
+          confirmationDialog: {
+            title: interactive.action.confirmationDialog.title,
+            message: interactive.action.confirmationDialog.message,
+            confirmText: interactive.action.confirmationDialog.confirmText,
+            cancelledText: interactive.action.confirmationDialog.cancelledText,
+          },
+          id: interactive.action.id,
+          delegateActionId: interactive.action.delegateActionId,
+        },
       },
     ],
   },

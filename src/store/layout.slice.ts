@@ -4,11 +4,12 @@ import actionTypes from 'constants/actionTypes';
 import {getData} from 'utils/prepareModel';
 import blocks from 'views/blocks';
 import {clone, cloneDeep, get} from 'external/lodash';
-import type {BlockItem, EditScreenNamePayloadAction, Layout} from './types';
 import {blockStateUnsafeSelector} from './selectors';
 import rootStore from 'store';
 import {getKeyByUnit} from 'utils/units';
 import {cloneToList, createBlockByConfig, findInTree, getEnrichedBlockConfig, removeFromList} from 'utils/blocks';
+
+import type {EditScreenNamePayloadAction, Layout, IListItem, BlockItem} from './types';
 
 type ChangeUnitsPayloadAction = {
   blockUuid: string;
@@ -253,7 +254,8 @@ export const pushBlockInside = createAction('layout/pushBlockInside', (payload: 
   }
 
   // create next blocks model
-  const replaceTargetBlock = (blocks: BlockItem[]): BlockItem[] =>
+  const replaceTargetBlock = (blocks: IListItem[]): IListItem[] =>
+
     blocks.map((block) => {
       if (target && block.uuid === payload.uuid) {
         return target;
@@ -263,10 +265,10 @@ export const pushBlockInside = createAction('layout/pushBlockInside', (payload: 
           listItems: replaceTargetBlock(block.listItems),
         };
       } else if (block.listItem && block.listItem.listItems) {
-        if (block.listItem.uuid === payload.uuid) {
+        if (block.listItem.uuid === payload.uuid && target) {
           return {
             ...block,
-            listItem: target
+            listItem: target,
           };
         } else {
           return {
@@ -464,7 +466,7 @@ const layoutSlice = createSlice({
     setSelectedBlock: (state, action: PayloadAction<string>) => {
       state.selectedBlockUuid = action.payload;
     },
-    reOrderLayout: (state, action: PayloadAction<BlockItem[]>) => {
+    reOrderLayout: (state, action: PayloadAction<IListItem[]>) => {
       state.blocks = [...action.payload];
     },
     replaceElement: (state, action: PayloadAction<BlockItem>) => {
@@ -479,7 +481,7 @@ const layoutSlice = createSlice({
       // };
     },
     changeUnits: (state, action: PayloadAction<ChangeUnitsPayloadAction>) => {
-      const newBlocksSet = JSON.parse(JSON.stringify(state.blocks));
+      const newBlocksSet: IListItem[] = JSON.parse(JSON.stringify(state.blocks));
       const targetElement: BlockItem =
         findInTree(newBlocksSet, action.payload.blockUuid) ||
         (action.payload.blockUuid === state.bottomBar?.uuid
@@ -520,7 +522,7 @@ const layoutSlice = createSlice({
 
       state.selectedBlockUuid = '';
     },
-    setLayout: (state, action: SetLayoutPayloadAction) => {
+    setLayout: (state, action) => {
       return {
         ...state,
         blocks: [...action.payload.layout],
