@@ -8,11 +8,12 @@ import {Device} from 'containers/MobileSelect/consts';
 import {setCorrectImageUrl} from 'utils';
 import {CustomSvg} from 'components/CustomSvg';
 import {useAppSelector} from 'store';
+import {transformHexWeb} from '../../utils/color';
 
 const TopAppBar = styled.div`
   padding: 16px;
-  color: ${(props) => invertColor(props.backgroundColor, true)};
-  background-color: ${(props) => props.backgroundColor || 'transparent'};
+  color: ${(props) => transformHexWeb(invertColor(props.backgroundColor, true))};
+  background-color: ${(props) => transformHexWeb(props.backgroundColor || 'transparent')};
   z-index: 2;
   width: 100%;
   display: flex;
@@ -27,8 +28,11 @@ const TopAppBar = styled.div`
     width: 100%;
     text-align: ${(props) => (props.blockState.deviceInfo.device === Device.ANDROID ? 'left' : 'center')};
     font-size: 17px;
-    color: ${(props) => props.titleColor
-    || (props.blockState.deviceInfo.device === Device.ANDROID ? '#FFFFFF' : '#0000FF')};
+    color: ${(props) => {
+      const colorTextTitle = props.titleColor
+        || (props.blockState.deviceInfo.device === Device.ANDROID ? '#FFFFFF' : '#0000FF');
+      return transformHexWeb(colorTextTitle);
+    }};
   }
   & div {
     position: relative;
@@ -39,7 +43,11 @@ const TopAppBar = styled.div`
     flex-direction: column;
     gap: 4px;
     & .item_icon {
-      background-color: ${(props) => props.textColor || (props.blockState.deviceInfo.device === Device.ANDROID ? '#FFFFFF' : '#0000FF')};
+      background-color: ${(props) => {
+        const bgColor = props.textColor
+          || (props.blockState.deviceInfo.device === Device.ANDROID ? '#FFFFFF' : '#0000FF');
+        return transformHexWeb(bgColor);
+      }};
     }
   }
 `;

@@ -19,12 +19,13 @@ import {pushBlockInside} from 'store/layout.slice';
 import {blockStateSafeSelector} from 'store/selectors';
 import store, {useAppDispatch, useAppSelector} from 'store';
 import {getDimensionStyles} from 'views/utils/styles/size';
+import {transformHexWeb} from '../../utils/color';
 
 const Card = styled.div`
   align-self: stretch;
   box-sizing: border-box;
   border: ${(props) => props.border};
-  background-color: ${(props) => props.backgroundColor};
+  background-color: ${(props) => transformHexWeb(props.backgroundColor)};
   display: flex;
   flex-direction: column;
   ${(props) => getDimensionStyles(props)
@@ -35,7 +36,8 @@ const Card = styled.div`
   }
   overflow: hidden;
   box-shadow: ${(props) => {
-    const RGB = hexToRgb(props.shadow?.color);
+    const color = transformHexWeb(props.shadow?.color);
+    const RGB = hexToRgb(color);
     return `${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px 8px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b}, ${props.shadow?.opacity})`;
   }};
   ${(props) => {

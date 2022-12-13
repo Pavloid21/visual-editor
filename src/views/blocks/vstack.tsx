@@ -31,6 +31,7 @@ import {Block, BlocksState, ListItemType, SettingsUIType, StyledComponentPropsTy
 import {findParentInTree} from 'utils/blocks';
 import {FieldConfigType} from 'views/configs/types';
 import {getDimensionStyles} from 'views/utils/styles/size';
+import {transformHexWeb} from 'utils/color';
 
 interface ComponentPropsType {
   blockId: string;
@@ -82,7 +83,7 @@ const VStack = styled.div<StyledComponentPropsType & VStackPropsType>`
   }};
   width: 100%;
   height: 100%;
-  background-color: ${(props) => props.backgroundColor || 'transparent'};
+  background-color: ${(props) => transformHexWeb(props.backgroundColor || 'transparent')};
   display: flex;
   justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
   align-items: ${(props) => {
@@ -101,7 +102,7 @@ const VStack = styled.div<StyledComponentPropsType & VStackPropsType>`
   box-sizing: border-box;
   border-width: ${(props) => props.borderWidth || 0}px;
   border-style: ${(props) => props.borderColor ? 'solid' : 'none'};
-  border-color: ${(props) => props.borderColor || 'transparent'};
+  border-color: ${(props) => transformHexWeb(props.borderColor || 'transparent')};
   gap: ${(props) => props.spacing || 0}px;
   ${(props) => getDimensionStyles(props)
     .padding()
@@ -110,9 +111,10 @@ const VStack = styled.div<StyledComponentPropsType & VStackPropsType>`
   }
   ${(props) => {
     if (props.shadow) {
+      const webColor = transformHexWeb(props.shadow?.color);
+      const RGB = hexToRgb(webColor);
       return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${props.shadow?.radius
-        }px rgba(${hexToRgb(props.shadow?.color)!.r}, ${hexToRgb(props.shadow?.color)!.g}, ${hexToRgb(props.shadow?.color)!.b
-        }, ${props.shadow?.opacity});`;
+        }px rgba(${RGB!.r}, ${RGB!.g}, ${RGB!.b}, ${props.shadow?.opacity});`;
     }
   }}
   ${(props) => {

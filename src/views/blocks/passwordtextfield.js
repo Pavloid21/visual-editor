@@ -26,6 +26,7 @@ import {
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
 import {getDimensionStyles} from 'views/utils/styles/size';
+import {transformHexWeb} from '../../utils/color';
 
 export const Container = styled.div`
   display: flex;
@@ -37,8 +38,8 @@ export const Container = styled.div`
   & > input {
     display: block;
     pointer-events: none;
-    color: ${(props) => props.textColor || 'transparent'};
-    background-color: ${(props) => props.backgroundColor || 'transparent'};
+    color: ${(props) => transformHexWeb(props.textColor || 'transparent')};
+    background-color: ${(props) => transformHexWeb(props.backgroundColor || 'transparent')};
     box-sizing: border-box;
     text-align: ${(props) => props.textAlignment || 'left'};
     ${(props) => getDimensionStyles(props)
@@ -47,7 +48,7 @@ export const Container = styled.div`
       .apply()
     }
     & ::placeholder {
-      color: ${(props) => props.placeholderColor || 'transparent'};
+      color: ${(props) => transformHexWeb(props.placeholderColor || 'transparent')};
       font-size: 12px;
       font-weight: 400;
     }
@@ -160,7 +161,7 @@ const block = (state) => {
       errorText: {type: 'string', name: 'Error text'},
       helperText: {type: 'string', name: 'Helper text'},
       isShowCharCounter: {
-        type: 'select', 
+        type: 'select',
         name: 'Show char counter',
         options: [
           {label: 'True', value: true},

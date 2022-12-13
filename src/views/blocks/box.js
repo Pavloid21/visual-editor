@@ -22,15 +22,20 @@ import {pushBlockInside} from 'store/layout.slice';
 import {blockStateSafeSelector} from 'store/selectors';
 import store, {useAppDispatch, useAppSelector} from 'store';
 import {getDimensionStyles} from 'views/utils/styles/size';
+import {transformHexWeb} from '../../utils/color';
 
 const Box = styled.div`
-  border: ${(props) => `${props.borderWidth}px solid ${props.borderColor}`};
-  background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
+  border: ${(props) => `${props.borderWidth}px solid ${transformHexWeb(props.borderColor)}`};
+  background-color: ${(props) => {
+    const color = props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent';
+    return transformHexWeb(color);
+  }};
   display: flex;
   align-items: center;
   overflow: hidden;
   box-shadow: ${(props) => {
-    const RGB = hexToRgb(props.shadow?.color);
+    const webColor = transformHexWeb(props.shadow?.color);
+    const RGB = hexToRgb(webColor);
     return `${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px 8px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b}, ${props.shadow?.opacity})`;
   }};
   border-radius: ${(props) => `${props.shape?.radius}px`};

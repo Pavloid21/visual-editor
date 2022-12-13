@@ -10,10 +10,14 @@ import {
 import {blockStateSafeSelector} from 'store/selectors';
 import {getDimensionStyles} from 'views/utils/styles/size';
 import store from 'store';
+import {transformHexWeb} from '../../utils/color';
 
 const Calendar = styled.div`
   & body{
-  background: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
+  background: ${(props) => {
+    const color = props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent';
+    return transformHexWeb(color);
+  }};
   font-family: sans-serif;
   justify-content:center;
   align-items:center;
@@ -28,22 +32,27 @@ const Calendar = styled.div`
 & .calendar{
   justify-content:center;
   align-items:center;
-  background: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
+  background: ${(props) => {
+    const color = props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent';
+    return transformHexWeb(color);
+  }};
   border-radius:5px;
-  
+
   & .month{
     display:flex;
     justify-content:space-between;
     align-items:center;
     font-size:33px;
     font-weight:400;
-    color: ${(props) => (props.headerColor?.indexOf('#') >= 0 ? props.headerColor : 'transparent')};
-    
+    color: ${(props) => {
+      const color = props.headerColor?.indexOf('#') >= 0 ? props.headerColor : 'transparent';
+      return transformHexWeb(color);
+    }};
     & .year{
       margin-left:10px;
       font-size:33px;
     }
-    
+
     & .nav{
       display:flex;
       justify-content:center;
@@ -55,17 +64,20 @@ const Calendar = styled.div`
       border-radius:40px;
       transition-duration:.2s;
       position:relative;
-      
+
     }
   }
-  
+
   & .days{
     display: grid;
     justify-content:center;
     align-items:center;
     grid-template-columns: repeat(7, 1fr);
-    color: ${(props) => (props.titleSelectionColor?.indexOf('#') >= 0 ? props.titleSelectionColor : 'transparent')};
-    
+    color: ${(props) => {
+      const color = props.titleSelectionColor?.indexOf('#') >= 0 ? props.titleSelectionColor : 'transparent';
+      return transformHexWeb(color);
+    }};
+
     & span{
       width:50px;
       justify-self:center;
@@ -75,11 +87,11 @@ const Calendar = styled.div`
       font-weight:400;
     }
   }
-  
+
   & .dates{
     display:grid;
     grid-template-columns: repeat(7, 1fr);
-    
+
     & button{
       cursor:pointer;
       outline:0;
@@ -94,43 +106,53 @@ const Calendar = styled.div`
       border-radius: ${(props) => props.cornerRadius * 100 +'%' || '0%'};
       transition-duration:.2s;
       background:transparent;
-      
+
       &.today{
-        background: ${(props) => (props.todayColor?.indexOf('#') >= 0 ? props.todayColor : 'transparent')};
+        background: ${(props) => {
+          const color = props.todayColor?.indexOf('#') >= 0 ? props.todayColor : 'transparent';
+          return transformHexWeb(color);
+        }};
       }
 
       ${(props) => {
+        const borderSelectionColor = props.borderSelectionColor?.indexOf('#') >= 0 ? props.borderSelectionColor : 'transparent';
+        const selectionColor = props.selectionColor?.indexOf('#') >= 0 ? props.selectionColor : 'transparent';
+
+        const webBorderSelectionColor = transformHexWeb(borderSelectionColor);
+        const webSelectionColor = transformHexWeb(selectionColor);
+
         if (props.allowMultipleSelection === true) {
+
           return `&.selectStart{
               border-radius: ${(props) => props.cornerRadius * 100 +'% 0% 0% ' + props.cornerRadius * 100 +'%'|| '0% 0% 0% 0%'};
-              border-color: ${(props) => (props.borderSelectionColor?.indexOf('#') >= 0 ? props.borderSelectionColor : 'transparent')};
-              background: ${(props) => (props.selectionColor?.indexOf('#') >= 0 ? props.selectionColor : 'transparent')};
+              border-color: ${webBorderSelectionColor};
+              background: ${webSelectionColor};
             }
 
             &.selectInterval{
               border-radius: 0% 0% 0% 0%;
-              border-color: ${(props) => (props.borderSelectionColor?.indexOf('#') >= 0 ? props.borderSelectionColor : 'transparent')};
-              background: ${(props) => (props.selectionColor?.indexOf('#') >= 0 ? props.selectionColor : 'transparent')};
+              border-color: ${webBorderSelectionColor};
+              background: ${webSelectionColor};
               opacity: 50%;
             }
 
             &.selectEnd{
               border-radius: ${(props) => '0% ' + props.cornerRadius * 100 +'% ' + props.cornerRadius * 100 +'% 0%'|| '0% 0% 0% 0%'};
-              border-color: ${(props) => (props.borderSelectionColor?.indexOf('#') >= 0 ? props.borderSelectionColor : 'transparent')};
-              background: ${(props) => (props.selectionColor?.indexOf('#') >= 0 ? props.selectionColor : 'transparent')};
+              border-color: ${webBorderSelectionColor};
+              background: ${webSelectionColor};
             }`;
         } else {
             return `&.selectStart{
-              border-color: ${(props) => (props.borderSelectionColor?.indexOf('#') >= 0 ? props.borderSelectionColor : 'transparent')};
-              background: ${(props) => (props.selectionColor?.indexOf('#') >= 0 ? props.selectionColor : 'transparent')};
+              border-color: ${webBorderSelectionColor};
+              background: ${webSelectionColor};
               }`;
           }
       }}
-      
+
       &:first-child{
         grid-column:3;
       }
-      
+
     }
   }
 }
@@ -270,7 +292,7 @@ const block = (state) => {
       dataSource: '',
       filter: {
         id: '',
-        applyHere: true, 
+        applyHere: true,
         query: [{}],
       },
     },
