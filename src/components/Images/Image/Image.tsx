@@ -1,6 +1,6 @@
 import {Container, WrapperFileInput} from './Image.styled';
 import React from 'react';
-import {groupTabs, trimExtension} from '../utils';
+import {groupTabs, trimExtension} from 'components/Images/utils';
 import {Accordion} from 'components/Accordion';
 import {FileInput} from 'components/controls';
 import {ImageSections} from './components/ImageSections';
