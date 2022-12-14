@@ -109,7 +109,7 @@ const Passcodeview = styled.div`
   	width: 10px;
 	background-color: ${(props) => transformHexWeb(props.interactive?.dottedPassCodeStackSettings?.dotSettings?.backgroundColor || 'transparent')};
 	${(props) => {
-		if (props.interactive?.dottedPassCodeStackSettings?.dotSettings?.shape?.type === 'ALLCORNERSROUND') {
+		if (props?.interactive?.dottedPassCodeStackSettings?.dotSettings?.shape?.type === 'ALLCORNERSROUND') {
 			return `border-radius: ${props.interactive.dottedPassCodeStackSettings.dotSettings.shape.radius}px;`;
 		}
 		}}
@@ -152,13 +152,13 @@ const Passcodeview = styled.div`
 	  width: fit-content;
 	  align-self: center;
 	  ${({props}) => {
-		if (props.interactive?.topTitleLabelSettings?.shape?.type === 'ALLCORNERSROUND') {
+		if (props?.interactive?.topTitleLabelSettings?.shape?.type === 'ALLCORNERSROUND') {
 			return `border-radius: ${props.interactive.topTitleLabelSettings.shape.radius}px;`;
 		}
 		}}
 	  overflow: hidden;
 	  ${(props) => {
-		if (props.interactive?.topTitleLabelSettings?.shadow) {
+		if (props?.interactive?.topTitleLabelSettings?.shadow) {
 			const webColor = transformHexWeb(props.interactive?.topTitleLabelSettings?.shadow?.color);
 			const RGB = hexToRgb(webColor);
 
@@ -173,7 +173,7 @@ const Passcodeview = styled.div`
 		color: ${(props) => transformHexWeb(props.interactive?.topTitleLabelSettings?.textColor || 'transparent')};
 		background-color: ${(props) => transformHexWeb(props.interactive?.topTitleLabelSettings?.backgroundColor || 'transparent')};
 		font-weight: ${(props) => {
-			switch (props.interactive?.topTitleLabelSettings?.fontWeight) {
+			switch (props?.interactive?.topTitleLabelSettings?.fontWeight) {
 				case 'THIN':
 					return 100;
 				case 'ULTALIGHT':
