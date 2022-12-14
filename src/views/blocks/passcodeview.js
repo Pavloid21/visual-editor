@@ -102,17 +102,17 @@ const Passcodeview = styled.div`
 	}
 
 	#fields .numberfield span {
-	  ${(props) => getDimensionStyles(props.interactive?.dottedPassCodeStackSettings?.dotSettings)
-		  .width()
-		  .height()
-		  .apply()
-		}
+	${(props) => getDimensionStyles(props.interactive?.dottedPassCodeStackSettings?.dotSettings)
+		.width()
+		.height()
+		.apply()
+	}
 	  background-color: ${(props) => transformHexWeb(props.interactive?.dottedPassCodeStackSettings?.dotSettings?.backgroundColor || 'transparent')};
 	${(props) => {
 		if (props.interactive?.dottedPassCodeStackSettings?.dotSettings?.shape?.type === 'ALLCORNERSROUND') {
-		  return `border-radius: ${dottedPassCodeStackSettings.dotSettings.shape.radius}px;`;
+			return `border-radius: ${interactive.dottedPassCodeStackSettings.dotSettings.shape.radius}px;`;
 		}
-	  }}
+		}}
 	  border-width: ${(props) => props.interactive?.dottedPassCodeStackSettings?.dotSettings?.borderWidth || 0}px;
 	  border-color: ${(props) => transformHexWeb(props.interactive?.dottedPassCodeStackSettings?.dotSettings?.borderColor || 'transparent')};
 	  position: relative;
@@ -153,55 +153,55 @@ const Passcodeview = styled.div`
 	  align-self: center;
 	  ${({props}) => {
 		if (props.interactive?.topTitleLabelSettings?.shape?.type === 'ALLCORNERSROUND') {
-		  return `border-radius: ${topTitleLabelSettings.shape.radius}px;`;
+			return `border-radius: ${props.interactive.topTitleLabelSettings.shape.radius}px;`;
 		}
-	  }}
+		}}
 	  overflow: hidden;
 	  ${(props) => {
 		if (props.interactive?.topTitleLabelSettings?.shadow) {
-		  const webColor = transformHexWeb(props.interactive?.topTitleLabelSettings?.shadow?.color);
-		  const RGB = hexToRgb(webColor);
+			const webColor = transformHexWeb(props.interactive?.topTitleLabelSettings?.shadow?.color);
+			const RGB = hexToRgb(webColor);
 
-		  return `box-shadow: ${props.interactive?.topTitleLabelSettings?.shadow?.offsetSize?.width}px ${props.interactive?.topTitleLabelSettings?.shadow?.offsetSize?.height}px ${
+			return `box-shadow: ${props.interactive?.topTitleLabelSettings?.shadow?.offsetSize?.width}px ${props.interactive?.topTitleLabelSettings?.shadow?.offsetSize?.height}px ${
 			props.interactive?.topTitleLabelSettings?.shadow?.radius
-		  }px rgba(${RGB.r}, ${RGB.g}, ${RGB.b}, ${props.interactive?.topTitleLabelSettings?.shadow?.opacity});`;
+			}px rgba(${RGB.r}, ${RGB.g}, ${RGB.b}, ${props.interactive?.topTitleLabelSettings?.shadow?.opacity});`;
 		}
-	  }}
+		}}
 	  & > span {
 		display: block;
 		text-align: ${(props) => props.interactive?.topTitleLabelSettings?.textAlignment || 'left'};
 		color: ${(props) => transformHexWeb(props.interactive?.topTitleLabelSettings?.textColor || 'transparent')};
 		background-color: ${(props) => transformHexWeb(props.interactive?.topTitleLabelSettings?.backgroundColor || 'transparent')};
 		font-weight: ${(props) => {
-		  switch (props.interactive?.topTitleLabelSettings?.fontWeight) {
-			case 'THIN':
-			  return 100;
-			case 'ULTALIGHT':
-			  return 200;
-			case 'LIGHT':
-			  return 300;
-			case 'REGULAR':
-			  return 400;
-			case 'MEDIUM':
-			  return 500;
-			case 'SEMIBOLD':
-			  return 600;
-			case 'BOLD':
-			  return 700;
-			case 'BLACK':
-			  return 800;
-			case 'HEAVY':
-			  return 900;
-			default:
-			  return 400;
-		  }
+			switch (props.interactive?.topTitleLabelSettings?.fontWeight) {
+				case 'THIN':
+					return 100;
+				case 'ULTALIGHT':
+					return 200;
+				case 'LIGHT':
+					return 300;
+				case 'REGULAR':
+					return 400;
+				case 'MEDIUM':
+					return 500;
+				case 'SEMIBOLD':
+					return 600;
+				case 'BOLD':
+					return 700;
+				case 'BLACK':
+					return 800;
+				case 'HEAVY':
+					return 900;
+				default:
+					return 400;
+			}
 		}};
 		${(props) => getDimensionStyles(props.interactive?.topTitleLabelSettings)
-		  .width()
-		  .height()
-		  .padding()
-		  .fontSize()
-		  .apply()
+			.width()
+			.height()
+			.padding()
+			.fontSize()
+			.apply()
 		}
 	  }
 	}
@@ -215,14 +215,12 @@ const Component = ({settingsUI, ...props}) => {
         {...settingsUI}
         className="draggable"
       >
-		    <div id="pincode">
+	  		<div id="pincode">
 				<div className="table">
-				  <div className="cell">
-
-					<div className="label">
-					  <span>{topTitleLabelTextStates?.enterCurrentPasscodeMessage}</span>
-					</div>
-
+					<div className="cell">
+						<div className="label">
+							<span>{interactive?.topTitleLabelTextStates?.enterCurrentPasscodeMessage}</span>
+						</div>
 					<div id="fields">
 					  <div className="grid">
 						<div className="grid__col grid__col--1-of-4 numberfield"><span></span></div>
@@ -269,7 +267,7 @@ const block = (state) => {
     name: 'CALENDAR',
     title: 'Passcodeview',
     description: '...',
-    previewImageUrl: calendar,
+    previewImageUrl: passcodeview,
     category: 'Controls',
     defaultInteractiveOptions: {},
     defaultData: {},
