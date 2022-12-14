@@ -110,7 +110,7 @@ const Passcodeview = styled.div`
 	  background-color: ${(props) => transformHexWeb(props.interactive?.dottedPassCodeStackSettings?.dotSettings?.backgroundColor || 'transparent')};
 	${(props) => {
 		if (props.interactive?.dottedPassCodeStackSettings?.dotSettings?.shape?.type === 'ALLCORNERSROUND') {
-			return `border-radius: ${interactive.dottedPassCodeStackSettings.dotSettings.shape.radius}px;`;
+			return `border-radius: ${props.interactive.dottedPassCodeStackSettings.dotSettings.shape.radius}px;`;
 		}
 		}}
 	  border-width: ${(props) => props.interactive?.dottedPassCodeStackSettings?.dotSettings?.borderWidth || 0}px;
@@ -215,45 +215,42 @@ const Component = ({settingsUI, ...props}) => {
         {...settingsUI}
         className="draggable"
       >
-	  		<div id="pincode">
+	  	<div id="pincode">
 				<div className="table">
 					<div className="cell">
 						<div className="label">
-							<span>{interactive?.topTitleLabelTextStates?.enterCurrentPasscodeMessage}</span>
+							<span>{props.interactive?.topTitleLabelTextStates?.enterCurrentPasscodeMessage}</span>
 						</div>
 					<div id="fields">
-					  <div className="grid">
-						<div className="grid__col grid__col--1-of-4 numberfield"><span></span></div>
-						<div className="grid__col grid__col--1-of-4 numberfield"><span></span></div>
-						<div className="grid__col grid__col--1-of-4 numberfield"><span></span></div>
-						<div className="grid__col grid__col--1-of-4 numberfield"><span></span></div>
-					  </div>
+						<div className="grid">
+							<div className="grid__col grid__col--1-of-4 numberfield"><span></span></div>
+							<div className="grid__col grid__col--1-of-4 numberfield"><span></span></div>
+							<div className="grid__col grid__col--1-of-4 numberfield"><span></span></div>
+							<div className="grid__col grid__col--1-of-4 numberfield"><span></span></div>
+						</div>
 					</div>
-
 					<div id="numbers">
-					  <div className="grid">
-						<div className="grid__col grid__col--1-of-3"><button>1</button></div>
-						<div className="grid__col grid__col--1-of-3"><button>2</button></div>
-						<div className="grid__col grid__col--1-of-3"><button>3</button></div>
+						<div className="grid">
+							<div className="grid__col grid__col--1-of-3"><button>1</button></div>
+							<div className="grid__col grid__col--1-of-3"><button>2</button></div>
+							<div className="grid__col grid__col--1-of-3"><button>3</button></div>
 
-						<div className="grid__col grid__col--1-of-3"><button>4</button></div>
-						<div className="grid__col grid__col--1-of-3"><button>5</button></div>
-						<div className="grid__col grid__col--1-of-3"><button>6</button></div>
+							<div className="grid__col grid__col--1-of-3"><button>4</button></div>
+							<div className="grid__col grid__col--1-of-3"><button>5</button></div>
+							<div className="grid__col grid__col--1-of-3"><button>6</button></div>
 
-						<div className="grid__col grid__col--1-of-3"><button>7</button></div>
-						<div className="grid__col grid__col--1-of-3"><button>8</button></div>
-						<div className="grid__col grid__col--1-of-3"><button>9</button></div>
+							<div className="grid__col grid__col--1-of-3"><button>7</button></div>
+							<div className="grid__col grid__col--1-of-3"><button>8</button></div>
+							<div className="grid__col grid__col--1-of-3"><button>9</button></div>
 
-						<div className="grid__col grid__col--1-of-3"></div>
-						<div className="grid__col grid__col--1-of-3"><button>0</button></div>
-						<div className="grid__col grid__col--1-of-3"></div>
-
-					  </div>
+							<div className="grid__col grid__col--1-of-3"></div>
+							<div className="grid__col grid__col--1-of-3"><button>0</button></div>
+							<div className="grid__col grid__col--1-of-3"></div>
+						</div>
 					</div>
-
-				  </div>
+					</div>
 				</div>
-			  </div>
+			</div>
       </Passcodeview>
     </Wrapper>
   );
@@ -290,9 +287,9 @@ const block = (state) => {
 				.withAllCornersRound
 				.withRadius
 				.done(),
-			 size: getSizeConfig(blockState.deviceInfo.device),
-			 padding,
-			 shadow: shadowConfigBuilder()
+			size: getSizeConfig(blockState.deviceInfo.device),
+			padding,
+			shadow: shadowConfigBuilder()
 				.withRadius
 				.done(),
 		},
@@ -305,7 +302,7 @@ const block = (state) => {
 			enterPasscodeSuccessMessage: {type: 'string', name: 'Enter passcode success message'},
 			biometricTitleMessage: {type: 'string', name: 'Biometric title message'},
 			cancelledBiometricButtonMessage: {type: 'string', name: 'Cancelled biometric button message'},
-		 },
+		},
 		dottedPassCodeStackSettings: {
 			numberOfDots: {type: 'number', name: 'Number of dots'},
 			stackContainerSettings: {
@@ -317,17 +314,17 @@ const block = (state) => {
 				borderColor,
 				borderWidth,
 			},
-		  dotSettings: {
-			size: getSizeConfig(blockState.deviceInfo.device),
-			backgroundColor,
-			borderColor,
-			borderWidth,
-			shape: shapeConfigBuilder()
-				.withAllCornersRound
-				.withRadius
-				.done(),
-			errorColor: {type: 'color', name: 'Error color'},
-		  },
+			dotSettings: {
+				size: getSizeConfig(blockState.deviceInfo.device),
+				backgroundColor,
+				borderColor,
+				borderWidth,
+				shape: shapeConfigBuilder()
+					.withAllCornersRound
+					.withRadius
+					.done(),
+				errorColor: {type: 'color', name: 'Error color'},
+			},
 		},
 		pinPadSettings: {
 			backgroundColor,
