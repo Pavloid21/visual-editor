@@ -108,8 +108,8 @@ const Passcodeview = styled.div`
 		  .apply()
 		}
 	  background-color: ${(props) => transformHexWeb(props.interactive?.dottedPassCodeStackSettings?.dotSettings?.backgroundColor || 'transparent')};
-	  ${({dottedPassCodeStackSettings?.dotSettings?.shape}) => {
-		if (dottedPassCodeStackSettings?.dotSettings?.shape?.type === 'ALLCORNERSROUND') {
+	${(props) => {
+		if (props.interactive?.dottedPassCodeStackSettings?.dotSettings?.shape?.type === 'ALLCORNERSROUND') {
 		  return `border-radius: ${dottedPassCodeStackSettings.dotSettings.shape.radius}px;`;
 		}
 	  }}
@@ -151,8 +151,8 @@ const Passcodeview = styled.div`
 	  display: flex;
 	  width: fit-content;
 	  align-self: center;
-	  ${({topTitleLabelSettings?.shape}) => {
-		if (topTitleLabelSettings?.shape?.type === 'ALLCORNERSROUND') {
+	  ${({props}) => {
+		if (props.interactive?.topTitleLabelSettings?.shape?.type === 'ALLCORNERSROUND') {
 		  return `border-radius: ${topTitleLabelSettings.shape.radius}px;`;
 		}
 	  }}
