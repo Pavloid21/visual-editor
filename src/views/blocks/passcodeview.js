@@ -102,12 +102,12 @@ const Passcodeview = styled.div`
 	}
 
 	#fields .numberfield span {
-	${(props) => getDimensionStyles(props.interactive?.dottedPassCodeStackSettings?.dotSettings)
-		.width()
-		.height()
-		.apply()
-	}
-	  background-color: ${(props) => transformHexWeb(props.interactive?.dottedPassCodeStackSettings?.dotSettings?.backgroundColor || 'transparent')};
+	/*------
+	Переделать height и width через getDimensionStyles
+	----*/
+	height: 10px;
+  	width: 10px;
+	background-color: ${(props) => transformHexWeb(props.interactive?.dottedPassCodeStackSettings?.dotSettings?.backgroundColor || 'transparent')};
 	${(props) => {
 		if (props.interactive?.dottedPassCodeStackSettings?.dotSettings?.shape?.type === 'ALLCORNERSROUND') {
 			return `border-radius: ${props.interactive.dottedPassCodeStackSettings.dotSettings.shape.radius}px;`;
@@ -196,13 +196,9 @@ const Passcodeview = styled.div`
 					return 400;
 			}
 		}};
-		${(props) => getDimensionStyles(props.interactive?.topTitleLabelSettings)
-			.width()
-			.height()
-			.padding()
-			.fontSize()
-			.apply()
-		}
+		/*------
+		Добавить height, width, padding, fontSize через getDimensionStyles
+		----*/
 	  }
 	}
 `;
