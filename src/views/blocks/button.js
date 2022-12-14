@@ -45,9 +45,11 @@ const Button = styled.div`
       const webColor = transformHexWeb(props.shadow?.color);
       const RGB = hexToRgb(webColor);
 
-      return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${
-        props.shadow?.radius
-      }px rgba(${RGB.r}, ${RGB.g}, ${RGB.b}, ${props.shadow?.opacity});`;
+      if(RGB !== null) {
+        return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${
+          props.shadow?.radius
+        }px rgba(${RGB.r}, ${RGB.g}, ${RGB.b}, ${props.shadow?.opacity});`;
+      }
     }
   }}
 
