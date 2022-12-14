@@ -6,7 +6,7 @@ import {LeftSidebar, TopBar, RightSidebar, HighlightedElement, Loader} from 'com
 import {useAppDispatch, useAppSelector} from 'store';
 import {Preview} from './Preview';
 import actionTypes from 'constants/actionTypes';
-import GlobalStyles from 'constants/theme';
+import {GlobalStyles} from 'constants/theme';
 import {Login} from './Login';
 import RequireAuth from 'auth/RequireAuth';
 import {useKeycloak} from '@react-keycloak/web';
@@ -18,6 +18,8 @@ import {reOrderLayout, replaceElement, setSelectedBlock} from 'store/layout.slic
 import {Templates} from './Templates/Templates';
 
 import type {IListItem} from 'store/types';
+
+const GlobalStylesProxy: any = GlobalStyles;
 
 const App: React.FC<unknown> = () => {
   const layout = useAppSelector((state) => state.layout);
@@ -104,7 +106,7 @@ const App: React.FC<unknown> = () => {
 
   return (
     <div>
-      <GlobalStyles />
+      <GlobalStylesProxy />
       <div
         className="wrapper d-flex"
         style={{

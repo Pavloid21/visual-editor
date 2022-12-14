@@ -7,6 +7,8 @@ import {Container, EditorWrapper} from './Code.styled';
 import {saveCode} from 'store/code.slice';
 import {setSnippet} from 'store/layout.slice';
 
+const SyntaxHighlighterProxy: any = SyntaxHighlighter;
+
 const Code: React.FC<any> = (props) => {
   const {code} = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
@@ -42,9 +44,9 @@ const Code: React.FC<any> = (props) => {
   return (
     <Container {...props}>
       <EditorWrapper>
-        <SyntaxHighlighter language="javascript" style={atomOneLight} showLineNumbers wrapLongLines>
+        <SyntaxHighlighterProxy language="javascript" style={atomOneLight} showLineNumbers wrapLongLines>
           {logic + snippets.filter((item) => item.screenID === selectedScreen)[0]?.snippet.replace(/"{{|}}"/g, '')}
-        </SyntaxHighlighter>
+        </SyntaxHighlighterProxy>
       </EditorWrapper>
     </Container>
   );

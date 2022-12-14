@@ -124,7 +124,7 @@ const VStack = styled.div<StyledComponentPropsType & VStackPropsType>`
   }}
 `;
 
-const ComponentSortedContainer = SortableContainer(({drop, backgroundColor, listItems, settingsUI, ...props}: any) => {
+const ComponentSortedContainer: any = SortableContainer(({drop, backgroundColor, listItems, settingsUI, ...props}: any) => {
   return (
     <Wrapper
       id={props.id}
