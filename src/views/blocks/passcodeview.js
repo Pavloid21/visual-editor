@@ -22,6 +22,7 @@ import {
 import {blockStateSafeSelector} from 'store/selectors';
 import {getDimensionStyles} from 'views/utils/styles/size';
 import store from 'store';
+import {transformHexWeb} from '../../utils/color';
 
 const Passcodeview = styled.div`
 	& .table {
