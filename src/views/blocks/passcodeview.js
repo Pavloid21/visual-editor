@@ -208,14 +208,14 @@ const Passcodeview = styled.div`
 `;
 
 const Component = ({settingsUI, ...props}) => {
-  return (
-    <Wrapper id={props.id} {...settingsUI} {...props}>
-      <Passcodeview
-        {...props}
-        {...settingsUI}
-        className="draggable"
-      >
-	  	<div id="pincode">
+	return (
+		<Wrapper id={props.id} {...settingsUI} {...props}>
+			<Passcodeview
+				{...props}
+				{...settingsUI}
+				className="draggable"
+			>
+			<div id="pincode">
 				<div className="table">
 					<div className="cell">
 						<div className="label">
