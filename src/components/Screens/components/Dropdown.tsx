@@ -1,19 +1,19 @@
 import {Container} from './Dropdown.styled';
 import {ReactComponent as ActionDots} from 'assets/left-sidebar-menu/actionDots.svg';
 import {ReactComponent as Copy} from 'assets/copy-item.svg';
-import React from 'react';
+import React, {MouseEventHandler} from 'react';
 import {ReactComponent as Trash} from 'assets/trash-item.svg';
+import {EditScreenNamePayloadAction} from 'store/types';
 
 type ButtonsProps = {
   handleCloneScreen: Function,
   handleCloneBlock: Function,
   handleDeleteScreen: Function,
   handleDeleteBlock: Function,
-  uuid: any,
-  subtitle: any,
-  node: any
+  uuid: string,
+  subtitle: string,
+  node: EditScreenNamePayloadAction
 }
-
 
 export const Dropdown = ({
   handleCloneScreen,
@@ -24,13 +24,13 @@ export const Dropdown = ({
   subtitle,
   node
 }: ButtonsProps) => {
-  const handleCopy = (event: any) => {
+  const handleCopy: React.MouseEventHandler<HTMLDivElement> = (event) => {
     subtitle === 'screen'
       ? handleCloneScreen(event, uuid)
       : handleCloneBlock(subtitle);
   }
 
-  const handleRemove = (event: any) => {
+  const handleRemove: React.MouseEventHandler<HTMLDivElement> = (event) => {
     subtitle === 'screen'
       ? handleDeleteScreen(event, node)
       : handleDeleteBlock(subtitle)
