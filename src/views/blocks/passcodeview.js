@@ -337,8 +337,8 @@ const block = (state) => {
 			borderWidth,
 			textColor,
 			imagePadding: buttonImagePadding,
-			leftImageTintColor: {type: 'color', name: 'Left image color'};
-			rightImageTintColor: {type: 'color', name: 'Right image color'};
+			leftImageTintColor: {type: 'color', name: 'Left image color'},
+			rightImageTintColor: {type: 'color', name: 'Right image color'},
 		},
 	},
   });
