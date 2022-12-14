@@ -48,22 +48,12 @@ const Passcodeview = styled.div`
 	#pincode {
 	  position: fixed;
 	  overflow: hidden;
-	  height: 667px;
-	  width: 375px;
+	  height: 100%;
+	  width: 100%;
 	  z-index: 9999;
-	  background-color: #272a2f;
+	  background-color: ${(props) => transformHexWeb(props?.interactive?.backgroundColor || 'transparent')}
 	  color: #fff;
-	  border-radius: 10px;
 	  text-align: center;
-	  -webkit-box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.6);
-	  -moz-box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.6);
-	  box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.6);
-	  top: 50%;
-	  left: 50%;
-	  margin-top: -335px;
-	  /* Negative half of height. */
-	  margin-left: -188px;
-	  /* Negative half of width. */
 	}
 
 	#numbers {
