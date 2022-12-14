@@ -272,20 +272,16 @@ const block = (state) => {
     previewImageUrl: calendar,
     category: 'Controls',
     defaultInteractiveOptions: {},
-    },
-    defaultData: {
-      backgroundColor: '',
-    },
-    config: {
-      mode: {
-        type: 'select', name: 'Mode', options: [
-          {label: 'Create PIN', value: 'create'},
-          {label: 'Verify PIN', value: 'verify'}
-        ]
-      },
-	  backgroundColor,
-    },
+    defaultData: {},
+    config: {},
 	interactive: {
+		backgroundColor,
+		mode: {
+		type: 'select', name: 'Mode', options: [
+			{label: 'Create PIN', value: 'create'},
+			{label: 'Verify PIN', value: 'verify'}
+			]
+		},
 		topTitleLabelSettings: {
 			textAlignment,
 			backgroundColor,
