@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useRef, useEffect} from 'react';
+import React, {useState, useCallback, useRef, useEffect, FormEvent} from 'react';
 import {HexColorInput} from 'react-colorful';
 
 import {debounce} from 'external/lodash';
@@ -53,6 +53,12 @@ const ColorPicker = ({value, onChangeColor, ...rest}: IColorPicker) => {
     }
   }, [isShow]);
 
+  const onInputValue = (e: FormEvent<HTMLInputElement>) => {
+    if (e.currentTarget.value === '#') {
+      onChangeEvent('');
+    }
+  };
+
   useEffect(() => {
     const observer = new IntersectionObserver(callbackObserver, options);
     if (wrapperRef.current && isShow) {
@@ -80,6 +86,7 @@ const ColorPicker = ({value, onChangeColor, ...rest}: IColorPicker) => {
         <HexColorInput
           color={value || ''}
           onChange={doDebouncedChangeGlobalValue}
+          onInput={onInputValue}
           alpha={true}
           prefixed={true}
           type="text"

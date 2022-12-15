@@ -35,7 +35,7 @@ const Switch = styled.div`
     transform: translateX(16px);
     ${(props) => {
     if (props.blockState.deviceInfo.device === Device.ANDROID) {
-      return `background-color: ${(props) => transformHexWeb(props.checkedColor || '#4ed164')};`;
+      return `background-color: ${transformHexWeb(props.checkedColor || '#4ed164')};`;
     }
     if (props.blockState.deviceInfo.device === Device.IOS) {
       return `background-color: #ffffff;`;
