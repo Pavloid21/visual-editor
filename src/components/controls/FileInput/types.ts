@@ -5,4 +5,5 @@ export interface FileInputProps {
   value: File[];
   accept: string;
   multiple?: boolean;
+  fileUploaded?: boolean;
 }

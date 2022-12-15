@@ -11,6 +11,7 @@ import projectReducer from './project.slice';
 import sideBarReducer from './side-bar.slice';
 import projectFormReducer from './project-form.slice';
 import screensReducer from './screens.slice';
+import imagesReducer from './images.slice';
 import leftBarMenuSlice from './left-bar-menu.slice';
 import {useDispatch, useSelector, TypedUseSelectorHook} from 'react-redux';
 
@@ -29,7 +30,8 @@ const rootReducer = combineReducers({
   sideBar: sideBarReducer,
   projectForm: projectFormReducer,
   screenList: screensReducer,
-  leftBarMenu: leftBarMenuSlice
+  leftBarMenu: leftBarMenuSlice,
+  imagesList: imagesReducer
 });
 
 const store = configureStore({
