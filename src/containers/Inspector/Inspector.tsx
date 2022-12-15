@@ -19,7 +19,7 @@ import {
   addActionField,
   removeActionField,
   changeKeyActionField,
-  changeActionURL,
+  changeActionURL, addParamsItem, removeParamsItem,
   addFilterQueryItem,
 } from 'store/layout.slice';
 import type {TInspector} from './types';
@@ -412,6 +412,38 @@ const Inspector: React.FC<TInspector> = ({display}) => {
           })}
         </div>
       )}
+      {interactive?.filter?.query && (
+        <div>
+          <Division>
+            <span>Params Items</span>
+            <Plus
+              className="icon"
+              onClick={() => {
+                dispatch(addParamsItem(blockUuid));
+              }}
+            />
+          </Division>
+          {block?.interactive?.filter?.query.map((element: any, index: number) => {
+            return (
+              <div key={`appBarButton_${element.uuid}${index}`}>
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                  <Division>
+                    <span>Item {index + 1}</span>
+                    <Trash
+                      className="icon"
+                      onClick={() => {
+                        dispatch(removeParamsItem(blockUuid, index));
+                      }}
+                    />
+                  </Division>
+                </div>
+                  {parseConfig(interactive.filter.query[0], blockUuid, block?.interactive?.filter?.query[index], [index, 'filter'])}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
     </div>
   );
 };

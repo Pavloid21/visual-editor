@@ -199,7 +199,7 @@ export const interactive = {
     delegateActionId: {
         type: 'string',
         name: 'Delegate action id',
-    },  
+    },
   },
 };
 export const dataSourceSettings = {
@@ -378,6 +378,6 @@ export const filter = {
   },
   query: [{
     key: {type: 'string', name: 'Query key'},
-    params: [{type: 'string', name: 'Query params'},],
+    params: {type: 'array', name: 'Query params'},
   },],
 };
