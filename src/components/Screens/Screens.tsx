@@ -5,11 +5,10 @@ import FileExplorerTheme from '@nosferatu500/theme-file-explorer';
 import {Icon, ScreenTitle} from 'components/LeftSideBar/LeftSideBar.styled';
 import {BounceLoader} from 'react-spinners';
 import models from 'views/blocks';
-import {ReactComponent as Copy} from 'assets/copy.svg';
-import {ReactComponent as Trash} from 'assets/trash.svg';
 import {css} from '@emotion/react';
 import {Container} from 'components/Screens/Screens.styled';
 import {useAppSelector} from 'store';
+import {Dropdown} from './components/Dropdown';
 
 type ScreensProps = {
   loading: boolean,
@@ -76,24 +75,16 @@ const Screens: React.FC<ScreensProps> = ({
                 </section>
               ),
               buttons: [
-                <Copy
+                <Dropdown
                   key={0}
-                  className="icon"
-                  onClick={(event) => {
-                    extendedNode.node.subtitle === 'screen'
-                      ? handleCloneScreen(event, extendedNode.node.uuid)
-                      : handleCloneBlock(extendedNode.node.subtitle);
-                  }}
-                />,
-                <Trash
-                  key={1}
-                  className="icon"
-                  onClick={(event) =>
-                    extendedNode.node.subtitle === 'screen'
-                      ? handleDeleteScreen(event, extendedNode.node)
-                      : handleDeleteBlock(extendedNode.node.subtitle)
-                  }
-                />,
+                  handleCloneScreen={handleCloneScreen}
+                  handleCloneBlock={handleCloneBlock}
+                  handleDeleteScreen={handleDeleteScreen}
+                  handleDeleteBlock={handleDeleteBlock}
+                  uuid={extendedNode.node.uuid}
+                  subtitle={extendedNode.node.subtitle}
+                  node={extendedNode.node}
+                />
               ],
             };
           }}

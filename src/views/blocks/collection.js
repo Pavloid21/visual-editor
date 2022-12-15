@@ -24,10 +24,14 @@ import {pushBlockInside} from 'store/layout.slice';
 import {blockStateSafeSelector, getListItemCollectionSelector} from 'store/selectors';
 import store, {useAppDispatch, useAppSelector} from 'store';
 import {getDimensionStyles} from 'views/utils/styles/size';
+import {transformHexWeb} from '../../utils/color';
 
 const Collection = styled.div`
   align-self: center;
-  background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
+  background-color: ${(props) => {
+    const color = props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent';
+    return transformHexWeb(color);
+  }};
   display: flex;
   ${(props) => getDimensionStyles(props)
     .width()
@@ -164,7 +168,7 @@ const block = (state) => {
       startPage: 0,
       pageSize: 0,
       filter: {
-        id: '', 
+        id: '',
         query: [{}],
       },
     },

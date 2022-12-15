@@ -1,33 +1,38 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, {keyframes} from 'styled-components';
 import progressbar from 'assets/progressbar.svg';
 import Wrapper from 'utils/wrapper';
 import {
   strokeWidth,
   progressBarColor,
 } from 'views/configs';
+import {transformHexWeb} from '../../utils/color';
+
+const rotation = keyframes`
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+`;
 
 const Progressbar = styled.div`
     width: 48px;
     height: 48px;
     border-width: 5px;
     border-style: solid;
-    border-top-color: ${(props) => props.progressBarColor || 'transparent'};
-    border-right-color: ${(props) => props.progressBarColor || 'transparent'};
+    border-top-color: ${(props) => transformHexWeb(props.progressBarColor || 'transparent')};
+    border-right-color: ${(props) => transformHexWeb(props.progressBarColor || 'transparent')};
     border-bottom-color: transparent;
-    border-left-color: ${(props) => props.progressBarColor || 'transparent'};
+    border-left-color: ${(props) => transformHexWeb(props.progressBarColor || 'transparent')};
     border-radius: 50%;
     display: inline-block;
     box-sizing: border-box;
-    animation: rotation 1s linear infinite;
-    & > @keyframes rotation {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-    } 
+    animation-name: ${rotation};
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
 `;
 
 const Component = ({settingsUI, ...props}) => {

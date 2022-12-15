@@ -17,6 +17,7 @@ import {
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
 import {getDimensionStyles} from 'views/utils/styles/size';
+import {transformHexWeb} from '../../utils/color';
 
 const Label = styledComponents.div`
   box-sizing: border-box;
@@ -31,18 +32,18 @@ const Label = styledComponents.div`
   overflow: hidden;
   ${({shadow}) => {
     if (shadow) {
+      const webColor = transformHexWeb(shadow?.color);
+      const RGB = hexToRgb(webColor);
       return `box-shadow: ${shadow?.offsetSize?.width}px ${shadow?.offsetSize?.height}px ${
         shadow?.radius || 0
-      }px rgba(${hexToRgb(shadow?.color).r}, ${hexToRgb(shadow?.color).g}, ${
-        hexToRgb(shadow?.color).b
-      }, ${shadow?.opacity});`;
+      }px rgba(${RGB.r}, ${RGB.g}, ${RGB.b}, ${shadow?.opacity});`;
     }
   }}
   & > span {
     display: block;
     text-align: ${(props) => props.textAlignment || 'left'};
-    color: ${(props) => props.textColor || 'transparent'};
-    background-color: ${(props) => props.backgroundColor || 'transparent'};
+    color: ${(props) => transformHexWeb(props.textColor || 'transparent')};
+    background-color: ${(props) => transformHexWeb(props.backgroundColor || 'transparent')};
     font-weight: ${(props) => {
       switch (props.fontWeight) {
         case 'THIN':

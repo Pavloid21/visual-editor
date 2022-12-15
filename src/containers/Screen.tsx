@@ -10,6 +10,7 @@ import Prism from 'prismjs';
 import {atomOneLight} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import {Modal} from 'components';
 import {editLogic} from 'store/output.slice';
+import {transformHexWeb} from 'utils/color';
 
 const Container = styled.div`
   padding: 14px;
@@ -166,8 +167,8 @@ const Screen: React.FC<any> = (props) => {
               label="Scrim color"
               $isWide
               placeholder="Scrim color"
-              value={settingsUI.bottomSheetSettings?.scrimColor}
-              onChange={(event) => handleChange(event.target.value, 'scrimColor', false)}
+              value={transformHexWeb(settingsUI.bottomSheetSettings?.scrimColor)}
+              onChangeColor={(value) => handleChange(value, 'scrimColor', false)}
             />
           </>
         )}

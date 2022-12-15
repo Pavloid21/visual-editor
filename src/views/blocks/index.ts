@@ -20,6 +20,7 @@ import calendar_text_field from './calendarField';
 import progressbar from './progressbar';
 import checkbox from './checkbox';
 import calendar from './calendar';
+import passcodeview from './passcodeview';
 import {Blocks} from './types';
 
 const blocks: Blocks = {
@@ -45,6 +46,7 @@ const blocks: Blocks = {
   progressbar,
   checkbox,
   calendar,
+  passcodeview,
 };
 
 export const gallery: Record<string, any> = {
@@ -67,6 +69,7 @@ export const gallery: Record<string, any> = {
   progressbar,
   checkbox,
   calendar,
+  passcodeview,
 };
 
 export default blocks;

@@ -19,12 +19,16 @@ import {pushBlockInside} from 'store/layout.slice';
 import {pageSize, shadowConfigBuilder, shapeConfigBuilder, startPage} from '../configs/index';
 import {getDimensionStyles} from '../utils/styles/size';
 import {useAppDispatch, useAppSelector} from 'store';
+import {transformHexWeb} from '../../utils/color';
 
 const VStack = styled.div`
   align-self: center;
   width: fit-content;
   height: fit-content;
-  background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
+  background-color: ${(props) => {
+    const color = props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent';
+    return transformHexWeb(color);
+  }};
   display: flex;
   justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
   align-items: center;

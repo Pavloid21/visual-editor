@@ -6,9 +6,10 @@ import {iconSelectedColor, iconUnselectedColor, textSelectedColor, textUnselecte
 import {CustomSvg} from 'components/CustomSvg';
 import {setCorrectImageUrl} from 'utils';
 import {useAppSelector} from 'store';
+import {transformHexWeb} from '../../utils/color';
 
 const BottomBar = styled.div`
-  background-color: ${(props) => props.backgroundColor || 'transparent'};
+  background-color: ${(props) => transformHexWeb(props.backgroundColor || 'transparent')};
   padding: 16px 0 16px 0;
   bottom: 0;
   margin-top: auto;
@@ -20,23 +21,23 @@ const BottomBar = styled.div`
     position: relative;
     flex: 1 1 auto;
     justify-content: center;
-    color: ${(props) => props.iconUnselectedColor};
+    color: ${(props) => transformHexWeb(props.iconUnselectedColor)};
     display: flex;
     align-items: center;
     flex-direction: column;
     gap: 4px;
     & label {
       margin-bottom: 0;
-      color: ${(props) => props.textUnselectedColor || 'transparent'};
+      color: ${(props) => transformHexWeb(props.textUnselectedColor || 'transparent')};
     }
     & .item_icon {
-      background-color: ${(props) => props.iconUnselectedColor};
+      background-color: ${(props) => transformHexWeb(props.iconUnselectedColor)};
     }
   }
   & .active {
-    color: ${(props) => props.iconSelectedColor};
+    color: ${(props) => transformHexWeb(props.iconSelectedColor)};
     & div {
-      background-color: ${(props) => props.iconSelectedColor};
+      background-color: ${(props) => transformHexWeb(props.iconSelectedColor)};
     }
   }
 `;

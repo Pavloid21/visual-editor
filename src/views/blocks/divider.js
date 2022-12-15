@@ -6,10 +6,11 @@ import {getDimensionStyles} from 'views/utils/styles/size';
 import store from 'store';
 import {backgroundColor, padding, getSizeConfig} from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
+import {transformHexWeb} from '../../utils/color';
 
 const HR = styled.hr`
   align-self: center;
-  background-color: ${(props) => props.backgroundColor || 'transparent'};
+  background-color: ${(props) => transformHexWeb(props.backgroundColor || 'transparent')};
   ${(props) => getDimensionStyles(props)
     .width()
     .height()
