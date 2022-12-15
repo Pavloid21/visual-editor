@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import Wrapper from 'utils/wrapper';
-import invertColor from 'utils/invertColor';
 import topappbar from 'assets/topappbar.svg';
 import {backgroundColor, interactive} from 'views/configs';
 import {Device} from 'containers/MobileSelect/consts';
@@ -12,7 +11,7 @@ import {transformHexWeb} from '../../utils/color';
 
 const TopAppBar = styled.div`
   padding: 16px;
-  color: ${(props) => transformHexWeb(invertColor(props.backgroundColor, true))};
+  color: ${(props) => transformHexWeb(props.backgroundColor)};
   background-color: ${(props) => transformHexWeb(props.backgroundColor || 'transparent')};
   z-index: 2;
   width: 100%;
