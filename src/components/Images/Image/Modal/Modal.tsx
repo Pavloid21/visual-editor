@@ -21,12 +21,12 @@ export const Modal = (props: ModalProps) => {
 
   const changeNewFolder = (e: React.ChangeEvent<HTMLInputElement> & React.ChangeEvent<HTMLTextAreaElement>) => {
     dispatch(setNewFolder(e.target.value));
-  }
+  };
 
   const handleCancel = () => {
     setItemModalOpen(false);
     dispatch(setNewFolder(''));
-  }
+  };
 
   return (
     <ModalWrapper>

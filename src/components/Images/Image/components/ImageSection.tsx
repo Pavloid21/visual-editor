@@ -20,7 +20,7 @@ export const ImageSection: FC<ImageSectionProps> = ({name, url, folderName, proj
       deleteImagesFolder(projectId, folderName, file);
       dispatch(deleteImages({dir: folderName, file}));
     }
-  }
+  };
 
   return (
     <Container>

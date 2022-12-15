@@ -28,7 +28,7 @@ export const Image = () => {
       const newImagesList = [...imagesArr, ...dataFolder];
       dispatch(setImages(newImagesList));
     });
-  }
+  };
 
   const createContentTabs = (obj: IconTabObjectType) => {
     const result = [];
@@ -43,7 +43,7 @@ export const Image = () => {
                         label="Upload image"
                         placeholder="Drag and drop image"
                         onFileChange={(file) => {
-                          formData.append('file', file[0])
+                          formData.append('file', file[0]);
                           createImagesFolder(projectId, formData, folderName).then(() => getImagesFolder(projectId, folderName));
                         }}
                         accept="image/*"

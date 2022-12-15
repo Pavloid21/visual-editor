@@ -3,7 +3,7 @@ import {FC} from 'react';
 
 type ImageSectionProps = {
   name: string,
-  url?: string
+  url: string
 };
 
 export const IconSection: FC<ImageSectionProps> = ({name, url}) => {

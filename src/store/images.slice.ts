@@ -38,7 +38,7 @@ export const fetchImages = createAsyncThunk(
 
 export const fetchIcons = createAsyncThunk(
   'icons/fetchIcons',
-  async (_,{dispatch}) => {
+  async (_, {dispatch}) => {
     getIconsData().then(({data}) => {
       const tabsData: IconTabType[] = [];
       data.forEach((item: IconDataObjectType) => {
@@ -58,7 +58,7 @@ export const fetchIcons = createAsyncThunk(
       dispatch(setIcons(tabsData));
     }).catch(console.log);
   }
-)
+);
 
 const initialState: TImagesType = {
   images: [],

@@ -1,7 +1,7 @@
 export type IconTabType = {
   name: string,
   dir: string,
-  url?: string,
+  url: string,
   file: string
 }
 
