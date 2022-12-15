@@ -19,7 +19,9 @@ import {
   addActionField,
   removeActionField,
   changeKeyActionField,
-  changeActionURL, addParamsItem, removeParamsItem,
+  changeActionURL,
+  addParamsItem,
+  removeParamsItem,
   addFilterQueryItem,
 } from 'store/layout.slice';
 import type {TInspector} from './types';
