@@ -234,6 +234,7 @@ export type TSettingsUI = {
     bottomSheetSettings: {
       heightInPercent: number;
       scrimColor: string;
+      cornersRadius: number;
     }
 }
 
