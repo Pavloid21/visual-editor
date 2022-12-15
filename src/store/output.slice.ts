@@ -14,7 +14,8 @@ const defaultSettingsUI: TSettingsUI = {
   isBottomSheet: false,
     bottomSheetSettings: {
       heightInPercent: 70,
-      scrimColor: '#FFFFFF'
+      scrimColor: '#FFFFFF',
+      cornersRadius: 0,
     }
 };
 
