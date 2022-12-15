@@ -18,7 +18,7 @@ import {
   filter,
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
-import {blockStateSafeSelector} from 'store/selectors';
+import {blockStateSafeSelector, getListItemCollectionSelector} from 'store/selectors';
 import store, {useAppDispatch, useAppSelector} from 'store';
 import {getDimensionStyles} from 'views/utils/styles/size';
 import {transformHexWeb} from '../../utils/color';
@@ -54,8 +54,16 @@ const SortableContainer = sortableContainer(({
   settingsUI,
   ...props
 }) => {
-  const {pageSize} = props.interactive;
-  const listItems = listItem && range(pageSize).map(() => renderHandlebars([listItem], 'document2').components);
+  const [listSize, setListSize] = React.useState(0);
+  const getListItemCollection = useAppSelector(getListItemCollectionSelector);
+
+  React.useEffect(() => {
+    if(getListItemCollection.length > 0) {
+      setListSize(5);
+    }
+  }, [getListItemCollection]);
+
+  const listItems = listItem && range(listSize).map(() => renderHandlebars([listItem], 'document2').components);
 
   return (
     <Wrapper id={props.id} {...settingsUI} {...props}>
@@ -140,7 +148,7 @@ const block = (state) => {
     defaultInteractiveOptions: {
       dataSource: '',
       startPage: 0,
-      pageSize: 5,
+      pageSize: 0,
       filter: {
         id: '',
         query: [{}],

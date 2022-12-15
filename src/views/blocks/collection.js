@@ -68,8 +68,8 @@ const Collection = styled.div`
 `;
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItem, settingsUI, ...props}) => {
-  const getListItemCollection = useAppSelector(getListItemCollectionSelector);
   const [collectionSize, setCollectionSize] = React.useState(0);
+  const getListItemCollection = useAppSelector(getListItemCollectionSelector);
 
   React.useEffect(() => {
     if(getListItemCollection.length > 0) {
