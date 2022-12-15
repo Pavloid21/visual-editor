@@ -76,6 +76,7 @@ const Screens: React.FC<ScreensProps> = ({
               ),
               buttons: [
                 <Dropdown
+                  key={0}
                   handleCloneScreen={handleCloneScreen}
                   handleCloneBlock={handleCloneBlock}
                   handleDeleteScreen={handleDeleteScreen}

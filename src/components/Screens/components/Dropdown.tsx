@@ -6,10 +6,10 @@ import {ReactComponent as Trash} from 'assets/trash-item.svg';
 import {EditScreenNamePayloadAction} from 'store/types';
 
 type ButtonsProps = {
-  handleCloneScreen: Function,
-  handleCloneBlock: Function,
-  handleDeleteScreen: Function,
-  handleDeleteBlock: Function,
+  handleCloneScreen: (event: React.MouseEvent<HTMLDivElement>, uuid: string) => void,
+  handleCloneBlock: (subtitle: string) => void,
+  handleDeleteScreen: (event: React.MouseEvent<HTMLDivElement>, node: EditScreenNamePayloadAction) => void,
+  handleDeleteBlock: (subtitle: string) => void,
   uuid: string,
   subtitle: string,
   node: EditScreenNamePayloadAction
