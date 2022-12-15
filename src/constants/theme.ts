@@ -1,5 +1,5 @@
 import {createGlobalStyle} from 'styled-components';
-export default createGlobalStyle`
+export const GlobalStyles =  createGlobalStyle`
   body {
     background: #FAFAFA;
     text-align: left;
