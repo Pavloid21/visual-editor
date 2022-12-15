@@ -124,7 +124,7 @@ const Calendar = styled.div`
         if (props.allowMultipleSelection === true) {
 
           return `&.selectStart{
-              border-radius: ${(props) => props.cornerRadius * 10 +'% 0% 0% ' + props.cornerRadius * 10 +'%'|| '0% 0% 0% 0%'};
+              border-radius: ${(props) => props.cornerRadius * 100 +'% 0% 0% '+ props.cornerRadius * 100 +'%'|| '0% 0% 0% 0%'};
               border-color: ${webBorderSelectionColor};
               background: ${webSelectionColor};
             }
@@ -137,7 +137,7 @@ const Calendar = styled.div`
             }
 
             &.selectEnd{
-              border-radius: ${(props) => '0% ' + props.cornerRadius * 10 +'% ' + props.cornerRadius * 10 +'% 0%'|| '0% 0% 0% 0%'};
+              border-radius: ${(props) => '0% '+ props.cornerRadius * 100 +'% '+ props.cornerRadius * 100 +'% 0%'|| '0% 0% 0% 0%'};
               border-color: ${webBorderSelectionColor};
               background: ${webSelectionColor};
             }`;
