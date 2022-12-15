@@ -80,6 +80,14 @@ export const GlobalStyles =  createGlobalStyle`
     line-height: 20px;
   }
 
+  [data-test-id="virtuoso-item-list"] {
+    & > div:first-child {
+      & .dropdown {
+        bottom: -32px;
+      }
+    }
+  }
+
   .node_selected {
     background-color: var(--light-orange);
   }
