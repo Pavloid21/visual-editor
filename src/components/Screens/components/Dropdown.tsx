@@ -3,16 +3,15 @@ import {ReactComponent as ActionDots} from 'assets/left-sidebar-menu/actionDots.
 import {ReactComponent as Copy} from 'assets/copy-item.svg';
 import React, {MouseEventHandler} from 'react';
 import {ReactComponent as Trash} from 'assets/trash-item.svg';
-import {EditScreenNamePayloadAction} from 'store/types';
 
 type ButtonsProps = {
   handleCloneScreen: (event: React.MouseEvent<HTMLDivElement>, uuid: string) => void,
   handleCloneBlock: (subtitle: string) => void,
-  handleDeleteScreen: (event: React.MouseEvent<HTMLDivElement>, node: EditScreenNamePayloadAction) => void,
+  handleDeleteScreen: (event: React.MouseEvent, node: {uuid: string, endpoint: string, screen: string}) => void,
   handleDeleteBlock: (subtitle: string) => void,
   uuid: string,
   subtitle: string,
-  node: EditScreenNamePayloadAction
+  node: {uuid: string, endpoint: string, screen: string}
 }
 
 export const Dropdown = ({
@@ -28,13 +27,13 @@ export const Dropdown = ({
     subtitle === 'screen'
       ? handleCloneScreen(event, uuid)
       : handleCloneBlock(subtitle);
-  }
+  };
 
   const handleRemove: React.MouseEventHandler<HTMLDivElement> = (event) => {
     subtitle === 'screen'
       ? handleDeleteScreen(event, node)
-      : handleDeleteBlock(subtitle)
-  }
+      : handleDeleteBlock(subtitle);
+  };
 
   return (
     <Container>
@@ -52,5 +51,5 @@ export const Dropdown = ({
         </div>
       </div>
     </Container>
-  )
+  );
 };
