@@ -19,7 +19,7 @@ export const getListItemCollectionSelector = createSelector(getBlocksSelector, (
 
   if(blocks.length) {
     const checkBlocksLength =  blocks[firstIndex].listItems.map((item) => {
-      if(item.blockId === 'collection' && item.listItem !== null) {
+      if((item.blockId === 'collection' || item.blockId === 'list') && item.listItem !== null) {
         return item.listItem;
       }
     });
