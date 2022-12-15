@@ -52,6 +52,7 @@ const Screen: React.FC<any> = (props) => {
   const handleChange = React.useCallback((
     event: string | boolean,
     tag:'scrimColor' |
+    'cornersRadius' |
     'heightInPercent' |
     'isBottomSheet' |
     'screenName' |
@@ -74,6 +75,7 @@ const Screen: React.FC<any> = (props) => {
         bottomSheetSettings: {
           heightInPercent: tag === 'heightInPercent' ? event : settingsUI.bottomSheetSettings.heightInPercent,
           scrimColor: tag === 'scrimColor' ? event : settingsUI.bottomSheetSettings.scrimColor,
+          cornersRadius: tag === 'cornersRadius' ? event : settingsUI.bottomSheetSettings.cornersRadius,
         }
       },
       snippet: {
@@ -169,6 +171,18 @@ const Screen: React.FC<any> = (props) => {
               placeholder="Scrim color"
               value={transformHexWeb(settingsUI.bottomSheetSettings?.scrimColor)}
               onChangeColor={(value) => handleChange(value, 'scrimColor', false)}
+            />
+            <Input
+              $isWide
+              $clearable={false}
+              label="Corners radius"
+              type="number"
+              placeholder="Corners radius"
+              maxNumber={100}
+              value={settingsUI.bottomSheetSettings?.cornersRadius}
+              max={100}
+              min={0}
+              onChange={(event) => handleChange(event.target.value, 'cornersRadius', false)}
             />
           </>
         )}
