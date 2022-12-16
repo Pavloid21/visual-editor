@@ -47,6 +47,8 @@ export interface Blocks extends SimpleObject {
   calendar_text_field: (state?: BlocksState) => Block;
   progressbar: (state?: BlocksState) => Block;
   checkbox: (state?: BlocksState) => Block;
+  calendar: (state?: BlocksState) => Block;
+  passcodeview: (state?: BlocksState) => Block;
 }
 
 export type SettingsUIType = Partial<{

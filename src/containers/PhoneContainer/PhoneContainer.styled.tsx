@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import {transformHexWeb} from 'utils/color';
 
 const Wrapper = styled.div<{
   backgroundColor: string;
@@ -11,7 +12,6 @@ const Wrapper = styled.div<{
   border: 1px solid #000;
   overflow: hidden;
   padding: 56px 26px 0;
-  background-color: ${(props) => props.backgroundColor};
   ${(props) => {
     return props.styled;
   }}
@@ -38,7 +38,7 @@ const BottomSheetContainer = styled.div<{
   flex-direction: column;
 
   & .top-block {
-    background-color: ${(props) => props.backgroundColor || '#FFFFFF'};
+    background-color: ${(props) => transformHexWeb(props.backgroundColor || '#FFFFFF')};
     height: ${(props) => (props.heightTop || '100%')};
   }
 

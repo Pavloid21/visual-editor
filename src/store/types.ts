@@ -3,6 +3,7 @@ import {Zoom} from 'containers/ZoomSelect/types';
 import store from './index';
 
 import type {ThunkDispatch} from '@reduxjs/toolkit';
+import {IconTabType} from '../components/Images/types';
 
 export type EditScreenNamePayloadAction = Action<string> & {
   screen: string;
@@ -130,7 +131,7 @@ export type APIItem = {
 };
 
 export type Layout = {
-  blocks: BlockItem[];
+  blocks: IListItem[];
   selectedBlockUuid: string;
   documentId: string;
   selectedScreen: any | null;
@@ -146,9 +147,62 @@ export type BlockItem = {
   blockId: number | string;
   settingsUI: any;
   interactive?: any;
-  listItems?: any[];
-  listItem?: any;
+  listItems?: IListItem[];
+  listItem?: IListItem;
 };
+
+export interface IListItem {
+  uuid: string;
+  blockId: string | number;
+  settingsUI: {
+    size?: {
+      heightInPercent: number;
+      widthInPercent: number;
+    };
+    distribution?: string;
+    spacing?: number;
+    scroll?: boolean;
+    borderColor?: string;
+    borderWidth?: number;
+    backgroundColor?: string;
+    thumbOnColor?: string;
+    placeholder?: string;
+    text?: string;
+    shadow?: Partial<TShadow>;
+    padding?: Partial<TPadding>;
+    shape?: {
+      type: string;
+      radius: string;
+    };
+  }
+  interactive?: {
+    type?: string;
+    action?: {
+      url: string;
+      fields: object;
+      target: string;
+    }
+  }
+  listItems: IListItem[];
+  listItem?: IListItem;
+}
+
+export type TShadow = {
+  color: string;
+  opacity: number;
+  offsetSize: {
+    width: number;
+    height: number;
+  };
+  radius: number;
+}
+
+export type TPadding = {
+  top: string;
+  bottom: string;
+  right: string;
+  left: string;
+}
 
 export type Config = {
   activeTab: number;
@@ -171,7 +225,8 @@ export type EditorMode = {
 export type LeftBarMenu = {
   activeTab: string,
   activeImageTab: string,
-  iconNameFilter: string
+  iconNameFilter: string,
+  imageNameFilter: string,
   filterAction: ActionTypes,
   screenNameFilter: string,
   actionNameFilter: string,
@@ -183,12 +238,24 @@ export type TScreenListOption = {
   value: string;
 }
 
+export type TImageListOption = {
+  name: string;
+  type: string;
+}
+
 export type TSettingsUI = {
   isBottomSheet: any;
     bottomSheetSettings: {
       heightInPercent: number;
       scrimColor: string;
+      cornersRadius: number;
     }
+}
+
+export type TImagesType = {
+  images: IconTabType[],
+  newFolder: string,
+  icons: IconTabType[]
 }
 
 export type RootStore = ReturnType<typeof store.getState>;

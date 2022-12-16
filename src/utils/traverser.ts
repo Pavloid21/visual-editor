@@ -91,12 +91,14 @@ export const buildLayout = ({screen, object}: Record<string, any>) => {
     layout: newBlock.listItems,
   };
   if (object.bottomBar) {
+    const {settingsUI, navigationItems} = object.bottomBar;
+
     action.bottomBar = {
       blockId: 'bottombar',
       uuid: v4(),
       settingsUI: {
-        ...object.bottomBar.settingsUI,
-        navigationItems: object.bottomBar.navigationItems,
+        ...settingsUI,
+        navigationItems: settingsUI.navigationItems !== undefined ? settingsUI.navigationItems : navigationItems,
       },
     };
   }

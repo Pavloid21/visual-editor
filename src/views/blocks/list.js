@@ -18,9 +18,10 @@ import {
   filter,
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
-import {blockStateSafeSelector} from 'store/selectors';
+import {blockStateSafeSelector, getListItemCollectionSelector} from 'store/selectors';
 import store, {useAppDispatch, useAppSelector} from 'store';
 import {getDimensionStyles} from 'views/utils/styles/size';
+import {transformHexWeb} from '../../utils/color';
 
 const List = styled.div`
   align-self: center;
@@ -30,7 +31,10 @@ const List = styled.div`
     .height()
     .apply()
   }
-  background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
+  background-color: ${(props) => {
+    const color = props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent';
+    return transformHexWeb(color);
+  }};
   display: flex;
   padding: 4px 0;
   flex-direction: column;
@@ -50,8 +54,16 @@ const SortableContainer = sortableContainer(({
   settingsUI,
   ...props
 }) => {
-  const {pageSize} = props.interactive;
-  const listItems = listItem && range(pageSize).map(() => renderHandlebars([listItem], 'document2').components);
+  const [listSize, setListSize] = React.useState(0);
+  const getListItemCollection = useAppSelector(getListItemCollectionSelector);
+
+  React.useEffect(() => {
+    if(getListItemCollection.length > 0) {
+      setListSize(5);
+    }
+  }, [getListItemCollection]);
+
+  const listItems = listItem && range(listSize).map(() => renderHandlebars([listItem], 'document2').components);
 
   return (
     <Wrapper id={props.id} {...settingsUI} {...props}>
@@ -136,7 +148,11 @@ const block = (state) => {
     defaultInteractiveOptions: {
       dataSource: '',
       startPage: 0,
-      pageSize: 5,
+      pageSize: 0,
+      filter: {
+        id: '',
+        query: [{}],
+      },
     },
     defaultData: {
       backgroundColor: '',
@@ -150,7 +166,10 @@ const block = (state) => {
       dataSource: dataSourceSettings.dataSource,
       startPage: dataSourceSettings.startPage,
       pageSize: dataSourceSettings.pageSize,
-      filter,
+      filter: {
+        id: filter.id,
+        query: filter.query,
+      },
   },
     config: {
       shape: shapeConfigBuilder()

@@ -17,16 +17,21 @@ import {
   shapeConfigBuilder,
   metricStyle,
   dataSourceSettings,
+  filter,
 } from 'views/configs';
 import collection from 'assets/collection.svg';
 import {pushBlockInside} from 'store/layout.slice';
-import {blockStateSafeSelector} from 'store/selectors';
+import {blockStateSafeSelector, getListItemCollectionSelector} from 'store/selectors';
 import store, {useAppDispatch, useAppSelector} from 'store';
 import {getDimensionStyles} from 'views/utils/styles/size';
+import {transformHexWeb} from '../../utils/color';
 
 const Collection = styled.div`
   align-self: center;
-  background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
+  background-color: ${(props) => {
+    const color = props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent';
+    return transformHexWeb(color);
+  }};
   display: flex;
   ${(props) => getDimensionStyles(props)
     .width()
@@ -63,8 +68,16 @@ const Collection = styled.div`
 `;
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItem, settingsUI, ...props}) => {
-  const {pageSize} = props.interactive;
-  const listItems = listItem && range(pageSize).map(() => renderHandlebars([listItem], 'document2').components);
+  const [collectionSize, setCollectionSize] = React.useState(0);
+  const getListItemCollection = useAppSelector(getListItemCollectionSelector);
+
+  React.useEffect(() => {
+    if(getListItemCollection.length > 0) {
+      setCollectionSize(5);
+    }
+  }, [getListItemCollection]);
+
+  const listItems = listItem && range(collectionSize).map(() => renderHandlebars([listItem], 'document2').components);
 
   return (
     <Wrapper
@@ -153,7 +166,11 @@ const block = (state) => {
     defaultInteractiveOptions: {
       dataSource: '',
       startPage: 0,
-      pageSize: 5,
+      pageSize: 0,
+      filter: {
+        id: '',
+        query: [{}],
+      },
     },
     defaultData: {
       backgroundColor: '',
@@ -181,6 +198,10 @@ const block = (state) => {
       dataSource: dataSourceSettings.dataSource,
       startPage: dataSourceSettings.startPage,
       pageSize: dataSourceSettings.pageSize,
+      filter: {
+        id: filter.id,
+        query: filter.query,
+      },
     },
     config: {
       backgroundColor,

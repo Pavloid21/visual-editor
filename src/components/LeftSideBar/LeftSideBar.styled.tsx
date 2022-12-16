@@ -9,6 +9,7 @@ export const Container = styled.div`
   justify-content: space-between;
   border-right: 1px solid var(--neo-gray);
   height: calc(100vh - 60px);
+  max-width: 458px;
   z-index: 1;
   & > .screen-list {
     flex: 1;

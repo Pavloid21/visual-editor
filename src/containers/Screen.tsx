@@ -10,6 +10,7 @@ import Prism from 'prismjs';
 import {atomOneLight} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import {Modal} from 'components';
 import {editLogic} from 'store/output.slice';
+import {transformHexWeb} from 'utils/color';
 
 const Container = styled.div`
   padding: 14px;
@@ -51,6 +52,7 @@ const Screen: React.FC<any> = (props) => {
   const handleChange = React.useCallback((
     event: string | boolean,
     tag:'scrimColor' |
+    'cornersRadius' |
     'heightInPercent' |
     'isBottomSheet' |
     'screenName' |
@@ -73,6 +75,7 @@ const Screen: React.FC<any> = (props) => {
         bottomSheetSettings: {
           heightInPercent: tag === 'heightInPercent' ? event : settingsUI.bottomSheetSettings.heightInPercent,
           scrimColor: tag === 'scrimColor' ? event : settingsUI.bottomSheetSettings.scrimColor,
+          cornersRadius: tag === 'cornersRadius' ? event : settingsUI.bottomSheetSettings.cornersRadius,
         }
       },
       snippet: {
@@ -166,8 +169,20 @@ const Screen: React.FC<any> = (props) => {
               label="Scrim color"
               $isWide
               placeholder="Scrim color"
-              value={settingsUI.bottomSheetSettings?.scrimColor}
-              onChange={(event) => handleChange(event.target.value, 'scrimColor', false)}
+              value={transformHexWeb(settingsUI.bottomSheetSettings?.scrimColor)}
+              onChangeColor={(value) => handleChange(value, 'scrimColor', false)}
+            />
+            <Input
+              $isWide
+              $clearable={false}
+              label="Corners radius"
+              type="number"
+              placeholder="Corners radius"
+              maxNumber={100}
+              value={settingsUI.bottomSheetSettings?.cornersRadius}
+              max={100}
+              min={0}
+              onChange={(event) => handleChange(event.target.value, 'cornersRadius', false)}
             />
           </>
         )}

@@ -4,21 +4,12 @@ import {Accordion} from 'components/Accordion';
 import {groupTabs} from 'components/Images/utils';
 import {IconSections} from './components/IconSections';
 import {IconTabObjectType} from 'components/Images/types';
+import {useAppSelector} from 'store';
 
 export const Icon = () => {
-  const tabsData = [
-    {tabsType: 'Action', name: 'code', url: 'code.svg'},
-    {tabsType: 'Alert', name: 'code1', url: 'code.svg'},
-    {tabsType: 'Av', name: 'code2', url: 'code.svg'},
-    {tabsType: 'Av', name: 'code', url: 'code.svg'},
-    {tabsType: 'Av', name: 'code2', url: 'code.svg'},
-    {tabsType: 'Action', name: 'code1', url: 'code.svg'},
-    {tabsType: 'Action', name: 'code2', url: 'code.svg'},
-    {tabsType: 'Action', name: 'code', url: 'code.svg'},
-    {tabsType: 'Action', name: 'code2', url: 'code.svg'},
-  ];
+  const iconsData = useAppSelector((state) => state.imagesList.icons);
 
-  const groupedTabs = groupTabs(tabsData);
+  const groupedTabs = groupTabs(iconsData);
 
   const createContentTabs = (obj: IconTabObjectType) => {
     const result = [];

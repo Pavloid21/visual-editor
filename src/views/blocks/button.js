@@ -20,18 +20,19 @@ import store, {useAppSelector} from 'store';
 import {getDimensionStyles} from 'views/utils/styles/size';
 import {setCorrectImageUrl, getFieldValue} from 'utils';
 import {CustomSvg} from 'components/CustomSvg';
+import {transformHexWeb} from '../../utils/color';
 
 const Button = styled.div`
   position: relative;
   box-sizing: border-box;
-  color: ${(props) => props.textColor || 'transparent'};
-  background-color: ${(props) => props.backgroundColor || 'transparent'};
+  color: ${(props) => transformHexWeb(props.textColor || 'transparent')};
+  background-color: ${(props) => transformHexWeb(props.backgroundColor || 'transparent')};
   align-items: center;
   display: flex;
   justify-content: space-between;
   border-width: ${(props) => props.borderWidth  || 0}px;
   border-style: solid;
-  border-color: ${(props) => props.borderColor || 'transparent'};
+  border-color: ${(props) => transformHexWeb(props.borderColor || 'transparent')};
   ${(props) => getDimensionStyles(props)
     .width()
     .height()
@@ -41,11 +42,14 @@ const Button = styled.div`
   }
   ${(props) => {
     if (props.shadow) {
-      return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${
-        props.shadow?.radius
-      }px rgba(${hexToRgb(props.shadow?.color).r}, ${hexToRgb(props.shadow?.color).g}, ${
-        hexToRgb(props.shadow?.color).b
-      }, ${props.shadow?.opacity});`;
+      const webColor = transformHexWeb(props.shadow?.color);
+      const RGB = hexToRgb(webColor);
+
+      if(RGB !== null) {
+        return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${
+          props.shadow?.radius
+        }px rgba(${RGB.r}, ${RGB.g}, ${RGB.b}, ${props.shadow?.opacity});`;
+      }
     }
   }}
 

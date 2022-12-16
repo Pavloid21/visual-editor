@@ -5,6 +5,7 @@ const initialState: LeftBarMenu = {
   activeTab: 'screen',
   activeImageTab: 'Icon',
   iconNameFilter: '',
+  imageNameFilter: '',
   filterAction: ActionTypes.all,
   screenNameFilter: '',
   actionNameFilter: '',
@@ -23,6 +24,9 @@ const leftBarMenuSlice = createSlice({
     },
     setIconNameFilter: (state, action: PayloadAction<string>) => {
       state.iconNameFilter = action.payload;
+    },
+    setImageNameFilter: (state, action: PayloadAction<string>) => {
+      state.imageNameFilter = action.payload;
     },
     setLeftBarActionFilter: (state, action: PayloadAction<ActionTypes>) => {
       state.filterAction = action.payload;
@@ -46,6 +50,7 @@ export const {
   setActionNameFilter,
   setActiveTabActions,
   setLeftBarImageTab,
-  setIconNameFilter
+  setIconNameFilter,
+  setImageNameFilter
 } = leftBarMenuSlice.actions;
 export default leftBarMenuSlice.reducer;

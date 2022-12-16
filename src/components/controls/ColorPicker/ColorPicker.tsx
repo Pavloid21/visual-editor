@@ -1,66 +1,102 @@
-import React, {
-  ChangeEvent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  ChangeEventHandler,
-  InputHTMLAttributes
-} from 'react';
+import React, {useState, useCallback, useRef, useEffect} from 'react';
+import {HexColorInput} from 'react-colorful';
+
+import {debounce} from 'external/lodash';
+
 import {Label} from 'components/controls';
 import {Container, Wrapper} from './ColorPicker.styled';
-import {debounce} from 'external/lodash';
-import {isValidHEX, normalizeHEX} from 'utils/color';
+import {PopoverColor} from 'components/controls/ColorPicker/PopoverColor';
+import {transformHexAndroid} from 'utils/color';
 
-interface IColorPicker extends InputHTMLAttributes<HTMLInputElement> {
-  onChange: ChangeEventHandler<HTMLInputElement>;
+const options = {
+  root: null,
+  rootMargin: "0px",
+};
+
+interface IColorPicker {
+  onChangeColor: (value: string) => void | undefined;
   label: string;
   debouncetimeout: number;
   $isWide: boolean;
+  placeholder?: string;
+  value: string;
 }
 
-const ColorPicker = ({value, onChange, ...rest}: IColorPicker) => {
-  const colorRef = useRef(null);
-  const [localValue, setLocalValue] = useState(value);
+const ColorPicker = ({value, onChangeColor, ...rest}: IColorPicker) => {
+  const wrapperRef = useRef(null);
 
-  useEffect(() => setLocalValue(value), [value]);
-  const doDebouncedChangeGlobalValue = useCallback(debounce(onChange, 1000), [onChange]);
+  const [position, setPosition] = useState("bottom");
+  const [isShow, setIsShow] = useState(false);
 
-  const onBlur = (e: ChangeEvent<HTMLInputElement>) => {
-    const {value: targetValue} = e.target;
-    if (isValidHEX(targetValue)) {
-      onChange(e);
+  const onChangeEvent = useCallback((value: string | undefined | null) => {
+    onChangeColor(transformHexAndroid(value));
+  }, [onChangeColor]);
+
+  const doDebouncedChangeGlobalValue = useCallback(debounce(onChangeEvent, 750), [onChangeEvent]);
+
+  const callbackObserver = useCallback((entries: IntersectionObserverEntry[]) => {
+    const [entry] = entries;
+    const heightDocument = document.documentElement.clientHeight;
+    if ((heightDocument - 250 - 120 - 20) <= entry.boundingClientRect.y) {
+      position !== "top" && setPosition("top");
     } else {
-      setLocalValue(value);
+      position !== "bottom" && setPosition("bottom");
     }
-  };
+    if (!entry.isIntersecting) {
+      setIsShow(false);
+    }
+  }, [position]);
 
-  const doChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
-    const {value: targetValue} = e.target;
-    setLocalValue(targetValue);
-    if (isValidHEX(targetValue)) {
-      doDebouncedChangeGlobalValue(e);
+  const onWheel = useCallback(() => {
+    if (isShow) {
+      setIsShow(false);
     }
-  };
+  }, [isShow]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(callbackObserver, options);
+    if (wrapperRef.current && isShow) {
+      observer.observe(wrapperRef.current);
+      document.addEventListener('wheel', onWheel);
+    }
+    return () => {
+      if (wrapperRef.current) {
+        observer.unobserve(wrapperRef.current);
+      }
+      document.removeEventListener('wheel', onWheel);
+    };
+  }, [wrapperRef, isShow]);
 
   return (
     <Wrapper>
       {rest.label && <Label>{rest.label}</Label>}
       <Container color={String(value)}>
-        <input
-          ref={colorRef}
-          type="color"
-          value={normalizeHEX(String(localValue))}
-          onChange={doChangeValue}
-          onBlur={onBlur}
+        <div
+          ref={wrapperRef}
+          className="swatch"
+          onClick={() => setIsShow(!isShow)}
         />
-        <input
+
+        <HexColorInput
+          color={value || ''}
+          onChange={doDebouncedChangeGlobalValue}
+          alpha={true}
+          prefixed={true}
           type="text"
-          value={localValue}
-          onChange={doChangeValue}
-          onBlur={onBlur}
+          className="input-color"
           {...rest}
         />
+
+        {isShow && (
+          <PopoverColor
+            value={value || ''}
+            onChange={doDebouncedChangeGlobalValue}
+            // themeColors={['#4D1ED58A', '#DC0F728A', '#42FF0026', '#CC00FFA1', '#49A44AE0', '#D917C063']}
+            onClickThemColors={onChangeColor}
+            onClose={() => setIsShow(false)}
+            position={position}
+          />
+        )}
       </Container>
     </Wrapper>
   );

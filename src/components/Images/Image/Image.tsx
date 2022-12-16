@@ -1,32 +1,40 @@
 import {Container, WrapperFileInput} from './Image.styled';
 import React from 'react';
-import {groupTabs} from '../utils';
+import {groupTabs, trimExtension} from 'components/Images/utils';
 import {Accordion} from 'components/Accordion';
 import {FileInput} from 'components/controls';
-import {createImagesFolder, deleteImagesFolder} from 'services/ApiService';
 import {ImageSections} from './components/ImageSections';
-import {IconTabObjectType} from '../types';
+import {IconTabObjectType, IconTabType, ImageDataType} from 'components/Images/types';
+import {useAppDispatch, useAppSelector} from 'store';
+import {BASE_URL, createImagesFolder, getImagesData} from 'services/ApiService';
+import {setImages} from 'store/images.slice';
 
 export const Image = () => {
-  createImagesFolder('portal', 'test1');
-  deleteImagesFolder('portal', 'test');
+  const imagesList = useAppSelector((state) => state.imagesList.images);
+  const projectId = useAppSelector((state) => state.project.id);
+  const dispatch = useAppDispatch();
+  const formData = new FormData();
+  const groupedTabs = groupTabs(imagesList);
 
-  const tabsData = [
-    {tabsType: 'Nature', name: 'code', url: 'image-preview.png'},
-    {tabsType: 'Nature', name: 'code', url: 'image-preview.png'},
-    {tabsType: 'Nature', name: 'code', url: 'image-preview.png'},
-    {tabsType: 'People', name: 'code', url: 'image-preview.png'},
-    {tabsType: 'People', name: 'code', url: 'image-preview.png'},
-    {tabsType: 'People', name: 'code', url: 'image-preview.png'},
-    {tabsType: 'People', name: 'code', url: 'image-preview.png'},
-    {tabsType: 'People', name: 'code', url: 'image-preview.png'},
-  ];
-
-  const groupedTabs = groupTabs(tabsData);
+  const getImagesFolder = (projectId: string, folderName: string) => {
+    const imagesArr = imagesList.filter((item: IconTabType) => item.dir !== folderName);
+    getImagesData(projectId, folderName).then(data => {
+      const dataFolder = data.data.map((item: ImageDataType) => ({
+        url: `${BASE_URL}projects/${projectId}/admin/files/${folderName}/${item.name}`,
+        name: trimExtension(item.name),
+        dir: folderName,
+        file: item.name
+      }));
+      const newImagesList = [...imagesArr, ...dataFolder];
+      dispatch(setImages(newImagesList));
+    });
+  };
 
   const createContentTabs = (obj: IconTabObjectType) => {
     const result = [];
     for (const item in obj) {
+      const isEmptyFolder = obj[item].length === 1 && !obj[item][0]?.url;
+      const folderName = obj[item][0]?.dir;
       result.push({
         title: item,
         content: <div>
@@ -34,12 +42,21 @@ export const Image = () => {
                       <FileInput
                         label="Upload image"
                         placeholder="Drag and drop image"
-                        onFileChange={() => console.log('onChange')}
+                        onFileChange={(file) => {
+                          formData.append('file', file[0]);
+                          createImagesFolder(projectId, formData, folderName).then(() => getImagesFolder(projectId, folderName));
+                        }}
                         accept="image/*"
                         value={[]}
+                        fileUploaded={true}
                       />
                     </WrapperFileInput>
-                  <ImageSections sections={obj[item]} />
+                  {!isEmptyFolder &&
+                    <ImageSections
+                      sections={obj[item]}
+                      projectId={projectId}
+                      folderName={folderName}
+                    />}
                 </div>
       });
     }
@@ -50,7 +67,6 @@ export const Image = () => {
 
   return (
     <Container>
-      <img src='http://mobile-platform.apps.msa31.do.neoflex.ru/api/v2/projects/portal/admin/files/test/otpusk.svg' alt='' />
       <Accordion tabs={contentTabs} />
     </Container>
   );

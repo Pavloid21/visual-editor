@@ -9,8 +9,10 @@ import {
   padding,
   checkedColor,
   uncheckedColor,
+  filter,
 } from 'views/configs';
 import {getDimensionStyles} from '../utils/styles/size';
+import {transformHexWeb} from '../../utils/color';
 
 const Switch = styled.div`
   font-size: 16px;
@@ -26,14 +28,14 @@ const Switch = styled.div`
     .apply()
   }
   & input:checked + span::before {
-    background-color: ${(props) => props.checkedColor || '#4ed164'};
+    background-color: ${(props) => transformHexWeb(props.checkedColor || '#4ed164')};
     opacity: ${(props) => (props.blockState.deviceInfo.device === Device.ANDROID ? '0.5' : '1')};
   }
   & input:checked + span::after {
     transform: translateX(16px);
     ${(props) => {
     if (props.blockState.deviceInfo.device === Device.ANDROID) {
-      return `background-color: ${(props) => props.checkedColor || '#4ed164'};`;
+      return `background-color: ${(props) => transformHexWeb(props.checkedColor || '#4ed164')};`;
     }
     if (props.blockState.deviceInfo.device === Device.IOS) {
       return `background-color: #ffffff;`;
@@ -124,49 +126,35 @@ const block = () => ({
   },
   defaultInteractiveOptions: {
     action: {url: '', fields: {}},
+    filter: {
+      id: '',
+      query: [{}],
+    },
   },
   interactive: {
     field: {type: 'string', name: 'Field name'},
     action: {
-      url: {
-        type: 'select',
-        name: 'Action URL',
-        action_types: 'actions,other',
-      },
-      method: {
-        type: 'select',
-        name: 'Method',
-        options: [
-          {label: 'Get', value: 'get'},
-          {label: 'Post', value: 'post'},
-        ],
-      },
-      fields: {
-        type: 'object',
-        properties: {
-          key: {type: 'string', name: 'Key'},
-          value: {type: 'string', name: 'Value'},
+        url: {
+          type: 'select',
+          name: 'Action URL',
+          action_types: 'actions,other',
         },
+        method: interactive.action.method,
+        fields: interactive.action.fields,
+        confirmationDialog: {
+          title: interactive.action.confirmationDialog.title,
+          message: interactive.action.confirmationDialog.message,
+          confirmText: interactive.action.confirmationDialog.confirmText,
+          cancelledText: interactive.action.confirmationDialog.cancelledText,
+        },
+        id: interactive.action.id,
+        delegateActionId: interactive.action.delegateActionId,
       },
-    },
-    confirmationDialog: {
-      title: {
-        type: 'string',
-        name: 'Title',
+      filter: {
+        id: filter.id,
+        applyHere: filter.applyHere,
+        query: filter.query,
       },
-      message: {
-        type: 'string',
-        name: 'Message',
-      },
-      confirmText: {
-        type: 'string',
-        name: 'Confirm text',
-      },
-      cancelledText: {
-        type: 'string',
-        name: 'Cancelled text',
-      },
-    },
   },
 });
 

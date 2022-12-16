@@ -64,7 +64,7 @@ export const PhoneContainer = (props: IPhoneContainer) => {
         >
           {settingsUI && settingsUI.isBottomSheet ? (
             <>
-              {statusBarByDevice(topAppBar?.settingsUI.backgroundColor, model)}
+              {statusBarByDevice(settingsUI.bottomSheetSettings?.scrimColor, model)}
               <BottomSheetContainer
                 backgroundColor={settingsUI.bottomSheetSettings?.scrimColor}
                 heightTop={countHeightTopBlock}

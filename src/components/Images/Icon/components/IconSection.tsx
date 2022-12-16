@@ -10,7 +10,7 @@ export const IconSection: FC<ImageSectionProps> = ({name, url}) => {
   return (
     <Container>
       <img src={url} alt={url} />
-      <div>{name}</div>
+      <div className='nameIconItem'>{name}</div>
     </Container>
   );
 };

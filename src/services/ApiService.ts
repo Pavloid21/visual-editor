@@ -155,20 +155,25 @@ export const getTemplateData = async (templateId: string, params?: string) => {
   return callApi(url, null, 'GET');
 };
 
-export const getImagesData = async (projectId: string) => {
-  const url = API.defaults.baseURL + `projects/${projectId}/admin/files`;
+export const getImagesData = async (projectId: string, folder = '') => {
+  const url = API.defaults.baseURL + `projects/${projectId}/admin/files/${folder}`;
   return callApi(url, null, 'GET');
 };
 
-export const createImagesFolder = async (projectId: string, payload: string) => {
-  const url = API.defaults.baseURL + `projects/${projectId}/admin/files`;
+export const getIconsData = async () => {
+  const url = API.defaults.baseURL + 'icons';
+  return callApi(url, null, 'GET');
+};
+
+export const createImagesFolder = async (projectId: string, payload: any, folder = '') => {
+  const url = API.defaults.baseURL + `projects/${projectId}/admin/files/${folder}/`;
   return callApi(url, payload, 'POST', undefined, undefined, {
     'Content-Type': 'multipart/form-data',
   });
 };
 
-export const deleteImagesFolder = async (projectId: string, endpoint: string) => {
-  const url = API.defaults.baseURL + `projects/${projectId}/admin/files/${endpoint}/`;
+export const deleteImagesFolder = async (projectId: string, folder: string, fileName: string) => {
+  const url = API.defaults.baseURL + `projects/${projectId}/admin/files/${folder}/${fileName}`;
   return callApi(url, null, 'DELETE');
 };
 

@@ -20,11 +20,13 @@ import {
   removeActionField,
   changeKeyActionField,
   changeActionURL,
+  addFilterQueryItem,
 } from 'store/layout.slice';
 import type {TInspector} from './types';
 import {blockStateUnsafeSelector} from 'store/selectors';
 import {getUnitOptionByDevice} from 'utils/units';
 import {get, isEmpty} from 'external/lodash';
+import {transformHexWeb} from 'utils/color';
 
 const Inspector: React.FC<TInspector> = ({display}) => {
   const dispatch = useAppDispatch();
@@ -114,8 +116,8 @@ const Inspector: React.FC<TInspector> = ({display}) => {
                 label={config[el].name}
                 $isWide
                 placeholder={config[el].name}
-                value={endpoint ? endpoint[el] : null}
-                onChange={(e: any) => handleChangeBlockData(blockUuid, el, e.target.value, parentKey)}
+                value={transformHexWeb(endpoint ? endpoint[el] : null)}
+                onChangeColor={(value: string) => handleChangeBlockData(blockUuid, el, value, parentKey)}
               />
             </div>
           );
@@ -191,9 +193,9 @@ const Inspector: React.FC<TInspector> = ({display}) => {
                 async={config[el].action_types}
                 label={config[el].name}
                 onChange={(value) => {
-                  parentKey !== 'action'
-                  ? handleChangeBlockData(blockUuid, el, value, parentKey)
-                  : handleChangeActionURL(blockUuid, value);
+                  el === 'url'
+                  ? handleChangeActionURL(blockUuid, value)
+                  : handleChangeBlockData(blockUuid, el, value, parentKey);
                 }}
                 options={config[el].options || []}
                 value={endpoint ? endpoint[el] : null}
@@ -259,7 +261,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
                     }}/>
                     <Trash
                       className="icon"
-                      onClick={(e) => {
+                      onClick={() => {
                         dispatch(removeActionField(block.uuid, key));
                       }}
                     />
@@ -307,7 +309,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
       }}
     >
       {interactive && parseConfig(interactive, blockUuid, block.interactive)}
-      {complex && <Select label="Element type" options={complex} onChange={handleChangeElemType} value={name} />}
+      {complex && <Select label="Input type" options={complex} onChange={handleChangeElemType} value={name} />}
       {parseConfig(config, blockUuid, block.settingsUI)}
       {block.settingsUI?.navigationItems && (
         <div>
@@ -327,7 +329,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
                   <span>Button {index + 1}</span>
                   <Trash
                     className="icon"
-                    onClick={(e) => {
+                    onClick={() => {
                       dispatch(removeBottomBarItem(index));
                     }}
                   />
@@ -370,6 +372,40 @@ const Inspector: React.FC<TInspector> = ({display}) => {
                 {parseConfig(interactive.rightButtons[0], blockUuid, block.interactive.rightButtons[index], [
                   index,
                   'rightButtons',
+                ])}
+              </div>
+            );
+          })}
+        </div>
+      )}
+      {block.interactive?.query && (
+        <div>
+          <Division>
+            <span>Query items</span>
+            <Plus
+              className="icon"
+              onClick={() => {
+                dispatch(addFilterQueryItem());
+              }}
+            />
+          </Division>
+          {block.interactive.query.map((element: any, index: number) => {
+            return (
+              <div key={`queryItem_${element.uuid}`}>
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                  <Division>
+                    <span>Item {index + 1}</span>
+                    <Trash
+                      className="icon"
+                      onClick={() => {
+                        dispatch(removeTopAppBarButton(index));
+                      }}
+                    />
+                  </Division>
+                </div>
+                {parseConfig(interactive.query[0], blockUuid, block.interactive.query[index], [
+                  index,
+                  'query',
                 ])}
               </div>
             );

@@ -192,6 +192,14 @@ export const interactive = {
         name: 'Api messenger',
       },
     },
+    id: {
+        type: 'string',
+        name: 'Id action',
+    },
+    delegateActionId: {
+        type: 'string',
+        name: 'Delegate action id',
+    },  
   },
 };
 export const dataSourceSettings = {
