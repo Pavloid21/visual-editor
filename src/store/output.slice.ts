@@ -16,6 +16,11 @@ const defaultSettingsUI: TSettingsUI = {
       heightInPercent: 70,
       scrimColor: '#FFFFFF',
       cornersRadius: 0,
+    },
+  isNavigateDrawer: false,
+    navigationDrawerSettings: {
+      weightInPercent: 70,
+      scrimColor: '#FFFFFF',
     }
 };
 
