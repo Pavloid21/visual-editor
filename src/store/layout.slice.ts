@@ -350,7 +350,7 @@ export const changeBlockData = createAction('layout/changeBlockData', (payload: 
     getEnrichedBlockConfig(findInTree(state.blocks, payload.blockUuid)) ||
     (payload.blockUuid === state.bottomBar?.uuid ? newBlocks.bottomBar : newBlocks.topAppBar);
 
-  if (payload.parentKey && payload.parentKey[1] === 'rightButtons') {
+  if (payload.parentKey && payload.parentKey[1] !== 'filter') {
     if (element?.interactive) {
       element.interactive[payload.parentKey[1]][payload.parentKey[0]][payload.key] = payload.value;
     } else {
