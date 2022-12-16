@@ -19,13 +19,15 @@ import {head} from 'external/lodash';
 import Routes from 'routes/routes';
 import {selectProject} from 'store/project.slice';
 import {useAppDispatch, useAppSelector} from 'store';
+import {setCancelBusinessSettings} from 'store/business-setting.slice';
+import {TBusinessSetting} from 'store/types';
 
 export const SideBarHeader: React.FC<SideBarHeaderProps> = React.memo((props) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal();
   const [warningOpen, setWarningOpen, toggleWarning] = useModal();
-  const businessSettings = useAppSelector((state) => state.businessSetting);
+  const businessSettingsChange = useAppSelector((state) => state.businessSetting.businessSettingsChange);
   const projectID = useAppSelector((state) => state.project.id);
   const location = useLocation();
   const project_id = projectID || location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
@@ -38,7 +40,7 @@ export const SideBarHeader: React.FC<SideBarHeaderProps> = React.memo((props) =>
     handleSubmit,
     control,
     formState: {
-      errors: {form},
+      errors: {form}
     },
   } = useForm<Inputs>({
     criteriaMode: 'all',
@@ -83,21 +85,36 @@ export const SideBarHeader: React.FC<SideBarHeaderProps> = React.memo((props) =>
     }
   });
 
-  const handleSave = async () => {
-    const businessSettingsEdit = `
+  const handleSaveBusinessSettings = (settings: TBusinessSetting, settingsList: string[]) => {
+    const settingsSave = settingsList.map((item: string) => {
+      const settingItem = settings[item as keyof TBusinessSetting];
+      if (typeof settingItem === 'boolean') {
+        return (`\t${item}: ${settingItem},\n`);
+      }
+      return (`\t${item}: "${settingItem}",\n`);
+    }).join("");
+    return `
 return {
-  loginUrl: "${businessSettings.loginUrl}",
-  passCodeVerificationUrl: "${businessSettings.passCodeVerificationUrl}",
-  isTouchId: ${businessSettings.isTouchId},
-  isFaceId: ${businessSettings.isFaceId},
-  timeTokenExpired: ${businessSettings.timeTokenExpired},
-  tokenDeviceUrl: "${businessSettings.tokenDeviceUrl}",
-  countPincodeAttempt: ${businessSettings.countPincodeAttempt},
-  countFaceIdAttempt: ${businessSettings.countFaceIdAttempt},
-  countTouchIdAttempt: ${businessSettings.countTouchIdAttempt},
-  mainScreenUrl: "${businessSettings.mainScreenUrl}",
-  invalidAccessTime: ${businessSettings.invalidAccessTime}
+  ${settingsSave}
 }`;
+  };
+
+  const handleSave = async () => {
+    const settingsList = [
+      'loginUrl',
+      'passCodeVerificationUrl',
+      'isTouchId',
+      'isFaceId',
+      'timeTokenExpired',
+      'tokenDeviceUrl',
+      'countPincodeAttempt',
+      'countFaceIdAttempt',
+      'countTouchIdAttempt',
+      'mainScreenUrl',
+      'invalidAccessTime',
+    ];
+    const businessSettingsEdit = handleSaveBusinessSettings(businessSettingsChange, settingsList);
+
     await saveAction(project_id, 'data', 'appSettings', businessSettingsEdit);
 
     const {name, icon: icons, description, platform, url} = getValues().form;
@@ -152,7 +169,10 @@ return {
           width="24"
           height="24"
           viewBox="6 6 24 24"
-          onClick={() => toggleModal()}
+          onClick={() => {
+            toggleModal();
+            dispatch(setCancelBusinessSettings(false));
+          }}
         />
       )}
       <Modal

@@ -4,11 +4,11 @@ import {ReactComponent as Close} from 'assets/close.svg';
 import {ContentModal, Bar, EditModalTabs, Actions} from './Modal.styled';
 import type {ModalProps} from 'containers/Project/types';
 import {MainInfoContent} from './components/MainInfoContent';
-import {EDIT_MODAL_TABS} from 'containers/Project/constants';
+import {EDIT_MODAL_TABS, WIDTH_MODAL} from 'containers/Project/constants';
 import {BusinessContent} from './components/BusinessContent';
 import {getActionByName} from 'services/ApiService';
 import {parseRuturnStatement} from 'utils/parse';
-import {clearBusinessSetting, setBusinessSetting} from 'store/business-setting.slice';
+import {setBusinessSetting, setBusinessSettingChange, setCancelBusinessSettings} from 'store/business-setting.slice';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootStore} from 'store/types';
 import {Button} from 'components/controls';
@@ -17,7 +17,6 @@ const Modal: React.FC<ModalProps> = (props) => {
   const projectID = useSelector((state: RootStore) => state.project.id);
   const project_id = projectID || location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
   const screenList = useSelector((state: RootStore) => state.screenList);
-  const actionsData = useSelector((state: RootStore) => state.actions.data);
   const dispatch = useDispatch();
   const {itemModalOpen, setItemModalOpen, form, control, handleSave, handleSubmit, isEdit, setValue} = props;
 
@@ -25,7 +24,10 @@ const Modal: React.FC<ModalProps> = (props) => {
 
   const getClassTabById = (tab: string) => activeTab === tab ? 'tab_active' : '';
 
-  const widthModal = isEdit ? '600px' : '502px';
+  const handleCancel = () => {
+    setItemModalOpen(false);
+    dispatch(setCancelBusinessSettings(true));
+  };
 
   const handlerClickTabs = (event: React.MouseEvent<HTMLDivElement>) => {
     const activeTab = (event.target as HTMLDivElement)?.dataset?.tabId || EDIT_MODAL_TABS.MAIN;
@@ -33,14 +35,13 @@ const Modal: React.FC<ModalProps> = (props) => {
   };
 
   useEffect(() => {
-    const businessSettings = async () => {
       if (project_id !== 'project') {
-        const data = await getActionByName(project_id, 'appSettings', 'data');
-        const settings = parseRuturnStatement(data);
-        dispatch(setBusinessSetting(settings));
+        getActionByName(project_id, 'appSettings', 'data').then(data => {
+          const settings = parseRuturnStatement(data);
+          dispatch(setBusinessSetting(settings));
+          dispatch(setBusinessSettingChange(settings));
+        });
       }
-    };
-    businessSettings();
   }, []);
 
   const renderMainInfo = () => (
@@ -56,11 +57,11 @@ const Modal: React.FC<ModalProps> = (props) => {
   );
 
   return (
-    <CustomModal isActive={itemModalOpen} handleClose={() => setItemModalOpen(false)} style={{maxWidth: widthModal}}>
+    <CustomModal isActive={itemModalOpen} handleClose={() => setItemModalOpen(false)} style={{maxWidth: WIDTH_MODAL[isEdit ? 'EDIT' : 'DEFAULT']}}>
       <Bar>
         <h3>{isEdit ? 'Edit' : 'Create New'} Project</h3>
         <div>
-          <Close className="icon" onClick={() => setItemModalOpen(false)} />
+          <Close className="icon" onClick={handleCancel} />
         </div>
       </Bar>
       {isEdit ?
@@ -83,7 +84,7 @@ const Modal: React.FC<ModalProps> = (props) => {
       }
       <Actions>
         <Button onClick={handleSubmit(handleSave)}>{isEdit ? 'Save' : 'Create'}</Button>
-        <Button className="secondary" onClick={() => setItemModalOpen(false)}>
+        <Button className="secondary" onClick={handleCancel}>
           Cancel
         </Button>
       </Actions>

@@ -4,8 +4,8 @@ import {Toggle} from 'components/controls/Toggle';
 import {BusinessContainer} from './BusinessContent.styled';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootStore, TScreenListOption} from 'store/types';
-import {Controller, useForm} from 'react-hook-form';
-import {setBusinessSetting} from 'store/business-setting.slice';
+import {Controller, useForm, useWatch} from 'react-hook-form';
+import {setBusinessSettingChange} from 'store/business-setting.slice';
 
 type BusinessContentType = {
   screenList: TScreenListOption[],
@@ -13,67 +13,66 @@ type BusinessContentType = {
 };
 
 export const BusinessContent = ({screenList}: BusinessContentType) => {
-  const businessSettings = useSelector((state: RootStore) => state.businessSetting);
+  const {businessSettings, cancelSettings} = useSelector((state: RootStore) => state.businessSetting);
   const dispatch = useDispatch();
   const {
     getValues,
-    resetField,
-    handleSubmit,
     setValue,
-    watch,
     control,
-    formState: {
-      errors: {form},
-    },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      timeTokenExpired: businessSettings.timeTokenExpired,
+      tokenDeviceUrl: businessSettings.tokenDeviceUrl,
+      countTouchIdAttempt: businessSettings.countTouchIdAttempt,
+      countPincodeAttempt: businessSettings.countPincodeAttempt,
+      countFaceIdAttempt: businessSettings.countFaceIdAttempt,
+      loginUrl: businessSettings.loginUrl,
+      passCodeVerificationUrl: businessSettings.passCodeVerificationUrl,
+      isTouchId: businessSettings.isTouchId,
+      isFaceId: businessSettings.isFaceId,
+      mainScreenUrl: businessSettings.mainScreenUrl,
+      invalidAccessTime: businessSettings.invalidAccessTime,
+    }
+  });
+
+  const watchFields = useWatch({
+    control,
+    name: [
+      'loginUrl',
+      'passCodeVerificationUrl',
+      'isTouchId',
+      'isFaceId',
+      'timeTokenExpired',
+      'tokenDeviceUrl',
+      'countPincodeAttempt',
+      'countFaceIdAttempt',
+      'countTouchIdAttempt',
+      'mainScreenUrl',
+      'invalidAccessTime',
+    ]});
 
   useEffect(() => {
-    setValue('timeTokenExpired', businessSettings.timeTokenExpired);
-    setValue('tokenDeviceUrl', businessSettings.tokenDeviceUrl);
-    setValue('countTouchIdAttempt', businessSettings.countTouchIdAttempt);
-    setValue('countPincodeAttempt', businessSettings.countPincodeAttempt);
-    setValue('countFaceIdAttempt', businessSettings.countFaceIdAttempt);
+    dispatch(setBusinessSettingChange(getValues()));
+  }, [watchFields]);
+
+  useEffect(() => {
     setValue('loginUrl', businessSettings.loginUrl);
     setValue('passCodeVerificationUrl', businessSettings.passCodeVerificationUrl);
     setValue('isTouchId', businessSettings.isTouchId);
     setValue('isFaceId', businessSettings.isFaceId);
+    setValue('timeTokenExpired', businessSettings.timeTokenExpired);
+    setValue('tokenDeviceUrl', businessSettings.tokenDeviceUrl);
+    setValue('countPincodeAttempt', businessSettings.countPincodeAttempt);
+    setValue('countFaceIdAttempt', businessSettings.countFaceIdAttempt);
+    setValue('countTouchIdAttempt', businessSettings.countTouchIdAttempt);
     setValue('mainScreenUrl', businessSettings.mainScreenUrl);
     setValue('invalidAccessTime', businessSettings.invalidAccessTime);
-  }, []);
-
-const loginUrl = watch('loginUrl');
-const passCodeVerificationUrl = watch('passCodeVerificationUrl');
-const isTouchId = watch('isTouchId');
-const isFaceId = watch('isFaceId');
-const timeTokenExpired = watch('timeTokenExpired');
-const tokenDeviceUrl = watch('tokenDeviceUrl');
-const countPincodeAttempt = watch('countPincodeAttempt');
-const countFaceIdAttempt = watch('countFaceIdAttempt');
-const countTouchIdAttempt = watch('countTouchIdAttempt');
-const mainScreenUrl = watch('mainScreenUrl');
-const invalidAccessTime = watch('invalidAccessTime');
-
-  useEffect(() => {
-    dispatch(setBusinessSetting(getValues()));
-  }, [
-    loginUrl,
-    passCodeVerificationUrl,
-    isTouchId,
-    isFaceId,
-    timeTokenExpired,
-    tokenDeviceUrl,
-    countPincodeAttempt,
-    countFaceIdAttempt,
-    countTouchIdAttempt,
-    mainScreenUrl,
-    invalidAccessTime
-  ]);
+  }, [cancelSettings]);
 
   return (
     <BusinessContainer>
       <div className="businessForm">
       <form
-        // ref={formRef}
         onSubmit={(e) => {
           e.preventDefault();
         }}

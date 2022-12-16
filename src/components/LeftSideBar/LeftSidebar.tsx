@@ -27,7 +27,7 @@ import {setScreens} from 'store/screens.slice';
 import {Screens} from 'components/Screens';
 import {SubheaderScreens, SubheaderActions, SubheaderImages} from 'components/LeftSideBar/Subheader';
 import {Images} from 'components/Images';
-import {ACTION_TEMPLATES} from '../Actions/constants';
+import {ACTION_TEMPLATES} from 'components/Actions/constants';
 import {useAppDispatch, useAppSelector} from 'store';
 
 const LeftSidebar: React.FC<unknown> = () => {

@@ -15,3 +15,9 @@ export type ModalProps = {
   setValue: UseFormSetValue<Inputs>;
   isEdit?: boolean;
 };
+
+export type PlatformTypeValues = {
+  ios: boolean;
+  android: boolean;
+  aurora: boolean;
+};

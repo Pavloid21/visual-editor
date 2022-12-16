@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import type {TBusinessSetting} from './types';
 
-const initialState: TBusinessSetting = {
+const businessSettings: TBusinessSetting = {
   loginUrl: '',
   passCodeVerificationUrl: '',
   isTouchId: false,
@@ -15,24 +15,27 @@ const initialState: TBusinessSetting = {
   invalidAccessTime: 0
 };
 
+const initialState = {
+  businessSettings,
+  businessSettingsChange: businessSettings,
+  cancelSettings: false
+};
+
 const businessSettingSlice = createSlice({
   name: 'businessSetting',
   initialState,
   reducers: {
     setBusinessSetting: (state, action: PayloadAction<TBusinessSetting>) => {
-      return {
-        ...state,
-        ...action.payload,
-      };
+      state.businessSettings = action.payload;
     },
-    clearBusinessSetting: (state) => {
-      return {
-        ...state,
-        ...initialState,
-      };
+    setBusinessSettingChange: (state, action: PayloadAction<TBusinessSetting>) => {
+      state.businessSettingsChange = action.payload;
     },
+    setCancelBusinessSettings: (state, action: PayloadAction<boolean>) => {
+      state.cancelSettings = action.payload;
+    }
   },
 });
 
-export const {setBusinessSetting, clearBusinessSetting} = businessSettingSlice.actions;
+export const {setBusinessSetting, setBusinessSettingChange, setCancelBusinessSettings} = businessSettingSlice.actions;
 export default businessSettingSlice.reducer;

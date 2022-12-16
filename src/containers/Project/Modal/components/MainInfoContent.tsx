@@ -4,9 +4,10 @@ import {Actions, ButtonGroup} from 'containers/Project/Modal/Modal.styled';
 import React from 'react';
 import {Inputs} from 'containers/Project/Project';
 import {MainInfoContainer} from './MainInfoContent.styled';
+import {PlatformTypeValues} from 'containers/Project/types';
 
 type MainInfoContentProps = {
-  control: Control<Inputs, any>;
+  control: Control<Inputs>;
   handleSave: () => void;
   handleSubmit: UseFormHandleSubmit<Inputs>;
   form?: {
@@ -23,11 +24,10 @@ export const MainInfoContent = ({
   control, handleSave, form, handleSubmit, setItemModalOpen, isEdit, setValue}: MainInfoContentProps
 ) => {
   const formRef = React.createRef<HTMLFormElement>();
-  const handlePlatformButtonClick = (event: React.MouseEvent, value: any) => {
+  const handlePlatformButtonClick = (event: React.MouseEvent, value: PlatformTypeValues) => {
     const platform = event.currentTarget.attributes.getNamedItem('data-platform')?.value;
     if (platform) {
-      // @ts-ignore
-      setValue('form.platform', JSON.stringify({...value, [platform]: value ? !value[platform] : true}));
+      setValue('form.platform', JSON.stringify({...value, [platform]: value ? !value[platform as keyof PlatformTypeValues] : true}));
     }
   };
 
@@ -70,21 +70,21 @@ export const MainInfoContent = ({
                 <ButtonGroup>
                   <Button
                     data-platform="ios"
-                    className={platform?.ios ? undefined : 'secondary'}
+                    className={platform?.ios ? '' : 'secondary'}
                     onClick={(event) => handlePlatformButtonClick(event, platform)}
                   >
                     iOS
                   </Button>
                   <Button
                     data-platform="android"
-                    className={platform?.android ? undefined : 'secondary'}
+                    className={platform?.android ? '' : 'secondary'}
                     onClick={(event) => handlePlatformButtonClick(event, platform)}
                   >
                     Android
                   </Button>
                   <Button
                     data-platform="aurora"
-                    className={platform?.aurora ? undefined : 'secondary'}
+                    className={platform?.aurora ? '' : 'secondary'}
                     onClick={(event) => handlePlatformButtonClick(event, platform)}
                   >
                     Aurora

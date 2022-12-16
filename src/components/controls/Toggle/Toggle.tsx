@@ -1,6 +1,12 @@
 import {Container} from './Toggle.styled';
+import React, {ChangeEventHandler} from 'react';
 
-export const Toggle = ({value, onChange}: {value: boolean, onChange: any}) => {
+type ToggleProps = {
+  value: boolean | undefined,
+  onChange: ChangeEventHandler<HTMLInputElement>
+};
+
+export const Toggle = ({value, onChange}: ToggleProps) => {
     const classOn = !value ? 'onbtn noVisible' :  'onbtn';
     const classOf = value ? 'ofbtn noVisible' :  'ofbtn';
 
@@ -8,7 +14,8 @@ export const Toggle = ({value, onChange}: {value: boolean, onChange: any}) => {
         <div>
             <Container>
                 <div className='toggle'>
-                    <input type="checkbox" onChange={onChange} checked={value} />
+                  <input type="checkbox" onChange={onChange} checked={value} />
+
                     <label htmlFor="" className={classOn}>ON</label>
                     <label htmlFor="" className={classOf}>OFF</label>
                 </div>
