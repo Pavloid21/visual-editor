@@ -85,7 +85,7 @@ const Component = ({settingsUI, ...props}) => {
   const defaultIcon = {
     IOS: settingsUI.isActive ? (
       <CheckCircleIcon color={settingsUI.iconSelectedColor} size={`${defaultSizeIcon * multiplicationFactor}px`} />
-    ) : ( 
+    ) : (
       <CircleIcon color={settingsUI.iconUnselectedColor } size={`${defaultSizeIcon * multiplicationFactor}px`} />
     ),
     ANDROID: settingsUI.isActive ? (
@@ -152,7 +152,7 @@ const block = () => ({
     defaultInteractiveOptions: {
       action: {url: '', fields: {}},
       filter: {
-        id: '', 
+        id: '',
         query: [{}],
       },
     },

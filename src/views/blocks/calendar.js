@@ -309,9 +309,7 @@ const block = (state) => {
       filter: {
         id: filter.id,
         applyHere: filter.applyHere,
-        query: {
-          key: filter.query.key,
-        },
+        query: filter.query,
       },
     },
     config: {
