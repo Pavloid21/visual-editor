@@ -425,7 +425,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
               }}
             />
           </Division>
-          {block?.interactive?.filter?.query.map((element: any, index: number) => {
+          {block?.interactive?.filter?.query?.map((element: any, index: number) => {
             return (
               <div key={`appBarButton_${element.uuid}${index}`}>
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
