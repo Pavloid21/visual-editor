@@ -376,8 +376,14 @@ export const filter = {
       {label: 'False', value: false},
     ],
   },
-  query: [{
-    key: {type: 'string', name: 'Query key'},
-    params: {type: 'array', name: 'Query params'},
-  },],
+  query: {
+    type: 'options',
+    title: 'Params Items',
+    name: 'Item',
+    options: [{
+      key: {type: 'string', name: 'Query key'},
+      params: {type: 'array', name: 'Query params'},
+    }
+]
+},
 };
