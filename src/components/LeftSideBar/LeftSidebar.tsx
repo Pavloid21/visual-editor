@@ -6,7 +6,7 @@ import {Actions, ButtonSelector, LeftSideBarMenu, Modal, SideBarHeader} from 'co
 import {v4} from 'uuid';
 import {getScreenByName, getScreensList, getScreenTemplates, getTemplateData} from 'services/ApiService';
 import {useParams} from 'react-router-dom';
-import {buildLayout, observer, prepareTree, snippet, useModal} from 'utils';
+import {buildLayout, observer, prepareTree, snippet, useModal, deleteEmptyKey, parseReturnStatement} from 'utils';
 import {
   Container,
   DefaultTemplateWrapper,
@@ -175,25 +175,14 @@ const LeftSidebar: React.FC<unknown> = () => {
     }
   }, [output]);
 
-  const parseReturnStatement = (script: any) => {
-    const regExpReturn = /^\s*return\s*{/gms;
-    const data = script.data.trim();
-
-    const matchLength = data.match(regExpReturn).length;
-    for (let i = 0; i < matchLength; i++) {
-      regExpReturn.test(data);
-    }
-
-    const func = eval(`(() => {return {${data.substring(regExpReturn.lastIndex)}})`);
-    return func();
-  };
-
   const updateScreenList = (script: any, screenLayout: Record<string, any>, screenPositionInList: number) => {
     if (script.data) {
+      const parseJson = parseReturnStatement(script);
+      const transform = deleteEmptyKey(parseJson);
       const rawData = {
         screen,
-        logic: parseReturnStatement(script),
-        object: parseReturnStatement(script),
+        logic: transform,
+        object: transform,
         project,
       };
       const {newBlock, action, screenEndpoint} = buildLayout(rawData);
