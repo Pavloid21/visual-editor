@@ -387,3 +387,12 @@ export const filter = {
 ]
 },
 };
+
+export const isGetValueFromBD = {
+  type: 'select',
+  name: 'Сache in local device',
+  options: [
+    {label: 'Enable cache', value: true},
+    {label: 'Disable cache', value: false},
+  ],
+};
