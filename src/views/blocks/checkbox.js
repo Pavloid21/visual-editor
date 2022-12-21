@@ -11,6 +11,7 @@ import {
   isActive,
   filter,
   interactive,
+  isGetValueFromBD,
 } from 'views/configs';
 import {setCorrectImageUrl, getFieldValue, checkExtension} from 'utils';
 import {CustomSvg} from 'components/CustomSvg';
@@ -180,6 +181,7 @@ const block = () => ({
         applyHere: filter.applyHere,
         query: filter.query,
       },
+      isGetValueFromBD,
     },
     config: {
       uncheckedIcon,
