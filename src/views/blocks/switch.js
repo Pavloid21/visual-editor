@@ -10,6 +10,7 @@ import {
   checkedColor,
   uncheckedColor,
   filter,
+  isGetValueFromBD,
 } from 'views/configs';
 import {getDimensionStyles} from '../utils/styles/size';
 import {transformHexWeb} from '../../utils/color';
@@ -155,6 +156,7 @@ const block = () => ({
         applyHere: filter.applyHere,
         query: filter.query,
       },
+      isGetValueFromBD,
   },
 });
 
