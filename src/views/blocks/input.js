@@ -29,6 +29,7 @@ import {
   cursorColor,
   regexp,
   regexpTrigger,
+  isGetValueFromBD,
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
@@ -219,6 +220,7 @@ const block = (state) => {
           {label: 'False', value: false},
         ],
       },
+      isGetValueFromBD,
     },
   });
 };
