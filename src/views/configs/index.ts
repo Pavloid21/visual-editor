@@ -4,7 +4,6 @@ export * from './alignment';
 export * from './shape';
 export * from './shadow';
 export * from './size';
-export * from './defaultData';
 
 export const textAlignment = {
   type: 'select',

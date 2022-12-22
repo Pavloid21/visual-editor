@@ -30,7 +30,6 @@ import {
   regexp,
   regexpTrigger,
   isGetValueFromBD,
-  defaultData,
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
@@ -55,11 +54,9 @@ const Input = styled.div`
     if (props.shadow) {
       const webColor = transformHexWeb(props.shadow?.color);
       const RGB = hexToRgb(webColor);
-      if(RGB !== null) {
-        return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${
-          props.shadow?.radius
-        }px rgba(${RGB.r}, ${RGB.g}, ${RGB.b}, ${props.shadow?.opacity});`;
-      }
+      return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${
+              props.shadow?.radius
+      }px rgba(${RGB.r}, ${RGB.g}, ${RGB.b}, ${props.shadow?.opacity});`;
     }
   }}
   ${(props) => {
@@ -149,8 +146,15 @@ const block = (state) => {
         width: 280,
         height: 48,
       },
-      shadow: defaultData.shadow,
-      shape: defaultData.shape,
+      shadow: {
+        color: '#000000',
+        opacity: 0,
+        offsetSize: {
+          width: 0,
+          height: 0,
+        },
+        radius: 0,
+      },
       padding: {
         left: 12,
         right: 16,

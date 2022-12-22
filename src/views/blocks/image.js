@@ -5,7 +5,6 @@ import Wrapper from 'utils/wrapper';
 import image from 'assets/image.svg';
 import {
   backgroundColor,
-  defaultData,
   borderColor, borderWidth, getSizeConfig,
   imageUrl, interactive, shadowConfigBuilder,
   shapeConfigBuilder, padding,
@@ -98,8 +97,15 @@ const block = (state) => {
         height: 200,
         width: 400,
       },
-      shape: defaultData.shape,
-      shadow: defaultData.shadow,
+      shadow: {
+        color: '#000000',
+        opacity: 0.3,
+        offsetSize: {
+          width: 0,
+          height: 0,
+        },
+        radius: 8,
+      },
     },
     defaultInteractiveOptions: {
       action: {url: '', fields: {}, confirmationDialog: {}},

@@ -18,7 +18,6 @@ import {
   metricStyle,
   dataSourceSettings,
   filter,
-  defaultData,
 } from 'views/configs';
 import collection from 'assets/collection.svg';
 import {pushBlockInside} from 'store/layout.slice';
@@ -186,16 +185,11 @@ const block = (state) => {
         right: 16,
         bottom: 16,
       },
-      shape: defaultData.shape,
       collectionUiConfig: {
-        cellBackgroundColor: '',
         metricStyle: 'pointsAndItemsIn',
-        pointHeight: 1,
-        pointWidth: 1,
-        itemsInHorisontal: 1,
-        itemsInVertical: 0,
-        widthToHeight: 0,
-        heightToWidth: 0,
+        pointHeight: 121,
+        itemsInHorisontal: 2,
+        itemsInVertical: 1,
         scrollDirection: 'vertical',
       },
     },
@@ -228,8 +222,8 @@ const block = (state) => {
         pointWidth: {type: 'number', name: 'Point width', relations: {metricStyle: ['pointsAndItemsIn', 'points']}},
         itemsInHorisontal: {type: 'number', name: 'Items in horizontal', relations: {metricStyle: ['pointsAndItemsIn', 'itemsInAndProportional', 'itemsIn']}},
         itemsInVertical: {type: 'number', name: 'Items in vertical', relations: {metricStyle: ['pointsAndItemsIn', 'itemsInAndProportional', 'itemsIn']}},
-        widthToHeight: {type: 'number', name: 'Width to height', relations: {metricStyle: ['pointsAndItemsIn', 'itemsInAndProportional', 'itemsIn']}},
-        heightToWidth: {type: 'number', name: 'Height to width', relations: {metricStyle: ['pointsAndItemsIn', 'itemsInAndProportional', 'itemsIn']}},
+        widthToHeight: {type: 'number', name: 'Width to height', relations: {metricStyle: ['itemsInAndProportional']}},
+        heightToWidth: {type: 'number', name: 'Height to width', relations: {metricStyle: ['itemsInAndProportional']}},
       },
     },
   });

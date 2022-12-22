@@ -131,7 +131,6 @@ const block = () => ({
       id: '',
       query: [{}],
     },
-    isActive: false
   },
   interactive: {
     field: {type: 'string', name: 'Field name'},
