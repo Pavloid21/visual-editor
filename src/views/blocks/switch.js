@@ -126,7 +126,7 @@ const block = () => ({
     padding,
   },
   defaultInteractiveOptions: {
-    action: {url: '', fields: {}},
+    action: {url: '', fields: {}, confirmationDialog: {}},
     filter: {
       id: '',
       query: [{}],

@@ -108,7 +108,7 @@ const block = (state) => {
       },
     },
     defaultInteractiveOptions: {
-      action: {url: '', fields: {}},
+      action: {url: '', fields: {}, confirmationDialog: {}},
     },
     interactive,
     config: {
