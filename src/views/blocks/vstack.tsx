@@ -113,7 +113,7 @@ const VStack = styled.div<StyledComponentPropsType & VStackPropsType>`
     if (props.shadow) {
       const webColor = transformHexWeb(props.shadow?.color);
       const RGB = hexToRgb(webColor);
-      
+
       if(RGB !== null) {
         return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${props.shadow?.radius
           }px rgba(${RGB!.r}, ${RGB!.g}, ${RGB!.b}, ${props.shadow?.opacity});`;
@@ -224,7 +224,7 @@ const block = (state?: BlocksState): Block => {
     ],
     defaultData: {
       size: {
-        heightInPercent: 50,
+        heightInPercent: 100,
         widthInPercent: 100,
       },
       backgroundColor: '#e3e3e3',
