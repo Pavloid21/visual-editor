@@ -12,6 +12,7 @@ import {
   shadowConfigBuilder,
   shapeConfigBuilder,
   text,
+  defaultData,
   textAlignment, textColor,
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
@@ -34,9 +35,12 @@ const Label = styledComponents.div`
     if (shadow) {
       const webColor = transformHexWeb(shadow?.color);
       const RGB = hexToRgb(webColor);
-      return `box-shadow: ${shadow?.offsetSize?.width}px ${shadow?.offsetSize?.height}px ${
-        shadow?.radius || 0
-      }px rgba(${RGB.r}, ${RGB.g}, ${RGB.b}, ${shadow?.opacity});`;
+      if(RGB !== null) {
+        return `box-shadow: ${shadow?.offsetSize?.width}px ${shadow?.offsetSize?.height}px ${
+          shadow?.radius || 0
+        }px rgba(${RGB.r}, ${RGB.g}, ${RGB.b}, ${shadow?.opacity});`;
+      }
+
     }
   }}
   & > span {
@@ -114,15 +118,8 @@ const block = (state) => {
         left: 0,
         right: 0,
       },
-      shadow: {
-        color: '#000000',
-        opacity: 0.3,
-        offsetSize: {
-          width: 0,
-          height: 0,
-        },
-        radius: 8,
-      },
+      shape: defaultData.shape,
+      shadow: defaultData.shadow,
     },
     config: {
       text,

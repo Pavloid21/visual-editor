@@ -13,6 +13,7 @@ import {
   padding,
   shadowConfigBuilder,
   shapeConfigBuilder,
+  defaultData,
   text, textColor, getSizeConfig, interactive
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
@@ -166,15 +167,8 @@ const block = (state) => {
       size: {
         height: 36,
       },
-      shadow: {
-        color: '#000000',
-        opacity: 0.3,
-        offsetSize: {
-          width: 0,
-          height: 0,
-        },
-        radius: 8,
-      },
+      shadow: defaultData.shadow,
+      shape: defaultData.shape,
     },
     interactive,
     config: {

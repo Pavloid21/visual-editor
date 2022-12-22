@@ -16,6 +16,7 @@ import {
   shapeConfigBuilder,
   dataSourceSettings,
   filter,
+  defaultData,
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
 import {blockStateSafeSelector, getListItemCollectionSelector} from 'store/selectors';
@@ -160,6 +161,7 @@ const block = (state) => {
         heightInPercent: 50,
         widthInPercent: 100,
       },
+      shape: defaultData.shape,
     },
     listItem: null,
     interactive: {
