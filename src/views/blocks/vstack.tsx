@@ -225,7 +225,7 @@ const block = (state?: BlocksState): Block => {
     ],
     defaultData: {
       size: {
-        heightInPercent: 50,
+        heightInPercent: 100,
         widthInPercent: 100,
       },
       backgroundColor: '#e3e3e3',
