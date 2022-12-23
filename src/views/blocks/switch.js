@@ -103,7 +103,7 @@ const Component = ({settingsUI, ...props}) => {
   return (
     <Wrapper id={props.id}>
       <Switch {...props} {...settingsUI} className="draggable">
-        <input type="checkbox" checked={settingsUI?.isActive} />
+        <input type="checkbox" checked={Boolean(settingsUI?.isActive)} />
         <span></span>
       </Switch>
     </Wrapper>

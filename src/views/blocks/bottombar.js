@@ -28,7 +28,7 @@ const BottomBar = styled.div`
     gap: 4px;
     & label {
       margin-bottom: 0;
-      color: ${(props) => transformHexWeb(props.textUnselectedColor || 'transparent')};
+      color: ${(props) => transformHexWeb(props.textUnselectedColor) || 'transparent'};
     }
     & .item_icon {
       background-color: ${(props) => transformHexWeb(props.iconUnselectedColor)};

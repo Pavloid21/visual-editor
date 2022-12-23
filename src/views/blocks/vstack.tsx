@@ -112,17 +112,18 @@ const VStack = styled.div<StyledComponentPropsType & VStackPropsType>`
   ${(props) => {
     if (props.shadow) {
       const webColor = transformHexWeb(props.shadow?.color);
-      const RGB = hexToRgb(webColor);
-      
+      const RGB = hexToRgb(webColor) || {r: 0, g: 0, b: 0};
+
       if(RGB !== null) {
-        return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${props.shadow?.radius
-          }px rgba(${RGB!.r}, ${RGB!.g}, ${RGB!.b}, ${props.shadow?.opacity});`;
+        return `box-shadow: ${props.shadow?.offsetSize?.width || 0}px ${props.shadow?.offsetSize?.height|| 0}px
+        ${props.shadow?.radius || 0}px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b},
+        ${props.shadow?.opacity || 0});`;
       }
     }
   }}
   ${(props) => {
-    if (props.shape?.type === 'ALLCORNERSROUND') {
-      return `border-radius: ${props.shape.radius}px;`;
+    if (props.shape?.type === 'ALLCORNERSROUND' || !props?.shape?.type) {
+      return `border-radius: ${props?.shape?.radius || 0}px;`;
     }
   }}
 `;
@@ -239,7 +240,7 @@ const block = (state?: BlocksState): Block => {
         left: '0',
         right: '0',
       },
-      shadow: {
+      /*shadow: {
         color: '#000000',
         opacity: 0,
         offsetSize: {
@@ -247,7 +248,7 @@ const block = (state?: BlocksState): Block => {
           height: 0,
         },
         radius: 0,
-      },
+      },*/
     },
     listItems: [],
     interactive,

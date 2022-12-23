@@ -24,10 +24,13 @@ const Image = styled.img`
   border-color: ${(props) => transformHexWeb(props.borderColor || 'transparent')};
   border-style: solid;
   box-shadow: ${(props) => {
-    const webColor = transformHexWeb(props.shadow?.color);
-    const RGB = hexToRgb(webColor);
-    return `${props.shadow?.offsetSize?.width ?? props.shadow?.offsetSize?.widthInPercent}px ${props.shadow?.offsetSize?.height ?? props.shadow?.offsetSize?.heightInPercent
-      }px 8px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b}, ${props.shadow?.opacity})`;
+    if (props.shadow) {
+      const webColor = transformHexWeb(props.shadow?.color);
+      const RGB = hexToRgb(webColor) || {r: 0, g: 0, b: 0};
+
+      return `${(props.shadow?.offsetSize?.width ?? props.shadow?.offsetSize?.widthInPercent) || 0}px ${(props.shadow?.offsetSize?.height ?? props.shadow?.offsetSize?.heightInPercent)
+      || 0}px 8px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b}, ${props.shadow?.opacity || 0})`;
+    }
   }};
   object-fit: ${(props) => {
     switch (props.imageAlignment) {
@@ -50,7 +53,7 @@ const Image = styled.img`
     .apply()
   }
   ${(props) => {
-    if (props.shape?.type === 'ALLCORNERSROUND') {
+    if (props.shape?.type === 'ALLCORNERSROUND' || !props?.shape?.type) {
       return `border-radius: ${props.shape?.radius || 0}px;`;
     }
   }}
