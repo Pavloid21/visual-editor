@@ -249,6 +249,11 @@ export type TSettingsUI = {
       heightInPercent: number;
       scrimColor: string;
       cornersRadius: number;
+    };
+  isNavigateDrawer: any;
+    navigationDrawerSettings: {
+      weightInPercent: number;
+      scrimColor: string;
     }
 }
 

@@ -55,6 +55,8 @@ const Screen: React.FC<any> = (props) => {
     'cornersRadius' |
     'heightInPercent' |
     'isBottomSheet' |
+    'isNavigateDrawer' |
+    'weightInPercent' |
     'screenName' |
     'saveScreen' |
     'showBottomBar' |
@@ -76,6 +78,11 @@ const Screen: React.FC<any> = (props) => {
           heightInPercent: tag === 'heightInPercent' ? event : settingsUI.bottomSheetSettings.heightInPercent,
           scrimColor: tag === 'scrimColor' ? event : settingsUI.bottomSheetSettings.scrimColor,
           cornersRadius: tag === 'cornersRadius' ? event : settingsUI.bottomSheetSettings.cornersRadius,
+        },
+        isNavigateDrawer: tag === 'isNavigateDrawer' ? Boolean(event) : settingsUI.isNavigateDrawer,
+        navigationDrawerSettings: {
+          heightInPercent: tag === 'weightInPercent' ? event : settingsUI.navigationDrawerSettings.weightInPercent,
+          scrimColor: tag === 'scrimColor' ? event : settingsUI.navigationDrawerSettings.scrimColor,
         }
       },
       snippet: {
@@ -183,6 +190,46 @@ const Screen: React.FC<any> = (props) => {
               max={100}
               min={0}
               onChange={(event) => handleChange(event.target.value, 'cornersRadius', false)}
+            />
+          </>
+        )}
+
+        <Select
+          value={settingsUI?.isNavigateDrawer}
+          label="Navigate drawer"
+          onChange={(value) => handleChange(Boolean(value), 'isNavigateDrawer', false)}
+          options={[
+            {
+              label: 'True',
+              value: true,
+            },
+            {
+              label: 'False',
+              value: false,
+            },
+          ]}
+        />
+        {settingsUI?.isNavigateDrawer && (
+          <>
+            <Input
+              $isWide
+              $clearable={false}
+              label="Weight"
+              type="number"
+              placeholder="Weight"
+              maxNumber={100}
+              value={settingsUI.navigationDrawerSettings?.weightInPercent}
+              max={100}
+              min={0}
+              onChange={(event) => handleChange(event.target.value, 'weightInPercent', false)}
+            />
+            <ColorPicker
+              debouncetimeout={500}
+              label="Scrim color"
+              $isWide
+              placeholder="Scrim color"
+              value={transformHexWeb(settingsUI.navigationDrawerSettings?.scrimColor)}
+              onChangeColor={(value) => handleChange(value, 'scrimColor', false)}
             />
           </>
         )}

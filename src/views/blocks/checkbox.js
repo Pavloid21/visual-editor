@@ -11,6 +11,7 @@ import {
   isActive,
   filter,
   interactive,
+  isGetValueFromBD,
 } from 'views/configs';
 import {setCorrectImageUrl, getFieldValue, checkExtension} from 'utils';
 import {CustomSvg} from 'components/CustomSvg';
@@ -85,7 +86,7 @@ const Component = ({settingsUI, ...props}) => {
   const defaultIcon = {
     IOS: settingsUI.isActive ? (
       <CheckCircleIcon color={settingsUI.iconSelectedColor} size={`${defaultSizeIcon * multiplicationFactor}px`} />
-    ) : ( 
+    ) : (
       <CircleIcon color={settingsUI.iconUnselectedColor } size={`${defaultSizeIcon * multiplicationFactor}px`} />
     ),
     ANDROID: settingsUI.isActive ? (
@@ -150,9 +151,9 @@ const block = () => ({
     defaultData: {
     },
     defaultInteractiveOptions: {
-      action: {url: '', fields: {}},
+      action: {url: '', fields: {}, confirmationDialog: {}},
       filter: {
-        id: '', 
+        id: '',
         query: [{}],
       },
     },
@@ -180,6 +181,7 @@ const block = () => ({
         applyHere: filter.applyHere,
         query: filter.query,
       },
+      isGetValueFromBD,
     },
     config: {
       uncheckedIcon,

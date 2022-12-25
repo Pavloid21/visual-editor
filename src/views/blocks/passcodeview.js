@@ -247,12 +247,21 @@ const block = (state) => {
 
   return ({
     Component,
-    name: 'CALENDAR',
+    name: 'PASSCODEVIEW',
     title: 'Passcodeview',
     description: '...',
     previewImageUrl: passcodeview,
     category: 'Controls',
-    defaultInteractiveOptions: {},
+    defaultInteractiveOptions: {
+		backgroundColor: '',
+		topTitleLabelSettings:{},
+		topTitleLabelTextStates: {},
+		dottedPassCodeStackSettings: {
+			stackContainerSettings: {},
+			dotSettings: {},
+		},
+		pinPadSettings: {},
+	},
     defaultData: {},
     config: {},
 	interactive: {

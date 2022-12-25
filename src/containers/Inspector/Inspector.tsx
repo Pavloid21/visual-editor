@@ -20,6 +20,8 @@ import {
   removeActionField,
   changeKeyActionField,
   changeActionURL,
+  addParamsItem,
+  removeParamsItem,
   addFilterQueryItem,
 } from 'store/layout.slice';
 import type {TInspector} from './types';
@@ -269,6 +271,42 @@ const Inspector: React.FC<TInspector> = ({display}) => {
                 );
               })}
             </GroupedFields>
+          );
+        case 'options':
+          return (
+            <>
+              {interactive?.[parentKey][el].options && (
+                <div>
+                  <Division>
+                    <span>{config[el].title}</span>
+                    <Plus
+                      className="icon"
+                      onClick={() => {
+                        dispatch(addParamsItem(blockUuid));
+                      }}
+                    />
+                  </Division>
+                  {block?.interactive?.[parentKey] && block?.interactive?.[parentKey][el].map((element: any, index: number) => {
+                    return (
+                      <div key={`appBarButton_${element.uuid}${index}`}>
+                        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                          <Division>
+                            <span>{config[el].name} {index + 1}</span>
+                            <Trash
+                              className="icon"
+                              onClick={() => {
+                                dispatch(removeParamsItem(blockUuid, index));
+                              }}
+                            />
+                          </Division>
+                        </div>
+                        {parseConfig(interactive?.[parentKey][el]?.options[0], blockUuid, block?.interactive?.[parentKey][el][index], [index, parentKey])}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </>
           );
       }
       if (endpoint && !Array.isArray(endpoint[el])) {

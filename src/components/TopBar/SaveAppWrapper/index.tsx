@@ -9,6 +9,7 @@ import {changesSaved} from 'store/layout.slice';
 import {currentEditorStateSafeSelector} from 'store/selectors';
 import {deleteAction as deleteActionStore} from 'store/actions.slice';
 import {ActionItem} from 'store/types';
+import {transformSnippet} from 'utils';
 
 export const SaveAppWrapper: React.FC<unknown> = () => {
   const dispatch = useAppDispatch();
@@ -22,7 +23,8 @@ export const SaveAppWrapper: React.FC<unknown> = () => {
       event.stopPropagation();
       const snippetsPromises: Promise<any>[] = snippets.filter((item) => {
         if (editedScreens.includes(item.screenID) && !deletedScreens.includes(item.screenID)) {
-          return saveScreen(projectID, item.endpoint, `${item.logic.replace(/return$/g, '')}${item.snippet}`);
+          const transform = transformSnippet(item.snippet);
+          return saveScreen(projectID, item.endpoint, `${item.logic.replace(/return$/g, '')}${transform}`);
         }
       });
       const deletedSnippetsPromises: Promise<any>[] = snippets.filter((item) => {

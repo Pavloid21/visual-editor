@@ -13,9 +13,14 @@ interface IInitialState {
 const defaultSettingsUI: TSettingsUI = {
   isBottomSheet: false,
     bottomSheetSettings: {
-      heightInPercent: 70,
-      scrimColor: '#FFFFFF',
+      heightInPercent: 0,
+      scrimColor: '',
       cornersRadius: 0,
+    },
+  isNavigateDrawer: false,
+    navigationDrawerSettings: {
+      weightInPercent: 70,
+      scrimColor: '#FFFFFF',
     }
 };
 

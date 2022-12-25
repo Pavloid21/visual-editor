@@ -10,6 +10,7 @@ import {
   checkedColor,
   uncheckedColor,
   filter,
+  isGetValueFromBD,
 } from 'views/configs';
 import {getDimensionStyles} from '../utils/styles/size';
 import {transformHexWeb} from '../../utils/color';
@@ -35,7 +36,7 @@ const Switch = styled.div`
     transform: translateX(16px);
     ${(props) => {
     if (props.blockState.deviceInfo.device === Device.ANDROID) {
-      return `background-color: ${(props) => transformHexWeb(props.checkedColor || '#4ed164')};`;
+      return `background-color: ${transformHexWeb(props.checkedColor || '#4ed164')};`;
     }
     if (props.blockState.deviceInfo.device === Device.IOS) {
       return `background-color: #ffffff;`;
@@ -125,11 +126,12 @@ const block = () => ({
     padding,
   },
   defaultInteractiveOptions: {
-    action: {url: '', fields: {}},
+    action: {url: '', fields: {}, confirmationDialog: {}},
     filter: {
       id: '',
       query: [{}],
     },
+    isActive: false
   },
   interactive: {
     field: {type: 'string', name: 'Field name'},
@@ -155,6 +157,7 @@ const block = () => ({
         applyHere: filter.applyHere,
         query: filter.query,
       },
+      isGetValueFromBD,
   },
 });
 

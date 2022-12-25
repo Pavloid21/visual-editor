@@ -104,7 +104,7 @@ const block = () => ({
         title: 'Button',
         iconUrl: '',
         tintColor: '#000000',
-        action: {url: ''}
+        action: {url: '', confirmationDialog: {}}
       },
     ],
   },

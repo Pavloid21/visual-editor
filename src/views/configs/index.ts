@@ -4,6 +4,7 @@ export * from './alignment';
 export * from './shape';
 export * from './shadow';
 export * from './size';
+export * from './defaultData';
 
 export const textAlignment = {
   type: 'select',
@@ -199,7 +200,7 @@ export const interactive = {
     delegateActionId: {
         type: 'string',
         name: 'Delegate action id',
-    },  
+    },
   },
 };
 export const dataSourceSettings = {
@@ -376,8 +377,23 @@ export const filter = {
       {label: 'False', value: false},
     ],
   },
-  query: [{
-    key: {type: 'string', name: 'Query key'},
-    params: [{type: 'string', name: 'Query params'},],
-  },],
+  query: {
+    type: 'options',
+    title: 'Params Items',
+    name: 'Item',
+    options: [{
+      key: {type: 'string', name: 'Query key'},
+      params: {type: 'array', name: 'Query params'},
+    }
+]
+},
+};
+
+export const isGetValueFromBD = {
+  type: 'select',
+  name: 'Сache in local device',
+  options: [
+    {label: 'Enable cache', value: true},
+    {label: 'Disable cache', value: false},
+  ],
 };

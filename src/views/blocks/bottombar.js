@@ -92,7 +92,8 @@ const block = () => ({
     iconSelectedColor: '#E9E8EA',
     iconUnselectedColor: '#A29CA6',
     textSelectedColor: '#E9E8EA',
-    textUnselectedColor: '#A29CA6',
+    textUnselectedColor: '',
+    showUnselectedText: false,
     navigationItems: [
       {
         screenName: 'Main',
