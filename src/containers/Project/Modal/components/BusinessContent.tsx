@@ -18,6 +18,7 @@ export const BusinessContent = ({screenList}: BusinessContentType) => {
   const {
     getValues,
     setValue,
+    reset,
     control,
   } = useForm({
     defaultValues: {
@@ -56,17 +57,7 @@ export const BusinessContent = ({screenList}: BusinessContentType) => {
   }, [watchFields]);
 
   useEffect(() => {
-    setValue('loginUrl', businessSettings.loginUrl);
-    setValue('passCodeVerificationUrl', businessSettings.passCodeVerificationUrl);
-    setValue('isTouchId', businessSettings.isTouchId);
-    setValue('isFaceId', businessSettings.isFaceId);
-    setValue('timeTokenExpired', businessSettings.timeTokenExpired);
-    setValue('tokenDeviceUrl', businessSettings.tokenDeviceUrl);
-    setValue('countPincodeAttempt', businessSettings.countPincodeAttempt);
-    setValue('countFaceIdAttempt', businessSettings.countFaceIdAttempt);
-    setValue('countTouchIdAttempt', businessSettings.countTouchIdAttempt);
-    setValue('mainScreenUrl', businessSettings.mainScreenUrl);
-    setValue('invalidAccessTime', businessSettings.invalidAccessTime);
+    reset(businessSettings);
   }, [cancelSettings]);
 
   return (

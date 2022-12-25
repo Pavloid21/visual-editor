@@ -88,10 +88,7 @@ export const SideBarHeader: React.FC<SideBarHeaderProps> = React.memo((props) =>
   const handleSaveBusinessSettings = (settings: TBusinessSetting, settingsList: string[]) => {
     const settingsSave = settingsList.map((item: string) => {
       const settingItem = settings[item as keyof TBusinessSetting];
-      if (typeof settingItem === 'boolean') {
-        return (`\t${item}: ${settingItem},\n`);
-      }
-      return (`\t${item}: "${settingItem}",\n`);
+      return (`\t${item}: ${typeof settingItem === "boolean" ? settingItem : '"' + settingItem + '"'},\n`);
     }).join("");
     return `
 return {
