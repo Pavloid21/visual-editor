@@ -19,7 +19,7 @@ import {addAction} from 'store/actions.slice';
 import {setActiveTab as setActiveTabAction} from 'store/config.slice';
 import {saveCode} from 'store/code.slice';
 import {cloneBlock, deleteBlock, selectScreen, setLayout, setSelectedBlock, setSnippet} from 'store/layout.slice';
-import {ActionTypes} from 'store/types';
+import {ActionTypes, SnippetType} from 'store/types';
 import {Bar} from 'containers/Project/Modal/Modal.styled';
 import {ReactComponent as Close} from 'assets/close.svg';
 import {screenTemplates as defaultTemplates} from 'constants/screenTemplates';
@@ -36,6 +36,7 @@ const LeftSidebar: React.FC<unknown> = () => {
     bottomBar,
     selectedScreen,
     blocks: layout,
+    snippets
   } = useAppSelector((state) => state.layout);
   const {activeTab, activeTabActions, filterAction} = useAppSelector((state) => state.leftBarMenu);
   const [loading, setLoading] = useState(false);
@@ -207,6 +208,11 @@ const LeftSidebar: React.FC<unknown> = () => {
     if (uuid === 'screen') {
       setLoadScreen({uuid: item.node.uuid, load: true});
       const script = await getScreenByName(item.node.endpoint, false, project);
+      snippets.forEach((snippet: SnippetType) => {
+        if (snippet.screenID === item.node.uuid) {
+          script.data = snippet.snippet;
+        }
+      });
       setLoadScreen({uuid: item.node.uuid, load: false});
       let screenPositionInList = 0;
       const screenLayout = availableScreens.filter((screen, index) => {

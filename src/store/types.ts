@@ -5,17 +5,19 @@ import store from './index';
 import type {ThunkDispatch} from '@reduxjs/toolkit';
 import {IconTabType} from '../components/Images/types';
 
+export type SnippetType = {
+  snippet: string;
+  endpoint: string;
+  selectedScreen?: string;
+  screenID: string;
+  logic: string;
+}
+
 export type EditScreenNamePayloadAction = Action<string> & {
   screen: string;
   navigationSettings: any;
   settingsUI: TSettingsUI;
-  snippet: {
-    snippet: string;
-    endpoint: string;
-    selectedScreen: string;
-    screenID: string;
-    logic: string;
-  };
+  snippet: SnippetType;
 };
 
 export type Actions = {
