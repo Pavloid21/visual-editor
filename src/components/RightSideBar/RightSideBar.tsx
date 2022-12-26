@@ -1,105 +1,23 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef} from 'react';
 import {SideBarHeader} from 'components';
 import {Inspector} from 'containers/Inspector';
 import Screen from 'containers/Screen';
-import {Button, Input} from 'components/controls';
 import {ActionsTabsForms} from 'containers/ActionForm';
 import {useAppDispatch, useAppSelector} from 'store';
-import {ReactComponent as Plus} from 'assets/plus.svg';
-import {ReactComponent as Remove} from 'assets/trash.svg';
-import {ReactComponent as Pencil} from 'assets/pencil.svg';
-import {useForm, useFieldArray, Controller} from 'react-hook-form';
 import {noop} from 'external/lodash';
 import {useOutsideAlerter} from 'utils';
-import {addAPI, editAPI, removeAPI} from 'store/api-settings.slice';
 import {setSelectedBlock} from 'store/layout.slice';
-import {APIContainer, APIRow, Container, RowContainer} from './RightSideBar.styled';
+import {APIContainer, Container} from './RightSideBar.styled';
 
 const RightSidebar: React.FC<unknown> = () => {
-  const APIs = useAppSelector((state) => state.api.list);
   const {activeTab} = useAppSelector((state) => state.config);
   const {selectedBlockUuid: selectedBlock, selectedScreen} = useAppSelector((state) => state.layout);
   const barState = useAppSelector((state) => state.sideBar);
   const selectedAction = useAppSelector((state) => state.actions.selected);
-  const [showForm, setAPIFormShow] = useState(false);
-  const [isEditing, setEditing] = useState(false);
-  const [selected, setSelected] = useState<number | undefined>();
   const dispatch = useAppDispatch();
-  const {handleSubmit, resetField, setValue, control, watch} = useForm();
-  const {fields, append, replace, remove} = useFieldArray({
-    control,
-    name: 'headers',
-  });
-  const paramsFieldsArray = useFieldArray({
-    control,
-    name: 'params',
-  });
 
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef, () => dispatch(setSelectedBlock('')));
-
-  const watchFieldArray = watch('headers');
-  const watchParamsArray = watch('params');
-  const controlledFields = fields.map((field, index) => {
-    return {
-      ...field,
-      ...watchFieldArray[index],
-    };
-  });
-  const controlledParams = paramsFieldsArray.fields.map((field, index) => {
-    return {
-      ...field,
-      ...watchParamsArray[index],
-    };
-  });
-
-  const handleAddHeaderButton = () => {
-    append({
-      key: '',
-      value: '',
-    });
-  };
-
-  const handleAddParamButton = () => {
-    paramsFieldsArray.append({
-      key: '',
-      value: '',
-    });
-  };
-
-  const handleAddButton = () => {
-    resetField('varName');
-    resetField('url');
-    resetField('headers');
-    resetField('params');
-    setAPIFormShow(true);
-  };
-
-  const onSubmit = (data: any) => {
-    if (isEditing && selected) {
-      dispatch(
-        editAPI({
-          api: data,
-          index: selected,
-        })
-      );
-    } else {
-      dispatch(addAPI(data));
-    }
-    setAPIFormShow(false);
-  };
-
-  const handleItemClick = (index: number) => {
-    setSelected(index);
-    setValue('varName', APIs[index].varName);
-    setValue('url', APIs[index].url);
-    setValue('headers', APIs[index].headers);
-    setValue('params', APIs[index].params);
-    replace(APIs[index].headers);
-    paramsFieldsArray.replace(APIs[index].params);
-    setAPIFormShow(true);
-    setEditing(true);
-  };
 
   if (!barState.right) {
     return null;
@@ -117,105 +35,8 @@ const RightSidebar: React.FC<unknown> = () => {
         {!selectedBlock && !selectedAction && activeTab !== 5 && (
           <APIContainer>
             <div>
-              <span>API Settings</span>
-              <Plus className="icon" onClick={handleAddButton} />
+              <span>Select screen or action to view properties</span>
             </div>
-            {showForm && (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                }}
-              >
-                <Controller
-                  name="varName"
-                  control={control}
-                  render={({field}) => (
-                    <Input type="text" label="Endpoint name" $clearable $isWide {...field} />
-                  )}
-                />
-                <Controller
-                  name="url"
-                  control={control}
-                  render={({field}) => <Input type="text" label="URL" $clearable $isWide {...field} />}
-                />
-                <div>
-                  <span>Headers</span>
-                  <Plus className="icon" onClick={handleAddHeaderButton} />
-                </div>
-                {controlledFields.map((field, index) => (
-                  <RowContainer key={field.id}>
-                    <Controller
-                      //@ts-ignore
-                      name={`headers.${index}.key`}
-                      control={control}
-                      render={({field}) => {
-                        return <Input placeholder="Key" label="Key" $clearable {...field} />;
-                      }}
-                    />
-                    <Controller
-                      //@ts-ignore
-                      name={`headers.${index}.value`}
-                      control={control}
-                      render={({field}) => <Input placeholder="Value" label="Value" $clearable {...field} />}
-                    />
-                    <Remove
-                      className="icon"
-                      onClick={() => {
-                        remove(index);
-                      }}
-                    />
-                  </RowContainer>
-                ))}
-                <div>
-                  <span>Parameters</span>
-                  <Plus className="icon" onClick={handleAddParamButton} />
-                </div>
-                {controlledParams.map((field, index) => (
-                  <RowContainer key={field.id}>
-                    <Controller
-                      //@ts-ignore
-                      name={`params.${index}.key`}
-                      control={control}
-                      render={({field}) => {
-                        return <Input placeholder="Key" label="Key" $clearable {...field} />;
-                      }}
-                    />
-                    <Controller
-                      //@ts-ignore
-                      name={`params.${index}.value`}
-                      control={control}
-                      render={({field}) => <Input placeholder="Value" label="Value" $clearable {...field} />}
-                    />
-                    <Remove
-                      className="icon"
-                      onClick={() => {
-                        paramsFieldsArray.remove(index);
-                      }}
-                    />
-                  </RowContainer>
-                ))}
-                <Button onClick={handleSubmit(onSubmit)}>{isEditing ? 'Edit' : 'Save'} API</Button>
-              </form>
-            )}
-            <div style={{marginTop: '16px'}}>
-              <span>API List</span>
-            </div>
-            {APIs.map((item, index) => {
-              return (
-                <APIRow style={{display: 'flex', justifyContent: 'space-between'}} key={`api_${index}`}>
-                  <span>{item.varName}</span>
-                  <span>
-                    <Pencil className="icon" onClick={() => handleItemClick(index)} />
-                    <Remove
-                      className="icon"
-                      onClick={() => {
-                        dispatch(removeAPI(index));
-                      }}
-                    />
-                  </span>
-                </APIRow>
-              );
-            })}
           </APIContainer>
         )}
       </div>
