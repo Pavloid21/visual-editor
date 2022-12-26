@@ -95,8 +95,7 @@ export const Container = styled.div`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-    .project_name .tooltip {
+    & > .tooltip {
       visibility: hidden;
       width: 120px;
       background-color: black;
@@ -108,10 +107,11 @@ export const Container = styled.div`
       /* Position the tooltip */
       position: absolute;
       z-index: 1;
+      &:hover {
+        visibility: visible;
+      }
     }
-    .project_name:hover .tooltip {
-      visibility: visible;
-    }
+  }
   .project_dates {
     font-size: 16px;
     line-height: 20px;
