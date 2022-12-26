@@ -95,7 +95,7 @@ export const Card: React.FC<TCardProps> = ({
         />
         <div className="card_footer">
           <div className="platform_tags">{platforms}</div>
-          <div className="project_name">{name}</div>
+          <div className="project_name">{name}<span className="tooltip">{name}</span></div>
           <div className="project_dates">
             <div>{`Created: ${created ? moment(created).format('DD.MM.yyyy HH:mm:ss') : ''}`}</div>
             <div>{`Last edit: ${edited ? moment(edited).format('DD.MM.yyyy HH:mm:ss') : ''}`}</div>
