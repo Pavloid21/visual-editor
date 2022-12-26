@@ -1,5 +1,6 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import actionsReducer from './actions.slice';
+import apiSettingsReducer from './api-settings.slice';
 import codeReducer from './code.slice';
 import configReducer from './config.slice';
 import currentReducer from './current.slice';
@@ -18,6 +19,7 @@ import type {RootStore, ThunkAppDispatch} from './types';
 
 const rootReducer = combineReducers({
   actions: actionsReducer,
+  api: apiSettingsReducer,
   code: codeReducer,
   config: configReducer,
   current: currentReducer,
