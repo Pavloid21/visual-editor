@@ -92,7 +92,26 @@ export const Container = styled.div`
     margin-bottom: 12px;
     max-width: 219px;
     overflow-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
+    .project_name .tooltip {
+      visibility: hidden;
+      width: 120px;
+      background-color: black;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+
+      /* Position the tooltip */
+      position: absolute;
+      z-index: 1;
+    }
+    .project_name:hover .tooltip {
+      visibility: visible;
+    }
   .project_dates {
     font-size: 16px;
     line-height: 20px;
