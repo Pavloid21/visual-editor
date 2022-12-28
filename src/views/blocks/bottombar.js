@@ -28,7 +28,7 @@ const BottomBar = styled.div`
     gap: 4px;
     & label {
       margin-bottom: 0;
-      color: ${(props) => transformHexWeb(props.textUnselectedColor || 'transparent')};
+      color: ${(props) => transformHexWeb(props.textUnselectedColor) || 'transparent'};
     }
     & .item_icon {
       background-color: ${(props) => transformHexWeb(props.iconUnselectedColor)};
@@ -92,8 +92,7 @@ const block = () => ({
     iconSelectedColor: '#E9E8EA',
     iconUnselectedColor: '#A29CA6',
     textSelectedColor: '#E9E8EA',
-    textUnselectedColor: '',
-    showUnselectedText: false,
+    textUnselectedColor: '#A29CA6',
     navigationItems: [
       {
         screenName: 'Main',

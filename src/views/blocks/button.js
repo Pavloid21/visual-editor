@@ -13,7 +13,6 @@ import {
   padding,
   shadowConfigBuilder,
   shapeConfigBuilder,
-  defaultData,
   text, textColor, getSizeConfig, interactive
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
@@ -44,19 +43,19 @@ const Button = styled.div`
   ${(props) => {
     if (props.shadow) {
       const webColor = transformHexWeb(props.shadow?.color);
-      const RGB = hexToRgb(webColor);
+      const RGB = hexToRgb(webColor) || {r: 0, g: 0, b: 0};
 
       if(RGB !== null) {
-        return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${
-          props.shadow?.radius
-        }px rgba(${RGB.r}, ${RGB.g}, ${RGB.b}, ${props.shadow?.opacity});`;
+        return `box-shadow: ${props.shadow?.offsetSize?.width || 0}px ${props.shadow?.offsetSize?.height|| 0}px
+        ${props.shadow?.radius || 0}px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b},
+        ${props.shadow?.opacity || 0});`;
       }
     }
   }}
 
   ${(props) => {
-    if (props.shape?.type === 'ALLCORNERSROUND') {
-      return `border-radius: ${props.shape.radius}px;`;
+    if (props.shape?.type === 'ALLCORNERSROUND' || !props?.shape?.type) {
+      return `border-radius: ${props?.shape?.radius || 0}px;`;
     }
   }}
   & > span {
@@ -167,8 +166,15 @@ const block = (state) => {
       size: {
         height: 36,
       },
-      shadow: defaultData.shadow,
-      shape: defaultData.shape,
+      shadow: {
+        color: '#000000',
+        opacity: 0.3,
+        offsetSize: {
+          width: 0,
+          height: 0,
+        },
+        radius: 8,
+      },
     },
     interactive,
     config: {

@@ -18,7 +18,6 @@ import {
   metricStyle,
   dataSourceSettings,
   filter,
-  defaultData,
 } from 'views/configs';
 import collection from 'assets/collection.svg';
 import {pushBlockInside} from 'store/layout.slice';
@@ -43,14 +42,14 @@ const Collection = styled.div`
   flex-direction: column;
   box-sizing: border-box;
   ${(props) => {
-    if (props.shape?.type === 'ALLCORNERSROUND') {
-      return `border-radius: ${props.shape?.radius || 0}px;`;
-  } else if (props.shape?.type === 'TOPCORNERSROUND') {
+    if (props.shape?.type === 'ALLCORNERSROUND' || !props?.shape?.type) {
+      return `border-radius: ${props?.shape?.radius || 0}px;`;
+    } else if (props.shape?.type === 'TOPCORNERSROUND') {
       return `border-top-left-radius: ${props.shape?.radius || 0}px; border-top-right-radius: ${props.shape?.radius || 0}px;`;
   }
 }}
   ${(props) => {
-    if (props.collectionUiConfig?.scrollDirection === 'vertical') {
+    if (props.collectionUiConfig?.scrollDirection === 'vertical' || !props?.collectionUiConfig?.scrollDirection) {
       return 'overflow-y: scroll; overflow-x: hidden;';
   }
     if (props.collectionUiConfig?.scrollDirection === 'horizontal') {
@@ -59,8 +58,8 @@ const Collection = styled.div`
 }}
   & > div {
     display: grid;
-    grid-template-columns: repeat(${(props) => props.collectionUiConfig?.itemsInHorisontal}, ${(props) => +props.collectionUiConfig?.pointWidth > 0 ? props.collectionUiConfig?.pointWidth + 'px' : '1fr'});
-    grid-template-rows: repeat(${(props) => props.collectionUiConfig?.itemsInVertical}, ${(props) => +props.collectionUiConfig?.pointHeight > 0 ? +props.collectionUiConfig?.pointHeight + 'px' : '1fr'});
+    grid-template-columns: repeat(${(props) => props.collectionUiConfig?.itemsInHorisontal || 1}, ${(props) => +props.collectionUiConfig?.pointWidth > 0 ? props.collectionUiConfig?.pointWidth + 'px' : '1fr'});
+    grid-template-rows: repeat(${(props) => props.collectionUiConfig?.itemsInVertical || 0}, ${(props) => +props.collectionUiConfig?.pointHeight > 0 ? +props.collectionUiConfig?.pointHeight + 'px' : '1fr'});
     overflow-x: inherit;
     overflow-y: inherit;
     grid-gap: ${(props) => props.spacing || 0}px;
@@ -186,16 +185,11 @@ const block = (state) => {
         right: 16,
         bottom: 16,
       },
-      shape: defaultData.shape,
       collectionUiConfig: {
-        cellBackgroundColor: '',
         metricStyle: 'pointsAndItemsIn',
-        pointHeight: 1,
-        pointWidth: 1,
-        itemsInHorisontal: 1,
-        itemsInVertical: 0,
-        widthToHeight: 0,
-        heightToWidth: 0,
+        pointHeight: 121,
+        itemsInHorisontal: 2,
+        itemsInVertical: 1,
         scrollDirection: 'vertical',
       },
     },
@@ -228,8 +222,8 @@ const block = (state) => {
         pointWidth: {type: 'number', name: 'Point width', relations: {metricStyle: ['pointsAndItemsIn', 'points']}},
         itemsInHorisontal: {type: 'number', name: 'Items in horizontal', relations: {metricStyle: ['pointsAndItemsIn', 'itemsInAndProportional', 'itemsIn']}},
         itemsInVertical: {type: 'number', name: 'Items in vertical', relations: {metricStyle: ['pointsAndItemsIn', 'itemsInAndProportional', 'itemsIn']}},
-        widthToHeight: {type: 'number', name: 'Width to height', relations: {metricStyle: ['pointsAndItemsIn', 'itemsInAndProportional', 'itemsIn']}},
-        heightToWidth: {type: 'number', name: 'Height to width', relations: {metricStyle: ['pointsAndItemsIn', 'itemsInAndProportional', 'itemsIn']}},
+        widthToHeight: {type: 'number', name: 'Width to height', relations: {metricStyle: ['itemsInAndProportional']}},
+        heightToWidth: {type: 'number', name: 'Height to width', relations: {metricStyle: ['itemsInAndProportional']}},
       },
     },
   });

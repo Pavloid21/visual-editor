@@ -12,7 +12,6 @@ import {
   shadowConfigBuilder,
   shapeConfigBuilder,
   text,
-  defaultData,
   textAlignment, textColor,
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
@@ -23,24 +22,21 @@ import {transformHexWeb} from '../../utils/color';
 const Label = styledComponents.div`
   box-sizing: border-box;
   display: flex;
-  width: fit-content;
+  width: fit-content;0
   align-self: center;
   ${({shape}) => {
-    if (shape?.type === 'ALLCORNERSROUND') {
-      return `border-radius: ${shape.radius}px;`;
+    if (shape?.type === 'ALLCORNERSROUND' || !shape?.type) {
+      return `border-radius: ${shape?.radius || 0}px;`;
     }
   }}
   overflow: hidden;
   ${({shadow}) => {
     if (shadow) {
       const webColor = transformHexWeb(shadow?.color);
-      const RGB = hexToRgb(webColor);
-      if(RGB !== null) {
-        return `box-shadow: ${shadow?.offsetSize?.width}px ${shadow?.offsetSize?.height}px ${
-          shadow?.radius || 0
-        }px rgba(${RGB.r}, ${RGB.g}, ${RGB.b}, ${shadow?.opacity});`;
-      }
-
+      const RGB = hexToRgb(webColor) || {r: 0, g: 0, b: 0};
+      return `box-shadow: ${shadow?.offsetSize?.width || 0}px ${shadow?.offsetSize?.height|| 0}px ${
+        shadow?.radius || 0
+      }px rgba(${RGB.r}, ${RGB.g}, ${RGB.b}, ${shadow?.opacity|| 0});`;
     }
   }}
   & > span {
@@ -118,8 +114,15 @@ const block = (state) => {
         left: 0,
         right: 0,
       },
-      shape: defaultData.shape,
-      shadow: defaultData.shadow,
+      shadow: {
+        color: '#000000',
+        opacity: 0.3,
+        offsetSize: {
+          width: 0,
+          height: 0,
+        },
+        radius: 8,
+      },
     },
     config: {
       text,

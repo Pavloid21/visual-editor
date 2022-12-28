@@ -16,7 +16,6 @@ import {
   shapeConfigBuilder,
   dataSourceSettings,
   filter,
-  defaultData,
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
 import {blockStateSafeSelector, getListItemCollectionSelector} from 'store/selectors';
@@ -42,8 +41,8 @@ const List = styled.div`
   box-sizing: border-box;
   overflow: auto;
   ${(props) => {
-    if (props.shape?.type === 'ALLCORNERSROUND') {
-      return `border-radius: ${props.shape.radius}px;`;
+    if (props.shape?.type === 'ALLCORNERSROUND' || !props?.shape?.type) {
+      return `border-radius: ${props?.shape?.radius || 0}px;`;
     }
   }}
 `;
@@ -161,7 +160,6 @@ const block = (state) => {
         heightInPercent: 50,
         widthInPercent: 100,
       },
-      shape: defaultData.shape,
     },
     listItem: null,
     interactive: {
