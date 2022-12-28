@@ -6,7 +6,7 @@ import {useModal} from 'utils';
 import {ReactComponent as ArrowBack} from 'assets/arrow_back.svg';
 import {ReactComponent as Settings} from 'assets/settings.svg';
 import {ReactComponent as Warning} from 'assets/warning.svg';
-import {BASE_URL, editProject, getProjectData} from 'services/ApiService';
+import {BASE_URL, editProject, getProjectData, saveAction} from 'services/ApiService';
 import Modal from 'containers/Project/Modal/Modal';
 import {Modal as CustomModal} from '../Modal';
 import {Button} from 'components/controls/Button';
@@ -19,14 +19,20 @@ import {head} from 'external/lodash';
 import Routes from 'routes/routes';
 import {selectProject} from 'store/project.slice';
 import {useAppDispatch, useAppSelector} from 'store';
+import {setCancelBusinessSettings} from 'store/business-setting.slice';
+import {TBusinessSetting} from 'store/types';
 
 export const SideBarHeader: React.FC<SideBarHeaderProps> = React.memo((props) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal();
   const [warningOpen, setWarningOpen, toggleWarning] = useModal();
-  const layout = useAppSelector((state) => state.layout);
+  const businessSettingsChange = useAppSelector((state) => state.businessSetting.businessSettingsChange);
+  const projectID = useAppSelector((state) => state.project.id);
   const location = useLocation();
+  const project_id = projectID || location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
+  const layout = useAppSelector((state) => state.layout);
+
   const {
     setValue,
     getValues,
@@ -34,7 +40,7 @@ export const SideBarHeader: React.FC<SideBarHeaderProps> = React.memo((props) =>
     handleSubmit,
     control,
     formState: {
-      errors: {form},
+      errors: {form}
     },
   } = useForm<Inputs>({
     criteriaMode: 'all',
@@ -68,7 +74,7 @@ export const SideBarHeader: React.FC<SideBarHeaderProps> = React.memo((props) =>
         })
       );
     });
-    
+
   }, [itemModalOpen, dispatch]);
 
   useBackListener(() => {
@@ -79,7 +85,35 @@ export const SideBarHeader: React.FC<SideBarHeaderProps> = React.memo((props) =>
     }
   });
 
+  const handleSaveBusinessSettings = (settings: TBusinessSetting, settingsList: string[]) => {
+    const settingsSave = settingsList.map((item: string) => {
+      const settingItem = settings[item as keyof TBusinessSetting];
+      return (`\t${item}: ${typeof settingItem === "boolean" ? settingItem : '"' + settingItem + '"'},\n`);
+    }).join("");
+    return `
+return {
+  ${settingsSave}
+}`;
+  };
+
   const handleSave = async () => {
+    const settingsList = [
+      'loginUrl',
+      'passCodeVerificationUrl',
+      'isTouchId',
+      'isFaceId',
+      'timeTokenExpired',
+      'tokenDeviceUrl',
+      'countPincodeAttempt',
+      'countFaceIdAttempt',
+      'countTouchIdAttempt',
+      'mainScreenUrl',
+      'invalidAccessTime',
+    ];
+    const businessSettingsEdit = handleSaveBusinessSettings(businessSettingsChange, settingsList);
+
+    await saveAction(project_id, 'data', 'appSettings', businessSettingsEdit);
+
     const {name, icon: icons, description, platform, url} = getValues().form;
     const requestIcons = await filesToDTO(icons);
     editProject(
@@ -132,7 +166,10 @@ export const SideBarHeader: React.FC<SideBarHeaderProps> = React.memo((props) =>
           width="24"
           height="24"
           viewBox="6 6 24 24"
-          onClick={() => toggleModal()}
+          onClick={() => {
+            toggleModal();
+            dispatch(setCancelBusinessSettings(false));
+          }}
         />
       )}
       <Modal

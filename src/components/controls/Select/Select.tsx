@@ -11,7 +11,7 @@ import {AnimateSharedLayout} from 'framer-motion';
 import {ActionTypes} from 'store/types';
 
 export const Select = React.memo((props: ISelect) => {
-  const {onChange, options, value, className, label, menuPlacement, styles, clearable} = props;
+  const {onChange, options, value, className, label, menuPlacement, styles, clearable, placeholder} = props;
   const [optionsList, setOptions] = useState(options || []);
   const menus = [
     {actionType: 'screens', title: 'Navigation'},
@@ -102,6 +102,9 @@ export const Select = React.memo((props: ISelect) => {
   );
 
   const getPlaceholder = useCallback(() => {
+    if (props.placeholder) {
+      return placeholder;
+    }
     if (props.async) {
       switch (selected_value) {
         case 'screens':

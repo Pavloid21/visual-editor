@@ -1,149 +1,93 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Modal as CustomModal} from 'components';
-import {Button, FileInput, Input, Label} from 'components/controls';
-import {Controller} from 'react-hook-form';
 import {ReactComponent as Close} from 'assets/close.svg';
-import {Bar, ButtonGroup, Actions} from './Modal.styled';
-import type {ModalProps} from '../types';
+import {ContentModal, Bar, EditModalTabs, Actions} from './Modal.styled';
+import type {ModalProps} from 'containers/Project/types';
+import {MainInfoContent} from './components/MainInfoContent';
+import {EDIT_MODAL_TABS, WIDTH_MODAL} from 'containers/Project/constants';
+import {BusinessContent} from './components/BusinessContent';
+import {getActionByName} from 'services/ApiService';
+import {parseRuturnStatement} from 'utils/parse';
+import {setBusinessSetting, setBusinessSettingChange, setCancelBusinessSettings} from 'store/business-setting.slice';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootStore} from 'store/types';
+import {Button} from 'components/controls';
 
 const Modal: React.FC<ModalProps> = (props) => {
+  const projectID = useSelector((state: RootStore) => state.project.id);
+  const project_id = projectID || location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
+  const screenList = useSelector((state: RootStore) => state.screenList);
+  const dispatch = useDispatch();
   const {itemModalOpen, setItemModalOpen, form, control, handleSave, handleSubmit, isEdit, setValue} = props;
-  const formRef = React.createRef<HTMLFormElement>();
-  const handlePlatformButtonClick = (event: React.MouseEvent, value: any) => {
-    const platform = event.currentTarget.attributes.getNamedItem('data-platform')?.value;
-    if (platform) {
-      // @ts-ignore
-      setValue('form.platform', JSON.stringify({...value, [platform]: value ? !value[platform] : true}));
-    }
+
+  const [activeTab, setActiveTab] = useState(EDIT_MODAL_TABS.MAIN);
+
+  const getClassTabById = (tab: string) => activeTab === tab ? 'tab_active' : '';
+
+  const handleCancel = () => {
+    setItemModalOpen(false);
+    dispatch(setCancelBusinessSettings(true));
   };
 
+  const handlerClickTabs = (event: React.MouseEvent<HTMLDivElement>) => {
+    const activeTab = (event.target as HTMLDivElement)?.dataset?.tabId || EDIT_MODAL_TABS.MAIN;
+    setActiveTab(activeTab);
+  };
+
+  useEffect(() => {
+      if (project_id !== 'project') {
+        getActionByName(project_id, 'appSettings', 'data').then(data => {
+          const settings = parseRuturnStatement(data);
+          dispatch(setBusinessSetting(settings));
+          dispatch(setBusinessSettingChange(settings));
+        });
+      }
+  }, []);
+
+  const renderMainInfo = () => (
+    <MainInfoContent
+      handleSubmit={handleSubmit}
+      control={control}
+      form={form}
+      handleSave={handleSave}
+      isEdit={isEdit}
+      setItemModalOpen={setItemModalOpen}
+      setValue={setValue}
+    />
+  );
+
   return (
-    <CustomModal isActive={itemModalOpen} handleClose={() => setItemModalOpen(false)} style={{maxWidth: '502px'}}>
+    <CustomModal isActive={itemModalOpen} handleClose={() => setItemModalOpen(false)} style={{maxWidth: WIDTH_MODAL[isEdit ? 'EDIT' : 'DEFAULT']}}>
       <Bar>
         <h3>{isEdit ? 'Edit' : 'Create New'} Project</h3>
         <div>
-          <Close className="icon" onClick={() => setItemModalOpen(false)} />
+          <Close className="icon" onClick={handleCancel} />
         </div>
       </Bar>
-      <div>
-        <form
-          ref={formRef}
-          onSubmit={(e) => {
-            e.preventDefault();
-          }}
-        >
-          <Controller
-            name="form.name"
-            control={control}
-            rules={{required: 'Name is required'}}
-            render={({field}) => {
-              return (
-                <div>
-                  <Input
-                    $clearable
-                    $isWide
-                    label="Project name"
-                    placeholder="Project name"
-                    $extraText={form?.name?.message}
-                    status={form?.name ? 'error' : undefined}
-                    {...field}
-                  />
-                </div>
-              );
-            }}
-          />
-          <Controller
-            name="form.platform"
-            control={control}
-            render={({field: {value}}) => {
-              const platform = JSON.parse(value ? value.toString() : '{}');
-              return (
-                <div>
-                  <Label>Platform</Label>
-                  <ButtonGroup>
-                    <Button
-                      data-platform="ios"
-                      className={platform?.ios ? undefined : 'secondary'}
-                      onClick={(event) => handlePlatformButtonClick(event, platform)}
-                    >
-                      iOS
-                    </Button>
-                    <Button
-                      data-platform="android"
-                      className={platform?.android ? undefined : 'secondary'}
-                      onClick={(event) => handlePlatformButtonClick(event, platform)}
-                    >
-                      Android
-                    </Button>
-                    <Button
-                      data-platform="aurora"
-                      className={platform?.aurora ? undefined : 'secondary'}
-                      onClick={(event) => handlePlatformButtonClick(event, platform)}
-                    >
-                      Aurora
-                    </Button>
-                  </ButtonGroup>
-                </div>
-              );
-            }}
-          />
-          <Controller
-            name="form.url"
-            control={control}
-            render={({field}) => {
-              return (
-                <div id="portal">
-                  <Input $clearable $isWide label="Backend URL" placeholder="http://yourbackend.com" {...field} />
-                </div>
-              );
-            }}
-          />
-          <Controller
-            name="form.description"
-            control={control}
-            render={({field}) => {
-              return (
-                <div>
-                  <Input
-                    $clearable
-                    $isWide
-                    $textarea
-                    label="Description"
-                    placeholder="Your project description"
-                    maxLength={500}
-                    showCount={true}
-                    $extraText={`${field.value?.length || 0}/500`}
-                    {...field}
-                  />
-                </div>
-              );
-            }}
-          />
-          <Controller
-            name="form.icon"
-            control={control}
-            render={({field}) => {
-              return (
-                <div>
-                  <FileInput
-                    label="Project icon"
-                    placeholder="Drag and drop image (512 × 512)"
-                    onFileChange={field.onChange}
-                    accept="image/*"
-                    {...field}
-                  />
-                </div>
-              );
-            }}
-          />
-        </form>
-        <Actions>
-          <Button onClick={handleSubmit(handleSave)}>{isEdit ? 'Save' : 'Create'}</Button>
-          <Button className="secondary" onClick={() => setItemModalOpen(false)}>
-            Cancel
-          </Button>
-        </Actions>
-      </div>
+      {isEdit ?
+        <>
+          <EditModalTabs onClick={handlerClickTabs}>
+            <h3 data-tab-id={EDIT_MODAL_TABS.MAIN} className={getClassTabById(EDIT_MODAL_TABS.MAIN)}>Main info</h3>
+            <h3 data-tab-id={EDIT_MODAL_TABS.BUSINESS} className={getClassTabById(EDIT_MODAL_TABS.BUSINESS)}>Business
+              setting</h3>
+          </EditModalTabs>
+          <ContentModal>
+          {activeTab === EDIT_MODAL_TABS.MAIN ?
+            renderMainInfo() :
+            <BusinessContent
+              screenList={screenList}
+              setItemModalOpen={setItemModalOpen}
+            />}
+          </ContentModal>
+        </> :
+        renderMainInfo()
+      }
+      <Actions>
+        <Button onClick={handleSubmit(handleSave)}>{isEdit ? 'Save' : 'Create'}</Button>
+        <Button className="secondary" onClick={handleCancel}>
+          Cancel
+        </Button>
+      </Actions>
     </CustomModal>
   );
 };

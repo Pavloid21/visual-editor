@@ -13,6 +13,7 @@ import projectFormReducer from './project-form.slice';
 import screensReducer from './screens.slice';
 import imagesReducer from './images.slice';
 import leftBarMenuSlice from './left-bar-menu.slice';
+import businessSettingSlice from './business-setting.slice';
 import {useDispatch, useSelector, TypedUseSelectorHook} from 'react-redux';
 
 import type {RootStore, ThunkAppDispatch} from './types';
@@ -31,7 +32,8 @@ const rootReducer = combineReducers({
   projectForm: projectFormReducer,
   screenList: screensReducer,
   leftBarMenu: leftBarMenuSlice,
-  imagesList: imagesReducer
+  imagesList: imagesReducer,
+  businessSetting: businessSettingSlice
 });
 
 const store = configureStore({
