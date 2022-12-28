@@ -100,12 +100,12 @@ return {
     const settingsList = [
       'loginUrl',
       'passCodeVerificationUrl',
+      'mainScreenUrl',
       'isTouchId',
       'isFaceId',
       'timeTokenExpired',
-      'tokenDeviceUrl',
       'countPinCodeAttempt',
-      'mainScreenUrl',
+      'tokenDeviceUrl',
     ];
     const businessSettingsEdit = handleSaveBusinessSettings(businessSettingsChange, settingsList);
 
