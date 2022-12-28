@@ -24,15 +24,11 @@ export const BusinessContent = ({screenList}: BusinessContentType) => {
     defaultValues: {
       timeTokenExpired: businessSettings.timeTokenExpired,
       tokenDeviceUrl: businessSettings.tokenDeviceUrl,
-      countTouchIdAttempt: businessSettings.countTouchIdAttempt,
-      countPincodeAttempt: businessSettings.countPincodeAttempt,
-      countFaceIdAttempt: businessSettings.countFaceIdAttempt,
       loginUrl: businessSettings.loginUrl,
       passCodeVerificationUrl: businessSettings.passCodeVerificationUrl,
       isTouchId: businessSettings.isTouchId,
       isFaceId: businessSettings.isFaceId,
       mainScreenUrl: businessSettings.mainScreenUrl,
-      invalidAccessTime: businessSettings.invalidAccessTime,
     }
   });
 
@@ -45,11 +41,7 @@ export const BusinessContent = ({screenList}: BusinessContentType) => {
       'isFaceId',
       'timeTokenExpired',
       'tokenDeviceUrl',
-      'countPincodeAttempt',
-      'countFaceIdAttempt',
-      'countTouchIdAttempt',
       'mainScreenUrl',
-      'invalidAccessTime',
     ]});
 
   useEffect(() => {
@@ -77,8 +69,8 @@ export const BusinessContent = ({screenList}: BusinessContentType) => {
               <div className="dropdownSelect login">
                 <Select
                   options={screenList}
-                  label="URL скрина логина"
-                  placeholder="http://example.com"
+                  label="Screen login"
+                  placeholder="Select Screen"
                   {...field}
                 />
               </div>
@@ -93,8 +85,8 @@ export const BusinessContent = ({screenList}: BusinessContentType) => {
               <div className="dropdownSelect pincode">
                 <Select
                   options={screenList}
-                  label="URL скрина пинкода"
-                  placeholder="http://example.com"
+                  label="Screen pin code"
+                  placeholder="Select Screen"
                   {...field}
                 />
               </div>
@@ -112,7 +104,7 @@ export const BusinessContent = ({screenList}: BusinessContentType) => {
                     value={field.value}
                     onChange={field.onChange}
                   />
-                  <p>Вход по Touchid</p>
+                  <p>Login with Touchid</p>
                 </div>
               );
             }}
@@ -127,7 +119,7 @@ export const BusinessContent = ({screenList}: BusinessContentType) => {
                     value={field.value}
                     onChange={field.onChange}
                   />
-                  <p>Вход по FaceId</p>
+                  <p>Login with FaceId</p>
                 </div>
               );
             }}
@@ -141,7 +133,7 @@ export const BusinessContent = ({screenList}: BusinessContentType) => {
               <div>
                 <Input
                   $isWide
-                  label="Время протухания токена в секундах"
+                  label="Token decay time in seconds"
                   placeholder="e.g. 86 400"
                   {...field}
                 />
@@ -157,7 +149,7 @@ export const BusinessContent = ({screenList}: BusinessContentType) => {
               <div>
                 <Input
                   $isWide
-                  label="URL токена устройства"
+                  label="Device token URL"
                   placeholder="http://example.com"
                   {...field}
                 />
@@ -165,56 +157,6 @@ export const BusinessContent = ({screenList}: BusinessContentType) => {
             );
           }}
         />
-        <div className="attempt">
-          <Controller
-            name="countTouchIdAttempt"
-            control={control}
-            render={({field}) => {
-              return (
-                <div>
-                  <Input
-                    $isWide
-                    label="Попытки входа по TouchId"
-                    type="number"
-                    {...field}
-                  />
-                </div>
-              );
-            }}
-          />
-          <Controller
-            name="countPincodeAttempt"
-            control={control}
-            render={({field}) => {
-              return (
-                <div>
-                  <Input
-                    $isWide
-                    label="Попытки ввода пинкода"
-                    type="number"
-                    {...field}
-                  />
-                </div>
-              );
-            }}
-          />
-          <Controller
-            name="countFaceIdAttempt"
-            control={control}
-            render={({field}) => {
-              return (
-                <div>
-                  <Input
-                    $isWide
-                    label="Попытки входа по FaceId"
-                    type="number"
-                    {...field}
-                  />
-                </div>
-              );
-            }}
-          />
-        </div>
         <Controller
           name="mainScreenUrl"
           control={control}
@@ -223,24 +165,8 @@ export const BusinessContent = ({screenList}: BusinessContentType) => {
               <div className="dropdownSelect">
                 <Select
                   options={screenList}
-                  label="URL главной страницы"
-                  placeholder="http://example.com"
-                  {...field}
-                />
-              </div>
-            );
-          }}
-        />
-        <Controller
-          name="invalidAccessTime"
-          control={control}
-          render={({field}) => {
-            return (
-              <div>
-                <Input
-                  $isWide
-                  label="Отображения всплывающего окна при неудачной попытке входа в секундах"
-                  placeholder="e.g. 86 400"
+                  label="Screen main"
+                  placeholder="Select Screen"
                   {...field}
                 />
               </div>
