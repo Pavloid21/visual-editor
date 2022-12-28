@@ -92,6 +92,8 @@ export type TBusinessSetting = {
   timeTokenExpired?: number;
   tokenDeviceUrl?: string;
   mainScreenUrl?: string;
+  countPinCodeAttempt?: number;
+
 };
 
 export type Template = {
