@@ -29,6 +29,7 @@ export const BusinessContent = ({screenList}: BusinessContentType) => {
       isTouchId: businessSettings.isTouchId,
       isFaceId: businessSettings.isFaceId,
       mainScreenUrl: businessSettings.mainScreenUrl,
+      countPinCodeAttempt: businessSettings.countPinCodeAttempt,
     }
   });
 
@@ -37,11 +38,12 @@ export const BusinessContent = ({screenList}: BusinessContentType) => {
     name: [
       'loginUrl',
       'passCodeVerificationUrl',
+      'mainScreenUrl',
       'isTouchId',
       'isFaceId',
       'timeTokenExpired',
+      'countPinCodeAttempt',
       'tokenDeviceUrl',
-      'mainScreenUrl',
     ]});
 
   useEffect(() => {
@@ -93,6 +95,22 @@ export const BusinessContent = ({screenList}: BusinessContentType) => {
             );
           }}
         />
+        <Controller
+          name="mainScreenUrl"
+          control={control}
+          render={({field}) => {
+            return (
+              <div className="dropdownSelect">
+                <Select
+                  options={screenList}
+                  label="Screen main"
+                  placeholder="Select Screen"
+                  {...field}
+                />
+              </div>
+            );
+          }}
+        />
         <div className="toggles">
           <Controller
             name="isTouchId"
@@ -134,7 +152,23 @@ export const BusinessContent = ({screenList}: BusinessContentType) => {
                 <Input
                   $isWide
                   label="Token decay time in seconds"
-                  placeholder="e.g. 86 400"
+                  type="number"
+                  {...field}
+                />
+              </div>
+            );
+          }}
+        />
+        <Controller
+          name="countPinCodeAttempt"
+          control={control}
+          render={({field}) => {
+            return (
+              <div>
+                <Input
+                  $isWide
+                  label="Number of login attempts by pincode"
+                  type="number"
                   {...field}
                 />
               </div>
@@ -151,22 +185,6 @@ export const BusinessContent = ({screenList}: BusinessContentType) => {
                   $isWide
                   label="Device token URL"
                   placeholder="http://example.com"
-                  {...field}
-                />
-              </div>
-            );
-          }}
-        />
-        <Controller
-          name="mainScreenUrl"
-          control={control}
-          render={({field}) => {
-            return (
-              <div className="dropdownSelect">
-                <Select
-                  options={screenList}
-                  label="Screen main"
-                  placeholder="Select Screen"
                   {...field}
                 />
               </div>
