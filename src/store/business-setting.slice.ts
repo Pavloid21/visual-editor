@@ -8,11 +8,7 @@ const businessSettings: TBusinessSetting = {
   isFaceId: false,
   timeTokenExpired: 0,
   tokenDeviceUrl: '',
-  countPincodeAttempt: 0,
-  countFaceIdAttempt: 0,
-  countTouchIdAttempt: 0,
-  mainScreenUrl: '',
-  invalidAccessTime: 0
+  mainScreenUrl: ''
 };
 
 const initialState = {
