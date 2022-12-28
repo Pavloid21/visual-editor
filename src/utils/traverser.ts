@@ -62,13 +62,16 @@ export const prepareTree = (
   } else if (treeData.value.listItem) {
     root.children = [buildTreeitem(treeData.value.listItem)];
   }
-  if (treeData?.action?.topAppBar) {
+  const thisScreenTopAppBar = topAppBar && root.expanded;
+  const thisScreenBottomBar = bottomBar && root.expanded;
+
+  if (treeData?.action?.topAppBar || thisScreenTopAppBar) {
     root.children.unshift({
       title: 'TOPAPPBAR',
       subtitle: topAppBar?.uuid,
     });
   }
-  if (treeData?.action?.bottomBar) {
+  if (treeData?.action?.bottomBar || thisScreenBottomBar) {
     root.children.push({
       title: 'BOTTOMBAR',
       subtitle: bottomBar?.uuid,
