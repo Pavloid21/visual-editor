@@ -91,11 +91,7 @@ export type TBusinessSetting = {
   isFaceId?: boolean;
   timeTokenExpired?: number;
   tokenDeviceUrl?: string;
-  countPincodeAttempt?: number;
-  countFaceIdAttempt?: number;
-  countTouchIdAttempt?: number;
   mainScreenUrl?: string;
-  invalidAccessTime?: number;
 };
 
 export type Template = {
