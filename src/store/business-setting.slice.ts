@@ -7,7 +7,7 @@ const businessSettings: TBusinessSetting = {
   isTouchId: false,
   isFaceId: false,
   timeTokenExpired: 0,
-  tokenDeviceUrl: '',
+  tokenDeviceUrl: 'push/tokens',
   mainScreenUrl: '',
   countPinCodeAttempt: 2
 };
