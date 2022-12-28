@@ -62,13 +62,13 @@ export const prepareTree = (
   } else if (treeData.value.listItem) {
     root.children = [buildTreeitem(treeData.value.listItem)];
   }
-  if (topAppBar) {
+  if (treeData?.action?.topAppBar) {
     root.children.unshift({
       title: 'TOPAPPBAR',
       subtitle: topAppBar?.uuid,
     });
   }
-  if (bottomBar) {
+  if (treeData?.action?.bottomBar) {
     root.children.push({
       title: 'BOTTOMBAR',
       subtitle: bottomBar?.uuid,
