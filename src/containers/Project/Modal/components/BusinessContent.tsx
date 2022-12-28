@@ -22,14 +22,14 @@ export const BusinessContent = ({screenList}: BusinessContentType) => {
     control,
   } = useForm({
     defaultValues: {
-      timeTokenExpired: businessSettings.timeTokenExpired,
-      tokenDeviceUrl: businessSettings.tokenDeviceUrl,
       loginUrl: businessSettings.loginUrl,
       passCodeVerificationUrl: businessSettings.passCodeVerificationUrl,
+      mainScreenUrl: businessSettings.mainScreenUrl,
       isTouchId: businessSettings.isTouchId,
       isFaceId: businessSettings.isFaceId,
-      mainScreenUrl: businessSettings.mainScreenUrl,
+      timeTokenExpired: businessSettings.timeTokenExpired,
       countPinCodeAttempt: businessSettings.countPinCodeAttempt,
+      tokenDeviceUrl: businessSettings.tokenDeviceUrl
     }
   });
 
