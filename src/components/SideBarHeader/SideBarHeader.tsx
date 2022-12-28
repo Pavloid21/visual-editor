@@ -104,7 +104,7 @@ return {
       'isFaceId',
       'timeTokenExpired',
       'tokenDeviceUrl',
-      'countPinСodeAttempt',
+      'countPinCodeAttempt',
       'mainScreenUrl',
     ];
     const businessSettingsEdit = handleSaveBusinessSettings(businessSettingsChange, settingsList);
