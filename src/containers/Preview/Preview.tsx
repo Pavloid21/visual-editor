@@ -22,7 +22,8 @@ import {TSortableList} from './types';
 const SortableItem = SortableElement((props: any) => <>{props.children}</>);
 
 const SortableList = SortableContainer(({drop, backgroundColor, list}: TSortableList) => {
-  const bottomBar = useAppSelector((state) => state.layout.bottomBar);
+  const {bottomBar} = useAppSelector((state) => state.layout);
+
   return (
     <Container backgroundColor={backgroundColor} ref={drop}>
       <div style={{flex: bottomBar ? 1 : 'none'}}>
