@@ -6,7 +6,17 @@ import {Actions, ButtonSelector, LeftSideBarMenu, Modal, SideBarHeader} from 'co
 import {v4} from 'uuid';
 import {getScreenByName, getScreensList, getScreenTemplates, getTemplateData} from 'services/ApiService';
 import {useParams} from 'react-router-dom';
-import {buildLayout, observer, prepareTree, snippet, useModal, deleteEmptyKey, parseReturnStatement} from 'utils';
+import {
+  buildLayout,
+  observer,
+  prepareTree,
+  snippet,
+  useModal,
+  deleteEmptyKey,
+  parseReturnStatement,
+  separateScreenUrl,
+  getBottomBar
+} from 'utils';
 import {
   Container,
   DefaultTemplateWrapper,
@@ -18,7 +28,7 @@ import {
 import {addAction} from 'store/actions.slice';
 import {setActiveTab as setActiveTabAction} from 'store/config.slice';
 import {saveCode} from 'store/code.slice';
-import {cloneBlock, deleteBlock, selectScreen, setLayout, setSelectedBlock, setSnippet} from 'store/layout.slice';
+import {cloneBlock, deleteBlock, pushBottomBar, selectScreen, setLayout, setSelectedBlock, setSnippet} from 'store/layout.slice';
 import {ActionTypes, SnippetType} from 'store/types';
 import {Bar} from 'containers/Project/Modal/Modal.styled';
 import {ReactComponent as Close} from 'assets/close.svg';
@@ -29,6 +39,7 @@ import {SubheaderScreens, SubheaderActions, SubheaderImages} from 'components/Le
 import {Images} from 'components/Images';
 import {ACTION_TEMPLATES} from 'components/Actions/constants';
 import {useAppDispatch, useAppSelector} from 'store';
+import {removeNavigationSettings, setBottomBar} from 'store/output.slice';
 
 const LeftSidebar: React.FC<unknown> = () => {
   const {
@@ -47,6 +58,7 @@ const LeftSidebar: React.FC<unknown> = () => {
     (state) => state.layout.snippets.filter((snippetData) => snippetData.screenID === selectedScreen)[0]
   );
   const projectName = useAppSelector((state) => state.project.name);
+  const {screen} = useAppSelector((state) => state.output);
   const {project} = useParams();
   const [activeTabScreens, setActiveTabScreens] = useState(0);
   const [availableScreens, setAvailableScreens] = useState<Record<string, any>[]>([]);
@@ -176,6 +188,33 @@ const LeftSidebar: React.FC<unknown> = () => {
     }
   }, [output]);
 
+  useEffect(() => {
+    const {showBottomBar, updateUrlBottomBar} = navigationSettings;
+    const getCorrectScreenName = separateScreenUrl(updateUrlBottomBar || '');
+
+    if(showBottomBar && !bottomBar && !updateUrlBottomBar) {
+      dispatch(pushBottomBar('bottombar'));
+    }
+    if(!showBottomBar && bottomBar) {
+      dispatch(deleteBlock(bottomBar.uuid));
+      dispatch(setBottomBar(false));
+    }
+    if(updateUrlBottomBar && showBottomBar && getCorrectScreenName !== screen) {
+      dispatch(getBottomBar(getCorrectScreenName, project));
+    }
+  }, [
+    dispatch,
+    navigationSettings.updateUrlBottomBar,
+    navigationSettings.showBottomBar,
+    screen,
+  ]);
+
+  useEffect(() => {
+    if(bottomBar) {
+      dispatch(setBottomBar(true));
+    }
+  }, [bottomBar, dispatch]);
+
   const updateScreenList = (script: any, screenLayout: Record<string, any>, screenPositionInList: number) => {
     if (script.data) {
       const parseJson = parseReturnStatement(script);
@@ -229,6 +268,11 @@ const LeftSidebar: React.FC<unknown> = () => {
         })
       );
       dispatch(setSelectedBlock(''));
+
+      if(item.node.navigationSettings === undefined) {
+        dispatch(removeNavigationSettings());
+      }
+
       dispatch({
         type: actionTypes.EDIT_SCREEN_NAME,
         screen: item.node.screen,
@@ -258,9 +302,13 @@ const LeftSidebar: React.FC<unknown> = () => {
 
   const handleDeleteBlock = useCallback(
     (blockUuid) => {
+      if(blockUuid === bottomBar.uuid) {
+        dispatch(setBottomBar(false));
+        dispatch(deleteBlock(blockUuid));
+      }
       dispatch(deleteBlock(blockUuid));
     },
-    [dispatch]
+    [bottomBar, dispatch]
   );
 
   const handleCloneBlock = useCallback(

@@ -42,6 +42,12 @@ const outputSlice = createSlice({
     editLogic: (state, action: PayloadAction<string>) => {
       state.logic = action.payload;
     },
+    setBottomBar: (state, action) => {
+      state.navigationSettings = {...state.navigationSettings, showBottomBar: action.payload};
+    },
+    removeNavigationSettings: (state) => {
+      state.navigationSettings = {saveScreen: false, showBottomBar: false, updateUrlBottomBar: ''};
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(actionTypes.ERASE, () => initialState);
@@ -65,5 +71,5 @@ const outputSlice = createSlice({
   },
 });
 
-export const {editLogic} = outputSlice.actions;
+export const {editLogic, setBottomBar, removeNavigationSettings} = outputSlice.actions;
 export default outputSlice.reducer;
