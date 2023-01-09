@@ -8,3 +8,5 @@ export {default as renderHandlebars} from './renderHandlebars';
 export {default as reportWebVitals} from './reportWebVitals';
 export {setCorrectImageUrl, getFieldValue, checkExtension} from './setCorrectImageUrl';
 export {transformSnippet, deleteEmptyKey, parseReturnStatement} from './transformSnippet';
+export {getBottomBar} from './getBottomBar';
+export {separateScreenUrl} from './separateScreenUrl';

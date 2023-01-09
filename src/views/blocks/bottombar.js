@@ -1,10 +1,16 @@
-// import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import bottombar from '../../assets/bottombar.svg';
 import Wrapper from '../../utils/wrapper';
-import {iconSelectedColor, iconUnselectedColor, textSelectedColor, textUnselectedColor, showUnselectedText} from '../configs';
+import {
+  iconSelectedColor,
+  iconUnselectedColor,
+  textSelectedColor,
+  textUnselectedColor,
+  showUnselectedText
+} from '../configs';
 import {CustomSvg} from 'components/CustomSvg';
-import {setCorrectImageUrl} from 'utils';
+import {setCorrectImageUrl, separateScreenUrl} from 'utils';
 import {useAppSelector} from 'store';
 import {transformHexWeb} from '../../utils/color';
 
@@ -26,10 +32,6 @@ const BottomBar = styled.div`
     align-items: center;
     flex-direction: column;
     gap: 4px;
-    & label {
-      margin-bottom: 0;
-      color: ${(props) => transformHexWeb(props.textUnselectedColor) || 'transparent'};
-    }
     & .item_icon {
       background-color: ${(props) => transformHexWeb(props.iconUnselectedColor)};
     }
@@ -42,12 +44,31 @@ const BottomBar = styled.div`
   }
 `;
 
+const Label = styled.label`
+  margin-bottom: 0;
+  color: ${(props) => props.activeLink ? props.textSelectedColor : props.textUnselectedColor}
+`;
+
 const Component = ({settingsUI, ...props}) => {
+  const [activeLink, setActiveLink] = useState('');
+
+  const {screen} = useAppSelector((state) => state.output);
   const {id} = useAppSelector(state => state.project);
 
   const {navigationItems} = settingsUI;
 
-  const bottomBarItems = navigationItems.map((item) => {
+  useEffect(() => {
+    if(navigationItems) {
+      navigationItems.map((element) => {
+        const getCorrectUrl = separateScreenUrl(element.action.url);
+        if(getCorrectUrl === screen) {
+          setActiveLink(getCorrectUrl);
+        }
+      });
+    }
+  }, [navigationItems, screen]);
+
+  const bottomBarItems = navigationItems?.map((item) => {
     const getCorrectUrl = setCorrectImageUrl(item.iconUrl, id);
 
     return {
@@ -63,15 +84,30 @@ const Component = ({settingsUI, ...props}) => {
       sizeModifier="FULLWIDTH"
     >
       <BottomBar {...settingsUI} {...props}>
-        {bottomBarItems.map((item, index) => {
+        {bottomBarItems && bottomBarItems.map((item, index) => {
+          const getCorrectUrl = separateScreenUrl(item.action.url);
           return (
             <div key={`bottomBarItem_${index}`}>
               <CustomSvg
-                fill={settingsUI.iconUnselectedColor}
+                fill={getCorrectUrl === activeLink ? settingsUI.iconSelectedColor : settingsUI.iconUnselectedColor}
                 src={item.iconUrl}
                 sizeSvg={`${19.2 * 1.25}px`}
                />
-              <label>{item.screenName}</label>
+               {settingsUI.showUnselectedText ? (
+                <Label
+                  activeLink={getCorrectUrl === activeLink}
+                  {...settingsUI}
+                >
+                  {getCorrectUrl === activeLink ? item.screenName : ''}
+                </Label>
+               ) : (
+                <Label
+                  activeLink={getCorrectUrl === activeLink}
+                  {...settingsUI}
+                >
+                  {item.screenName}
+                </Label>
+               )}
             </div>
           );
         })}

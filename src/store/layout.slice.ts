@@ -503,6 +503,9 @@ const layoutSlice = createSlice({
       abar.settingsUI.topAppBarItems = nextItems;
       state.topAppBar = {...abar};
     },
+    replaceBottomBar: (state, action) => {
+      state.bottomBar = action.payload;
+    },
     removeBottomBarItem: (state, action: PayloadAction<number>) => {
       const newBarItems = [...state.bottomBar.settingsUI.navigationItems];
       newBarItems.splice(action.payload, 1);
@@ -714,6 +717,7 @@ const layoutSlice = createSlice({
 export const {
   changesSaved,
   addTopAppBarItem,
+  replaceBottomBar,
   removeBottomBarItem,
   removeTopAppBarItem,
   removeTopAppBarButton,
