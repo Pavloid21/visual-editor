@@ -10,7 +10,7 @@ import {
   padding,
   shadowConfigBuilder,
   shapeConfigBuilder,
-  textAlignment, 
+  textAlignment,
   textColor,
   distribution,
   spacing,
@@ -51,7 +51,7 @@ const Passcodeview = styled.div`
 	  height: 100%;
 	  width: 100%;
 	  z-index: 9999;
-	  background-color: ${(props) => transformHexWeb(props?.interactive?.backgroundColor || 'transparent')}
+	  background-color: ${(props) => transformHexWeb(props?.interactive?.backgroundColor || 'transparent')};
 	  color: #fff;
 	  text-align: center;
 	}
@@ -72,19 +72,20 @@ const Passcodeview = styled.div`
 	  width: 70px;
 	  height: 70px;
 	  margin-bottom: 10px;
-	  background-color: rgba(0, 0, 0, 0.35);
-	  border: 0;
-	  color: #fff;
+	  background-color: ${(props) => transformHexWeb(props?.interactive?.pinPadSettings?.backgroundColor || 'transparent')};
+	  color: ${(props) => transformHexWeb(props?.interactive?.pinPadSettings?.textColor || 'transparent')};
 	  font-size: 25px;
 	  line-height: 50px;
 	  border-radius: 100%;
 	  opacity: 1;
 	  outline: 0;
-	  border: 2px solid #272a2f;
+    border-width: ${(props) => props.interactive?.pinPadSettings?.borderWidth || 0}px;
+    border-color: ${(props) => transformHexWeb(props.interactive?.pinPadSettings?.borderColor || 'transparent')};
+    border-style: solid;
 	}
 
 	#fields {
-	  max-width: 200px;
+	  max-width: 360px;
 	  padding: 0 20px;
 	  margin: 50px auto;
 	  position: relative;
@@ -92,19 +93,21 @@ const Passcodeview = styled.div`
 	}
 
 	#fields .numberfield span {
-	/*------
-	Переделать height и width через getDimensionStyles
-	----*/
-	height: 10px;
-  	width: 10px;
+    ${(props) => getDimensionStyles(props?.interactive?.dottedPassCodeStackSettings?.dotSettings)
+        .width()
+        .height()
+        .apply()
+    }
 	background-color: ${(props) => transformHexWeb(props.interactive?.dottedPassCodeStackSettings?.dotSettings?.backgroundColor || 'transparent')};
 	${(props) => {
+    console.log('props', props);
 		if (props?.interactive?.dottedPassCodeStackSettings?.dotSettings?.shape?.type === 'ALLCORNERSROUND') {
 			return `border-radius: ${props.interactive.dottedPassCodeStackSettings.dotSettings.shape.radius}px;`;
 		}
 		}}
 	  border-width: ${(props) => props.interactive?.dottedPassCodeStackSettings?.dotSettings?.borderWidth || 0}px;
 	  border-color: ${(props) => transformHexWeb(props.interactive?.dottedPassCodeStackSettings?.dotSettings?.borderColor || 'transparent')};
+    border-style: solid;
 	  position: relative;
 	  display: inline-block;
 	}
@@ -141,7 +144,7 @@ const Passcodeview = styled.div`
 	  display: flex;
 	  width: fit-content;
 	  align-self: center;
-	  ${({props}) => {
+	  ${(props) => {
 		if (props?.interactive?.topTitleLabelSettings?.shape?.type === 'ALLCORNERSROUND') {
 			return `border-radius: ${props.interactive.topTitleLabelSettings.shape.radius}px;`;
 		}
@@ -189,11 +192,20 @@ const Passcodeview = styled.div`
 		/*------
 		Добавить height, width, padding, fontSize через getDimensionStyles
 		----*/
+      ${(props) => getDimensionStyles(props?.interactive?.topTitleLabelSettings)
+        .width()
+        .height()
+        .padding()
+        .fontSize()
+        .apply()
+      }
 	  }
 	}
 `;
 
 const Component = ({settingsUI, ...props}) => {
+  const classNameDots = `grid__col grid__col--1-of-${props.interactive?.dottedPassCodeStackSettings?.numberOfDots} numberfield`;
+
 	return (
 		<Wrapper id={props.id} {...settingsUI} {...props}>
 			<Passcodeview
@@ -207,33 +219,33 @@ const Component = ({settingsUI, ...props}) => {
 						<div className="label">
 							<span>{props.interactive?.topTitleLabelTextStates?.enterCurrentPasscodeMessage}</span>
 						</div>
-					<div id="fields">
-						<div className="grid">
-							<div className="grid__col grid__col--1-of-4 numberfield"><span></span></div>
-							<div className="grid__col grid__col--1-of-4 numberfield"><span></span></div>
-							<div className="grid__col grid__col--1-of-4 numberfield"><span></span></div>
-							<div className="grid__col grid__col--1-of-4 numberfield"><span></span></div>
-						</div>
-					</div>
-					<div id="numbers">
-						<div className="grid">
-							<div className="grid__col grid__col--1-of-3"><button>1</button></div>
-							<div className="grid__col grid__col--1-of-3"><button>2</button></div>
-							<div className="grid__col grid__col--1-of-3"><button>3</button></div>
+            <div id="fields">
+              <div className="grid">
+                {props.interactive?.dottedPassCodeStackSettings?.numberOfDots > 0 &&
+                  Array.from(Array(props.interactive?.dottedPassCodeStackSettings?.numberOfDots).keys()).map((item) => {
+                  return <div key={item} className={classNameDots}><span></span></div>;
+                })}
+              </div>
+            </div>
+            <div id="numbers">
+              <div className="grid">
+                <div className="grid__col grid__col--1-of-3"><button>1</button></div>
+                <div className="grid__col grid__col--1-of-3"><button>2</button></div>
+                <div className="grid__col grid__col--1-of-3"><button>3</button></div>
 
-							<div className="grid__col grid__col--1-of-3"><button>4</button></div>
-							<div className="grid__col grid__col--1-of-3"><button>5</button></div>
-							<div className="grid__col grid__col--1-of-3"><button>6</button></div>
+                <div className="grid__col grid__col--1-of-3"><button>4</button></div>
+                <div className="grid__col grid__col--1-of-3"><button>5</button></div>
+                <div className="grid__col grid__col--1-of-3"><button>6</button></div>
 
-							<div className="grid__col grid__col--1-of-3"><button>7</button></div>
-							<div className="grid__col grid__col--1-of-3"><button>8</button></div>
-							<div className="grid__col grid__col--1-of-3"><button>9</button></div>
+                <div className="grid__col grid__col--1-of-3"><button>7</button></div>
+                <div className="grid__col grid__col--1-of-3"><button>8</button></div>
+                <div className="grid__col grid__col--1-of-3"><button>9</button></div>
 
-							<div className="grid__col grid__col--1-of-3"></div>
-							<div className="grid__col grid__col--1-of-3"><button>0</button></div>
-							<div className="grid__col grid__col--1-of-3"></div>
-						</div>
-					</div>
+                <div className="grid__col grid__col--1-of-3"></div>
+                <div className="grid__col grid__col--1-of-3"><button>0</button></div>
+                <div className="grid__col grid__col--1-of-3"></div>
+              </div>
+            </div>
 					</div>
 				</div>
 			</div>
@@ -253,17 +265,63 @@ const block = (state) => {
     previewImageUrl: passcodeview,
     category: 'Controls',
     defaultInteractiveOptions: {
-		backgroundColor: '',
-		topTitleLabelSettings:{},
-		topTitleLabelTextStates: {},
-		dottedPassCodeStackSettings: {
-			stackContainerSettings: {},
-			dotSettings: {},
-		},
-		pinPadSettings: {},
-	},
+      backgroundColor: 'transparent',
+      topTitleLabelSettings: {
+        shape: {
+          type: 'ALLCORNERSROUND',
+          radius: 0
+        },
+        size: {
+          height: 50,
+          width: 150,
+        },
+        fontSize: 15,
+        padding: {
+          top: 25,
+          right: 16,
+          bottom: 28,
+          left: 16,
+        },
+        shadow: {
+          color: '#000000',
+          offsetSize: {
+            height: 0,
+            width: 0,
+          },
+          radius: 8,
+          opacity: 0.3
+        }
+      },
+      topTitleLabelTextStates: {
+        enterCurrentPasscodeMessage: '123',
+      },
+      dottedPassCodeStackSettings: {
+        stackContainerSettings: {},
+        dotSettings: {
+          backgroundColor: 'transparent',
+          borderWidth: 0,
+          borderColor: 'transparent',
+          shape: {
+            type: 'ALLCORNERSROUND',
+            radius: 0
+          },
+          size: {
+            height: 36,
+            width: 36
+          }
+        },
+        numberOfDots: 4
+      },
+      pinPadSettings: {
+        backgroundColor: 'transparent',
+        borderWidth: 0,
+        borderColor: 'transparent',
+        textColor: 'transparent'
+      },
+    },
     defaultData: {},
-    config: {},
+    config: {
+    },
 	interactive: {
 		backgroundColor,
 		mode: {
