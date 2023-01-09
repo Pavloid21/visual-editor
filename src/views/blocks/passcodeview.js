@@ -100,7 +100,6 @@ const Passcodeview = styled.div`
     }
 	background-color: ${(props) => transformHexWeb(props.interactive?.dottedPassCodeStackSettings?.dotSettings?.backgroundColor || 'transparent')};
 	${(props) => {
-    console.log('props', props);
 		if (props?.interactive?.dottedPassCodeStackSettings?.dotSettings?.shape?.type === 'ALLCORNERSROUND') {
 			return `border-radius: ${props.interactive.dottedPassCodeStackSettings.dotSettings.shape.radius}px;`;
 		}
@@ -267,20 +266,21 @@ const block = (state) => {
     defaultInteractiveOptions: {
       backgroundColor: 'transparent',
       topTitleLabelSettings: {
+        text : 'Top label text',
         shape: {
           type: 'ALLCORNERSROUND',
           radius: 0
         },
         size: {
           height: 50,
-          width: 150,
+          width: 400,
         },
-        fontSize: 15,
+        fontSize: 24,
         padding: {
-          top: 25,
-          right: 16,
-          bottom: 28,
-          left: 16,
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0,
         },
         shadow: {
           color: '#000000',
@@ -290,38 +290,61 @@ const block = (state) => {
           },
           radius: 8,
           opacity: 0.3
-        }
+        },
+        textAlignment : 'CENTER'
       },
       topTitleLabelTextStates: {
-        enterCurrentPasscodeMessage: '123',
+        enterCurrentPasscodeMessage : 'Введите пароль',
+        enterSetPasscodeMessage : 'Создайте пароль',
+        reEnterPasscodeMessage : 'Повторно введите пароль',
+        passcodeNotMatchMessage : 'Пароли не совпадают'
       },
       dottedPassCodeStackSettings: {
-        stackContainerSettings: {},
+        stackContainerSettings : {
+          size: {
+            height : 40,
+            width : 200
+          },
+          distribution: 'SPACEBETWEEN',
+          spacing: 10,
+          backgroundColor: '#ffffff',
+          borderColor: '#757575',
+          borderWidth: 1
+        },
         dotSettings: {
-          backgroundColor: 'transparent',
-          borderWidth: 0,
-          borderColor: 'transparent',
+          backgroundColor: '#ffffff',
+          borderWidth: 1,
+          borderColor: '#757575',
           shape: {
             type: 'ALLCORNERSROUND',
-            radius: 0
+            radius: 12
           },
           size: {
-            height: 36,
-            width: 36
+            height: 24,
+            width: 24
           }
         },
-        numberOfDots: 4
+        numberOfDots: 4,
       },
       pinPadSettings: {
-        backgroundColor: 'transparent',
-        borderWidth: 0,
-        borderColor: 'transparent',
-        textColor: 'transparent'
+        backgroundColor: '#ffffff',
+        borderWidth: 2,
+        borderColor: '#fa6520',
+        textColor: '#000000',
+        highlitedColor : '#ffffff',
+        highlitedAlpha : 0.1,
+        imagePadding : {
+          left : 8,
+          right : 8,
+          top : 8,
+          bottom : 8,
+        },
       },
+      leftImageTintColor: '#fa6520',
+      rightImageTintColor: '#CCCCCC'
     },
     defaultData: {},
-    config: {
-    },
+    config: {},
 	interactive: {
 		backgroundColor,
 		mode: {
