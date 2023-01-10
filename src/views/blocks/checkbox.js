@@ -65,7 +65,7 @@ const RenderImage = ({getExtension, getCorrectImageUrl, url, color, id}) => (
   <>
     {getExtension === 'icons' || checkExtension(getCorrectImageUrl) === 'svg' ? (
         <CustomSvg
-          fill={color || '#d9dadc'}
+          fill={color || '#000000'}
           src={setCorrectImageUrl(url, id)}
           sizeSvg={`${defaultSizeIcon * multiplicationFactor}px`}
         />
