@@ -31,9 +31,12 @@ const Screens: React.FC<ScreensProps> = ({
   handleCloneScreen,
   handleCloneBlock,
   handleDeleteScreen,
-  handleDeleteBlock}) => {
+  handleDeleteBlock
+}) => {
   const {selectedBlockUuid: selectedBlock, selectedScreen} = useAppSelector((state) => state.layout);
   const screenNameFilter = useAppSelector((state) => state.leftBarMenu.screenNameFilter);
+  const {showBottomBar, updateUrlBottomBar} = useAppSelector((state) => state.output.navigationSettings);
+
   const override = css`
     display: inline-block;
     margin: 0 auto;
@@ -56,25 +59,31 @@ const Screens: React.FC<ScreensProps> = ({
           generateNodeProps={(extendedNode) => {
             return {
               title: (
-                <section
-                  className={`node ${
-                    selectedBlock === extendedNode.node.subtitle || selectedScreen === extendedNode.node.uuid
-                      ? 'node_selected'
-                      : ''
-                  }`}
-                  onClick={async (event) => handleItemClick(event, extendedNode)}
-                >
-                  <ScreenTitle>
-                    {load?.load && load?.uuid === extendedNode.node.uuid ? (
-                      <BounceLoader loading={true} size={24} color="#F44532" css={override} />
-                    ) : (
-                      <Icon src={models[extendedNode.node?.title?.toLowerCase()]?.().previewImageUrl} />
-                    )}
-                    <span>{extendedNode.node.endpoint || extendedNode.node.title}</span>
-                  </ScreenTitle>
-                </section>
+                <>
+                  {extendedNode.node.title === 'BOTTOMBAR' && showBottomBar && updateUrlBottomBar.length ? (
+                    <></>
+                  ) : (
+                    <section
+                      className={`node ${
+                        selectedBlock === extendedNode.node.subtitle || selectedScreen === extendedNode.node.uuid
+                          ? 'node_selected'
+                          : ''
+                      }`}
+                      onClick={async (event) => handleItemClick(event, extendedNode)}
+                    >
+                      <ScreenTitle>
+                        {load?.load && load?.uuid === extendedNode.node.uuid ? (
+                          <BounceLoader loading={true} size={24} color="#F44532" css={override} />
+                        ) : (
+                          <Icon src={models[extendedNode.node?.title?.toLowerCase()]?.().previewImageUrl} />
+                        )}
+                          <span>{extendedNode.node.endpoint || extendedNode.node.title}</span>
+                      </ScreenTitle>
+                    </section>
+                  )}
+                </>
               ),
-              buttons: [
+              buttons: extendedNode.node.title === 'BOTTOMBAR' && showBottomBar && updateUrlBottomBar.length ? [] : [
                 <Dropdown
                   key={0}
                   handleCloneScreen={handleCloneScreen}
