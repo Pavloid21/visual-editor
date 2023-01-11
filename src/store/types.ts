@@ -2,37 +2,66 @@ import {Action} from 'redux';
 import {Zoom} from 'containers/ZoomSelect/types';
 import store from './index';
 
+import type {ThunkDispatch} from '@reduxjs/toolkit';
+import {IconTabType} from '../components/Images/types';
+
+export type SnippetType = {
+  snippet: string;
+  endpoint: string;
+  selectedScreen?: string;
+  screenID: string;
+  logic: string;
+}
+
 export type EditScreenNamePayloadAction = Action<string> & {
   screen: string;
   navigationSettings: any;
-  settingsUI: any;
-  snippet: {
-    snippet: string;
-    endpoint: string;
-    selectedScreen: string;
-    screenID: string;
-    logic: string;
-  };
+  settingsUI: TSettingsUI;
+  snippet: SnippetType;
 };
 
 export type Actions = {
   actions: ActionItem[];
   data: ActionItem[];
+  externals: ActionItem[];
+  push: ActionItem[];
+  cronTasks: ActionItem[];
   selected: ActionItem | null;
+  all: ActionItem[];
   deleted: {
     actions: ActionItem[];
     data: ActionItem[];
+    externals: ActionItem[];
+    cronTasks: ActionItem[];
+    push: ActionItem[];
   };
 };
 
 export enum ActionTypes {
+  all = 'all',
   data = 'data',
-  action = 'action',
+  actions = 'actions',
+  push = 'push',
+  externals = 'externals',
+  cronTasks = 'cronTasks'
+}
+
+export type ActionCronTasksObject = {
+  id?: string;
+  pattern?: string;
+  snippetType?: string;
+  snippetName?: string;
 }
 
 export type ActionItem = {
   action: string;
-  object: string;
+  object?: ActionCronTasksObject | string;
+  selected?: boolean;
+  type: ActionTypes;
+};
+
+export type ActionPushItem = {
+  action: string;
   selected?: boolean;
   type: ActionTypes;
 };
@@ -53,6 +82,18 @@ export type Project = {
   icon: string;
   created?: string;
   edited?: string;
+};
+
+export type TBusinessSetting = {
+  loginUrl?: string;
+  passCodeVerificationUrl?: string;
+  isTouchId?: boolean;
+  isFaceId?: boolean;
+  timeTokenExpired?: number;
+  tokenDeviceUrl?: string;
+  mainScreenUrl?: string;
+  countPinCodeAttempt?: number;
+
 };
 
 export type Template = {
@@ -90,7 +131,7 @@ export type APIItem = {
 };
 
 export type Layout = {
-  blocks: BlockItem[];
+  blocks: IListItem[];
   selectedBlockUuid: string;
   documentId: string;
   selectedScreen: any | null;
@@ -106,20 +147,66 @@ export type BlockItem = {
   blockId: number | string;
   settingsUI: any;
   interactive?: any;
-  listItems?: any[];
-  listItem?: any;
+  listItems?: IListItem[];
+  listItem?: IListItem;
 };
+
+export interface IListItem {
+  uuid: string;
+  blockId: string | number;
+  settingsUI: {
+    size?: {
+      heightInPercent: number;
+      widthInPercent: number;
+    };
+    distribution?: string;
+    spacing?: number;
+    scroll?: boolean;
+    borderColor?: string;
+    borderWidth?: number;
+    backgroundColor?: string;
+    thumbOnColor?: string;
+    placeholder?: string;
+    text?: string;
+    shadow?: Partial<TShadow>;
+    padding?: Partial<TPadding>;
+    shape?: {
+      type: string;
+      radius: string;
+    };
+  }
+  interactive?: {
+    type?: string;
+    action?: {
+      url: string;
+      fields: object;
+      target: string;
+    }
+  }
+  listItems: IListItem[];
+  listItem?: IListItem;
+}
+
+export type TShadow = {
+  color: string;
+  opacity: number;
+  offsetSize: {
+    width: number;
+    height: number;
+  };
+  radius: number;
+}
+
+export type TPadding = {
+  top: string;
+  bottom: string;
+  right: string;
+  left: string;
+}
 
 export type Config = {
   activeTab: number;
   previewMode: number;
-};
-
-export type Output = {
-  screen: string;
-  logic: string;
-  navigationSettings: any;
-  settingsUI: any;
 };
 
 export type SideBar = {
@@ -137,7 +224,13 @@ export type EditorMode = {
 
 export type LeftBarMenu = {
   activeTab: string,
-  filterAction: number
+  activeImageTab: string,
+  iconNameFilter: string,
+  imageNameFilter: string,
+  filterAction: ActionTypes,
+  screenNameFilter: string,
+  actionNameFilter: string,
+  activeTabActions: ActionTypes
 }
 
 export type TScreenListOption = {
@@ -145,5 +238,30 @@ export type TScreenListOption = {
   value: string;
 }
 
+export type TImageListOption = {
+  name: string;
+  type: string;
+}
+
+export type TSettingsUI = {
+  isBottomSheet: any;
+    bottomSheetSettings: {
+      heightInPercent: number;
+      scrimColor: string;
+      cornersRadius: number;
+    };
+  isNavigateDrawer: any;
+    navigationDrawerSettings: {
+      weightInPercent: number;
+      scrimColor: string;
+    }
+}
+
+export type TImagesType = {
+  images: IconTabType[],
+  newFolder: string,
+  icons: IconTabType[]
+}
+
 export type RootStore = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export type ThunkAppDispatch = ThunkDispatch<RootStore, void, Action>;

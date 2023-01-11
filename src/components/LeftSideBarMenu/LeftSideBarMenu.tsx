@@ -1,14 +1,15 @@
 import React, {useCallback, useMemo} from 'react';
 import {Container, MenuItem} from './LeftSideBarMenu.styled.jsx';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootStore} from '../../store/types';
-import {setLeftBarMenu} from '../../store/left-bar-menu.slice';
+import {setLeftBarMenu} from 'store/left-bar-menu.slice';
 import {ReactComponent as ScreenImage} from 'assets/left-sidebar-menu/screens.svg';
 import {ReactComponent as ActionImage} from 'assets/left-sidebar-menu/actions.svg';
 import {ReactComponent as ImageImage} from 'assets/left-sidebar-menu/images.svg';
+import {deleteAction, setSelectAction} from 'store/actions.slice';
+import {useAppDispatch, useAppSelector} from 'store';
+
 const LeftSideBarMenu: React.FC = () => {
-  const dispatch = useDispatch();
-  const activeTab = useSelector((state: RootStore) => state.leftBarMenu.activeTab);
+  const dispatch = useAppDispatch();
+  const {activeTab} = useAppSelector((state) => state.leftBarMenu);
 
   const handleModeClick = useCallback(
     (mode: string | undefined) => {
@@ -36,15 +37,16 @@ const LeftSideBarMenu: React.FC = () => {
       break;
   }
 
-  const ContainerClick = useCallback(
-    (event: React.MouseEvent<HTMLDivElement>) => {
-      const tab = (event.target as HTMLDivElement).closest('div');
-      if (tab) {
-        handleModeClick(tab.dataset.tabActive);
-      }
-    },
-    [handleModeClick]
-  );
+  const ContainerClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const tab = (event.target as HTMLDivElement).closest('div');
+    if (tab) {
+      handleModeClick(tab.dataset.tabActive);
+    }
+    if (tab?.dataset.tabActive !== 'action') {
+      dispatch(setSelectAction(null));
+      dispatch(deleteAction(null));
+    }
+  };
 
   const getClassTabById = useMemo(
     () => (value: string) => {

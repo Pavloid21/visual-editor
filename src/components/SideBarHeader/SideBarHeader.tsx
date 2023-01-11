@@ -6,28 +6,33 @@ import {useModal} from 'utils';
 import {ReactComponent as ArrowBack} from 'assets/arrow_back.svg';
 import {ReactComponent as Settings} from 'assets/settings.svg';
 import {ReactComponent as Warning} from 'assets/warning.svg';
-import {BASE_URL, editProject, getProjectData} from 'services/ApiService';
+import {BASE_URL, editProject, getProjectData, saveAction} from 'services/ApiService';
 import Modal from 'containers/Project/Modal/Modal';
-import {useDispatch, useSelector} from 'react-redux';
 import {Modal as CustomModal} from '../Modal';
 import {Button} from 'components/controls/Button';
 import {useBackListener} from 'constants/utils';
 import {setLayout} from 'store/layout.slice';
-import type {RootStore} from '../../store/types';
 import type {SideBarHeaderProps} from './types';
 import {Header, Subheader, WarningWrapper} from './SideBarHeader.styled';
 import {filesToDTO} from 'utils/files';
 import {head} from 'external/lodash';
 import Routes from 'routes/routes';
 import {selectProject} from 'store/project.slice';
+import {useAppDispatch, useAppSelector} from 'store';
+import {setCancelBusinessSettings} from 'store/business-setting.slice';
+import {TBusinessSetting} from 'store/types';
 
 export const SideBarHeader: React.FC<SideBarHeaderProps> = React.memo((props) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal();
   const [warningOpen, setWarningOpen, toggleWarning] = useModal();
-  const layout = useSelector((state: RootStore) => state.layout);
+  const businessSettingsChange = useAppSelector((state) => state.businessSetting.businessSettingsChange);
+  const projectID = useAppSelector((state) => state.project.id);
   const location = useLocation();
+  const project_id = projectID || location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
+  const layout = useAppSelector((state) => state.layout);
+
   const {
     setValue,
     getValues,
@@ -35,7 +40,7 @@ export const SideBarHeader: React.FC<SideBarHeaderProps> = React.memo((props) =>
     handleSubmit,
     control,
     formState: {
-      errors: {form},
+      errors: {form}
     },
   } = useForm<Inputs>({
     criteriaMode: 'all',
@@ -69,7 +74,7 @@ export const SideBarHeader: React.FC<SideBarHeaderProps> = React.memo((props) =>
         })
       );
     });
-    
+
   }, [itemModalOpen, dispatch]);
 
   useBackListener(() => {
@@ -80,7 +85,35 @@ export const SideBarHeader: React.FC<SideBarHeaderProps> = React.memo((props) =>
     }
   });
 
+  const handleSaveBusinessSettings = (settings: TBusinessSetting, settingsList: string[]) => {
+    const settingsSave = settingsList.map((item: string, i: number, row: string[]) => {
+      const settingItem = settings[item as keyof TBusinessSetting];
+      const notStringItem = typeof settingItem === "boolean" || !isNaN(Number(settingItem));
+      const resultSetting = `\t${item}: ${notStringItem ? settingItem : '"' + settingItem + '"'}`;
+      const isLastElement = i + 1 === row.length;
+      if (!isLastElement) {
+        return resultSetting.concat(',\n');
+      }
+      return resultSetting;
+    }).join("");
+    return `return {\n${settingsSave}\n}`;
+  };
+
   const handleSave = async () => {
+    const settingsList = [
+      'loginUrl',
+      'passCodeVerificationUrl',
+      'mainScreenUrl',
+      'isTouchId',
+      'isFaceId',
+      'timeTokenExpired',
+      'countPinCodeAttempt',
+      'tokenDeviceUrl',
+    ];
+    const businessSettingsEdit = handleSaveBusinessSettings(businessSettingsChange, settingsList);
+
+    await saveAction(project_id, 'data', 'appSettings', businessSettingsEdit);
+
     const {name, icon: icons, description, platform, url} = getValues().form;
     const requestIcons = await filesToDTO(icons);
     editProject(
@@ -133,7 +166,10 @@ export const SideBarHeader: React.FC<SideBarHeaderProps> = React.memo((props) =>
           width="24"
           height="24"
           viewBox="6 6 24 24"
-          onClick={() => toggleModal()}
+          onClick={() => {
+            toggleModal();
+            dispatch(setCancelBusinessSettings(false));
+          }}
         />
       )}
       <Modal

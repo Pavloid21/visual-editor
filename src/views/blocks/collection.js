@@ -1,9 +1,9 @@
 import React from 'react';
 import {useDrop} from 'react-dnd';
+import {range} from 'external/lodash';
 import styled from 'styled-components';
 import {arrayMoveImmutable} from 'array-move';
 import {sortableContainer} from 'react-sortable-hoc';
-import {useDispatch, useSelector} from 'react-redux';
 import renderHandlebars from 'utils/renderHandlebars';
 import Wrapper from 'utils/wrapper';
 import {onSortMove} from 'utils/hooks';
@@ -17,34 +17,39 @@ import {
   shapeConfigBuilder,
   metricStyle,
   dataSourceSettings,
+  filter,
 } from 'views/configs';
 import collection from 'assets/collection.svg';
 import {pushBlockInside} from 'store/layout.slice';
-import {blockStateSafeSelector} from 'store/selectors';
-import store from 'store';
-import {getSizeStyle} from 'views/utils/styles/size';
+import {blockStateSafeSelector, getListItemCollectionSelector} from 'store/selectors';
+import store, {useAppDispatch, useAppSelector} from 'store';
+import {getDimensionStyles} from 'views/utils/styles/size';
+import {transformHexWeb} from '../../utils/color';
 
 const Collection = styled.div`
   align-self: center;
-  width: ${(props) => getSizeStyle('width', props)};
-  height: ${(props) => getSizeStyle('height', props)};
-  background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
+  background-color: ${(props) => {
+    const color = props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent';
+    return transformHexWeb(color);
+  }};
   display: flex;
-  padding-top: ${(props) => props.padding?.top || 0}px;
-  padding-bottom: ${(props) => props.padding?.bottom || 0}px;
-  padding-left: ${(props) => props.padding?.left || 0}px;
-  padding-right: ${(props) => props.padding?.right || 0}px;
+  ${(props) => getDimensionStyles(props)
+    .width()
+    .height()
+    .padding()
+    .apply()
+  }
   flex-direction: column;
   box-sizing: border-box;
   ${(props) => {
-    if (props.shape?.type === 'ALLCORNERSROUND') {
-      return `border-radius: ${props.shape?.radius || 0}px;`;
-  } else if (props.shape?.type === 'TOPCORNERSROUND') {
+    if (props.shape?.type === 'ALLCORNERSROUND' || !props?.shape?.type) {
+      return `border-radius: ${props?.shape?.radius || 0}px;`;
+    } else if (props.shape?.type === 'TOPCORNERSROUND') {
       return `border-top-left-radius: ${props.shape?.radius || 0}px; border-top-right-radius: ${props.shape?.radius || 0}px;`;
   }
 }}
   ${(props) => {
-    if (props.collectionUiConfig?.scrollDirection === 'vertical') {
+    if (props.collectionUiConfig?.scrollDirection === 'vertical' || !props?.collectionUiConfig?.scrollDirection) {
       return 'overflow-y: scroll; overflow-x: hidden;';
   }
     if (props.collectionUiConfig?.scrollDirection === 'horizontal') {
@@ -53,8 +58,8 @@ const Collection = styled.div`
 }}
   & > div {
     display: grid;
-    grid-template-columns: repeat(${(props) => props.collectionUiConfig?.itemsInHorisontal}, ${(props) => +props.collectionUiConfig?.pointWidth > 0 ? props.collectionUiConfig?.pointWidth + 'px' : '1fr'});
-    grid-template-rows: repeat(${(props) => props.collectionUiConfig?.itemsInVertical}, ${(props) => +props.collectionUiConfig?.pointHeight > 0 ? +props.collectionUiConfig?.pointHeight + 'px' : '1fr'});
+    grid-template-columns: repeat(${(props) => props.collectionUiConfig?.itemsInHorisontal || 1}, ${(props) => +props.collectionUiConfig?.pointWidth > 0 ? props.collectionUiConfig?.pointWidth + 'px' : '1fr'});
+    grid-template-rows: repeat(${(props) => props.collectionUiConfig?.itemsInVertical || 0}, ${(props) => +props.collectionUiConfig?.pointHeight > 0 ? +props.collectionUiConfig?.pointHeight + 'px' : '1fr'});
     overflow-x: inherit;
     overflow-y: inherit;
     grid-gap: ${(props) => props.spacing || 0}px;
@@ -63,6 +68,17 @@ const Collection = styled.div`
 `;
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItem, settingsUI, ...props}) => {
+  const [collectionSize, setCollectionSize] = React.useState(0);
+  const getListItemCollection = useAppSelector(getListItemCollectionSelector);
+
+  React.useEffect(() => {
+    if(getListItemCollection.length > 0) {
+      setCollectionSize(5);
+    }
+  }, [getListItemCollection]);
+
+  const listItems = listItem && range(collectionSize).map(() => renderHandlebars([listItem], 'document2').components);
+
   return (
     <Wrapper
       id={props.id}
@@ -76,15 +92,15 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItem, s
         backgroundColor={backgroundColor}
         className="draggable"
       >
-        <div>{listItem && renderHandlebars([listItem], 'document2').components}</div>
+        <div>{listItems}</div>
       </Collection>
     </Wrapper>
   );
 });
 
 const Component = ({settingsUI, uuid, listItems, ...props}) => {
-  const dispatch = useDispatch();
-  const layout = useSelector((state) => state.layout);
+  const dispatch = useAppDispatch();
+  const {layout} = useAppSelector((state) => state);
   const [{canDrop, isOver, target}, drop] = useDrop(() => ({
     accept: ItemTypes.BOX,
     drop: (item) => {
@@ -150,7 +166,11 @@ const block = (state) => {
     defaultInteractiveOptions: {
       dataSource: '',
       startPage: 0,
-      pageSize: 20,
+      pageSize: 0,
+      filter: {
+        id: '',
+        query: [{}],
+      },
     },
     defaultData: {
       backgroundColor: '',
@@ -176,6 +196,12 @@ const block = (state) => {
     listItem: null,
     interactive: {
       dataSource: dataSourceSettings.dataSource,
+      startPage: dataSourceSettings.startPage,
+      pageSize: dataSourceSettings.pageSize,
+      filter: {
+        id: filter.id,
+        query: filter.query,
+      },
     },
     config: {
       backgroundColor,

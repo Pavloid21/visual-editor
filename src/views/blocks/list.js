@@ -2,7 +2,6 @@ import React from 'react';
 import {useDrop} from 'react-dnd';
 import styled from 'styled-components';
 import {arrayMoveImmutable} from 'array-move';
-import {useDispatch, useSelector} from 'react-redux';
 import {sortableContainer} from 'react-sortable-hoc';
 import {range} from 'external/lodash';
 import renderHandlebars from 'utils/renderHandlebars';
@@ -15,27 +14,35 @@ import {
   backgroundColor,
   getSizeConfig,
   shapeConfigBuilder,
-  dataSourceSettings
+  dataSourceSettings,
+  filter,
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
-import {blockStateSafeSelector} from 'store/selectors';
-import store from 'store';
-import {getSizeStyle} from 'views/utils/styles/size';
+import {blockStateSafeSelector, getListItemCollectionSelector} from 'store/selectors';
+import store, {useAppDispatch, useAppSelector} from 'store';
+import {getDimensionStyles} from 'views/utils/styles/size';
+import {transformHexWeb} from '../../utils/color';
 
 const List = styled.div`
   align-self: center;
   margin: 0 0;
-  width: ${(props) => getSizeStyle('width', props)};
-  height: ${(props) => getSizeStyle('height', props)};
-  background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
+  ${(props) => getDimensionStyles(props)
+    .width()
+    .height()
+    .apply()
+  }
+  background-color: ${(props) => {
+    const color = props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent';
+    return transformHexWeb(color);
+  }};
   display: flex;
   padding: 4px 0;
   flex-direction: column;
   box-sizing: border-box;
   overflow: auto;
   ${(props) => {
-    if (props.shape?.type === 'ALLCORNERSROUND') {
-      return `border-radius: ${props.shape.radius}px;`;
+    if (props.shape?.type === 'ALLCORNERSROUND' || !props?.shape?.type) {
+      return `border-radius: ${props?.shape?.radius || 0}px;`;
     }
   }}
 `;
@@ -45,11 +52,18 @@ const SortableContainer = sortableContainer(({
   backgroundColor,
   listItem,
   settingsUI,
-  pageSize = 1,
   ...props
 }) => {
-  const listItems = listItem
-    && range(pageSize).map(() => renderHandlebars([listItem], 'document2').components);
+  const [listSize, setListSize] = React.useState(0);
+  const getListItemCollection = useAppSelector(getListItemCollectionSelector);
+
+  React.useEffect(() => {
+    if(getListItemCollection.length > 0) {
+      setListSize(5);
+    }
+  }, [getListItemCollection]);
+
+  const listItems = listItem && range(listSize).map(() => renderHandlebars([listItem], 'document2').components);
 
   return (
     <Wrapper id={props.id} {...settingsUI} {...props}>
@@ -67,8 +81,8 @@ const SortableContainer = sortableContainer(({
 });
 
 const Component = ({settingsUI, uuid, listItems, ...props}) => {
-  const dispatch = useDispatch();
-  const layout = useSelector((state) => state.layout);
+  const dispatch = useAppDispatch();
+  const {layout} = useAppSelector((state) => state);
   const [{canDrop, isOver, target}, drop] = useDrop(() => ({
     accept: ItemTypes.BOX,
     drop: (item) => {
@@ -134,7 +148,11 @@ const block = (state) => {
     defaultInteractiveOptions: {
       dataSource: '',
       startPage: 0,
-      pageSize: 20,
+      pageSize: 0,
+      filter: {
+        id: '',
+        query: [{}],
+      },
     },
     defaultData: {
       backgroundColor: '',
@@ -145,7 +163,13 @@ const block = (state) => {
     },
     listItem: null,
     interactive: {
-    dataSourceSettings
+      dataSource: dataSourceSettings.dataSource,
+      startPage: dataSourceSettings.startPage,
+      pageSize: dataSourceSettings.pageSize,
+      filter: {
+        id: filter.id,
+        query: filter.query,
+      },
   },
     config: {
       shape: shapeConfigBuilder()

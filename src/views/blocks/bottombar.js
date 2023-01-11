@@ -1,11 +1,21 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import bottombar from '../../assets/bottombar.svg';
 import Wrapper from '../../utils/wrapper';
-import {iconSelectedColor, iconUnselectedColor, textSelectedColor, textUnselectedColor, showUnselectedText} from '../configs';
+import {
+  iconSelectedColor,
+  iconUnselectedColor,
+  textSelectedColor,
+  textUnselectedColor,
+  showUnselectedText
+} from '../configs';
+import {CustomSvg} from 'components/CustomSvg';
+import {setCorrectImageUrl, separateScreenUrl} from 'utils';
+import {useAppSelector} from 'store';
+import {transformHexWeb} from '../../utils/color';
 
 const BottomBar = styled.div`
-  background-color: ${(props) => props.backgroundColor || 'transparent'};
+  background-color: ${(props) => transformHexWeb(props.backgroundColor || 'transparent')};
   padding: 16px 0 16px 0;
   bottom: 0;
   margin-top: auto;
@@ -17,39 +27,56 @@ const BottomBar = styled.div`
     position: relative;
     flex: 1 1 auto;
     justify-content: center;
-    color: ${(props) => props.iconUnselectedColor};
+    color: ${(props) => transformHexWeb(props.iconUnselectedColor)};
     display: flex;
     align-items: center;
     flex-direction: column;
     gap: 4px;
-    & label {
-      margin-bottom: 0;
-      color: ${(props) => props.textSelectedColor || 'transparent'};
-    }
     & .item_icon {
-      background-color: ${(props) => props.iconUnselectedColor};
+      background-color: ${(props) => transformHexWeb(props.iconUnselectedColor)};
     }
   }
   & .active {
-    color: ${(props) => props.iconSelectedColor};
+    color: ${(props) => transformHexWeb(props.iconSelectedColor)};
     & div {
-      background-color: ${(props) => props.iconSelectedColor};
+      background-color: ${(props) => transformHexWeb(props.iconSelectedColor)};
     }
   }
 `;
 
-const Icon = styled.div`
-  width: 16px;
-  height: 16px;
-  mask: url(${(props) => props.iconUrl}) no-repeat center;
+const Label = styled.label`
+  margin-bottom: 0;
+  color: ${(props) => props.activeLink ? props.textSelectedColor : props.textUnselectedColor}
 `;
 
 const Component = ({settingsUI, ...props}) => {
+  const [activeLink, setActiveLink] = useState('');
+
+  const {screen} = useAppSelector((state) => state.output);
+  const {id} = useAppSelector(state => state.project);
+
   const {navigationItems} = settingsUI;
-  const buttons = [];
-  for (let index in navigationItems) {
-    buttons.push(navigationItems[index]);
-  }
+
+  useEffect(() => {
+    if(navigationItems) {
+      navigationItems.map((element) => {
+        const getCorrectUrl = separateScreenUrl(element.action.url);
+        if(getCorrectUrl === screen) {
+          setActiveLink(getCorrectUrl);
+        }
+      });
+    }
+  }, [navigationItems, screen]);
+
+  const bottomBarItems = navigationItems?.map((item) => {
+    const getCorrectUrl = setCorrectImageUrl(item.iconUrl, id);
+
+    return {
+      ...item,
+      iconUrl: getCorrectUrl,
+    };
+  });
+
   return (
     <Wrapper
       id={props.id}
@@ -57,11 +84,30 @@ const Component = ({settingsUI, ...props}) => {
       sizeModifier="FULLWIDTH"
     >
       <BottomBar {...settingsUI} {...props}>
-        {buttons.map((item, index) => {
+        {bottomBarItems && bottomBarItems.map((item, index) => {
+          const getCorrectUrl = separateScreenUrl(item.action.url);
           return (
             <div key={`bottomBarItem_${index}`}>
-              <Icon className="item_icon" iconUrl={item.iconUrl}></Icon>
-              <label>{item.screenName}</label>
+              <CustomSvg
+                fill={getCorrectUrl === activeLink ? settingsUI.iconSelectedColor : settingsUI.iconUnselectedColor}
+                src={item.iconUrl}
+                sizeSvg={`${19.2 * 1.25}px`}
+               />
+               {settingsUI.showUnselectedText ? (
+                <Label
+                  activeLink={getCorrectUrl === activeLink}
+                  {...settingsUI}
+                >
+                  {getCorrectUrl === activeLink ? item.screenName : ''}
+                </Label>
+               ) : (
+                <Label
+                  activeLink={getCorrectUrl === activeLink}
+                  {...settingsUI}
+                >
+                  {item.screenName}
+                </Label>
+               )}
             </div>
           );
         })}
@@ -103,7 +149,6 @@ const block = () => ({
         iconUrl: 'icons/material/action/ic_account_circle_48px',
         action: {
           url: '',
-          target: '',
         },
       },
     ],
@@ -123,7 +168,7 @@ const block = () => ({
           url: {
             type: 'select',
             name: 'Action URL',
-            action_types: 'data'
+            action_types: 'screens,other'
           },
           method: {
             type: 'select',

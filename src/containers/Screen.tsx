@@ -1,16 +1,16 @@
 import React from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import {useAppDispatch, useAppSelector} from 'store';
 import {ColorPicker, Input, Label, Select} from 'components/controls';
 import actionTypes from 'constants/actionTypes';
 import styled from 'styled-components';
 import Editor from 'react-simple-code-editor';
-import fullScreenIcon from '../assets/full-screen.svg';
+import fullScreenIcon from 'assets/full-screen.svg';
 import {useModal, snippet} from 'utils';
 import Prism from 'prismjs';
 import {atomOneLight} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import {Modal} from 'components';
 import {editLogic} from 'store/output.slice';
-import type {RootStore} from 'store/types';
+import {transformHexWeb} from 'utils/color';
 
 const Container = styled.div`
   padding: 14px;
@@ -42,13 +42,66 @@ const EditorWrapper = styled.div<any>`
 `;
 
 const Screen: React.FC<any> = (props) => {
-  const {screen: screenName, navigationSettings, settingsUI} = useSelector((state: RootStore) => state.output);
-  const logic = useSelector((state: RootStore) => state.output.logic);
-  const selectedScreen = useSelector((state: RootStore) => state.layout.selectedScreen);
-  const layout = useSelector((state: RootStore) => state.layout);
+  const {screen: screenName, navigationSettings, settingsUI, logic} = useAppSelector((state) => state.output);
+  const {selectedScreen} = useAppSelector((state) => state.layout);
+  const {layout} = useAppSelector((state) => state);
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal();
-  const dispatch = useDispatch();
-  const screenOptions = useSelector((state: RootStore) => state.screenList);
+  const dispatch = useAppDispatch();
+  const screenOptions = useAppSelector((state) => state.screenList);
+
+  const handleChange = React.useCallback((
+    event: string | boolean,
+    tag:'scrimColor' |
+    'cornersRadius' |
+    'heightInPercent' |
+    'isBottomSheet' |
+    'isNavigateDrawer' |
+    'weightInPercent' |
+    'screenName' |
+    'saveScreen' |
+    'showBottomBar' |
+    'bottomBar',
+    useEvent: boolean,
+    navigationChange?: boolean,
+  ) => {
+    dispatch({
+      type: actionTypes.EDIT_SCREEN_NAME,
+      screen: tag === 'screenName' ? event : screenName,
+      navigationSettings: navigationChange ? {
+        saveScreen: tag === 'saveScreen' ? event : navigationSettings.saveScreen,
+        showBottomBar: tag === 'showBottomBar' ? event : navigationSettings.showBottomBar,
+        updateUrlBottomBar: tag === 'bottomBar' ? event : navigationSettings.updateUrlBottomBar,
+      } : navigationSettings,
+      settingsUI: {
+        isBottomSheet: tag === 'isBottomSheet' ? Boolean(event) : settingsUI.isBottomSheet,
+        bottomSheetSettings: {
+          heightInPercent: tag === 'heightInPercent' ? event : settingsUI.bottomSheetSettings.heightInPercent,
+          scrimColor: tag === 'scrimColor' ? event : settingsUI.bottomSheetSettings.scrimColor,
+          cornersRadius: tag === 'cornersRadius' ? event : settingsUI.bottomSheetSettings.cornersRadius,
+        },
+        isNavigateDrawer: tag === 'isNavigateDrawer' ? Boolean(event) : settingsUI.isNavigateDrawer,
+        navigationDrawerSettings: {
+          heightInPercent: tag === 'weightInPercent' ? event : settingsUI.navigationDrawerSettings.weightInPercent,
+          scrimColor: tag === 'scrimColor' ? event : settingsUI.navigationDrawerSettings.scrimColor,
+        }
+      },
+      snippet: {
+        screenID: selectedScreen.uuid,
+        endpoint: useEvent ? String(event).replace(/\s/g, '_') : screenName,
+        snippet: snippet({
+          screen: useEvent ? String(event).replace(/\s/g, '_') : screenName,
+          listItems: layout,
+        }),
+      },
+    });
+  }, [
+    dispatch,
+    layout,
+    navigationSettings,
+    screenName,
+    selectedScreen.uuid,
+    settingsUI
+  ]);
 
   return props.display ? (
     <Container>
@@ -60,21 +113,7 @@ const Screen: React.FC<any> = (props) => {
           type="text"
           placeholder="Screen name"
           value={screenName}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement> & React.ChangeEvent<HTMLInputElement>) =>
-            dispatch({
-              type: actionTypes.EDIT_SCREEN_NAME,
-              screen: e.target.value,
-              navigationSettings: navigationSettings,
-              snippet: {
-                screenID: selectedScreen.uuid,
-                endpoint: e.target.value.replace(/\s/g, '_'),
-                snippet: snippet({
-                  screen: e.target.value,
-                  listItems: layout,
-                }),
-              },
-            })
-          }
+          onChange={(event) => handleChange(event.target.value, 'screenName', true)}
         />
         <>
           <Label>Code for the Screen</Label>
@@ -106,23 +145,7 @@ const Screen: React.FC<any> = (props) => {
         <Select
           value={settingsUI?.isBottomSheet}
           label="Bottom sheet"
-          onChange={(value) => {
-            dispatch({
-              type: actionTypes.EDIT_SCREEN_NAME,
-              screen: screenName,
-              settingsUI: {
-                isBottomSheet: value,
-              },
-              snippet: {
-                screenID: selectedScreen.uuid,
-                endpoint: screenName.replace(/\s/g, '_'),
-                snippet: snippet({
-                  screen: screenName,
-                  listItems: layout,
-                }),
-              },
-            });
-          }}
+          onChange={(value) => handleChange(Boolean(value), 'isBottomSheet', false)}
           options={[
             {
               label: 'True',
@@ -142,140 +165,78 @@ const Screen: React.FC<any> = (props) => {
               label="Height"
               type="number"
               placeholder="Height"
+              maxNumber={100}
               value={settingsUI.bottomSheetSettings?.heightInPercent}
               max={100}
               min={0}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement> & React.ChangeEvent<HTMLInputElement>) =>
-                dispatch({
-                  type: actionTypes.EDIT_SCREEN_NAME,
-                  screen: screenName,
-                  navigationSettings: navigationSettings,
-                  settingsUI: {
-                    bottomSheetSettings: {
-                      ...settingsUI.bottomSheetSettings,
-                      heightInPercent: +e.target.value,
-                    },
-                  },
-                  snippet: {
-                    screenID: selectedScreen.uuid,
-                    endpoint: e.target.value.replace(/\s/g, '_'),
-                    snippet: snippet({
-                      screen: e.target.value,
-                      listItems: layout,
-                    }),
-                  },
-                })
-              }
-            />
-            <Input
-              $isWide
-              $clearable={false}
-              label="Scrim color alpha"
-              type="number"
-              placeholder="Scrim color alpha"
-              value={settingsUI.bottomSheetSettings?.scrimColorAlpha}
-              max={1}
-              min={0}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement> & React.ChangeEvent<HTMLInputElement>) =>
-                dispatch({
-                  type: actionTypes.EDIT_SCREEN_NAME,
-                  screen: screenName,
-                  navigationSettings: navigationSettings,
-                  settingsUI: {
-                    bottomSheetSettings: {
-                      ...settingsUI.bottomSheetSettings,
-                      scrimColorAlpha: +e.target.value,
-                    },
-                  },
-                  snippet: {
-                    screenID: selectedScreen.uuid,
-                    endpoint: e.target.value.replace(/\s/g, '_'),
-                    snippet: snippet({
-                      screen: e.target.value,
-                      listItems: layout,
-                    }),
-                  },
-                })
-              }
-            />
-            <ColorPicker
-              debouncetimeout={500}
-              label="Background color"
-              $isWide
-              placeholder="Background color"
-              value={settingsUI.bottomSheetSettings?.sheetBackgroundColor}
-              onChange={(e: any) =>
-                dispatch({
-                  type: actionTypes.EDIT_SCREEN_NAME,
-                  screen: screenName,
-                  navigationSettings: navigationSettings,
-                  settingsUI: {
-                    bottomSheetSettings: {
-                      ...settingsUI.bottomSheetSettings,
-                      sheetBackgroundColor: e.target.value,
-                    },
-                  },
-                  snippet: {
-                    screenID: selectedScreen.uuid,
-                    endpoint: e.target.value.replace(/\s/g, '_'),
-                    snippet: snippet({
-                      screen: e.target.value,
-                      listItems: layout,
-                    }),
-                  },
-                })
-              }
+              onChange={(event) => handleChange(event.target.value, 'heightInPercent', false)}
             />
             <ColorPicker
               debouncetimeout={500}
               label="Scrim color"
               $isWide
               placeholder="Scrim color"
-              value={settingsUI.bottomSheetSettings?.scrimColor}
-              onChange={(e: any) =>
-                dispatch({
-                  type: actionTypes.EDIT_SCREEN_NAME,
-                  screen: screenName,
-                  navigationSettings: navigationSettings,
-                  settingsUI: {
-                    bottomSheetSettings: {
-                      ...settingsUI.bottomSheetSettings,
-                      scrimColor: e.target.value,
-                    },
-                  },
-                  snippet: {
-                    screenID: selectedScreen.uuid,
-                    endpoint: e.target.value.replace(/\s/g, '_'),
-                    snippet: snippet({
-                      screen: e.target.value,
-                      listItems: layout,
-                    }),
-                  },
-                })
-              }
+              value={transformHexWeb(settingsUI.bottomSheetSettings?.scrimColor)}
+              onChangeColor={(value) => handleChange(value, 'scrimColor', false)}
+            />
+            <Input
+              $isWide
+              $clearable={false}
+              label="Corners radius"
+              type="number"
+              placeholder="Corners radius"
+              maxNumber={100}
+              value={settingsUI.bottomSheetSettings?.cornersRadius}
+              max={100}
+              min={0}
+              onChange={(event) => handleChange(event.target.value, 'cornersRadius', false)}
+            />
+          </>
+        )}
+
+        <Select
+          value={settingsUI?.isNavigateDrawer}
+          label="Navigate drawer"
+          onChange={(value) => handleChange(Boolean(value), 'isNavigateDrawer', false)}
+          options={[
+            {
+              label: 'True',
+              value: true,
+            },
+            {
+              label: 'False',
+              value: false,
+            },
+          ]}
+        />
+        {settingsUI?.isNavigateDrawer && (
+          <>
+            <Input
+              $isWide
+              $clearable={false}
+              label="Weight"
+              type="number"
+              placeholder="Weight"
+              maxNumber={100}
+              value={settingsUI.navigationDrawerSettings?.weightInPercent}
+              max={100}
+              min={0}
+              onChange={(event) => handleChange(event.target.value, 'weightInPercent', false)}
+            />
+            <ColorPicker
+              debouncetimeout={500}
+              label="Scrim color"
+              $isWide
+              placeholder="Scrim color"
+              value={transformHexWeb(settingsUI.navigationDrawerSettings?.scrimColor)}
+              onChangeColor={(value) => handleChange(value, 'scrimColor', false)}
             />
           </>
         )}
         <Select
           value={navigationSettings?.saveScreen}
           label="Save screen"
-          onChange={(value) => {
-            dispatch({
-              type: actionTypes.EDIT_SCREEN_NAME,
-              screen: screenName,
-              navigationSettings: {
-                saveScreen: value,
-              },
-              snippet: {
-                screenID: selectedScreen.uuid,
-                endpoint: screenName.replace(/\s/g, '_'),
-                snippet: snippet({
-                  screen: screenName,
-                  listItems: layout,
-                }),
-              },
-            });
-          }}
+          onChange={(value) => handleChange(Boolean(value), 'saveScreen', false, true)}
           options={[
             {
               label: 'True',
@@ -290,23 +251,7 @@ const Screen: React.FC<any> = (props) => {
         <Select
           value={navigationSettings?.showBottomBar}
           label="Show bottom bar"
-          onChange={(value) => {
-            dispatch({
-              type: actionTypes.EDIT_SCREEN_NAME,
-              screen: screenName,
-              navigationSettings: {
-                showBottomBar: value,
-              },
-              snippet: {
-                screenID: selectedScreen.uuid,
-                endpoint: screenName.replace(/\s/g, '_'),
-                snippet: snippet({
-                  screen: screenName,
-                  listItems: layout,
-                }),
-              },
-            });
-          }}
+          onChange={(value) => handleChange(Boolean(value), 'showBottomBar', false, true)}
           options={[
             {
               label: 'True',
@@ -321,27 +266,16 @@ const Screen: React.FC<any> = (props) => {
         <Select
           value={navigationSettings?.updateUrlBottomBar}
           label="Bottom bar"
-          onChange={(value) => {
-            dispatch({
-              type: actionTypes.EDIT_SCREEN_NAME,
-              screen: screenName,
-              navigationSettings: {
-                updateUrlBottomBar: value,
-              },
-              snippet: {
-                screenID: selectedScreen.uuid,
-                endpoint: screenName.replace(/\s/g, '_'),
-                snippet: snippet({
-                  screen: screenName,
-                  listItems: layout,
-                }),
-              },
-            });
-          }}
+          onChange={(value) => handleChange(String(value), 'bottomBar', false, true)}
           options={screenOptions}
         />
       </div>
-      <Modal isActive={itemModalOpen} handleClose={() => setItemModalOpen(false)} padding="16px">
+
+      <Modal
+        isActive={itemModalOpen}
+        handleClose={() => setItemModalOpen(false)}
+        padding="16px"
+      >
         <EditorWrapper icon={fullScreenIcon}>
           <Editor
             highlight={(code) => Prism.highlight(code, Prism.languages.js, 'javascript')}

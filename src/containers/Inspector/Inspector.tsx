@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import {useAppDispatch, useAppSelector} from 'store';
 import blocks from 'views/blocks';
 import {ReactComponent as Trash} from 'assets/trash.svg';
 import {leadLetter} from 'constants/utils';
@@ -20,18 +20,21 @@ import {
   removeActionField,
   changeKeyActionField,
   changeActionURL,
+  addParamsItem,
+  removeParamsItem,
+  addFilterQueryItem,
 } from 'store/layout.slice';
 import type {TInspector} from './types';
-import type {RootStore} from 'store/types';
 import {blockStateUnsafeSelector} from 'store/selectors';
 import {getUnitOptionByDevice} from 'utils/units';
-import {get} from 'external/lodash';
+import {get, isEmpty} from 'external/lodash';
+import {transformHexWeb} from 'utils/color';
 import {ImageSelect} from 'components/controls/Select/ImageSelect';
 
 const Inspector: React.FC<TInspector> = ({display}) => {
-  const dispatch = useDispatch();
-  const layout = useSelector((state: RootStore) => state.layout);
-  const blockState = useSelector(blockStateUnsafeSelector);
+  const dispatch = useAppDispatch();
+  const {layout} = useAppSelector((state) => state);
+  const blockState = useAppSelector(blockStateUnsafeSelector);
   const handleChangeBlockData = useCallback(
     (blockUuid: string, key: string, value: any, parentKey: string | undefined) => {
       dispatch(
@@ -115,12 +118,12 @@ const Inspector: React.FC<TInspector> = ({display}) => {
           return (
             <div className="form-group" key={`${parentKey}_${index}`}>
               <ColorPicker
-                debounceTimeout={500}
+                debouncetimeout={500}
                 label={config[el].name}
                 $isWide
                 placeholder={config[el].name}
-                value={endpoint ? endpoint[el] : null}
-                onChange={(e: any) => handleChangeBlockData(blockUuid, el, e.target.value, parentKey)}
+                value={transformHexWeb(endpoint ? endpoint[el] : null)}
+                onChangeColor={(value: string) => handleChangeBlockData(blockUuid, el, value, parentKey)}
               />
             </div>
           );
@@ -173,7 +176,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
                 handleChangeBlockData(
                   blockUuid,
                   endpoint && endpoint[el] !== undefined ? el : el + 'InPercent',
-                  +e.target.value,
+                  !isEmpty(e.target.value) ? +e.target.value : e.target.value,
                   parentKey
                 )
               }
@@ -261,41 +264,70 @@ const Inspector: React.FC<TInspector> = ({display}) => {
                 <span>{leadLetter(el)}</span>
                 <Plus className="icon" onClick={() => dispatch(addActionField(block.uuid))} />
               </Division>
-              {block.interactive[parentKey] &&
-                Object.keys(block.interactive[parentKey][el] || {}).map((key: any, index: number) => {
-                  const item = block.interactive[parentKey][el][key];
-                  return (
-                    <Division key={`object_item_${index}`} style={{alignItems: 'end', gap: '12px'}} withoutBorder>
-                      <Input
-                        $clearable
-                        $isWide
-                        label="Key"
-                        value={key}
-                        onChange={(e) => {
-                          e.stopPropagation();
-                          handleChangeKeyActionField(block.uuid, index, e.target.value);
-                        }}
-                      />
-                      <Input
-                        $clearable
-                        $isWide
-                        label="Value"
-                        value={item}
-                        onChange={(e) => {
-                          e.stopPropagation();
-                          handleChangeKeyActionField(block.uuid, index, e.target.value, true);
-                        }}
-                      />
-                      <Trash
-                        className="icon"
-                        onClick={(e) => {
-                          dispatch(removeActionField(block.uuid, key));
-                        }}
-                      />
-                    </Division>
-                  );
-                })}
+              {block.interactive[parentKey] && Object.keys(block.interactive[parentKey][el] || {}).map((key: any, index: number) => {
+                const item = block.interactive[parentKey][el][key];
+                return (
+                  <Division key={`object_item_${index}`} style={{alignItems: 'end', gap: '12px'}} withoutBorder>
+                    <Input
+                      $clearable
+                      $isWide
+                      label="Key"
+                      value={key}
+                      onChange={(e) => {
+                        e.stopPropagation();
+                        handleChangeKeyActionField(block.uuid, index, e.target.value);
+                      }}
+                    />
+                    <Input $clearable $isWide label="Value" value={item} onChange={(e) => {
+                      e.stopPropagation();
+                      handleChangeKeyActionField(block.uuid, index, e.target.value, true);
+                    }}/>
+                    <Trash
+                      className="icon"
+                      onClick={() => {
+                        dispatch(removeActionField(block.uuid, key));
+                      }}
+                    />
+                  </Division>
+                );
+              })}
             </GroupedFields>
+          );
+        case 'options':
+          return (
+            <>
+              {interactive?.[parentKey][el].options && (
+                <div>
+                  <Division>
+                    <span>{config[el].title}</span>
+                    <Plus
+                      className="icon"
+                      onClick={() => {
+                        dispatch(addParamsItem(blockUuid));
+                      }}
+                    />
+                  </Division>
+                  {block?.interactive?.[parentKey] && block?.interactive?.[parentKey][el].map((element: any, index: number) => {
+                    return (
+                      <div key={`appBarButton_${element.uuid}${index}`}>
+                        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                          <Division>
+                            <span>{config[el].name} {index + 1}</span>
+                            <Trash
+                              className="icon"
+                              onClick={() => {
+                                dispatch(removeParamsItem(blockUuid, index));
+                              }}
+                            />
+                          </Division>
+                        </div>
+                        {parseConfig(interactive?.[parentKey][el]?.options[0], blockUuid, block?.interactive?.[parentKey][el][index], [index, parentKey])}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </>
           );
       }
       if (endpoint && !Array.isArray(endpoint[el])) {
@@ -336,7 +368,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
       }}
     >
       {interactive && parseConfig(interactive, blockUuid, block.interactive)}
-      {complex && <Select label="Element type" options={complex} onChange={handleChangeElemType} value={name} />}
+      {complex && <Select label="Input type" options={complex} onChange={handleChangeElemType} value={name} />}
       {parseConfig(config, blockUuid, block.settingsUI)}
       {block.settingsUI?.navigationItems && (
         <div>
@@ -356,7 +388,7 @@ const Inspector: React.FC<TInspector> = ({display}) => {
                   <span>Button {index + 1}</span>
                   <Trash
                     className="icon"
-                    onClick={(e) => {
+                    onClick={() => {
                       dispatch(removeBottomBarItem(index));
                     }}
                   />
@@ -399,6 +431,40 @@ const Inspector: React.FC<TInspector> = ({display}) => {
                 {parseConfig(interactive.rightButtons[0], blockUuid, block.interactive.rightButtons[index], [
                   index,
                   'rightButtons',
+                ])}
+              </div>
+            );
+          })}
+        </div>
+      )}
+      {block.interactive?.query && (
+        <div>
+          <Division>
+            <span>Query items</span>
+            <Plus
+              className="icon"
+              onClick={() => {
+                dispatch(addFilterQueryItem());
+              }}
+            />
+          </Division>
+          {block.interactive.query.map((element: any, index: number) => {
+            return (
+              <div key={`queryItem_${element.uuid}`}>
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                  <Division>
+                    <span>Item {index + 1}</span>
+                    <Trash
+                      className="icon"
+                      onClick={() => {
+                        dispatch(removeTopAppBarButton(index));
+                      }}
+                    />
+                  </Division>
+                </div>
+                {parseConfig(interactive.query[0], blockUuid, block.interactive.query[index], [
+                  index,
+                  'query',
                 ])}
               </div>
             );

@@ -62,13 +62,16 @@ export const prepareTree = (
   } else if (treeData.value.listItem) {
     root.children = [buildTreeitem(treeData.value.listItem)];
   }
-  if (topAppBar) {
+  const thisScreenTopAppBar = topAppBar && root.expanded;
+  const thisScreenBottomBar = bottomBar && root.expanded;
+
+  if (treeData?.action?.topAppBar || thisScreenTopAppBar) {
     root.children.unshift({
       title: 'TOPAPPBAR',
       subtitle: topAppBar?.uuid,
     });
   }
-  if (bottomBar) {
+  if (treeData?.action?.bottomBar || thisScreenBottomBar) {
     root.children.push({
       title: 'BOTTOMBAR',
       subtitle: bottomBar?.uuid,
@@ -91,12 +94,14 @@ export const buildLayout = ({screen, object}: Record<string, any>) => {
     layout: newBlock.listItems,
   };
   if (object.bottomBar) {
+    const {settingsUI, navigationItems} = object.bottomBar;
+
     action.bottomBar = {
       blockId: 'bottombar',
       uuid: v4(),
       settingsUI: {
-        ...object.bottomBar.settingsUI,
-        navigationItems: object.bottomBar.navigationItems,
+        ...settingsUI,
+        navigationItems: settingsUI.navigationItems !== undefined ? settingsUI.navigationItems : navigationItems,
       },
     };
   }
@@ -109,7 +114,6 @@ export const buildLayout = ({screen, object}: Record<string, any>) => {
       },
       interactive: {
         rightButtons: [...object.topAppBar.rightButtons || []],
-        appBarItems: {...object.topAppBar.appBarItems},
       },
     };
   }

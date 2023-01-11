@@ -4,22 +4,34 @@ import React from 'react';
 import {Search} from 'components/SideBarHeader/SideBarHeader.styled';
 import {Input} from 'components/controls';
 import FilterAction from 'components/Actions/FilterAction';
-import {AnimateSharedLayout} from 'framer-motion';
-import {Item, Indicator} from 'components/controls/Select/Select.styled';
-import {TabWrapper} from './SubheaderActions.styled';
+import {ActionTypes} from 'store/types';
+import {setActionNameFilter, setActiveTabActions} from 'store/left-bar-menu.slice';
+import {setSelectAction} from 'store/actions.slice';
+import {useAppDispatch, useAppSelector} from 'store';
 
 type TSideBarSubheaderActions = {
-  activeTab: number;
-  setActiveTab: React.Dispatch<React.SetStateAction<number>>;
+  activeTab: string;
   handleAddAction: () => void;
 };
 
-const SubheaderActions: React.FC<TSideBarSubheaderActions> = ({activeTab, setActiveTab, handleAddAction}) => {
-  const getClassTabById = (index: number) => (activeTab === index ? 'tab_active' : '');
+const SubheaderActions: React.FC<TSideBarSubheaderActions> = ({
+  activeTab,
+  handleAddAction,
+}) => {
+  const dispatch = useAppDispatch();
+  const actionNameFilter = useAppSelector((state) => state.leftBarMenu.actionNameFilter);
+
+  const setFilterValue = (e: React.ChangeEvent<HTMLInputElement> & React.ChangeEvent<HTMLTextAreaElement>) => {
+    dispatch(setActionNameFilter(e.target.value));
+  };
+  const getClassTabById = (actionType: string) => {
+    return activeTab === actionType ? 'tab_active' : '';
+  };
 
   const handlerClickAction = (event: React.MouseEvent<HTMLDivElement>) => {
-    const activeTab = +((event.target as HTMLDivElement)?.dataset?.tabId || 0);
-    setActiveTab(activeTab);
+    const activeTabAction = (event.target as HTMLDivElement)?.dataset?.tabId || ActionTypes.actions;
+    dispatch(setActiveTabActions(activeTabAction as ActionTypes));
+    dispatch(setSelectAction(null));
   };
 
   const menus = ['Actions', 'Cron Tasks', 'Push'];
@@ -27,30 +39,28 @@ const SubheaderActions: React.FC<TSideBarSubheaderActions> = ({activeTab, setAct
   return (
     <>
       <SideBarSubheader>
-        <TabWrapper>
-          <AnimateSharedLayout>
-            {menus.map((item, index) => {
-              return (
-                <Item
-                  pure
-                  data-tab-id={index}
-                  isActive={activeTab === index}
-                  key={`sideBarActionsTabs_${index}`}
-                  onClick={handlerClickAction}
-                >
-                  {item}
-                  {getClassTabById(index) && <Indicator layoutId="idk" />}
-                </Item>
-              );
-            })}
-          </AnimateSharedLayout>
-        </TabWrapper>
+        <div className="actions_tab" onClick={handlerClickAction}>
+          <span data-tab-id={ActionTypes.actions} className={getClassTabById(ActionTypes.actions)}>
+            Actions
+          </span>
+          <span data-tab-id={ActionTypes.cronTasks} className={getClassTabById(ActionTypes.cronTasks)}>
+            Cron Tasks
+          </span>
+          <span data-tab-id={ActionTypes.push} className={getClassTabById(ActionTypes.push)}>
+            Push
+          </span>
+        </div>
         <Plus className="icon" onClick={handleAddAction} />
       </SideBarSubheader>
       <Search>
-        <Input $isWide placeholder="Action name" />
+        <Input
+          $isWide
+          placeholder="Action name"
+          value={actionNameFilter}
+          onChange={setFilterValue}
+        />
       </Search>
-      {activeTab === 0 && <FilterAction />}
+      {activeTab === ActionTypes.actions && <FilterAction />}
     </>
   );
 };

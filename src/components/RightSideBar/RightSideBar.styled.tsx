@@ -22,26 +22,5 @@ export const APIContainer = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #e6e6e6;
-    margin-bottom: 8px;
   }
-`;
-
-export const RowContainer = styled.section`
-  display: flex;
-  align-items: center;
-  gap: 17px;
-  & > svg {
-    align-self: end;
-    margin-bottom: 10px;
-  }
-  & input {
-    max-width: 160px;
-  }
-`;
-
-export const APIRow = styled.section`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 `;

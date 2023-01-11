@@ -3,7 +3,6 @@ import {useDrop} from 'react-dnd';
 import styled from 'styled-components';
 import {arrayMoveImmutable} from 'array-move';
 import {sortableContainer} from 'react-sortable-hoc';
-import {useSelector, useDispatch} from 'react-redux';
 import Wrapper from 'utils/wrapper';
 import {observer} from 'utils/observer';
 import {onSortMove} from 'utils/hooks';
@@ -12,38 +11,40 @@ import {hexToRgb} from 'constants/utils';
 import {ItemTypes} from 'constants/actionTypes';
 import card from 'assets/card.svg';
 import {
-  backgroundColor, corners, elevation, getSizeConfig,
+  backgroundColor, elevation, getSizeConfig,
   padding, shadowConfigBuilder,
   shapeConfigBuilder, interactive
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
 import {blockStateSafeSelector} from 'store/selectors';
-import store from 'store';
-import {getSizeStyle} from 'views/utils/styles/size';
+import store, {useAppDispatch, useAppSelector} from 'store';
+import {getDimensionStyles} from 'views/utils/styles/size';
+import {transformHexWeb} from '../../utils/color';
 
 const Card = styled.div`
   align-self: stretch;
   box-sizing: border-box;
   border: ${(props) => props.border};
-  background-color: ${(props) => props.backgroundColor};
+  background-color: ${(props) => transformHexWeb(props.backgroundColor)};
   display: flex;
   flex-direction: column;
-  padding-top: ${(props) => props.padding?.top}px;
-  padding-right: ${(props) => props.padding?.right}px;
-  padding-bottom: ${(props) => props.padding?.bottom}px;
-  padding-left: ${(props) => props.padding?.left}px;
-  height: ${(props) => getSizeStyle('height', props)};
+  ${(props) => getDimensionStyles(props)
+    .height()
+    .padding()
+    .borderRadius()
+    .apply()
+  }
   overflow: hidden;
   box-shadow: ${(props) => {
-    const RGB = hexToRgb(props.shadow?.color);
+    const color = transformHexWeb(props.shadow?.color);
+    const RGB = hexToRgb(color);
     return `${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px 8px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b}, ${props.shadow?.opacity})`;
   }};
-  border-radius: ${(props) => `
-    ${props.corners?.topLeftRadius}px
-    ${props.corners?.topRightRadius}px
-    ${props.corners?.bottomRightRadius}px
-    ${props.corners?.bottomLeftRadius}px
-  `};
+  ${(props) => {
+    if (props.shape?.type === 'ALLCORNERSROUND') {
+      return `border-radius: ${props.shape.radius}px;`;
+    }
+  }}
 `;
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, settingsUI, ...props}) => {
@@ -63,8 +64,8 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, 
 });
 
 const Component = ({settingsUI, uuid, listItems, ...props}) => {
-  const dispatch = useDispatch();
-  const layout = useSelector((state) => state.layout);
+  const dispatch = useAppDispatch();
+  const {layout} = useAppSelector((state) => state);
   const [{canDrop, isOver, target}, drop] = useDrop(() => ({
     accept: ItemTypes.BOX,
     drop: (item) => {
@@ -127,7 +128,7 @@ const block = (state) => {
     previewImageUrl: card,
     category: 'Element',
     defaultInteractiveOptions: {
-      action: {url: '', target: '', fields: {}},
+      action: {url: '', fields: {}, confirmationDialog: {}},
     },
     defaultData: {
       elevation: 3,
@@ -141,16 +142,6 @@ const block = (state) => {
       },
       size: {
         height: 0,
-      },
-      shape: {
-        type: 'ROUND',
-        radius: 20,
-      },
-      corners: {
-        topLeftRadius: 20,
-        topRightRadius: 20,
-        bottomLeftRadius: 0,
-        bottomRightRadius: 0,
       },
       shadow: {
         color: '#000000',
@@ -169,7 +160,6 @@ const block = (state) => {
         .withAllCornersRound
         .withRadius
         .done(),
-      corners,
       shadow: shadowConfigBuilder().done(),
       padding,
       size: {

@@ -1,12 +1,12 @@
 import {set} from 'external/lodash';
-import type {FieldConfigType, SelectionFieldConfigType} from './types';
+import type {FieldConfigType} from './types';
 
 type ShadowConfigType = {
   color: FieldConfigType,
   opacity: FieldConfigType,
   offsetSize: {
-    height: SelectionFieldConfigType
-    width: SelectionFieldConfigType
+    height: FieldConfigType
+    width: FieldConfigType
   },
   radius?: FieldConfigType
 }
@@ -16,22 +16,8 @@ export const shadowConfigBuilder = () => {
     color: {type: 'color', name: 'Shadow color'},
     opacity: {type: 'number', name: 'Opacity'},
     offsetSize: {
-      height: {
-        type: 'units',
-        name: 'Height',
-        options: [
-          {label: 'px', value: 'px'},
-          {label: '%', value: '%'},
-        ],
-      },
-      width: {
-        type: 'units',
-        name: 'Width',
-        options: [
-          {label: 'px', value: 'px'},
-          {label: '%', value: '%'},
-        ],
-      },
+      height: {type: 'number', name: 'Height'},
+      width: {type: 'number', name: 'Width'},
     },
   };
 

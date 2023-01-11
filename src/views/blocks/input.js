@@ -6,47 +6,66 @@ import {
   backgroundColor,
   borderColor,
   borderWidth,
-  text, textColor, fontWeight, fontSize,
-  padding, placeholder, placeholderColor,
+  text,
+  textColor,
+  fontWeight,
+  fontSize,
+  padding,
+  placeholder,
+  placeholderColor,
   shadowConfigBuilder,
   shapeConfigBuilder,
   textAlignment,
   getSizeConfig,
+  label,
+  unfocusedLabelColor,
+  focusedLabelColor,
+  focusedIndicatorColor,
+  unfocusedIndicatorColor,
+  helperTextColor,
+  errorTextColor,
+  errorIndicatorColor,
+  errorLabelColor,
+  cursorColor,
+  regexp,
+  regexpTrigger,
+  isGetValueFromBD,
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
-import {getSizeStyle} from 'views/utils/styles/size';
+import {getDimensionStyles} from 'views/utils/styles/size';
+import {transformHexWeb} from '../../utils/color';
 
 const Input = styled.div`
   align-self: center;
-  color: ${(props) => props.textColor || 'transparent'};
-  background-color: ${(props) => props.backgroundColor || 'transparent'};
+  color: ${(props) => transformHexWeb(props.textColor || 'transparent')};
+  background-color: ${(props) => transformHexWeb(props.backgroundColor || 'transparent')};
   display: flex;
   align-items: center;
   border: 1px solid var(--neo-gray);
   text-align: ${(props) => props.textAlignment || 'left'};
-  width: ${(props) => getSizeStyle('width', props)};
-  height: ${(props) => getSizeStyle('height', props)};
-  padding-top: ${(props) => props.padding?.top || 0}px;
-  padding-bottom: ${(props) => props.padding?.bottom || 0}px;
-  padding-left: ${(props) => props.padding?.left || 0}px;
-  padding-right: ${(props) => props.padding?.right || 0}px;
+  ${(props) => getDimensionStyles(props)
+    .width()
+    .height()
+    .padding()
+    .apply()
+  }
   ${(props) => {
     if (props.shadow) {
-      return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${
-              props.shadow?.radius
-      }px rgba(${hexToRgb(props.shadow?.color).r}, ${hexToRgb(props.shadow?.color).g}, ${
-              hexToRgb(props.shadow?.color).b
-      }, ${props.shadow?.opacity});`;
+      const webColor = transformHexWeb(props.shadow?.color);
+      const RGB = hexToRgb(webColor) || {r: 0, g: 0, b: 0};
+      return `box-shadow: ${props.shadow?.offsetSize?.width || 0}px ${props.shadow?.offsetSize?.height || 0}px ${
+              props.shadow?.radius  || 0
+      }px rgba(${RGB.r}, ${RGB.g}, ${RGB.b}, ${props.shadow?.opacity || 0});`;
     }
   }}
   ${(props) => {
-    if (props.shape?.type === 'ALLCORNERSROUND') {
-      return `border-radius: ${props.shape.radius}px;`;
+    if (props.shape?.type === 'ALLCORNERSROUND' || !props?.shape?.type) {
+      return `border-radius: ${props?.shape?.radius || 0}px;`;
     }
   }}
   border-width: ${(props) => props.borderWidth || 0}px;
-  border-color: ${(props) => props.borderColor || 'transparent'};
+  border-color: ${(props) => transformHexWeb(props.borderColor || 'transparent')};
   & > span {
     font-size: ${(props) => props.fontSize || 12}px;
     font-weight: ${(props) => {
@@ -75,7 +94,7 @@ const Input = styled.div`
     }};
   }
   & > .placeholder {
-    color: ${(props) => props.placeholderColor || 'transparent'};
+    color: ${(props) => transformHexWeb(props.placeholderColor || 'transparent')};
     font-size: 12px;
     font-weight: 400;
   }
@@ -142,10 +161,6 @@ const block = (state) => {
         top: 4,
         bottom: 4,
       },
-      shape: {
-        type: 'ALLCORNERSROUND',
-        radius: '4',
-      },
     },
     config: {
       padding,
@@ -164,9 +179,48 @@ const block = (state) => {
         .withRadius
         .done(),
       shape: shapeConfigBuilder().withAllCornersRound.withRadius.done(),
+      label,
+      unfocusedLabelColor,
+      focusedLabelColor,
+      focusedIndicatorColor,
+      unfocusedIndicatorColor,
+      helperTextColor,
+      errorTextColor,
+      errorIndicatorColor,
+      errorLabelColor,
+      cursorColor,
+      regexp,
+      regexpTrigger,
     },
     interactive: {
       field: {type: 'string', name: 'Field name'},
+      keyboardType: {
+        type: 'select',
+        name: 'Keyboard type',
+        options: [
+          {label: 'Password', value: 'PASSWORD'},
+          {label: 'Text', value: 'TEXT'},
+          {label: 'Ascii', value: 'ASCII'},
+          {label: 'Decimal', value: 'DECIMAL'},
+          {label: 'Email', value: 'EMAIL'},
+          {label: 'Number', value: 'NUMBER'},
+          {label: 'Number password', value: 'NUMBER_PASSWORD'},
+          {label: 'Phone', value: 'PHONE'},
+          {label: 'Uri', value: 'URI'},
+        ],
+      },
+      maxLength: {type: 'number', name: 'Max length'},
+      errorText: {type: 'string', name: 'Error text'},
+      helperText: {type: 'string', name: 'Helper text'},
+      isShowCharCounter: {
+        type: 'select',
+        name: 'Show char counter',
+        options: [
+          {label: 'True', value: true},
+          {label: 'False', value: false},
+        ],
+      },
+      isGetValueFromBD,
     },
   });
 };

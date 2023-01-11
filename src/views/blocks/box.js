@@ -3,7 +3,6 @@ import {useDrop} from 'react-dnd';
 import styled from 'styled-components';
 import {arrayMoveImmutable} from 'array-move';
 import {sortableContainer} from 'react-sortable-hoc';
-import {useSelector, useDispatch} from 'react-redux';
 import Wrapper from 'utils/wrapper';
 import {onSortMove} from 'utils/hooks';
 import {observer} from 'utils/observer';
@@ -21,22 +20,30 @@ import {
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
 import {blockStateSafeSelector} from 'store/selectors';
-import store from 'store';
-import {getSizeStyle} from 'views/utils/styles/size';
+import store, {useAppDispatch, useAppSelector} from 'store';
+import {getDimensionStyles} from 'views/utils/styles/size';
+import {transformHexWeb} from '../../utils/color';
 
 const Box = styled.div`
-  border: ${(props) => `${props.borderWidth}px solid ${props.borderColor}`};
-  width: ${(props) => getSizeStyle('width', props)};
-  height: ${(props) => getSizeStyle('height', props)};
-  background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
+  border: ${(props) => `${props.borderWidth}px solid ${transformHexWeb(props.borderColor)}`};
+  background-color: ${(props) => {
+    const color = props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent';
+    return transformHexWeb(color);
+  }};
   display: flex;
   align-items: center;
   overflow: hidden;
   box-shadow: ${(props) => {
-    const RGB = hexToRgb(props.shadow?.color);
+    const webColor = transformHexWeb(props.shadow?.color);
+    const RGB = hexToRgb(webColor);
     return `${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px 8px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b}, ${props.shadow?.opacity})`;
   }};
   border-radius: ${(props) => `${props.shape?.radius}px`};
+  ${(props) => getDimensionStyles(props)
+    .width()
+    .height()
+    .apply()
+  }
 `;
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, settingsUI, ...props}) => {
@@ -56,8 +63,8 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, 
 });
 
 const Component = ({settingsUI, uuid, listItems, ...props}) => {
-  const dispatch = useDispatch();
-  const layout = useSelector((state) => state.layout);
+  const dispatch = useAppDispatch();
+  const layout = useAppSelector((state) => state.layout);
   const [{canDrop, isOver, target}, drop] = useDrop(() => ({
     accept: ItemTypes.BOX,
     drop: (item) => {
@@ -126,10 +133,6 @@ const block = (state) => {
       size: {
         height: 56,
         width: 100,
-      },
-      shape: {
-        type: 'ALLCORNERSROUND',
-        radius: 4,
       },
       shadow: {
         color: '#000000',

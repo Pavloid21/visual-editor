@@ -1,9 +1,8 @@
 import React from 'react';
 import {useDrop} from 'react-dnd';
 import styled from 'styled-components';
-import {sortableContainer} from 'react-sortable-hoc';
+import {SortableContainer, SortEndHandler} from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
-import {useDispatch, useSelector} from 'react-redux';
 import Wrapper from 'utils/wrapper';
 import {onSortMove} from 'utils/hooks';
 import {observer} from 'utils/observer';
@@ -14,7 +13,6 @@ import vstack from 'assets/vstack.svg';
 import {
   alignmentConfig,
   backgroundColor,
-  corners,
   distribution,
   scroll,
   borderColor,
@@ -23,14 +21,38 @@ import {
   padding,
   shadowConfigBuilder,
   getSizeConfig,
-  interactive
+  interactive,
+  shapeConfigBuilder,
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
 import {blockStateSafeSelector} from 'store/selectors';
-import store from 'store';
-import {getSizeStyle} from 'views/utils/styles/size';
+import store, {useAppDispatch, useAppSelector} from 'store';
+import {Block, BlocksState, ListItemType, SettingsUIType, StyledComponentPropsType} from './types';
+import {findParentInTree} from 'utils/blocks';
+import {FieldConfigType} from 'views/configs/types';
+import {getDimensionStyles} from 'views/utils/styles/size';
+import {transformHexWeb} from 'utils/color';
 
-const VStack = styled.div`
+interface ComponentPropsType {
+  blockId: string;
+  uuid: string;
+  id: string;
+  settingsUI: SettingsUIType;
+  interactive: {
+    action: {
+      url: string,
+      fields: FieldConfigType;
+    }
+  };
+  listItems: ListItemType[];
+  blockState: BlocksState;
+}
+
+type VStackPropsType = {
+  isRoot: boolean
+}
+
+const VStack = styled.div<StyledComponentPropsType & VStackPropsType>`
   align-self: ${({alignment}) => {
     switch (alignment) {
       case 'CENTER':
@@ -59,19 +81,9 @@ const VStack = styled.div`
         return '0 0';
     }
   }};
-  width: ${(props) => {
-    if (['FULLWIDTH', 'FULLSIZE'].includes(props.sizeModifier)) {
-      return '100%';
-    }
-    return getSizeStyle('width', props);
-  }};
-  height: ${(props) => {
-    if (['FULLHEIGHT', 'FULLSIZE'].includes(props.sizeModifier)) {
-      return '100%';
-    }
-    return getSizeStyle('height', props);
-  }};
-  background-color: ${(props) => props.backgroundColor || 'transparent'};
+  width: 100%;
+  height: 100%;
+  background-color: ${(props) => transformHexWeb(props.backgroundColor || 'transparent')};
   display: flex;
   justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
   align-items: ${(props) => {
@@ -87,37 +99,41 @@ const VStack = styled.div`
     }
   }};
   flex-direction: column;
-  padding-top: ${(props) => props.padding?.top || 0}px;
-  padding-bottom: ${(props) => props.padding?.bottom || 0}px;
-  padding-left: ${(props) => props.padding?.left || 0}px;
-  padding-right: ${(props) => props.padding?.right || 0}px;
   box-sizing: border-box;
   border-width: ${(props) => props.borderWidth || 0}px;
   border-style: ${(props) => props.borderColor ? 'solid' : 'none'};
-  border-color: ${(props) => props.borderColor || 'transparent'};
+  border-color: ${(props) => transformHexWeb(props.borderColor || 'transparent')};
   gap: ${(props) => props.spacing || 0}px;
-  border-radius: ${(props) => `
-    ${props.corners?.topLeftRadius || 0}px
-    ${props.corners?.topRightRadius || 0}px
-    ${props.corners?.bottomRightRadius || 0}px
-    ${props.corners?.bottomLeftRadius || 0}px
-  `};
+  ${(props) => getDimensionStyles(props)
+    .padding()
+    .borderRadius()
+    .apply()
+  }
   ${(props) => {
     if (props.shadow) {
-      return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${props.shadow?.radius
-        }px rgba(${hexToRgb(props.shadow?.color).r}, ${hexToRgb(props.shadow?.color).g}, ${hexToRgb(props.shadow?.color).b
-        }, ${props.shadow?.opacity});`;
+      const webColor = transformHexWeb(props.shadow?.color);
+      const RGB = hexToRgb(webColor) || {r: 0, g: 0, b: 0};
+
+      if(RGB !== null) {
+        return `box-shadow: ${props.shadow?.offsetSize?.width || 0}px ${props.shadow?.offsetSize?.height|| 0}px
+        ${props.shadow?.radius || 0}px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b},
+        ${props.shadow?.opacity || 0});`;
+      }
+    }
+  }}
+  ${(props) => {
+    if (props.shape?.type === 'ALLCORNERSROUND' || !props?.shape?.type) {
+      return `border-radius: ${props?.shape?.radius || 0}px;`;
     }
   }}
 `;
 
-const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, settingsUI, ...props}) => {
+const ComponentSortedContainer: any = SortableContainer(({drop, backgroundColor, listItems, settingsUI, ...props}: any) => {
   return (
     <Wrapper
       id={props.id}
       {...settingsUI}
       {...props}
-      sizeModifier='FULLSIZE'
     >
       <VStack
         {...settingsUI}
@@ -132,10 +148,12 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, 
   );
 });
 
-const Component = ({settingsUI, uuid, listItems, ...props}) => {
-  const dispatch = useDispatch();
-  const layout = useSelector((state) => state.layout);
-  const [{canDrop, isOver, target}, drop] = useDrop(() => ({
+const Component = ({settingsUI, uuid, listItems, ...props}: ComponentPropsType) => {
+  const dispatch = useAppDispatch();
+  const {layout} = useAppSelector((state) => state);
+  const isRoot = !findParentInTree(layout.blocks, uuid);
+  // @ts-ignore
+  const [{canDrop, isOver, target}, drop] = useDrop<any, any>(() => ({
     accept: ItemTypes.BOX,
     drop: (item) => {
       if (target.isOver()) {
@@ -162,18 +180,19 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
     backgroundColor = '#f1f8ff';
   }
 
-  const onSortEnd = ({oldIndex, newIndex, nodes}) => {
-    const newOrder = arrayMoveImmutable(nodes, oldIndex, newIndex).map((item) => item.node.getAttribute('id'));
+  const onSortEnd: SortEndHandler = ({oldIndex, newIndex, nodes}) => {
+    const newOrder = arrayMoveImmutable(nodes, oldIndex, newIndex).map((item: any) => item.node.getAttribute('id'));
     observer.broadcast({
       layout,
       newOrder,
+      // @ts-ignore
       parentID: nodes[0].node.parentNode.getAttribute('id'),
       event: 'sorted',
     });
   };
 
   return (
-    <SortableContainer
+    <ComponentSortedContainer
       drop={drop}
       onSortEnd={onSortEnd}
       listItems={listItems}
@@ -182,11 +201,12 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
       backgroundColor={backgroundColor}
       distance={1}
       shouldCancelStart={onSortMove}
+      isRoot={isRoot}
     />
   );
 };
 
-const block = (state) => {
+const block = (state?: BlocksState): Block => {
   const blockState = state || blockStateSafeSelector(store.getState());
 
   return ({
@@ -197,7 +217,7 @@ const block = (state) => {
     previewImageUrl: vstack,
     category: 'Container',
     defaultInteractiveOptions: {
-      action: {url: '',  target: '', fields: {}},
+      action: {url: '',  fields: {}},
     },
     complex: [
       {label: 'Vertical', value: 'VSTACK'},
@@ -205,7 +225,7 @@ const block = (state) => {
     ],
     defaultData: {
       size: {
-        heightInPercent: 50,
+        heightInPercent: 100,
         widthInPercent: 100,
       },
       backgroundColor: '#e3e3e3',
@@ -220,7 +240,7 @@ const block = (state) => {
         left: '0',
         right: '0',
       },
-      shadow: {
+      /*shadow: {
         color: '#000000',
         opacity: 0,
         offsetSize: {
@@ -228,7 +248,7 @@ const block = (state) => {
           height: 0,
         },
         radius: 0,
-      },
+      },*/
     },
     listItems: [],
     interactive,
@@ -240,10 +260,13 @@ const block = (state) => {
       scroll,
       borderColor,
       borderWidth,
+      shape: shapeConfigBuilder()
+        .withAllCornersRound
+        .withRadius
+        .done(),
       size: getSizeConfig(blockState.deviceInfo.device),
       padding,
       shadow: shadowConfigBuilder().withRadius.done(),
-      corners,
     },
   });
 };

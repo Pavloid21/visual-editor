@@ -3,7 +3,6 @@ import {useDrop} from 'react-dnd';
 import styled from 'styled-components';
 import {arrayMoveImmutable} from 'array-move';
 import {sortableContainer} from 'react-sortable-hoc';
-import {useDispatch, useSelector} from 'react-redux';
 import Wrapper from 'utils/wrapper';
 import {onSortMove} from 'utils/hooks';
 import {observer} from 'utils/observer';
@@ -18,28 +17,29 @@ import {
 } from 'views/configs';
 import {pushBlockInside} from 'store/layout.slice';
 import {pageSize, shadowConfigBuilder, shapeConfigBuilder, startPage} from '../configs/index';
+import {getDimensionStyles} from '../utils/styles/size';
+import {useAppDispatch, useAppSelector} from 'store';
+import {transformHexWeb} from '../../utils/color';
 
 const VStack = styled.div`
   align-self: center;
   width: fit-content;
   height: fit-content;
-  background-color: ${(props) => (props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent')};
+  background-color: ${(props) => {
+    const color = props.backgroundColor?.indexOf('#') >= 0 ? props.backgroundColor : 'transparent';
+    return transformHexWeb(color);
+  }};
   display: flex;
   justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
   align-items: center;
   flex-direction: column;
-  padding-top: ${(props) => props.padding?.top || 5}px;
-  padding-bottom: ${(props) => props.padding?.bottom || 5}px;
-  padding-left: ${(props) => props.padding?.left || 5}px;
-  padding-right: ${(props) => props.padding?.right || 5}px;
+  ${(props) => getDimensionStyles(props)
+    .padding('padding', 5)
+    .borderRadius()
+    .apply()
+  }
   box-sizing: border-box;
   gap: ${(props) => props.spacing}px;
-  border-radius: ${(props) => `
-    ${props.corners?.topLeftRadius || 0}px
-    ${props.corners?.topRightRadius || 0}px
-    ${props.corners?.bottomRightRadius || 0}px
-    ${props.corners?.bottomLeftRadius || 0}px
-  `};
 `;
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, settingsUI, ...props}) => {
@@ -59,8 +59,8 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, 
 });
 
 const Component = ({settingsUI, uuid, listItems, ...props}) => {
-  const dispatch = useDispatch();
-  const layout = useSelector((state) => state.layout);
+  const dispatch = useAppDispatch();
+  const {layout} = useAppSelector((state) => state);
   const [{canDrop, isOver, target}, drop] = useDrop(() => ({
     accept: ItemTypes.BOX,
     drop: (item) => {

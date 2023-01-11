@@ -1,6 +1,5 @@
 import React from 'react';
 import {useDrop} from 'react-dnd';
-import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 import {sortableContainer} from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
@@ -12,7 +11,6 @@ import {ItemTypes} from 'constants/actionTypes';
 import {
   alignmentConfig,
   backgroundColor,
-  corners,
   distribution,
   scroll,
   borderColor,
@@ -21,14 +19,17 @@ import {
   padding,
   shadowConfigBuilder,
   getSizeConfig,
-  interactive
+  interactive,
+  shapeConfigBuilder
 } from 'views/configs';
 import hstack from 'assets/hstack.svg';
 import {pushBlockInside} from 'store/layout.slice';
 import {hexToRgb} from 'constants/utils';
-import {getSizeStyle} from '../utils/styles/size';
+import {findParentInTree} from 'utils/blocks';
 import {blockStateSafeSelector} from 'store/selectors';
-import store from 'store';
+import store, {useAppDispatch, useAppSelector} from 'store';
+import {getDimensionStyles} from 'views/utils/styles/size';
+import {transformHexWeb} from '../../utils/color';
 
 const HStack = styled.div`
   align-self: ${(props) => {
@@ -57,41 +58,52 @@ const HStack = styled.div`
         return '0 auto auto auto';
     }
   }};
-  width: ${(props) => getSizeStyle('width', props)};
-  height: ${(props) => getSizeStyle('height', props)};
-  background-color: ${(props) => props.backgroundColor || 'transparent'};
+  min-width: 100%;
+  width: fit-content;
+  height: 100%;
+  background-color: ${(props) => transformHexWeb(props.backgroundColor || 'transparent')};
   display: flex;
   justify-content: ${(props) => (props.distribution === 'SPACEBETWEEN' ? 'space-between' : props.distribution)};
   text-align: ${(props) => props.alignment};
   flex-direction: row;
-  align-items: center;
-  padding-top: ${(props) => props.padding?.top || 0}px;
-  padding-bottom: ${(props) => props.padding?.bottom || 0}px;
-  padding-left: ${(props) => props.padding?.left || 0}px;
-  padding-right: ${(props) => props.padding?.right || 0}px;
+  align-items: ${(props) => {
+    switch(props.alignment) {
+      case 'CENTER':
+        return 'center';
+      case 'TOP':
+        return 'start';
+      case 'BOTTOM':
+        return 'end';
+    }
+  }};
+  ${(props) => getDimensionStyles(props)
+    .padding()
+    .borderRadius()
+    .apply()
+  }
   border-width: ${(props) => props.borderWidth || 0}px;
   border-style: solid;
-  border-color: ${(props) => props.borderColor || 'transparent'};
+  border-color: ${(props) => transformHexWeb(props.borderColor || 'transparent')};
   gap: ${(props) => props.spacing || 0}px;
   position: relative;
-  border-radius: ${(props) => `
-    ${props.corners?.topLeftRadius || 0}px
-    ${props.corners?.topRightRadius || 0}px
-    ${props.corners?.bottomRightRadius || 0}px
-    ${props.corners?.bottomLeftRadius || 0}px
-  `};
   ${(props) => {
     if (props.shadow) {
+      const webColor = transformHexWeb(props.shadow?.color);
+      const RGB = hexToRgb(webColor);
       return `box-shadow: ${props.shadow?.offsetSize?.width}px ${props.shadow?.offsetSize?.height}px ${props.shadow?.radius
-        }px rgba(${hexToRgb(props.shadow?.color).r}, ${hexToRgb(props.shadow?.color).g}, ${hexToRgb(props.shadow?.color).b
-        }, ${props.shadow?.opacity});`;
+        }px rgba(${RGB.r}, ${RGB.g}, ${RGB.b}, ${props.shadow?.opacity});`;
+    }
+  }}
+  ${(props) => {
+    if (props.shape?.type === 'ALLCORNERSROUND') {
+      return `border-radius: ${props.shape.radius}px;`;
     }
   }}
 `;
 
 const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, settingsUI, ...props}) => {
   return (
-    <Wrapper id={props.id} {...settingsUI} {...props} sizeModifier="FULLSIZE">
+    <Wrapper id={props.id} {...settingsUI} {...props}>
       <HStack {...settingsUI} {...props} backgroundColor={backgroundColor} ref={drop} className="draggable">
         {listItems && renderHandlebars(listItems, 'document2').components}
       </HStack>
@@ -100,8 +112,9 @@ const SortableContainer = sortableContainer(({drop, backgroundColor, listItems, 
 });
 
 const Component = ({settingsUI, uuid, listItems, ...props}) => {
-  const dispatch = useDispatch();
-  const layout = useSelector((state) => state.layout);
+  const dispatch = useAppDispatch();
+  const {layout} = useAppSelector((state) => state);
+  const isRoot = !findParentInTree(layout.blocks, uuid);
   const [{canDrop, isOver, target}, drop] = useDrop(() => ({
     accept: ItemTypes.BOX,
     drop: (item) => {
@@ -150,6 +163,7 @@ const Component = ({settingsUI, uuid, listItems, ...props}) => {
       settingsUI={settingsUI}
       distance={1}
       shouldCancelStart={onSortMove}
+      isRoot={isRoot}
     />
   );
 };
@@ -165,7 +179,7 @@ const block = (state) => {
     previewImageUrl: hstack,
     category: 'Container',
     defaultInteractiveOptions: {
-      action: {url: '', target: '', fields: {}},
+      action: {url: '', fields: {}, confirmationDialog: {}},
     },
     complex: [
       {label: 'Vertical', value: 'VSTACK'},
@@ -183,12 +197,6 @@ const block = (state) => {
         bottom: '100',
         left: '10',
         right: '10',
-      },
-      corners: {
-        topLeftRadius: 0,
-        topRightRadius: 0,
-        bottomLeftRadius: 0,
-        bottomRightRadius: 0,
       },
       shadow: {
         color: '#000000',
@@ -209,10 +217,13 @@ const block = (state) => {
       scroll,
       borderColor,
       borderWidth,
+      shape: shapeConfigBuilder()
+        .withAllCornersRound
+        .withRadius
+        .done(),
       size: getSizeConfig(blockState.deviceInfo.device),
       padding,
       shadow: shadowConfigBuilder().withRadius.done(),
-      corners,
     },
     interactive,
   });

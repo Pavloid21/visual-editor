@@ -1,19 +1,20 @@
-import {useEffect, useState} from "react";
-import {getSrcImageSvg} from "services/ApiService";
-import {CustomSvgStyled} from "./CustomSvg.styled";
+import {useEffect, useState} from 'react';
+import {getSrcImageSvg} from 'services/ApiService';
+import {CustomSvgStyled} from './CustomSvg.styled';
 
 interface ICustomSvg {
   src: string;
   fill: string;
+  sizeSvg?: string;
 }
 
-const CustomSvg = ({src, fill}: ICustomSvg) => {
+const CustomSvg = ({src, fill, sizeSvg}: ICustomSvg) => {
   const [svgTemplate, setSvgTemplate] = useState<string>('');
   const [isLoader, setIsLoader] = useState<boolean>(false);
-  const [sizeSvg, setSizeSvg] = useState<string>(`${20 * 1.25}px`);
+  const [size, setSize] = useState<string>(sizeSvg || '');
 
   if(src === undefined) {
-    setSizeSvg('');
+    setSize('');
   }
 
   useEffect(() => {
@@ -28,8 +29,8 @@ const CustomSvg = ({src, fill}: ICustomSvg) => {
       <CustomSvgStyled
         dangerouslySetInnerHTML={{__html: svgTemplate}}
         fill={fill}
-        width={sizeSvg}
-        height={sizeSvg}
+        width={size}
+        height={size}
       />
     );
   }

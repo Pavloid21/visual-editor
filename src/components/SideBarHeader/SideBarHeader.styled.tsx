@@ -67,3 +67,7 @@ export const Search = styled.div`
   padding: 0 16px;
   margin-bottom: 15px;
 `;
+
+export const SearchImage = styled.div`
+  padding: 0 16px;
+`;

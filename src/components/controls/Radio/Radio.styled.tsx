@@ -3,7 +3,12 @@ import styled from 'styled-components';
 export const Container = styled.div`
   display: flex;
   align-items: center;
+  cursor: pointer;
   margin: 0 12px 0 0;
+
+  & label {
+    cursor: pointer;
+  }
   & .custom-radio-btn {
     min-width: 14px;
     width: 14px;

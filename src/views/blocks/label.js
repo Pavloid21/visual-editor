@@ -16,36 +16,34 @@ import {
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
-import {getSizeStyle} from 'views/utils/styles/size';
+import {getDimensionStyles} from 'views/utils/styles/size';
+import {transformHexWeb} from '../../utils/color';
 
 const Label = styledComponents.div`
   box-sizing: border-box;
   display: flex;
-  width: fit-content;
+  width: fit-content;0
   align-self: center;
   ${({shape}) => {
-    if (shape?.type === 'ALLCORNERSROUND') {
-      return `border-radius: ${shape.radius}px;`;
+    if (shape?.type === 'ALLCORNERSROUND' || !shape?.type) {
+      return `border-radius: ${shape?.radius || 0}px;`;
     }
   }}
   overflow: hidden;
   ${({shadow}) => {
     if (shadow) {
-      return `box-shadow: ${shadow?.offsetSize?.width}px ${shadow?.offsetSize?.height}px ${
+      const webColor = transformHexWeb(shadow?.color);
+      const RGB = hexToRgb(webColor) || {r: 0, g: 0, b: 0};
+      return `box-shadow: ${shadow?.offsetSize?.width || 0}px ${shadow?.offsetSize?.height|| 0}px ${
         shadow?.radius || 0
-      }px rgba(${hexToRgb(shadow?.color).r}, ${hexToRgb(shadow?.color).g}, ${
-        hexToRgb(shadow?.color).b
-      }, ${shadow?.opacity});`;
+      }px rgba(${RGB.r}, ${RGB.g}, ${RGB.b}, ${shadow?.opacity|| 0});`;
     }
   }}
   & > span {
     display: block;
-    width: ${(props) => getSizeStyle('width', props)};
-    height: ${(props) => getSizeStyle('height', props)};
     text-align: ${(props) => props.textAlignment || 'left'};
-    color: ${(props) => props.textColor || 'transparent'};
-    font-size: ${(props) => props.fontSize || 12}px;
-    background-color: ${(props) => props.backgroundColor || 'transparent'};
+    color: ${(props) => transformHexWeb(props.textColor || 'transparent')};
+    background-color: ${(props) => transformHexWeb(props.backgroundColor || 'transparent')};
     font-weight: ${(props) => {
       switch (props.fontWeight) {
         case 'THIN':
@@ -70,10 +68,13 @@ const Label = styledComponents.div`
           return 400;
       }
     }};
-    padding-top: ${(props) => props.padding?.top || 0}px;
-    padding-bottom: ${(props) => props.padding?.bottom || 0}px;
-    padding-left: ${(props) => props.padding?.left || 0}px;
-    padding-right: ${(props) => props.padding?.right || 0}px;
+    ${(props) => getDimensionStyles(props)
+      .width()
+      .height()
+      .padding()
+      .fontSize()
+      .apply()
+    }
   }
 `;
 
@@ -112,6 +113,15 @@ const block = (state) => {
         bottom: 0,
         left: 0,
         right: 0,
+      },
+      shadow: {
+        color: '#000000',
+        opacity: 0.3,
+        offsetSize: {
+          width: 0,
+          height: 0,
+        },
+        radius: 8,
       },
     },
     config: {

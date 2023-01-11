@@ -10,26 +10,45 @@ import {
   text,
   textAlignment,
   textColor,
+  label,
+  unfocusedLabelColor,
+  focusedLabelColor,
+  focusedIndicatorColor,
+  unfocusedIndicatorColor,
+  helperTextColor,
+  errorTextColor,
+  errorIndicatorColor,
+  errorLabelColor,
+  cursorColor,
+  regexp,
+  regexpTrigger,
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
 import store from 'store';
-import {getSizeStyle} from 'views/utils/styles/size';
+import {getDimensionStyles} from 'views/utils/styles/size';
+import {transformHexWeb} from '../../utils/color';
 
 export const Container = styled.div`
   display: flex;
   align-self: center;
-  width: ${(props) => getSizeStyle('width', props)};
+  ${(props) => getDimensionStyles(props)
+    .width()
+    .apply()
+  }
   & > input {
-    height: ${(props) => getSizeStyle('height', props)};
     display: block;
     pointer-events: none;
-    color: ${(props) => props.textColor || 'transparent'};
-    background-color: ${(props) => props.backgroundColor || 'transparent'};
+    color: ${(props) => transformHexWeb(props.textColor || 'transparent')};
+    background-color: ${(props) => transformHexWeb(props.backgroundColor || 'transparent')};
     box-sizing: border-box;
     text-align: ${(props) => props.textAlignment || 'left'};
-    font-size: ${(props) => props.fontSize || 12}px;
+    ${(props) => getDimensionStyles(props)
+      .height()
+      .fontSize()
+      .apply()
+    }
     & ::placeholder {
-      color: ${(props) => props.placeholderColor || 'transparent'};
+      color: ${(props) => transformHexWeb(props.placeholderColor || 'transparent')};
       font-size: 12px;
       font-weight: 400;
     }
@@ -98,10 +117,6 @@ const block = (state) => {
         top: 4,
         bottom: 4,
       },
-      shape: {
-        type: 'ALLCORNERSROUND',
-        radius: '4',
-      },
     },
     config: {
       placeholder,
@@ -112,9 +127,47 @@ const block = (state) => {
       backgroundColor,
       fontSize,
       size: getSizeConfig(blockState.deviceInfo.device),
+      label,
+      unfocusedLabelColor,
+      focusedLabelColor,
+      focusedIndicatorColor,
+      unfocusedIndicatorColor,
+      helperTextColor,
+      errorTextColor,
+      errorIndicatorColor,
+      errorLabelColor,
+      cursorColor,
+      regexp,
+      regexpTrigger,
     },
     interactive: {
       field: {type: 'string', name: 'Field name'},
+      keyboardType: {
+        type: 'select',
+        name: 'Keyboard type',
+        options: [
+          {label: 'Password', value: 'PASSWORD'},
+          {label: 'Text', value: 'TEXT'},
+          {label: 'Ascii', value: 'ASCII'},
+          {label: 'Decimal', value: 'DECIMAL'},
+          {label: 'Email', value: 'EMAIL'},
+          {label: 'Number', value: 'NUMBER'},
+          {label: 'Number password', value: 'NUMBER_PASSWORD'},
+          {label: 'Phone', value: 'PHONE'},
+          {label: 'Uri', value: 'URI'},
+        ],
+      },
+      maxLength: {type: 'number', name: 'Max length'},
+      errorText: {type: 'string', name: 'Error text'},
+      helperText: {type: 'string', name: 'Helper text'},
+      isShowCharCounter: {
+        type: 'select',
+        name: 'Show char counter',
+        options: [
+          {label: 'True', value: true},
+          {label: 'False', value: false},
+        ],
+      },
     },
   });
 };

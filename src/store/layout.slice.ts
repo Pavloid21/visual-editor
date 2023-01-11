@@ -4,17 +4,18 @@ import actionTypes from 'constants/actionTypes';
 import {getData} from 'utils/prepareModel';
 import blocks from 'views/blocks';
 import {clone, cloneDeep, get} from 'external/lodash';
-import type {BlockItem, EditScreenNamePayloadAction, Layout} from './types';
 import {blockStateUnsafeSelector} from './selectors';
 import rootStore from 'store';
 import {getKeyByUnit} from 'utils/units';
 import {cloneToList, createBlockByConfig, findInTree, getEnrichedBlockConfig, removeFromList} from 'utils/blocks';
 
+import type {EditScreenNamePayloadAction, Layout, IListItem, BlockItem} from './types';
+
 type ChangeUnitsPayloadAction = {
   blockUuid: string;
   key: string;
   value: string | undefined;
-  parentKey?: string;
+  parentKey?: string | [number, string];
 };
 
 type SelectScreenPayloadAction = PayloadAction<{
@@ -32,6 +33,11 @@ type SetLayoutPayloadAction = PayloadAction<{
   topAppBar?: BlockItem;
   layout: Layout[];
 }>;
+
+type TPayloadBlock = {
+  blockId: string;
+  uuid: string;
+};
 
 const initialState: Layout = {
   blocks: [],
@@ -192,7 +198,66 @@ export const addTopAppBarButton = createAction('layout/addTopAppBarButton', () =
   };
 });
 
-export const pushBlockInside = createAction('layout/pushBlockInside', (payload) => {
+export const addFilterQueryItem = createAction('layout/addFilterQueryItem', () => {
+  const store = rootStore.getState();
+  const {layout: state} = store;
+  const extendedItems = [...get(state, 'interactive.query', [])];
+  extendedItems.push({
+    ...blocks.defaultData.query[0],
+    uuid: uuidv4(),
+  });
+
+  return {
+    payload: extendedItems,
+  };
+});
+
+export const addParamsItem = createAction('layout/addParamsItem', (uuid: string) => {
+  const store = rootStore.getState();
+  const {layout: state} = store;
+  const newBlocks = cloneDeep({
+    blocks: state.blocks,
+    bottomBar: state.bottomBar,
+    topAppBar: state.topAppBar,
+  });
+  const emptyItem = {
+    key: '',
+    params: [''],
+  };
+
+  const targetBlock: BlockItem = getEnrichedBlockConfig(findInTree(newBlocks.blocks, uuid)) ||
+    (uuid === state.bottomBar?.uuid ? newBlocks.bottomBar : newBlocks.topAppBar);
+  const hasQuery = targetBlock?.interactive?.filter?.query;
+  if(hasQuery) {
+    targetBlock.interactive.filter.query = [...get(targetBlock, 'interactive.filter.query'), emptyItem];
+  } else {
+    targetBlock.interactive = {...targetBlock.interactive, filter: {query: [emptyItem]}};
+  }
+
+  return {
+    payload: newBlocks.blocks,
+  };
+});
+
+export const removeParamsItem = createAction('layout/removeParamsItem', (uuid: string, index: number) => {
+  const store = rootStore.getState();
+  const {layout: state} = store;
+  const newBlocks = cloneDeep({
+    blocks: state.blocks,
+    bottomBar: state.bottomBar,
+    topAppBar: state.topAppBar,
+  });
+
+  const targetBlock: BlockItem = getEnrichedBlockConfig(findInTree(newBlocks.blocks, uuid)) ||
+    (uuid === state.bottomBar?.uuid ? newBlocks.bottomBar : newBlocks.topAppBar);
+  targetBlock.interactive.filter.query = targetBlock.interactive.filter.query.filter((item: any, itemIndex: number) => index !== itemIndex);
+
+  return {
+    payload: newBlocks.blocks,
+  };
+});
+
+export const pushBlockInside = createAction('layout/pushBlockInside', (payload: TPayloadBlock, rootBlock?: boolean) => {
   if (['bottombar', 'topappbar'].includes(payload.blockId)) {
     return {
       payload: null,
@@ -203,6 +268,17 @@ export const pushBlockInside = createAction('layout/pushBlockInside', (payload) 
   const {layout: state} = store;
   const blockState = blockStateUnsafeSelector(store);
   const newBlock = createBlockByConfig(payload.blockId);
+
+  if(rootBlock) {
+    return {
+      payload: [
+        ...state.blocks,
+        {
+          ...newBlock,
+        },
+      ],
+    };
+  }
 
   // add block in target node
   const target = clone(findInTree(state.blocks, payload.uuid));
@@ -223,7 +299,8 @@ export const pushBlockInside = createAction('layout/pushBlockInside', (payload) 
   }
 
   // create next blocks model
-  const replaceTargetBlock = (blocks: BlockItem[]): BlockItem[] =>
+  const replaceTargetBlock = (blocks: IListItem[]): IListItem[] =>
+
     blocks.map((block) => {
       if (target && block.uuid === payload.uuid) {
         return target;
@@ -232,6 +309,21 @@ export const pushBlockInside = createAction('layout/pushBlockInside', (payload) 
           ...block,
           listItems: replaceTargetBlock(block.listItems),
         };
+      } else if (block.listItem && block.listItem.listItems) {
+        if (block.listItem.uuid === payload.uuid && target) {
+          return {
+            ...block,
+            listItem: target,
+          };
+        } else {
+          return {
+            ...block,
+            listItem: {
+              ...block.listItem,
+              listItems: replaceTargetBlock(block.listItem.listItems)
+            },
+          };
+        }
       }
       return block;
     });
@@ -239,22 +331,6 @@ export const pushBlockInside = createAction('layout/pushBlockInside', (payload) 
 
   return {
     payload: nextBlocks,
-  };
-});
-
-export const pushBlock = createAction('layout/pushBlock', (blockId) => {
-  const store = rootStore.getState();
-  const {layout: state} = store;
-
-  // const blockConfig = blocks[blockId](blockStateUnsafeSelector(store));
-  const newBlock = createBlockByConfig(blockId);
-  return {
-    payload: [
-      ...state.blocks,
-      {
-        ...newBlock,
-      },
-    ],
   };
 });
 
@@ -270,10 +346,18 @@ export const changeBlockData = createAction('layout/changeBlockData', (payload: 
   const element: BlockItem =
     getEnrichedBlockConfig(findInTree(newBlocks.blocks, payload.blockUuid)) ||
     (payload.blockUuid === state.bottomBar?.uuid ? newBlocks.bottomBar : newBlocks.topAppBar);
-  if (payload.parentKey && Array.isArray(payload.parentKey)) {
-    element.interactive.rightButtons[0].tintColor = payload.value;
+  const prevElement: BlockItem =
+    getEnrichedBlockConfig(findInTree(state.blocks, payload.blockUuid)) ||
+    (payload.blockUuid === state.bottomBar?.uuid ? newBlocks.bottomBar : newBlocks.topAppBar);
+
+  if (payload.parentKey && Array.isArray(payload.parentKey) && payload.parentKey[1] !== 'filter') {
+    if (element?.interactive) {
+      element.interactive[payload.parentKey[1]][payload.parentKey[0]][payload.key] = payload.value;
+    } else {
+      element.settingsUI[payload.parentKey[1]][payload.parentKey[0]][payload.key] = payload.value;
+    }
   } else if (payload.parentKey) {
-    const findDataBlock = (data: any, parentKey: string, key: string) => {
+    const findDataBlock = (data: any, parentKey: string | [number, string], key: string) => {
       let ref: any = null;
       Object.keys(data).forEach((item) => {
         if (item === parentKey) {
@@ -289,9 +373,21 @@ export const changeBlockData = createAction('layout/changeBlockData', (payload: 
       payload.parentKey,
       payload.key
     );
-    if (valueKeeper) {
+      if (payload.parentKey[1] === 'filter') {
+        let query = [];
+        if(prevElement?.interactive?.filter?.query && payload?.parentKey) {
+          query = prevElement?.interactive?.filter?.query.map((item: string[], index: number) => {
+            if(payload?.parentKey && index === payload?.parentKey[0]) return {...item, [payload.key]: payload.value};
+            return item;
+          });
+          const parentLength = Number(payload.parentKey[0]) + 1;
+          if(payload?.parentKey && query.length < parentLength) query.push({[payload?.key]: payload?.value});
+        }
+
+        element.interactive[payload.parentKey[1]] = {...element.interactive[payload.parentKey[1]], query};
+    } else if (valueKeeper) {
       valueKeeper[payload.key] = payload.value;
-    } else {
+    } else if(!Array.isArray(payload.parentKey)) {
       element.settingsUI[payload.parentKey] = {[payload.key]: payload.value};
     }
   } else {
@@ -407,6 +503,9 @@ const layoutSlice = createSlice({
       abar.settingsUI.topAppBarItems = nextItems;
       state.topAppBar = {...abar};
     },
+    replaceBottomBar: (state, action) => {
+      state.bottomBar = action.payload;
+    },
     removeBottomBarItem: (state, action: PayloadAction<number>) => {
       const newBarItems = [...state.bottomBar.settingsUI.navigationItems];
       newBarItems.splice(action.payload, 1);
@@ -415,11 +514,15 @@ const layoutSlice = createSlice({
       state.bottomBar = {...newBottomBar};
     },
     removeTopAppBarButton: (state, action: PayloadAction<number>) => {
-      const newBarItems = [...state.topAppBar.interactive.rightButtons];
-      newBarItems.splice(action.payload, 1);
-      const newTopAppBar = {...state.topAppBar};
-      newTopAppBar.interactive.rightButtons = newBarItems;
-      state.topAppBar = {...newTopAppBar};
+      if(action.payload === 0) {
+        state.topAppBar.interactive = {};
+      } else {
+        const newBarItems = [...state.topAppBar.interactive.rightButtons];
+        newBarItems.splice(action.payload, 1);
+        const newTopAppBar = {...state.topAppBar};
+        newTopAppBar.interactive.rightButtons = newBarItems;
+        state.topAppBar = {...newTopAppBar};
+      }
     },
     removeTopAppBarItem: (state, action: PayloadAction<number>) => {
       const newAppBarItems = [...state.topAppBar.settingsUI.topAppBarItems];
@@ -431,7 +534,7 @@ const layoutSlice = createSlice({
     setSelectedBlock: (state, action: PayloadAction<string>) => {
       state.selectedBlockUuid = action.payload;
     },
-    reOrderLayout: (state, action: PayloadAction<BlockItem[]>) => {
+    reOrderLayout: (state, action: PayloadAction<IListItem[]>) => {
       state.blocks = [...action.payload];
     },
     replaceElement: (state, action: PayloadAction<BlockItem>) => {
@@ -446,7 +549,7 @@ const layoutSlice = createSlice({
       // };
     },
     changeUnits: (state, action: PayloadAction<ChangeUnitsPayloadAction>) => {
-      const newBlocksSet = JSON.parse(JSON.stringify(state.blocks));
+      const newBlocksSet: IListItem[] = JSON.parse(JSON.stringify(state.blocks));
       const targetElement: BlockItem =
         findInTree(newBlocksSet, action.payload.blockUuid) ||
         (action.payload.blockUuid === state.bottomBar?.uuid
@@ -487,7 +590,7 @@ const layoutSlice = createSlice({
 
       state.selectedBlockUuid = '';
     },
-    setLayout: (state, action: SetLayoutPayloadAction) => {
+    setLayout: (state, action) => {
       return {
         ...state,
         blocks: [...action.payload.layout],
@@ -546,6 +649,15 @@ const layoutSlice = createSlice({
     builder.addCase(addTopAppBarButton, (state, action) => {
       state.topAppBar.interactive.rightButtons = action.payload;
     });
+    builder.addCase(addFilterQueryItem, (state, action) => {
+      state.blocks = action.payload;
+    });
+    builder.addCase(addParamsItem, (state, action) => {
+      state.blocks = action.payload;
+    });
+    builder.addCase(removeParamsItem, (state, action) => {
+      state.blocks = action.payload;
+    });
     builder.addCase(addActionField, (state, action) => {
       state.blocks = action.payload;
     });
@@ -567,9 +679,6 @@ const layoutSlice = createSlice({
       state.blocks = action.payload.blocks;
       state.bottomBar = action.payload.bottomBar;
       state.topAppBar = action.payload.topAppBar;
-    });
-    builder.addCase(pushBlock, (state, action) => {
-      state.blocks = action.payload;
     });
     builder.addCase(removeProperty, (state, action) => {
       state.blocks = action.payload;
@@ -608,6 +717,7 @@ const layoutSlice = createSlice({
 export const {
   changesSaved,
   addTopAppBarItem,
+  replaceBottomBar,
   removeBottomBarItem,
   removeTopAppBarItem,
   removeTopAppBarButton,

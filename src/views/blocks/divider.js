@@ -2,20 +2,21 @@ import React from 'react';
 import styled from 'styled-components';
 import Wrapper from 'utils/wrapper';
 import divider from 'assets/divider.svg';
-import {getSizeStyle} from '../utils/styles/size';
+import {getDimensionStyles} from 'views/utils/styles/size';
 import store from 'store';
 import {backgroundColor, padding, getSizeConfig} from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
+import {transformHexWeb} from '../../utils/color';
 
 const HR = styled.hr`
   align-self: center;
-  background-color: ${(props) => props.backgroundColor || 'transparent'};
-  height: ${(props) => getSizeStyle('height', props)};
-  width: ${(props) => getSizeStyle('width', props)};
-  padding-top: ${(props) => props.padding?.top || 0}px;
-  padding-bottom: ${(props) => props.padding?.bottom || 0}px;
-  padding-left: ${(props) => props.padding?.left || 0}px;
-  padding-right: ${(props) => props.padding?.right || 0}px;
+  background-color: ${(props) => transformHexWeb(props.backgroundColor || 'transparent')};
+  ${(props) => getDimensionStyles(props)
+    .width()
+    .height()
+    .padding()
+    .apply()
+  }
 `;
 
 const Component = ({settingsUI, ...props}) => {

@@ -10,27 +10,27 @@ import {
   shapeConfigBuilder, padding,
 } from 'views/configs';
 import {blockStateSafeSelector} from 'store/selectors';
-import store from 'store';
-import {getSizeStyle} from 'views/utils/styles/size';
-import {useSelector} from 'react-redux';
-import {setCorrectImageUrl, getFieldValue} from 'utils';
+import store, {useAppSelector} from 'store';
+import {getDimensionStyles} from 'views/utils/styles/size';
+import {setCorrectImageUrl, getFieldValue, checkExtension} from 'utils';
 import {CustomSvg} from 'components/CustomSvg';
+import {transformHexWeb} from '../../utils/color';
 
 const Image = styled.img`
   display: flex;
   box-sizing: border-box;
-  background-color: ${(props) => props.backgroundColor || 'transparent'};
-  padding-top: ${(props) => props.padding?.top || 0}px;
-  padding-bottom: ${(props) => props.padding?.bottom || 0}px;
-  padding-left: ${(props) => props.padding?.left || 0}px;
-  padding-right: ${(props) => props.padding?.right || 0}px;
+  background-color: ${(props) => transformHexWeb(props.backgroundColor || 'transparent')};
   border-width: ${(props) => props.borderWidth  || 0}px;
-  border-color: ${(props) => props.borderColor || 'transparent'};
+  border-color: ${(props) => transformHexWeb(props.borderColor || 'transparent')};
   border-style: solid;
   box-shadow: ${(props) => {
-    const RGB = hexToRgb(props.shadow?.color);
-    return `${props.shadow?.offsetSize?.width || props.shadow?.offsetSize?.widthInPercent}px ${props.shadow?.offsetSize?.height || props.shadow?.offsetSize?.heightInPercent
-      }px 8px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b}, ${props.shadow?.opacity})`;
+    if (props.shadow) {
+      const webColor = transformHexWeb(props.shadow?.color);
+      const RGB = hexToRgb(webColor) || {r: 0, g: 0, b: 0};
+
+      return `${(props.shadow?.offsetSize?.width ?? props.shadow?.offsetSize?.widthInPercent) || 0}px ${(props.shadow?.offsetSize?.height ?? props.shadow?.offsetSize?.heightInPercent)
+      || 0}px 8px rgba(${RGB?.r}, ${RGB?.g}, ${RGB?.b}, ${props.shadow?.opacity || 0})`;
+    }
   }};
   object-fit: ${(props) => {
     switch (props.imageAlignment) {
@@ -46,23 +46,27 @@ const Image = styled.img`
   }};
   align-self: center;
   z-index: 90;
-  width: ${(props) => getSizeStyle('width', props)};
-  height: ${(props) => getSizeStyle('height', props)};
+  ${(props) => getDimensionStyles(props)
+    .width()
+    .height()
+    .padding()
+    .apply()
+  }
   ${(props) => {
-    if (props.shape?.type === 'ALLCORNERSROUND') {
+    if (props.shape?.type === 'ALLCORNERSROUND' || !props?.shape?.type) {
       return `border-radius: ${props.shape?.radius || 0}px;`;
     }
   }}
 `;
 
 const Component = ({settingsUI, ...props}) => {
-  const {id} = useSelector(state => state.project);
+  const {id} = useAppSelector(state => state.project);
   const getCorrectImageUrl = setCorrectImageUrl(settingsUI.imageUrl, id);
   const getExtension = getFieldValue(settingsUI.imageUrl);
 
   return (
     <Wrapper id={props.id} {...settingsUI} {...props}>
-      {getExtension === 'icons' ? (
+      {getExtension === 'icons' || checkExtension(getCorrectImageUrl) === 'svg' ? (
         <CustomSvg fill={settingsUI.iconTintColor} src={getCorrectImageUrl} />
       ) : (
         <Image
@@ -96,10 +100,6 @@ const block = (state) => {
         height: 200,
         width: 400,
       },
-      shape: {
-        type: 'ALLCORNERSROUND',
-        radius: 4,
-      },
       shadow: {
         color: '#000000',
         opacity: 0.3,
@@ -111,7 +111,7 @@ const block = (state) => {
       },
     },
     defaultInteractiveOptions: {
-      action: {url: '', target: '', fields: {}},
+      action: {url: '', fields: {}, confirmationDialog: {}},
     },
     interactive,
     config: {

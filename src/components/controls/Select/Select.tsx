@@ -5,13 +5,13 @@ import {Input, Label} from 'components/controls';
 import {WithLabel} from './WithLabel';
 import {DropdownIndicator} from './Dropdown';
 import {baseStyleSelect} from './style';
-import {getActionsList, getDataActionsList, getScreenesList} from 'services/ApiService';
+import {getActionsList, getDataActionsList, getScreensList} from 'services/ApiService';
 import {Indicator, Item, TabsContainer} from './Select.styled';
 import {AnimateSharedLayout} from 'framer-motion';
 import {ActionTypes} from 'store/types';
 
 export const Select = React.memo((props: ISelect) => {
-  const {onChange, options, value, className, label, menuPlacement, styles, clearable} = props;
+  const {onChange, options, value, className, label, menuPlacement, styles, clearable, placeholder} = props;
   const [optionsList, setOptions] = useState(options || []);
   const menus = [
     {actionType: 'screens', title: 'Navigation'},
@@ -32,7 +32,7 @@ export const Select = React.memo((props: ISelect) => {
         if (value.indexOf('screen') === 0) {
           return filteredMenu.find((option) => option.actionType === 'screen')?.actionType;
         }
-        if (value.indexOf(ActionTypes.action) === 0) {
+        if (value.indexOf(ActionTypes.actions) === 0) {
           return filteredMenu.find((option) => option.actionType === 'actions')?.actionType;
         }
         if (value.indexOf(ActionTypes.data) === 0) {
@@ -44,7 +44,7 @@ export const Select = React.memo((props: ISelect) => {
     [filteredMenu, props.async]
   );
 
-  const [selected_value, setSelectedValue] = useState(getCurrentTab(value));
+  const [selected_value, setSelectedValue] = useState(getCurrentTab(value?.toString()));
   const [optionsModel, setModel] = useState<any>({
     [menus[0].actionType]: [],
     [menus[1].actionType]: [],
@@ -82,7 +82,7 @@ export const Select = React.memo((props: ISelect) => {
       };
     }
     if (actionTypesList?.includes('screens')) {
-      screens = await getScreenesList(projectId!);
+      screens = await getScreensList(projectId!);
       optionsModel = {
         ...optionsModel,
         screens: screens.data.map((screen: string) => ({
@@ -102,6 +102,9 @@ export const Select = React.memo((props: ISelect) => {
   );
 
   const getPlaceholder = useCallback(() => {
+    if (props.placeholder) {
+      return placeholder;
+    }
     if (props.async) {
       switch (selected_value) {
         case 'screens':
@@ -129,6 +132,7 @@ export const Select = React.memo((props: ISelect) => {
       setOptions(options);
     }
   }, [options, optionsModel, selected_value]);
+
   return (
     <>
       {props.async && (

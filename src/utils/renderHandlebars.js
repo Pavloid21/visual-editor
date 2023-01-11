@@ -1,18 +1,18 @@
 import blocks from 'views/blocks';
 import {sortableElement} from 'react-sortable-hoc';
 import {observer} from './observer';
-import {useSelector} from 'react-redux';
+import {useAppSelector} from 'store';
 import {blockStateUnsafeSelector} from '../store/selectors';
 
 // eslint-disable-next-line react/display-name
 const providerBlockState = Child => (props) => {
-  const blockState = useSelector(blockStateUnsafeSelector);
+  const blockState = useAppSelector(blockStateUnsafeSelector);
 
   return (<Child {...props} blockState={blockState} />);
 };
 
 const SortableItem = sortableElement(({layoutBlock, Component, ...props}) => {
-  const blockState = useSelector(blockStateUnsafeSelector);
+  const blockState = useAppSelector(blockStateUnsafeSelector);
 
   return (
     <Component

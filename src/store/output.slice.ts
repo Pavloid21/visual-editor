@@ -1,12 +1,38 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import actionTypes from 'constants/actionTypes';
-import type {EditScreenNamePayloadAction, Output} from './types';
 
-const initialState: Output = {
+import type {EditScreenNamePayloadAction, TSettingsUI} from './types';
+
+interface IInitialState {
+  screen: string;
+  logic: string;
+  navigationSettings: any;
+  settingsUI: TSettingsUI;
+}
+
+const defaultSettingsUI: TSettingsUI = {
+  isBottomSheet: false,
+    bottomSheetSettings: {
+      heightInPercent: 70,
+      scrimColor: '#FFFFFF',
+      cornersRadius: 0,
+    },
+  isNavigateDrawer: false,
+    navigationDrawerSettings: {
+      weightInPercent: 70,
+      scrimColor: '#FFFFFF',
+    }
+};
+
+const initialState: IInitialState = {
   screen: 'screen name',
   logic: '',
-  navigationSettings: undefined,
-  settingsUI: undefined,
+  navigationSettings: {
+    saveScreen: false,
+    showBottomBar: false,
+    updateUrlBottomBar: '',
+  },
+  settingsUI: defaultSettingsUI,
 };
 
 const outputSlice = createSlice({
@@ -16,6 +42,12 @@ const outputSlice = createSlice({
     editLogic: (state, action: PayloadAction<string>) => {
       state.logic = action.payload;
     },
+    setBottomBar: (state, action) => {
+      state.navigationSettings = {...state.navigationSettings, showBottomBar: action.payload};
+    },
+    removeNavigationSettings: (state) => {
+      state.navigationSettings = {saveScreen: false, showBottomBar: false, updateUrlBottomBar: ''};
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(actionTypes.ERASE, () => initialState);
@@ -28,13 +60,16 @@ const outputSlice = createSlice({
       if (action.navigationSettings) {
         nextState.navigationSettings = {...nextState.navigationSettings, ...action.navigationSettings};
       }
-      if (action.settingsUI) {
+      if (action.settingsUI !== undefined) {
         nextState.settingsUI = {...nextState.settingsUI, ...action.settingsUI};
+      } else {
+        state = {...nextState, settingsUI: defaultSettingsUI};
+        return state;
       }
       return nextState;
     });
   },
 });
 
-export const {editLogic} = outputSlice.actions;
+export const {editLogic, setBottomBar, removeNavigationSettings} = outputSlice.actions;
 export default outputSlice.reducer;

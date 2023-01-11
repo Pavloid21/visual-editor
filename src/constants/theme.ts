@@ -1,5 +1,5 @@
 import {createGlobalStyle} from 'styled-components';
-export default createGlobalStyle`
+export const GlobalStyles =  createGlobalStyle`
   body {
     background: #FAFAFA;
     text-align: left;
@@ -78,6 +78,14 @@ export default createGlobalStyle`
   .rst__tree {
     font-size: 16px;
     line-height: 20px;
+  }
+
+  [data-test-id="virtuoso-item-list"] {
+    & > div:first-child {
+      & .dropdown {
+        bottom: -32px;
+      }
+    }
   }
 
   .node_selected {
