@@ -17,7 +17,7 @@ const RightSidebar: React.FC<unknown> = () => {
   const dispatch = useAppDispatch();
 
   const wrapperRef = useRef(null);
-  useOutsideAlerter(wrapperRef, () => dispatch(setSelectedBlock('')));
+  // useOutsideAlerter(wrapperRef, () => dispatch(setSelectedBlock('')));
 
   if (!barState.right) {
     return null;

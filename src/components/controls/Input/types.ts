@@ -9,4 +9,5 @@ export interface NeoInputProps extends InputProps {
   status?: 'error' | 'success';
   type?: string;
   maxNumber?: number;
+  icon?: JSX.Element;
 }

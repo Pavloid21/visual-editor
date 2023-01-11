@@ -260,7 +260,7 @@ const LeftSidebar: React.FC<unknown> = () => {
           return true;
         }
       })[0];
-      const nextList = updateScreenList.call(availableScreenes, script, screenLayout, screenPositionInList);
+      const nextList = updateScreenList.call(availableScreens, script, screenLayout, screenPositionInList);
       dispatch(setActiveTabAction(5));
       dispatch(
         selectScreen({

@@ -1,14 +1,17 @@
 import Input from 'rc-input';
 import TextArea, {TextAreaProps} from 'rc-textarea';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 import {NeoInputProps} from './types';
 
 export const Container = styled.section<TextAreaProps & NeoInputProps & {label?: string}>`
   position: relative;
+  ${({icon}) => icon && css`
+      margin-right: 16px;
+    `}
   & svg {
-    position: ${(props) => (props.$clearable ? 'absolute' : 'initial')};
+    position: ${({$clearable}) => ($clearable ? 'absolute' : 'initial')};
     right: 12px;
-    top: ${(props) => (props.label ? '38px' : '10px')};
+    top: ${({label}) => (label ? '38px' : '10px')};
     &:hover {
       cursor: pointer;
     }
@@ -103,4 +106,14 @@ export const Label = styled.label`
   position: relative;
   color: var(--neo-secondary-gray);
   margin-bottom: 4px;
+`;
+
+export const IconWrapper = styled.div`
+  position: absolute;
+  top: 34px;
+  right: -25px;
+  & > svg {
+    width: 16px;
+    height: 16px;
+  }
 `;

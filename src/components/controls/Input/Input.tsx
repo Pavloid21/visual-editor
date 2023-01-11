@@ -1,7 +1,7 @@
-import React, {ReactNode} from 'react';
+import React from 'react';
 import {ReactComponent as Remove} from 'assets/circle_cross.svg';
 import {NeoInputProps} from './types';
-import {Container, Inline, Label, StyledNeoInput, StyledNeoTextArea} from './Input.styled';
+import {Container, IconWrapper, Label, StyledNeoInput, StyledNeoTextArea} from './Input.styled';
 import {TextAreaProps} from 'rc-textarea';
 
 export const NeoInput = React.forwardRef(({
@@ -23,7 +23,7 @@ export const NeoInput = React.forwardRef(({
   };
 
   return (
-    <Container {...props} label={label}>
+    <Container {...props} $clearable={$clearable} label={label}>
       {label && <Label>{label}</Label>}
       {$textarea ? (
         <StyledNeoTextArea autoSize={{minRows: 2, maxRows: 8}} ref={ref} {...props} />
@@ -36,6 +36,7 @@ export const NeoInput = React.forwardRef(({
         />
       )}
       {$extraText && <span className="extra">{$extraText}</span>}
+      {props.icon && <IconWrapper>{props.icon}</IconWrapper>}
     </Container>
   );
 });

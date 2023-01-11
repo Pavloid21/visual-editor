@@ -134,14 +134,14 @@ export const ImageSelect = React.memo((props: ISelect) => {
           value={getInputValue()}
           onChange={handleChangeAction}
           icon={
-            isImageSelected() && (
+            isImageSelected() ? (
               <ImageIcon
                 className="icon"
                 onClick={() => {
                   dispatch(setLeftBarMenu('image'));
                 }}
               />
-            )
+            ) : undefined
           }
         />
       ) : (
